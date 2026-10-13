@@ -2,7 +2,7 @@
 
 ## Development Process
 Enforce TDD workflow. Use /sync (preflight), /blueprint (design plan), and
-/code-review (validate).
+/done (validate).
 Refer to docs/DECISIONS.md and docs/IMPLEMENTATION_PLAN.md for context before work.
 Dev server: npm run dev (Next.js) or npx expo start (Expo).
 ## Security
