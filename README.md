@@ -78,13 +78,15 @@ Then type `/sync` in Claude Code. It reports whether your branch is up to date a
 
 ### Step 2: Create your own branch
 
-Never work directly on `main`. Make a branch, which is your own copy to work in:
+Never work directly on `main`. Make a branch, which is your own copy to work in. Name it `name/feature-x`, using your first name and a short description of what you're doing:
 
 ```
-git switch -c feature/short-description
+git switch -c name/feature-x
 ```
 
-Replace `short-description` with what you're doing, e.g. `feature/login-page`.
+For example, `jaida/login-page`. Use lowercase and hyphens, no spaces.
+
+Only push to branches that start with your own name. Other people's branches are theirs. Your work reaches `main` only through a pull request (Steps 5 and 6).
 
 ### Step 3: `/blueprint` (plan before coding)
 
@@ -126,7 +128,7 @@ After the merge, type `/landed` in Claude Code. It confirms `main` still passes 
 git switch main                 # go to main
 git pull                        # get latest
 /sync                           # check status
-git switch -c feature/my-thing  # new branch
+git switch -c name/feature-x    # new branch
 /blueprint                      # plan
 (build with Claude, tests first)
 /done                           # check + open PR
@@ -171,6 +173,9 @@ Read the test name in the error. It tells you which behavior broke. Paste the er
 
 **Git says "Your branch is behind"**
 Run `git pull`.
+
+**Git says "protected branch" or "push declined" when you push**
+You're trying to push straight to `main`, which is protected. Make your own branch (Step 2), push that, and open a PR with `/done`.
 
 **`/done` or `/landed` says `gh: command not found` or asks you to log in**
 Install the GitHub CLI and run `gh auth login` (see section 1).
