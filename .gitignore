@@ -43,5 +43,6 @@ next-env.d.ts
 
 # history
 .history
+
 # claude code (personal settings)
 .claude/settings.local.json
