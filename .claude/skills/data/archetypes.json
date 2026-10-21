@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "source": "Archetype names, descriptions and segment mappings come from Banfield Design Co.'s written client-type document. Fields marked in 'draft_fields' are inferred from that document and the Oct 2 / Oct 9 meeting transcripts and must be reviewed by Banfield before use.",
+    "draft_fields": ["signals", "communication", "pacing", "pitch", "risks", "brief_tips"],
+    "visibility": "Team-facing only. Never show archetype ids, labels or scores to the client.",
+    "scoring": "Answer options in the question bank carry weights keyed by archetype id. Sum weights, normalize to percentages and report the blend (e.g. 60% analytical_validator / 30% hands_on_controller). Scoring must keep working if archetypes are added or removed."
+  },
+  "archetypes": [
+    {
+      "id": "decisive_delegator",
+      "label": "The Decisive Delegator",
+      "tagline": "Fast decision-maker. Comfortable delegating. Outcome-focused.",
+      "description": "Busy professional lives; want the design team to take ownership. Prefer two excellent options to ten possibilities and may lose patience with unnecessary meetings.",
+      "segments": ["growing_family_renovation", "established_homeowner_forever_home"],
+      "signals": [
+        "Prefers a clear recommendation from someone experienced",
+        "Wants the design team to take the lead",
+        "Open to a concept different from what they pictured",
+        "Completes the quiz quickly; short open-text answers"
+      ],
+      "communication": "Short, decisive emails with a clear recommendation and next step. Bullet points, not essays.",
+      "pacing": "Fewer, tightly agendaed meetings. Present two strong options, not a range.",
+      "pitch": "Full-service package where Banfield owns the process end to end.",
+      "risks": [
+        "Disengages if meetings feel unnecessary",
+        "May approve quickly and want to revisit later if not briefed on consequences"
+      ],
+      "brief_tips": "Lead with the outcome and timeline. Respect their time from the first call."
+    },
+    {
+      "id": "analytical_validator",
+      "label": "The Analytical Validator",
+      "tagline": "Research-driven. Detail-oriented. Evidence-seeking.",
+      "description": "Appreciates specifications, comparative pricing, energy performance and documented reasoning. May challenge a recommendation not because they distrust the designer, but because they want to understand it.",
+      "segments": ["established_homeowner_forever_home", "performance_minded_planner", "multi_generational_family"],
+      "signals": [
+        "Researches thoroughly before feeling confident",
+        "Wants to understand the reasoning before deciding",
+        "Values a clear understanding of costs",
+        "Long, detailed open-text answers; high self-rated detail orientation"
+      ],
+      "communication": "Detailed written follow-ups with specs, comparisons and the reasoning behind each recommendation.",
+      "pacing": "Allow time between decisions for review. Send materials ahead of meetings.",
+      "pitch": "Structured process with documented decision points; highlight performance and energy expertise.",
+      "risks": [
+        "Questions can be misread as distrust",
+        "Decisions slow down without supporting evidence"
+      ],
+      "brief_tips": "Bring the data. Treat challenges as engagement, not pushback."
+    },
+    {
+      "id": "cautious_reassurance_seeker",
+      "label": "The Cautious Reassurance Seeker",
+      "tagline": "Risk-sensitive. Thoughtful. Needs confidence and validation.",
+      "description": "Often making one of the largest discretionary investments of their lives and can find design decisions intimidating. May fear costly mistakes, unfamiliar terminology or unexpected expenses. Looks to approval from others (builders/trades, family and friends).",
+      "segments": ["growing_family_renovation", "staying_put"],
+      "signals": [
+        "Likes discussing decisions with the people involved",
+        "Not sure how involved to be; wants to learn how the process works",
+        "Prefers to stay close to what they originally imagined",
+        "Values knowing what happens next and frequent progress updates",
+        "Mentions past bad experiences or nervousness about cost"
+      ],
+      "communication": "Warm, plain-language updates with no jargon. Explain what happens next and why.",
+      "pacing": "Smaller decisions spread out; check in often. Avoid presenting too many possibilities at once.",
+      "pitch": "Guided process with clear milestones, cost transparency and predictable check-ins.",
+      "risks": [
+        "Too many options causes shutdown",
+        "Third-party opinions (trades, family) can override decisions",
+        "Needs trust built before letting go of their own plan"
+      ],
+      "brief_tips": "Build trust before design. Name the next step at the end of every interaction."
+    },
+    {
+      "id": "creative_collaborator",
+      "label": "The Creative Collaborator",
+      "tagline": "Highly engaged. Visually motivated. Idea-rich.",
+      "description": "Enjoys design, collects inspiration and wants to participate. May come with extensive Pinterest boards and a strong sense of personal style. Higher chance of scope creep as they become inspired.",
+      "segments": ["established_homeowner_forever_home"],
+      "signals": [
+        "Prefers to explore ideas and see where they lead",
+        "Enjoys collaborating at design milestones",
+        "Excited to explore a new perspective",
+        "Values seeing visualizations before committing",
+        "Uploads inspiration images; rich answers to style and mood questions"
+      ],
+      "communication": "Visual-first: mood boards, renderings, images over text.",
+      "pacing": "Build in collaborative working sessions at key milestones.",
+      "pitch": "Collaborative design process with visualization; set scope boundaries early.",
+      "risks": [
+        "Scope creep as new ideas emerge",
+        "Strong personal style can conflict with team recommendations"
+      ],
+      "brief_tips": "Invite their ideas, then anchor every addition back to scope and budget."
+    },
+    {
+      "id": "hands_on_controller",
+      "label": "The Hands-On Controller",
+      "tagline": "High involvement. Strong ownership. Process-sensitive.",
+      "description": "Prefers to maintain visibility into budgets, decisions, vendors and timelines. May have managed major projects professionally and expects significant involvement.",
+      "segments": ["performance_minded_planner"],
+      "signals": [
+        "Wants to be closely involved in selections and decisions",
+        "Wants to compare a new concept with their original vision",
+        "Values being involved in the details and understanding why choices are made",
+        "Values a clear understanding of costs and where the budget is going"
+      ],
+      "communication": "Regular structured status updates covering budget, timeline, vendors and open decisions.",
+      "pacing": "Agree on decision checkpoints up front; keep them visible.",
+      "pitch": "Hourly or phased engagement with transparent tracking; position Banfield as a strategic teammate.",
+      "risks": [
+        "Friction if they feel excluded from vendor or budget decisions",
+        "May second-guess trades or the design team"
+      ],
+      "brief_tips": "Share the plan and the numbers early. Give them clear lanes for involvement."
+    }
+  ],
+  "segments": {
+    "growing_family_renovation": "Growing Family Renovation",
+    "established_homeowner_forever_home": "Established Homeowner / Forever Home",
+    "performance_minded_planner": "Performance-Minded Planner",
+    "staying_put": "Staying Put",
+    "multi_generational_family": "Multi-generational Family"
+  }
+}
