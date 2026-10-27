@@ -55,6 +55,20 @@ describe('loadFitRules', () => {
   test('has at least one service area', () => {
     expect(loadFitRules().serviceAreas.length).toBeGreaterThan(0)
   })
+
+  // Brand Standards: studio is in Port Moody and serves Vancouver and the Lower Mainland.
+  test('service area covers the home base and the wider Lower Mainland', () => {
+    const areas = loadFitRules().serviceAreas
+    for (const city of ['Port Moody', 'Vancouver', 'Surrey', 'Langley', 'Abbotsford']) {
+      expect(areas).toContain(city)
+    }
+  })
+
+  // Brand Standards: a one-time session is Banfield's paid "Designer on Call" service,
+  // so choosing it is never a weak fit on its own.
+  test('the one-time session answer is not rated weak', () => {
+    expect(loadFitRules().criteria.service.ratings.consult).not.toBe('weak')
+  })
 })
 
 describe('parseFitRules', () => {

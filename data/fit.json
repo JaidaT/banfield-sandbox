@@ -5,7 +5,7 @@
     "source": "Draft fit rules from Banfield's fit criteria (scope, location, investment, timeframe, readiness, service requirements) and the DISCOVERY P6 evidence (free-help seekers, uncommitted callers). Every rating, service area and red flag is a guess and must be reviewed by Banfield before use.",
     "ratings": "strong = a great fit; possible = worth a call, check on it; weak = likely not a fit, or not yet. Ratings are team-facing only and never shown to the client.",
     "criteria": "Each key matches a 'criterion' on a fit question in questions.json. Every answer to that question needs a rating here; a test enforces this.",
-    "serviceAreas": "Municipalities Banfield serves. A site address in one of these rates location as strong; anywhere else rates it possible so Jamie can decide.",
+    "serviceAreas": "Lower Mainland municipalities (Brand Standards: studio in Port Moody, serving Vancouver and the Lower Mainland). A site address in one of these rates location as strong; anywhere else rates it possible so Jamie can decide.",
     "redFlags": "Combinations of answers worth flagging in the team brief. A flag is raised when every condition in 'when' matches."
   },
   "criteria": {
@@ -53,25 +53,39 @@
       "ratings": {
         "full_service": "strong",
         "design_only": "possible",
-        "consult": "weak",
+        "consult": "possible",
         "not_sure": "possible"
       }
     }
   },
   "serviceAreas": [
-    "Burnaby",
+    "Port Moody",
     "Vancouver",
-    "North Vancouver",
-    "West Vancouver",
+    "Burnaby",
     "New Westminster",
     "Richmond",
+    "Delta",
+    "Surrey",
+    "White Rock",
+    "Langley",
+    "North Vancouver",
+    "West Vancouver",
     "Coquitlam",
-    "Port Moody"
+    "Port Coquitlam",
+    "Anmore",
+    "Belcarra",
+    "Maple Ridge",
+    "Pitt Meadows",
+    "Lions Bay",
+    "Bowen Island",
+    "Abbotsford",
+    "Mission",
+    "Chilliwack"
   ],
   "redFlags": [
     {
-      "id": "free_advice",
-      "note": "Just exploring and only wants a one-time consult. May be looking for free advice.",
+      "id": "early_one_time_session",
+      "note": "Just exploring and interested in a one-time session. Designer on Call may suit them better than a full project.",
       "when": [
         { "question": "timeframe", "option": "just_exploring" },
         { "question": "service", "option": "consult" }

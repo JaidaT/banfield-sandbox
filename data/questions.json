@@ -138,7 +138,7 @@
       "options": [
         { "id": "full_service", "label": "Take it from idea to move-in" },
         { "id": "design_only", "label": "Design plans I can take to my builder" },
-        { "id": "consult", "label": "A one-time consult to point me in the right direction" },
+        { "id": "consult", "label": "A focused session to point me in the right direction" },
         { "id": "not_sure", "label": "Not sure. Help me figure it out." }
       ]
     }
