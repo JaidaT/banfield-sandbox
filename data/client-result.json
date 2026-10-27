@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "draft": true,
+    "purpose": "Wording for the client-facing result screen. Draft in Banfield's voice (Brand Standards: warm, conversational, confident without exaggeration; warmth leads, proof follows). Never mention client types, scores or fit here; tests enforce this.",
+    "placeholders": "{firstName} is replaced with the client's first name.",
+    "projectLines": "Each line reflects one of the client's own answers back to them: 'question' is a question id from questions.json and 'prefix' goes before their answer.",
+    "cta": "bookingUrl is a placeholder until the real booking page exists. Name and email are added to it so the booking form can be pre-filled. Says 'us' rather than naming Jamie until Banfield decides (see DISCOVERY open questions)."
+  },
+  "greeting": "Thanks, {firstName}. Here's what we heard.",
+  "intro": "No right or wrong answers here. Just a few things that help us understand you, your home and how you like to work.",
+  "projectTitle": "Your project",
+  "projectLines": [
+    { "question": "project_scope", "prefix": "What you're dreaming up: " },
+    { "question": "timeframe", "prefix": "Timing: " }
+  ],
+  "confidenceTitle": "What helps you feel confident",
+  "confidenceQuestion": "confidence",
+  "homeTitle": "What home means to you",
+  "homeQuestion": "home_meaning",
+  "closing": "We'd love to work with you.",
+  "cta": {
+    "label": "Book your Meet + Inspire",
+    "text": "Grab a coffee. Let's talk about your home. Book a complimentary Meet + Inspire session to explore your space, goals, and next steps.",
+    "bookingUrl": "/book",
+    "fallback": "Not quite ready to book? No pressure. We'll check in by email in a couple of days."
+  }
+}

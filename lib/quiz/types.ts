@@ -184,6 +184,28 @@ export interface AnswerLine {
   answer: string | null
 }
 
+export interface ClientCopy {
+  greeting: string
+  intro: string
+  projectTitle: string
+  projectLines: { question: string; prefix: string }[]
+  confidenceTitle: string
+  confidenceQuestion: string
+  homeTitle: string
+  homeQuestion: string
+  closing: string
+  cta: { label: string; text: string; bookingUrl: string; fallback: string }
+}
+
+// Client-facing. Deliberately has no archetype, blend or fit fields.
+export interface ClientResult {
+  greeting: string
+  intro: string
+  sections: { title: string; lines: string[] }[]
+  closing: string
+  cta: { label: string; text: string; href: string; fallback: string }
+}
+
 // Team-facing only. Never render any part of this to the client.
 export interface TeamBrief {
   submissionId: string

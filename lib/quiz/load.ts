@@ -1,4 +1,5 @@
 import archetypesJson from '@/data/archetypes.json'
+import clientResultJson from '@/data/client-result.json'
 import fitJson from '@/data/fit.json'
 import questionsJson from '@/data/questions.json'
 import samplesJson from '@/data/sample-submissions.json'
@@ -9,6 +10,7 @@ import type {
   AnswerOption,
   Archetype,
   ArchetypeData,
+  ClientCopy,
   Comparison,
   FitCondition,
   FitCriterion,
@@ -340,6 +342,55 @@ export function parseSampleSubmissions(raw: unknown, questions: Question[]): Sam
     }
     return sample
   })
+}
+
+const COPY_FIELDS = [
+  'greeting',
+  'intro',
+  'projectTitle',
+  'confidenceTitle',
+  'confidenceQuestion',
+  'homeTitle',
+  'homeQuestion',
+  'closing',
+] as const
+const CTA_FIELDS = ['label', 'text', 'bookingUrl', 'fallback'] as const
+
+// When `questions` is given, also checks that every referenced question exists.
+export function parseClientCopy(raw: unknown, questions?: Question[]): ClientCopy {
+  if (!isRecord(raw)) throw new Error('client result copy must be an object')
+  for (const field of COPY_FIELDS) {
+    if (typeof raw[field] !== 'string' || raw[field] === '') {
+      throw new Error(`client result copy is missing "${field}"`)
+    }
+  }
+  if (!isRecord(raw.cta)) throw new Error('client result copy is missing "cta"')
+  const cta = raw.cta
+  for (const field of CTA_FIELDS) {
+    if (typeof cta[field] !== 'string' || cta[field] === '') {
+      throw new Error(`client result copy is missing "cta.${field}"`)
+    }
+  }
+  if (!Array.isArray(raw.projectLines)) {
+    throw new Error('client result copy is missing "projectLines"')
+  }
+  const copy = raw as unknown as ClientCopy
+  if (questions) {
+    const ids = new Set(questions.map((q) => q.id))
+    const referenced = [
+      ...copy.projectLines.map((l) => l.question),
+      copy.confidenceQuestion,
+      copy.homeQuestion,
+    ]
+    for (const id of referenced) {
+      if (!ids.has(id)) throw new Error(`client result copy refers to unknown question: ${id}`)
+    }
+  }
+  return copy
+}
+
+export function loadClientCopy(): ClientCopy {
+  return parseClientCopy(clientResultJson as unknown, loadQuestions())
 }
 
 export function loadQuizData(): QuizData {
