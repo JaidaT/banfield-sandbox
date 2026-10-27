@@ -60,6 +60,8 @@ Mapping to Banfield's existing client segments:
 | Staying Put | Cautious Reassurance Seeker |
 | Multi-generational Family | Analytical Validator |
 
+Note: Banfield's Brand Standards (pp. 24-28) list Performance-Minded Planner as one of five segments, but its audit note says to treat it as a trait layered onto Growing Family or Established Homeowner, not a standalone persona. Kept as a segment for now; see open questions. Segment summaries are in BRAND_NOTES.md.
+
 **Prototype must:**
 - The archetype blend and per-archetype guidance appear only in the team brief, never in client-facing results.
 - Score answers toward archetypes and output a blend, e.g. "60% Analytical Validator / 30% Hands-On Controller". Segments map to several types, so a single label is too blunt.
@@ -160,5 +162,9 @@ Mapping to Banfield's existing client segments:
 ## Open questions / tensions to resolve
 - **Budget in the Quick Quiz:** "Investment" is a fit criterion, but Jamie said budget means little up front and worried the quiz could scare people off. Consider ranges, or a soft framing like "investment comfort".
 - **Style labels:** The current form asks clients to circle styles like "Tuscan" and "Transitional". Jamie said these labels mean different things to everyone (P4). Replace them with image-based choices.
-- **Missing source:** Banfield's segment definitions (brand document, pp. 24–28) haven't been received yet.
+- **Missing source (resolved 2026-10-26):** Banfield's segment definitions (Brand Standards, pp. 24-28, dated Aug 16, 2026) have been received. Relevant notes are in BRAND_NOTES.md.
+- **Performance-Minded Planner: segment or trait?** The Brand Standards call it one of five segments but its audit note says to treat it as a trait on another segment. Confirm with Banfield before the brief describes it either way.
+- **What is "Meet + Inspire"?** This document calls it the full form for hired clients; the Brand Standards call it the complimentary 45-minute consultation (the call the Quick Quiz books). Confirm the name for each before writing CTA copy.
+- **Book with Jamie, or with the team?** P5 says clients value talking to Jamie directly; the Brand Standards' "person to platform" shift says "this isn't just Jamie, this is a studio." Confirm how the CTA should name who they will meet.
+- **Should the quiz identify life-stage segment too?** It currently scores working-style archetypes only. Segment would need household questions (for example kids, aging parents).
 - **Unvalidated archetypes:** The archetype-to-question mapping hasn't been tested with real users. Validate it in USER_RESEARCH.md.
