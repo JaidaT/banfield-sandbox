@@ -137,6 +137,20 @@ export interface ArchetypeScore {
   percent: number
 }
 
+export interface CriterionResult {
+  id: string
+  label: string
+  rating: FitRating | 'unanswered'
+  // What the client chose (or their city, for location). Absent when unanswered.
+  answer?: string
+}
+
+export interface FitAssessment {
+  overall: FitRating
+  criteria: CriterionResult[]
+  redFlags: RedFlag[]
+}
+
 export interface ArchetypeBlend {
   // Highest first; ties keep the order archetypes appear in archetypes.json.
   scores: ArchetypeScore[]
