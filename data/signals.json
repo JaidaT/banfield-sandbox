@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "draft": true,
+    "source": "Draft behavioural-signal rules from DISCOVERY P2 (time to complete, skipped questions, one-word vs detailed open answers) and the 'signals' listed per archetype in archetypes.json. Thresholds and weights are guesses and must be tuned with Banfield once real submissions exist.",
+    "signals": {
+      "durationSeconds": "Time from the first question to submitting, in seconds.",
+      "skippedCount": "Number of optional questions left blank.",
+      "avgTextLength": "Average character count of answered open-text questions. Only applies when at least one open-text question was answered."
+    },
+    "ops": "lt = less than, lte = less than or equal, gt = greater than, gte = greater than or equal.",
+    "weights": "Points added toward archetype ids, on the same scale as questions.json. A rule with no weights only adds its note to the team brief."
+  },
+  "rules": [
+    {
+      "id": "fast_finish",
+      "signal": "durationSeconds",
+      "op": "lt",
+      "value": 150,
+      "weights": { "decisive_delegator": 2 },
+      "note": "Finished quickly (under 2.5 minutes)"
+    },
+    {
+      "id": "took_their_time",
+      "signal": "durationSeconds",
+      "op": "gt",
+      "value": 480,
+      "weights": { "analytical_validator": 1, "cautious_reassurance_seeker": 1 },
+      "note": "Took their time (over 8 minutes)"
+    },
+    {
+      "id": "detailed_answers",
+      "signal": "avgTextLength",
+      "op": "gte",
+      "value": 200,
+      "weights": { "analytical_validator": 2, "creative_collaborator": 1 },
+      "note": "Wrote detailed open answers"
+    },
+    {
+      "id": "brief_answers",
+      "signal": "avgTextLength",
+      "op": "lt",
+      "value": 30,
+      "weights": { "decisive_delegator": 1 },
+      "note": "Kept open answers short"
+    },
+    {
+      "id": "skipped_several",
+      "signal": "skippedCount",
+      "op": "gte",
+      "value": 2,
+      "note": "Skipped 2 or more optional questions"
+    }
+  ]
+}

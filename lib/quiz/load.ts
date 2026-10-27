@@ -1,7 +1,18 @@
 import archetypesJson from '@/data/archetypes.json'
 import questionsJson from '@/data/questions.json'
-import { QUESTION_KINDS } from './types'
-import type { AnswerOption, Archetype, ArchetypeData, Question, QuestionKind } from './types'
+import signalsJson from '@/data/signals.json'
+import { COMPARISONS, QUESTION_KINDS, SIGNALS } from './types'
+import type {
+  AnswerOption,
+  Archetype,
+  ArchetypeData,
+  Comparison,
+  Question,
+  QuestionKind,
+  Signal,
+  SignalRule,
+  Weights,
+} from './types'
 
 const STRING_FIELDS = ['id', 'label', 'communication', 'pacing', 'pitch'] as const
 const ARRAY_FIELDS = ['segments', 'signals', 'risks'] as const
@@ -71,25 +82,7 @@ function parseOption(raw: unknown, questionId: string, archetypeIds: Set<string>
   if (!isRecord(raw) || typeof raw.id !== 'string' || typeof raw.label !== 'string') {
     throw new Error(`question ${questionId} has an option without an "id" and "label"`)
   }
-  const weights: AnswerOption['weights'] = {}
-  if (raw.weights !== undefined) {
-    if (!isRecord(raw.weights)) {
-      throw new Error(`question ${questionId} option ${raw.id} has "weights" that is not an object`)
-    }
-    for (const [archetypeId, weight] of Object.entries(raw.weights)) {
-      if (!archetypeIds.has(archetypeId)) {
-        throw new Error(
-          `question ${questionId} option ${raw.id} weights unknown archetype: ${archetypeId}`,
-        )
-      }
-      if (typeof weight !== 'number' || !Number.isFinite(weight)) {
-        throw new Error(
-          `question ${questionId} option ${raw.id} weight for ${archetypeId} must be a number`,
-        )
-      }
-      weights[archetypeId] = weight
-    }
-  }
+  const weights = parseWeights(raw.weights, `question ${questionId} option ${raw.id}`, archetypeIds)
   return { id: raw.id, label: raw.label, weights }
 }
 
@@ -149,6 +142,69 @@ export function parseQuestionBank(raw: unknown, archetypeIds: readonly string[])
 export function loadQuestions(): Question[] {
   return parseQuestionBank(
     questionsJson as unknown,
+    loadArchetypes().map((a) => a.id),
+  )
+}
+
+// `where` names the owner (e.g. "signal rule fast") so errors point at the bad entry.
+function parseWeights(raw: unknown, where: string, archetypeIds: Set<string>): Weights {
+  const weights: Weights = {}
+  if (raw === undefined) return weights
+  if (!isRecord(raw)) throw new Error(`${where} has "weights" that is not an object`)
+  for (const [archetypeId, weight] of Object.entries(raw)) {
+    if (!archetypeIds.has(archetypeId)) {
+      throw new Error(`${where} weights unknown archetype: ${archetypeId}`)
+    }
+    if (typeof weight !== 'number' || !Number.isFinite(weight)) {
+      throw new Error(`${where} weight for ${archetypeId} must be a number`)
+    }
+    weights[archetypeId] = weight
+  }
+  return weights
+}
+
+export function parseSignalRules(raw: unknown, archetypeIds: readonly string[]): SignalRule[] {
+  if (!isRecord(raw) || !Array.isArray(raw.rules)) {
+    throw new Error('signal rules must have a "rules" array')
+  }
+  const known = new Set(archetypeIds)
+  const seen = new Set<string>()
+
+  return raw.rules.map((entry: unknown, index: number): SignalRule => {
+    if (!isRecord(entry) || typeof entry.id !== 'string' || entry.id === '') {
+      throw new Error(`signal rule at index ${index} is missing an "id"`)
+    }
+    const id = entry.id
+    if (seen.has(id)) throw new Error(`duplicate signal rule id: ${id}`)
+    seen.add(id)
+
+    if (!SIGNALS.includes(entry.signal as Signal)) {
+      throw new Error(`signal rule ${id} has unknown signal: ${String(entry.signal)}`)
+    }
+    if (!COMPARISONS.includes(entry.op as Comparison)) {
+      throw new Error(`signal rule ${id} has unknown comparison: ${String(entry.op)}`)
+    }
+    if (typeof entry.value !== 'number' || !Number.isFinite(entry.value)) {
+      throw new Error(`signal rule ${id} "value" must be a number`)
+    }
+    if (typeof entry.note !== 'string' || entry.note === '') {
+      throw new Error(`signal rule ${id} is missing a "note" for the team brief`)
+    }
+
+    return {
+      id,
+      signal: entry.signal as Signal,
+      op: entry.op as Comparison,
+      value: entry.value,
+      weights: parseWeights(entry.weights, `signal rule ${id}`, known),
+      note: entry.note,
+    }
+  })
+}
+
+export function loadSignalRules(): SignalRule[] {
+  return parseSignalRules(
+    signalsJson as unknown,
     loadArchetypes().map((a) => a.id),
   )
 }
