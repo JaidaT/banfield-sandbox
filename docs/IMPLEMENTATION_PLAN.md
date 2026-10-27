@@ -13,7 +13,7 @@ Constraints carried from DISCOVERY.md:
 Before writing route code, read the relevant guides in `node_modules/next/dist/docs/` (routing, dynamic params, server/client components). Next 16.4 differs from older versions (see AGENTS.md).
 
 ### Phase 1: Data layer
-- [ ] Move `.claude/skills/data/archetypes.json` to `data/archetypes.json` and update references
+- [x] Move `.claude/skills/data/archetypes.json` to `data/archetypes.json` and update references
 - [ ] Add `lib/quiz/types.ts`: `Archetype`, `ArchetypeId`, `Question`, `AnswerOption` (with `weights: Partial<Record<ArchetypeId, number>>`), `Submission` (contact, site address, answers, behavioural signals: `durationMs`, `skippedQuestionIds`, open-text answers), `ArchetypeBlend`, `FitAssessment`, `TeamBrief`, `ClientResult`
 - [ ] Add `data/questions.json`: a stub Quick Quiz question bank (about 8 to 10 questions) covering the four Banfield sample behavioural questions, plus indirect questions ("how do you take your coffee", "what does home mean to you") and fit questions (scope, location, investment comfort range, timeframe, readiness, service type). Each option carries archetype weights and/or a fit key. Mark it `_meta.draft: true` for Banfield review
 - [ ] Add `data/signals.json`: behavioural-signal adjustment rules (for example a fast completion leans toward `decisive_delegator` and long open-text answers lean toward `analytical_validator` and `creative_collaborator`), with thresholds as data
@@ -49,3 +49,4 @@ Before writing route code, read the relevant guides in `node_modules/next/dist/d
 - Persistence and aggregate analytics ("X% of visitors are type Y")
 - Real booking integration, photo and floor-plan uploads, and the follow-up email
 - Access control for `/team/*`
+- A non-coder way for Banfield to edit archetypes, questions and fit rules (raw JSON on GitHub is too error-prone for them). Options: a Google Sheet as the source (fits their G Suite stack; preferred), an admin page, or plain-language errors plus an editing guide. Keep the existing validation as the safety net whichever method is chosen, and make its errors visible to whoever is editing. Confirm with Banfield how they want to edit before building
