@@ -49,4 +49,5 @@ Before writing route code, read the relevant guides in `node_modules/next/dist/d
 - Persistence and aggregate analytics ("X% of visitors are type Y")
 - Real booking integration, photo and floor-plan uploads, and the follow-up email
 - Access control for `/team/*`
+- The full questionnaire must work on its own for people who skipped the short quiz. When short-quiz answers exist (matched by booking email, with no accounts or logins), it skips or pre-fills those questions so nothing is asked twice. Keep the scoring and brief functions working from any subset of answers so a brief can also come from the full questionnaire
 - A non-coder way for Banfield to edit archetypes, questions and fit rules (raw JSON on GitHub is too error-prone for them). Options: a Google Sheet as the source (fits their G Suite stack; preferred), an admin page, or plain-language errors plus an editing guide. Keep the existing validation as the safety net whichever method is chosen, and make its errors visible to whoever is editing. Confirm with Banfield how they want to edit before building
