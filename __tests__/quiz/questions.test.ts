@@ -103,6 +103,20 @@ describe('parseQuestionBank', () => {
     expect(() => parseQuestionBank(bank, IDS)).toThrow(/q1.*slider/)
   })
 
+  // Fit and archetype are independent axes (see DECISIONS.md).
+  test('throws when a fit question carries archetype weights', () => {
+    const bank = bankWith([
+      {
+        id: 'timeframe',
+        kind: 'single',
+        prompt: 'When?',
+        criterion: 'timeframe',
+        options: [{ id: 'soon', label: 'Soon', weights: { decisive_delegator: 1 } }],
+      },
+    ])
+    expect(() => parseQuestionBank(bank, IDS)).toThrow(/timeframe.*fit.*weights/)
+  })
+
   test('text questions need no options and default to an empty list', () => {
     const [q] = parseQuestionBank(bankWith([{ id: 'home', kind: 'text', prompt: 'Tell us' }]), IDS)
     expect(q.options).toEqual([])

@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "draft": true,
+    "source": "Draft fit rules from Banfield's fit criteria (scope, location, investment, timeframe, readiness, service requirements) and the DISCOVERY P6 evidence (free-help seekers, uncommitted callers). Every rating, service area and red flag is a guess and must be reviewed by Banfield before use.",
+    "ratings": "strong = a great fit; possible = worth a call, check on it; weak = likely not a fit, or not yet. Ratings are team-facing only and never shown to the client.",
+    "criteria": "Each key matches a 'criterion' on a fit question in questions.json. Every answer to that question needs a rating here; a test enforces this.",
+    "serviceAreas": "Municipalities Banfield serves. A site address in one of these rates location as strong; anywhere else rates it possible so Jamie can decide.",
+    "redFlags": "Combinations of answers worth flagging in the team brief. A flag is raised when every condition in 'when' matches."
+  },
+  "criteria": {
+    "scope": {
+      "label": "Scope",
+      "ratings": {
+        "furniture_styling": "possible",
+        "facelift": "possible",
+        "renovation": "strong",
+        "new_build": "strong",
+        "not_sure": "possible"
+      }
+    },
+    "timeframe": {
+      "label": "Timeframe",
+      "ratings": {
+        "asap": "possible",
+        "3_to_6_months": "strong",
+        "6_to_12_months": "strong",
+        "over_a_year": "possible",
+        "just_exploring": "weak"
+      }
+    },
+    "investment": {
+      "label": "Investment",
+      "ratings": {
+        "under_50k": "weak",
+        "50k_to_150k": "possible",
+        "150k_to_400k": "strong",
+        "over_400k": "strong",
+        "not_sure": "possible"
+      }
+    },
+    "readiness": {
+      "label": "Readiness",
+      "ratings": {
+        "just_ideas": "possible",
+        "planning": "strong",
+        "ready": "strong",
+        "underway": "possible"
+      }
+    },
+    "service": {
+      "label": "Service requirements",
+      "ratings": {
+        "full_service": "strong",
+        "design_only": "possible",
+        "consult": "weak",
+        "not_sure": "possible"
+      }
+    }
+  },
+  "serviceAreas": [
+    "Burnaby",
+    "Vancouver",
+    "North Vancouver",
+    "West Vancouver",
+    "New Westminster",
+    "Richmond",
+    "Coquitlam",
+    "Port Moody"
+  ],
+  "redFlags": [
+    {
+      "id": "free_advice",
+      "note": "Just exploring and only wants a one-time consult. May be looking for free advice.",
+      "when": [
+        { "question": "timeframe", "option": "just_exploring" },
+        { "question": "service", "option": "consult" }
+      ]
+    },
+    {
+      "id": "early_no_budget",
+      "note": "Still collecting ideas with no budget in mind. May not be ready to commit.",
+      "when": [
+        { "question": "readiness", "option": "just_ideas" },
+        { "question": "investment", "option": "not_sure" }
+      ]
+    },
+    {
+      "id": "builder_underway",
+      "note": "Already underway with a builder. Design changes may be limited; ask what stage they are at.",
+      "when": [
+        { "question": "readiness", "option": "underway" }
+      ]
+    }
+  ]
+}

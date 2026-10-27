@@ -58,3 +58,33 @@ export interface SignalRule {
   weights: Weights
   note: string
 }
+
+export const FIT_RATINGS = ['strong', 'possible', 'weak'] as const
+export type FitRating = (typeof FIT_RATINGS)[number]
+
+export interface FitCriterion {
+  id: string
+  label: string
+  // The question whose `criterion` matches this id.
+  questionId: string
+  // Keyed by answer option id.
+  ratings: Record<string, FitRating>
+}
+
+export interface FitCondition {
+  question: string
+  option: string
+}
+
+// Raised when every condition in `when` matches the submission's answers.
+export interface RedFlag {
+  id: string
+  note: string
+  when: FitCondition[]
+}
+
+export interface FitRules {
+  criteria: Record<string, FitCriterion>
+  serviceAreas: string[]
+  redFlags: RedFlag[]
+}

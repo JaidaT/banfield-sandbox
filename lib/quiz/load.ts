@@ -1,12 +1,18 @@
 import archetypesJson from '@/data/archetypes.json'
+import fitJson from '@/data/fit.json'
 import questionsJson from '@/data/questions.json'
 import signalsJson from '@/data/signals.json'
-import { COMPARISONS, QUESTION_KINDS, SIGNALS } from './types'
+import { COMPARISONS, FIT_RATINGS, QUESTION_KINDS, SIGNALS } from './types'
 import type {
   AnswerOption,
   Archetype,
   ArchetypeData,
   Comparison,
+  FitCondition,
+  FitCriterion,
+  FitRating,
+  FitRules,
+  RedFlag,
   Question,
   QuestionKind,
   Signal,
@@ -131,7 +137,16 @@ export function parseQuestionBank(raw: unknown, archetypeIds: readonly string[])
       options,
     }
     if (typeof entry.help === 'string') question.help = entry.help
-    if (typeof entry.criterion === 'string') question.criterion = entry.criterion
+    if (typeof entry.criterion === 'string') {
+      question.criterion = entry.criterion
+      // Fit and archetype are independent axes, so fit answers never score archetypes.
+      const weighted = options.find((o) => Object.keys(o.weights).length > 0)
+      if (weighted) {
+        throw new Error(
+          `question ${id} is a fit question but option ${weighted.id} has archetype weights`,
+        )
+      }
+    }
     if (kind === 'multi' && typeof entry.maxSelections === 'number') {
       question.maxSelections = entry.maxSelections
     }
@@ -207,4 +222,96 @@ export function loadSignalRules(): SignalRule[] {
     signalsJson as unknown,
     loadArchetypes().map((a) => a.id),
   )
+}
+
+function parseCriterion(raw: unknown, id: string, question: Question | undefined): FitCriterion {
+  if (!question) throw new Error(`fit criterion ${id} has no matching question in the bank`)
+  if (!isRecord(raw) || typeof raw.label !== 'string' || !isRecord(raw.ratings)) {
+    throw new Error(`fit criterion ${id} needs a "label" and a "ratings" object`)
+  }
+  const optionIds = new Set(question.options.map((o) => o.id))
+  const ratings: Record<string, FitRating> = {}
+  for (const [optionId, rating] of Object.entries(raw.ratings)) {
+    if (!optionIds.has(optionId)) {
+      throw new Error(`fit criterion ${id} rates unknown answer: ${optionId}`)
+    }
+    if (!FIT_RATINGS.includes(rating as FitRating)) {
+      throw new Error(`fit criterion ${id} answer ${optionId} has invalid rating: ${String(rating)}`)
+    }
+    ratings[optionId] = rating as FitRating
+  }
+  for (const optionId of optionIds) {
+    if (!(optionId in ratings)) {
+      throw new Error(`fit criterion ${id} has no rating for answer ${optionId}`)
+    }
+  }
+  return { id, label: raw.label, questionId: question.id, ratings }
+}
+
+function parseRedFlag(raw: unknown, index: number, questions: Question[]): RedFlag {
+  if (!isRecord(raw) || typeof raw.id !== 'string' || raw.id === '') {
+    throw new Error(`red flag at index ${index} is missing an "id"`)
+  }
+  const id = raw.id
+  if (typeof raw.note !== 'string' || raw.note === '') {
+    throw new Error(`red flag ${id} is missing a "note" for the team brief`)
+  }
+  if (!Array.isArray(raw.when) || raw.when.length === 0) {
+    throw new Error(`red flag ${id} needs at least one condition in "when"`)
+  }
+  const when = raw.when.map((condition: unknown): FitCondition => {
+    if (!isRecord(condition)) throw new Error(`red flag ${id} has a condition that is not an object`)
+    const question = questions.find((q) => q.id === condition.question)
+    if (!question) {
+      throw new Error(`red flag ${id} refers to unknown question: ${String(condition.question)}`)
+    }
+    if (!question.options.some((o) => o.id === condition.option)) {
+      throw new Error(
+        `red flag ${id} refers to unknown answer ${String(condition.option)} on question ${question.id}`,
+      )
+    }
+    return { question: question.id, option: condition.option as string }
+  })
+  return { id, note: raw.note, when }
+}
+
+// Cross-checks fit.json against the question bank so a renamed or added answer
+// cannot leave a fit question unrated.
+export function parseFitRules(raw: unknown, questions: Question[]): FitRules {
+  if (!isRecord(raw) || !isRecord(raw.criteria)) {
+    throw new Error('fit rules must have a "criteria" object')
+  }
+  const byCriterion = new Map(
+    questions.filter((q) => q.criterion).map((q) => [q.criterion as string, q]),
+  )
+
+  const criteria: Record<string, FitCriterion> = {}
+  for (const [id, entry] of Object.entries(raw.criteria)) {
+    criteria[id] = parseCriterion(entry, id, byCriterion.get(id))
+  }
+  for (const [criterion, question] of byCriterion) {
+    if (!(criterion in criteria)) {
+      throw new Error(`no fit ratings for criterion ${criterion} (question ${question.id})`)
+    }
+  }
+
+  const areas = raw.serviceAreas
+  if (!Array.isArray(areas) || areas.length === 0 || !areas.every((a) => typeof a === 'string')) {
+    throw new Error('fit rules need at least one service area in "serviceAreas"')
+  }
+
+  const rawFlags = raw.redFlags === undefined ? [] : raw.redFlags
+  if (!Array.isArray(rawFlags)) throw new Error('fit rules "redFlags" must be a list')
+  const redFlags = rawFlags.map((f: unknown, i: number) => parseRedFlag(f, i, questions))
+  const seen = new Set<string>()
+  for (const f of redFlags) {
+    if (seen.has(f.id)) throw new Error(`duplicate red flag id: ${f.id}`)
+    seen.add(f.id)
+  }
+
+  return { criteria, serviceAreas: areas as string[], redFlags }
+}
+
+export function loadFitRules(): FitRules {
+  return parseFitRules(fitJson as unknown, loadQuestions())
 }
