@@ -25,8 +25,10 @@ export default function ClientResultView({ result }: { result: ClientResult }) {
       <section className="flex flex-col gap-4 rounded-2xl bg-navy p-6 text-frost">
         <p className="font-heading text-2xl font-bold">{result.closing}</p>
         <p className="leading-7">{result.cta.text}</p>
+        {/* target="_top": leave the Squarespace iframe so booking opens full size. */}
         <a
           href={result.cta.href}
+          target="_top"
           className="self-start rounded-full bg-accent px-6 py-3 font-semibold text-charcoal transition-opacity hover:opacity-90"
         >
           {result.cta.label}

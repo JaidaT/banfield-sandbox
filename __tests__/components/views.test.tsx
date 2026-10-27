@@ -68,6 +68,14 @@ describe('ClientResultView', () => {
     expect(link.getAttribute('href')).toBe(result.cta.href)
   })
 
+  // The quiz is embedded in Squarespace with an iframe. Booking must leave the
+  // frame and open in the whole browser tab, not squeezed inside the quiz box.
+  test('the booking link opens in the full window, not inside the iframe', () => {
+    const result = buildClientResult(sample('decisive-delegator'), data.questions, copy)
+    render(<ClientResultView result={result} />)
+    expect(screen.getByRole('link', { name: result.cta.label }).getAttribute('target')).toBe('_top')
+  })
+
   // DISCOVERY P3 and P6: nothing team-facing on the client screen.
   test('never renders archetype labels or fit ratings', () => {
     for (const s of samples) {
