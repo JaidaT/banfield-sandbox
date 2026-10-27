@@ -16,7 +16,7 @@ Tags show where each note applies: **[fit]** fit rules, **[brief]** team brief, 
 Architectural Design; Interior Design; Renovation Design; Kitchen and Bathroom Design; Permit Coordination; Furniture and Soft Goods Design; Generational Design (aging in place, multi-generational); Passive House and Net Zero Design; and:
 
 - **Designer on Call:** a paid, focused 2-hour session or half-day design review. This is why the quiz treats "a focused session" as a real service (rated *possible*), not a free-advice warning sign.
-- **Meet + Inspire session:** a **complimentary 45-minute consultation** to understand goals, establish alignment and introduce the process. Tone: informal, conversational, insightful. This conflicts with how DISCOVERY.md uses the name (see open questions there).
+- **Meet + Inspire session:** a **complimentary 45-minute consultation** to understand goals, establish alignment and introduce the process. Tone: informal, conversational, insightful. Confirmed 2026-10-26: this is the call the Quick Quiz's CTA books.
 
 ## Who is a good fit **[fit]**
 

@@ -3,7 +3,7 @@
 ## Agreed direction (Oct 9, confirmed by Banfield in writing)
 Two separate tools, built from one shared question bank (build the full version first, then condense):
 1. **Quick Quiz (public, on website):** ~5 min, filled out *before* booking a discovery call with Jamie. Qualifies the lead and identifies the client type.
-2. **Full "Meet & Inspire" (hired clients only):** Replaces the current "Let us get to know you" form.
+2. **Full questionnaire (hired clients only):** Replaces the current "Let us get to know you" form. (Not to be confused with the Meet + Inspire session, which is the free 45-minute call the Quick Quiz books.)
 No client should answer the same question twice across the two.
 
 The team-facing brief must answer two separate questions:
@@ -106,7 +106,7 @@ Note: Banfield's Brand Standards (pp. 24-28) list Performance-Minded Planner as 
   - Never show fit or archetype labels to the client.
   - Always end positively with a booking CTA.
 
-## P7 — The current Meet & Inspire (Google Sheets) is long, generic and manual (HIGH, full version)
+## P7 — The current "Let us get to know you" form (Google Sheets) is long, generic and manual (HIGH, full version)
 - One long non-adaptive form that ends in "a long page of answers."
 - Clients get questions that aren't relevant to them.
 - Staff copy answers into Claude by hand to build profiles.
@@ -164,7 +164,7 @@ Note: Banfield's Brand Standards (pp. 24-28) list Performance-Minded Planner as 
 - **Style labels:** The current form asks clients to circle styles like "Tuscan" and "Transitional". Jamie said these labels mean different things to everyone (P4). Replace them with image-based choices.
 - **Missing source (resolved 2026-10-26):** Banfield's segment definitions (Brand Standards, pp. 24-28, dated Aug 16, 2026) have been received. Relevant notes are in BRAND_NOTES.md.
 - **Performance-Minded Planner: segment or trait?** The Brand Standards call it one of five segments but its audit note says to treat it as a trait on another segment. Confirm with Banfield before the brief describes it either way.
-- **What is "Meet + Inspire"?** This document calls it the full form for hired clients; the Brand Standards call it the complimentary 45-minute consultation (the call the Quick Quiz books). Confirm the name for each before writing CTA copy.
+- **What is "Meet + Inspire"? (resolved 2026-10-26):** It is the free 45-minute call with Banfield, the call the Quick Quiz books. The long form for hired clients is called the full questionnaire in this document.
 - **Book with Jamie, or with the team?** P5 says clients value talking to Jamie directly; the Brand Standards' "person to platform" shift says "this isn't just Jamie, this is a studio." Confirm how the CTA should name who they will meet.
 - **Should the quiz identify life-stage segment too?** It currently scores working-style archetypes only. Segment would need household questions (for example kids, aging parents).
 - **Unvalidated archetypes:** The archetype-to-question mapping hasn't been tested with real users. Validate it in USER_RESEARCH.md.
