@@ -48,7 +48,7 @@
       "signal": "skippedCount",
       "op": "gte",
       "value": 2,
-      "note": "Skipped 2 or more optional questions"
+      "note": "Skipped 2 or more questions"
     }
   ]
 }

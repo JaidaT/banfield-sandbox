@@ -156,3 +156,47 @@ export interface ArchetypeBlend {
   scores: ArchetypeScore[]
   insufficient: boolean
 }
+
+export interface QuizData {
+  archetypes: Archetype[]
+  questions: Question[]
+  signalRules: SignalRule[]
+  fitRules: FitRules
+}
+
+// Team-facing guidance for one of the client's leading archetypes.
+export interface ArchetypeGuidance {
+  id: ArchetypeId
+  label: string
+  tagline: string
+  percent: number
+  communication: string
+  pacing: string
+  pitch: string
+  risks: string[]
+  tip: string
+}
+
+export interface AnswerLine {
+  questionId: string
+  prompt: string
+  // Readable answer (option labels or text); null when skipped.
+  answer: string | null
+}
+
+// Team-facing only. Never render any part of this to the client.
+export interface TeamBrief {
+  submissionId: string
+  headline: string
+  contact: Contact
+  blend: ArchetypeBlend
+  highlights: ArchetypeGuidance[]
+  fit: FitAssessment
+  behaviour: {
+    durationSeconds: number
+    skippedQuestions: string[]
+    avgTextLength: number | null
+    notes: string[]
+  }
+  answers: AnswerLine[]
+}

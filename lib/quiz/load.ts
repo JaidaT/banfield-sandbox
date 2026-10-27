@@ -17,6 +17,7 @@ import type {
   RedFlag,
   Question,
   QuestionKind,
+  QuizData,
   SampleSubmission,
   Signal,
   SignalRule,
@@ -339,6 +340,23 @@ export function parseSampleSubmissions(raw: unknown, questions: Question[]): Sam
     }
     return sample
   })
+}
+
+export function loadQuizData(): QuizData {
+  const archetypes = loadArchetypes()
+  const questions = parseQuestionBank(
+    questionsJson as unknown,
+    archetypes.map((a) => a.id),
+  )
+  return {
+    archetypes,
+    questions,
+    signalRules: parseSignalRules(
+      signalsJson as unknown,
+      archetypes.map((a) => a.id),
+    ),
+    fitRules: parseFitRules(fitJson as unknown, questions),
+  }
 }
 
 export function loadSampleSubmissions(): SampleSubmission[] {
