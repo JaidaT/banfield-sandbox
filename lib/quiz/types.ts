@@ -88,3 +88,32 @@ export interface FitRules {
   serviceAreas: string[]
   redFlags: RedFlag[]
 }
+
+export interface SiteAddress {
+  street: string
+  city: string
+  postalCode: string
+}
+
+export interface Contact {
+  name: string
+  email: string
+  phone: string
+  siteAddress: SiteAddress
+}
+
+// Single-choice: option id. Multi-choice: option ids. Text: free text.
+// A question with no entry was skipped.
+export type Answer = string | string[]
+
+export interface Submission {
+  id: string
+  contact: Contact
+  answers: Record<string, Answer>
+  durationSeconds: number
+}
+
+// A made-up submission used in tests and demo pages.
+export interface SampleSubmission extends Submission {
+  note: string
+}

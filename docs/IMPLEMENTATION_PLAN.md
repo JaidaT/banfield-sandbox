@@ -14,12 +14,12 @@ Before writing route code, read the relevant guides in `node_modules/next/dist/d
 
 ### Phase 1: Data layer
 - [x] Move `.claude/skills/data/archetypes.json` to `data/archetypes.json` and update references
-- [ ] Add `lib/quiz/types.ts`: `Archetype`, `ArchetypeId`, `Question`, `AnswerOption` (with `weights: Partial<Record<ArchetypeId, number>>`), `Submission` (contact, site address, answers, behavioural signals: `durationMs`, `skippedQuestionIds`, open-text answers), `ArchetypeBlend`, `FitAssessment`, `TeamBrief`, `ClientResult`
+- [x] Add `lib/quiz/types.ts` input types: `Archetype`, `Question`, `AnswerOption`, `Weights`, `SignalRule`, `FitRules`, `Submission` (contact, site address, answers, `durationSeconds`; skipped questions are the unanswered ones, derived in Phase 2). Output types (`ArchetypeBlend`, `FitAssessment`, `TeamBrief`, `ClientResult`) are added with the Phase 2 functions that produce them
 - [x] Add `data/questions.json`: a stub Quick Quiz question bank (about 8 to 10 questions) covering the four Banfield sample behavioural questions, plus indirect questions ("how do you take your coffee", "what does home mean to you") and fit questions (scope, location, investment comfort range, timeframe, readiness, service type). Each option carries archetype weights and/or a fit key. Mark it `_meta.draft: true` for Banfield review
 - [x] Add `data/signals.json`: behavioural-signal adjustment rules (for example a fast completion leans toward `decisive_delegator` and long open-text answers lean toward `analytical_validator` and `creative_collaborator`), with thresholds as data
 - [x] Add `data/fit.json`: fit criteria (service area, investment ranges, timeframe windows, readiness and service levels) mapped to `strong | possible | weak` per criterion, plus red-flag rules (for example missing site address or "looking for free advice"). Mark it as a draft
 - [x] Add `lib/quiz/load.ts`: typed loaders that validate the JSON files at load time and fail loudly on unknown archetype ids in weights
-- [ ] Add `__tests__/fixtures/submissions.ts`: 4 to 5 fixture submissions (one leaning strongly toward each of several archetypes, a mixed blend, a weak-fit one, and one with skipped questions)
+- [x] Add `data/sample-submissions.json` (moved from `__tests__/fixtures/` so the Phase 3 demo pages can load it too) plus `lib/quiz/submission.ts` (`validateSubmission`): 5 sample submissions (one leaning strongly toward each of several archetypes, a mixed blend, a weak-fit one, and one with skipped questions)
 
 ### Phase 2: Scoring and assessment (pure functions)
 - [ ] `lib/quiz/scoreArchetypes.ts`: sum the option weights per archetype, apply the signal adjustments, normalize to whole-number percentages that add up to 100, and sort descending. Works for any number of archetypes and returns an even or "insufficient data" result when no weights apply

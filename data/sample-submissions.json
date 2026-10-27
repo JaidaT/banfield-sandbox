@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "purpose": "Made-up Quick Quiz submissions for tests and demo pages. Not real clients. Names, emails (example.com), phone numbers (555-01xx) and street addresses are fictional.",
+    "answers": "Keys are question ids from questions.json. Pick-one questions take an option id, pick-several questions take a list of option ids, text questions take text. A missing question means it was skipped.",
+    "note": "Each sample's 'note' says who it is meant to represent, so a reviewer can check the brief against the intent."
+  },
+  "samples": [
+    {
+      "id": "decisive-delegator",
+      "note": "Clear Decisive Delegator. Strong fit: renovation, $150K-$400K, ready in 3-6 months, full service, in Burnaby. Finished fast with short answers.",
+      "contact": {
+        "name": "Alex Morgan",
+        "email": "alex.morgan@example.com",
+        "phone": "604-555-0101",
+        "siteAddress": { "street": "100 Example Ave", "city": "Burnaby", "postalCode": "V5A 0A1" }
+      },
+      "answers": {
+        "decision_style": "trust_expert",
+        "involvement": "show_me_the_result",
+        "different_concept": "love_it",
+        "confidence": ["clear_recommendation", "budget_visibility"],
+        "coffee": "black_to_go",
+        "home_meaning": "Calm. Somewhere that just works.",
+        "project_scope": "renovation",
+        "timeframe": "3_to_6_months",
+        "investment": "150k_to_400k",
+        "readiness": "ready",
+        "service": "full_service"
+      },
+      "durationSeconds": 130
+    },
+    {
+      "id": "analytical-validator",
+      "note": "Clear Analytical Validator. Strong fit: new build over $400K in Vancouver, 6-12 months out. Took their time and wrote a long, detailed answer.",
+      "contact": {
+        "name": "Jordan Lee",
+        "email": "jordan.lee@example.com",
+        "phone": "604-555-0102",
+        "siteAddress": { "street": "200 Sample St", "city": "Vancouver", "postalCode": "V6B 0A2" }
+      },
+      "answers": {
+        "decision_style": "research",
+        "involvement": "explain_the_why",
+        "different_concept": "why",
+        "confidence": ["reasoning", "budget_visibility"],
+        "coffee": "pour_over",
+        "home_meaning": "Home is where everything has a reason to be where it is. We want a house that performs well for decades: good air quality, low energy bills, materials that age well, and a layout we have actually thought through rather than inherited. We have read a lot about Passive House and want to understand the trade-offs.",
+        "project_scope": "new_build",
+        "timeframe": "6_to_12_months",
+        "investment": "over_400k",
+        "readiness": "planning",
+        "service": "full_service"
+      },
+      "durationSeconds": 420
+    },
+    {
+      "id": "mixed-cautious-controller",
+      "note": "Mixed blend: Cautious Reassurance Seeker and Hands-On Controller. Possible fit: renovation $50K-$150K in Coquitlam, wants to start ASAP, unsure what service they need.",
+      "contact": {
+        "name": "Casey Nguyen",
+        "email": "casey.nguyen@example.com",
+        "phone": "604-555-0103",
+        "siteAddress": { "street": "300 Placeholder Rd", "city": "Coquitlam", "postalCode": "V3K 0A3" }
+      },
+      "answers": {
+        "decision_style": "talk_it_through",
+        "involvement": "hands_on",
+        "different_concept": "nervous",
+        "confidence": ["whats_next", "in_the_details"],
+        "coffee": "usual_order",
+        "home_meaning": "Somewhere the kids can grow up and my mom can come stay with us.",
+        "project_scope": "renovation",
+        "timeframe": "asap",
+        "investment": "50k_to_150k",
+        "readiness": "planning",
+        "service": "not_sure"
+      },
+      "durationSeconds": 300
+    },
+    {
+      "id": "weak-fit-explorer",
+      "note": "Leans Creative Collaborator. Weak fit: furniture and styling only, just exploring, no budget in mind, wants a one-time session, and the site is outside the service area (Kelowna). Should raise the early-stage notes.",
+      "contact": {
+        "name": "Riley Thompson",
+        "email": "riley.thompson@example.com",
+        "phone": "250-555-0104",
+        "siteAddress": { "street": "400 Demo Cres", "city": "Kelowna", "postalCode": "V1Y 0A4" }
+      },
+      "answers": {
+        "decision_style": "follow_ideas",
+        "involvement": "milestones",
+        "different_concept": "exciting",
+        "confidence": ["see_it_first"],
+        "coffee": "something_new",
+        "home_meaning": "Colour, plants, and a big table for friends.",
+        "project_scope": "furniture_styling",
+        "timeframe": "just_exploring",
+        "investment": "not_sure",
+        "readiness": "just_ideas",
+        "service": "consult"
+      },
+      "durationSeconds": 200
+    },
+    {
+      "id": "skipper",
+      "note": "Leans Hands-On Controller. Skipped three questions (confidence, coffee, home) and finished very fast. Already underway with a builder in Surrey, wants design plans only. Should raise the 'builder underway' note.",
+      "contact": {
+        "name": "Morgan Davis",
+        "email": "morgan.davis@example.com",
+        "phone": "604-555-0105",
+        "siteAddress": { "street": "500 Mock Blvd", "city": "Surrey", "postalCode": "V3T 0A5" }
+      },
+      "answers": {
+        "decision_style": "map_it_out",
+        "involvement": "hands_on",
+        "different_concept": "compare",
+        "project_scope": "renovation",
+        "timeframe": "6_to_12_months",
+        "investment": "150k_to_400k",
+        "readiness": "underway",
+        "service": "design_only"
+      },
+      "durationSeconds": 95
+    }
+  ]
+}

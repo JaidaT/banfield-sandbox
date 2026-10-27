@@ -1,7 +1,9 @@
 import archetypesJson from '@/data/archetypes.json'
 import fitJson from '@/data/fit.json'
 import questionsJson from '@/data/questions.json'
+import samplesJson from '@/data/sample-submissions.json'
 import signalsJson from '@/data/signals.json'
+import { validateSubmission } from './submission'
 import { COMPARISONS, FIT_RATINGS, QUESTION_KINDS, SIGNALS } from './types'
 import type {
   AnswerOption,
@@ -15,6 +17,7 @@ import type {
   RedFlag,
   Question,
   QuestionKind,
+  SampleSubmission,
   Signal,
   SignalRule,
   Weights,
@@ -314,4 +317,30 @@ export function parseFitRules(raw: unknown, questions: Question[]): FitRules {
 
 export function loadFitRules(): FitRules {
   return parseFitRules(fitJson as unknown, loadQuestions())
+}
+
+export function parseSampleSubmissions(raw: unknown, questions: Question[]): SampleSubmission[] {
+  if (!isRecord(raw) || !Array.isArray(raw.samples)) {
+    throw new Error('sample submissions must have a "samples" array')
+  }
+  return raw.samples.map((entry: unknown, index: number): SampleSubmission => {
+    if (
+      !isRecord(entry) ||
+      typeof entry.id !== 'string' ||
+      !isRecord(entry.contact) ||
+      !isRecord(entry.answers)
+    ) {
+      throw new Error(`sample at index ${index} needs an "id", "contact" and "answers"`)
+    }
+    const sample = entry as unknown as SampleSubmission
+    const problems = validateSubmission(sample, questions)
+    if (problems.length > 0) {
+      throw new Error(`sample ${sample.id} is invalid:\n- ${problems.join('\n- ')}`)
+    }
+    return sample
+  })
+}
+
+export function loadSampleSubmissions(): SampleSubmission[] {
+  return parseSampleSubmissions(samplesJson as unknown, loadQuestions())
 }
