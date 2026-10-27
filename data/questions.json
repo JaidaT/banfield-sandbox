@@ -63,7 +63,6 @@
       "id": "coffee",
       "kind": "single",
       "prompt": "Important question first: how do you take your coffee?",
-      "help": "It's not that deep. Or is it?",
       "options": [
         { "id": "black_to_go", "label": "Black, in a travel mug, already out the door", "weights": { "decisive_delegator": 1 } },
         { "id": "pour_over", "label": "Pour-over. Beans weighed. Timer running.", "weights": { "analytical_validator": 1, "hands_on_controller": 1 } },
