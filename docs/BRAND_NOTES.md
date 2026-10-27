@@ -49,6 +49,7 @@ Five segments from Banfield's client research (pp. 24-28). Segments describe **l
 - **Preferred words:** thoughtful design, real life, functional flow, tailored spaces, seamless process, designed with intention. Emotional words: home, gather, grow, morning, table, stay, belong, remember, hold, everyday, together, comfort.
 - **Avoid:** overusing "luxury"; trend-based language; technical terms without context; leading with certainty or transactional language ("guaranteed", "risk-free"). **Warmth leads, proof follows.**
 - **Ready-made CTA line:** "Grab a coffee. Let's talk about your home. Book a complimentary Meet + Inspire session to explore your space, goals, and next steps."
+- **Banfield's current booking page** (screenshot shared 2026-10-26) uses the same voice: "Pull up a chair, reheat that coffee yes, even with the toys and laundry still out and let's talk about your home." It describes Meet + Inspire as "a complimentary 45-minute Zoom session with Principal Designer Jamie Banfield". The client result CTA borrows this wording. **[client]**
 
 ## Visual identity **[ui]**
 
