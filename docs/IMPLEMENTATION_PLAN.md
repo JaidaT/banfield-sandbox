@@ -29,25 +29,28 @@ Before writing route code, read the relevant guides in `node_modules/next/dist/d
 - [x] `lib/quiz/buildClientResult.ts` (wording in `data/client-result.json` so Banfield can edit tone): a warm, label-free summary drawn from how they want to live (no archetype ids, labels, scores or fit ratings), plus the CTA content (book a call with Jamie, with prefill data and a follow-up email fallback note)
 
 ### Phase 3: UI
-- [ ] `app/team/brief/[id]/page.tsx`: a server component that loads a fixture by id and renders the brief so it's easy to skim: blend bars, fit table, guidance cards, behavioural notes and a collapsible section of raw answers. Mobile-first with Tailwind, and set `robots: noindex` in metadata
-- [ ] `app/team/brief/[id]/CopyBriefButton.tsx`: a client component that copies `briefToText` output to the clipboard and shows a confirmation
-- [ ] `app/result/[id]/page.tsx`: the client-facing result screen in Jamie's voice, ending with "We'd love to work with you" and a booking CTA (placeholder link that carries the prefilled name and email as query params)
-- [ ] `app/team/page.tsx`: an index listing the fixture submissions with links to each brief and result (dev and demo only)
+- [x] `app/team/brief/[id]/page.tsx`: a server component that loads a fixture by id and renders the brief so it's easy to skim: blend bars, fit table, guidance cards, behavioural notes and a collapsible section of raw answers. Mobile-first with Tailwind, and set `robots: noindex` in metadata (view in `components/TeamBriefView.tsx`; noindex set in `app/team/layout.tsx`)
+- [x] `components/CopyBriefButton.tsx`: a client component that copies `briefToText` output to the clipboard and shows a confirmation
+- [x] `app/result/[id]/page.tsx`: the client-facing result screen in Jamie's voice, ending with "We'd love to work with you" and a booking CTA (placeholder link that carries the prefilled name and email as query params; `app/book/page.tsx` is a placeholder that shows the prefilled details)
+- [x] `app/team/page.tsx`: an index listing the fixture submissions with links to each brief and result (dev and demo only)
+- [x] Brand colours (Frost White, Charcoal, Navy, Yellow) as theme tokens; Poppins body and Quicksand headings (Glacial Indifference not yet licensed)
 
 ### Phase 4: Tests and validation
-- [ ] Unit tests for the loaders: valid files load, and an unknown archetype id in weights throws
-- [ ] Unit tests for `scoreArchetypes`: percentages add up to 100, the ordering is correct, signal adjustments apply, adding a sixth archetype to a test dataset still works, and the empty case is handled
-- [ ] Unit tests for `assessFit`: each criterion rating, red flags, and a fit result that doesn't change when archetype answers change
-- [ ] Unit tests for `buildTeamBrief` and `briefToText`: required sections are present and contact fields are carried through
-- [ ] Unit tests for `buildClientResult`: the output never contains any archetype id, label, tagline, segment name or fit rating (checked against every fixture), and it always includes the CTA
-- [ ] Component tests: the brief page renders the blend and the copy button, and the result page renders the CTA with no team-only content
-- [ ] Replace the starter `__tests__/page.test.tsx` once `app/page.tsx` changes
-- [ ] Run `npm run lint`, `npm test` and `npm run build`, and check both pages at mobile width in `npm run dev`
+- [x] Unit tests for the loaders: valid files load, and an unknown archetype id in weights throws
+- [x] Unit tests for `scoreArchetypes`: percentages add up to 100, the ordering is correct, signal adjustments apply, adding a sixth archetype to a test dataset still works, and the empty case is handled
+- [x] Unit tests for `assessFit`: each criterion rating, red flags, and a fit result that doesn't change when archetype answers change
+- [x] Unit tests for `buildTeamBrief` and `briefToText`: required sections are present and contact fields are carried through
+- [x] Unit tests for `buildClientResult`: the output never contains any archetype id, label, tagline, segment name or fit rating (checked against every fixture), and it always includes the CTA
+- [x] Component tests: the brief page renders the blend and the copy button, and the result page renders the CTA with no team-only content
+- [x] Replace the starter `__tests__/page.test.tsx` once `app/page.tsx` changes
+- [ ] Run `npm run lint`, `npm test` and `npm run build`, and check both pages at mobile width in `npm run dev` (lint, test and build pass; the mobile-width visual check has not been done)
 
 ### Later (not in this plan)
 - Quick Quiz UI and the handoff from submission to these outputs
 - Persistence and aggregate analytics ("X% of visitors are type Y")
 - Real booking integration, photo and floor-plan uploads, and the follow-up email
 - Access control for `/team/*`
+- Real submissions need random, non-descriptive ids. Demo URLs use sample ids like `mixed-cautious-controller`, which appear in the client result page's address and page data
+- Next.js reported a known security vulnerability in version 16.4.0 during `npm run build` and recommends upgrading. Upgrade before anything is deployed
 - The full questionnaire must work on its own for people who skipped the short quiz. When short-quiz answers exist (matched by booking email, with no accounts or logins), it skips or pre-fills those questions so nothing is asked twice. Keep the scoring and brief functions working from any subset of answers so a brief can also come from the full questionnaire
 - A non-coder way for Banfield to edit archetypes, questions and fit rules (raw JSON on GitHub is too error-prone for them). Options: a Google Sheet as the source (fits their G Suite stack; preferred), an admin page, or plain-language errors plus an editing guide. Keep the existing validation as the safety net whichever method is chosen, and make its errors visible to whoever is editing. Confirm with Banfield how they want to edit before building
