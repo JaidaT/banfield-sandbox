@@ -117,3 +117,28 @@ export interface Submission {
 export interface SampleSubmission extends Submission {
   note: string
 }
+
+export interface SignalValues {
+  durationSeconds: number
+  skippedCount: number
+  // Null when no open-text question was answered, so length rules do not apply.
+  avgTextLength: number | null
+}
+
+export interface SignalResult {
+  values: SignalValues
+  matched: SignalRule[]
+}
+
+export interface ArchetypeScore {
+  id: ArchetypeId
+  label: string
+  points: number
+  percent: number
+}
+
+export interface ArchetypeBlend {
+  // Highest first; ties keep the order archetypes appear in archetypes.json.
+  scores: ArchetypeScore[]
+  insufficient: boolean
+}

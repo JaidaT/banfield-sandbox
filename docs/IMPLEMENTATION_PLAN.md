@@ -22,7 +22,7 @@ Before writing route code, read the relevant guides in `node_modules/next/dist/d
 - [x] Add `data/sample-submissions.json` (moved from `__tests__/fixtures/` so the Phase 3 demo pages can load it too) plus `lib/quiz/submission.ts` (`validateSubmission`): 5 sample submissions (one leaning strongly toward each of several archetypes, a mixed blend, a weak-fit one, and one with skipped questions)
 
 ### Phase 2: Scoring and assessment (pure functions)
-- [ ] `lib/quiz/scoreArchetypes.ts`: sum the option weights per archetype, apply the signal adjustments, normalize to whole-number percentages that add up to 100, and sort descending. Works for any number of archetypes and returns an even or "insufficient data" result when no weights apply
+- [x] `lib/quiz/scoreArchetypes.ts` (with `lib/quiz/signals.ts` for the behavioural signals; every unanswered question counts as skipped): sum the option weights per archetype, apply the signal adjustments, normalize to whole-number percentages that add up to 100, and sort descending. Works for any number of archetypes and returns an even or "insufficient data" result when no weights apply
 - [ ] `lib/quiz/assessFit.ts`: per-criterion rating plus an overall rating and a list of reasons and red flags, kept independent of the archetype score
 - [ ] `lib/quiz/buildTeamBrief.ts`: compose the contact block (name, email, phone, full site address, uploads placeholder), the blend (top 2 or 3 above a configurable cutoff), guidance per archetype from `archetypes.json` (communication, pacing, pitch, risks, brief tips), a fit summary, behavioural notes (duration, skipped questions, answer length) and the raw answers
 - [ ] `lib/quiz/briefToText.ts`: render the brief as plain text or markdown for pasting into Claude or JobTread

@@ -5,7 +5,7 @@
     "source": "Draft behavioural-signal rules from DISCOVERY P2 (time to complete, skipped questions, one-word vs detailed open answers) and the 'signals' listed per archetype in archetypes.json. Thresholds and weights are guesses and must be tuned with Banfield once real submissions exist.",
     "signals": {
       "durationSeconds": "Time from the first question to submitting, in seconds.",
-      "skippedCount": "Number of optional questions left blank.",
+      "skippedCount": "Number of questions left unanswered. Any question can be skipped; skipping is a signal, not an error.",
       "avgTextLength": "Average character count of answered open-text questions. Only applies when at least one open-text question was answered."
     },
     "ops": "lt = less than, lte = less than or equal, gt = greater than, gte = greater than or equal.",
