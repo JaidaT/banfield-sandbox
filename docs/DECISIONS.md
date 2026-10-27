@@ -19,3 +19,8 @@
 **Context:** Archetype and fit labels must never reach the client (P3, P6), and results must end positively with a booking CTA (P5).
 **Decision:** `buildClientResult` is a separate function from `buildTeamBrief` and returns a type with no archetype or fit fields. A test checks every fixture's client output for any archetype id, label, tagline, segment name or fit rating.
 **Alternatives considered:** One result object with team fields hidden in the UI (rejected because one rendering mistake would leak labels to the client).
+
+## 2026-10-26 — Completion-time signals are note-only until validated
+**Context:** The draft signal rules gave archetype points for finishing fast or slow. Validation will involve only a handful of people (one past client, one recent renovator who did not use a designer, and classmates who are not homeowners), so there is no data showing that completion speed reflects client type. Speed could just as easily reflect being on a phone or distracted.
+**Decision:** `durationSeconds` rules in `data/signals.json` carry no weights. They still add a note to the team brief ("Finished quickly", "Took their time") so Jamie can judge it. A test in `__tests__/quiz/signals.test.ts` enforces this. Open-text length and skip rules are unchanged.
+**Alternatives considered:** Keep the guessed weights (rejected because one wrong threshold would skew every client's blend); remove timing entirely (rejected because the note is still useful context for Jamie and the data is needed for later validation).

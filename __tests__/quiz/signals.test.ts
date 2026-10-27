@@ -23,6 +23,14 @@ describe('loadSignalRules', () => {
   test('every rule has a note for the team brief', () => {
     for (const r of loadSignalRules()) expect(r.note).toBeTruthy()
   })
+
+  // Completion time is unvalidated (see DECISIONS.md), so it informs the brief
+  // but must not move the archetype blend until real data supports it.
+  test('timing rules add a note only, not archetype points', () => {
+    const timing = loadSignalRules().filter((r) => r.signal === 'durationSeconds')
+    expect(timing.length).toBeGreaterThan(0)
+    for (const r of timing) expect(r.weights, r.id).toEqual({})
+  })
 })
 
 describe('parseSignalRules', () => {

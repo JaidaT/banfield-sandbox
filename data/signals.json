@@ -9,7 +9,8 @@
       "avgTextLength": "Average character count of answered open-text questions. Only applies when at least one open-text question was answered."
     },
     "ops": "lt = less than, lte = less than or equal, gt = greater than, gte = greater than or equal.",
-    "weights": "Points added toward archetype ids, on the same scale as questions.json. A rule with no weights only adds its note to the team brief."
+    "weights": "Points added toward archetype ids, on the same scale as questions.json. A rule with no weights only adds its note to the team brief.",
+    "timing": "durationSeconds rules are note-only until real completion times show that speed reflects client type (see docs/DECISIONS.md and docs/USER_RESEARCH.md). A test enforces this."
   },
   "rules": [
     {
@@ -17,7 +18,6 @@
       "signal": "durationSeconds",
       "op": "lt",
       "value": 150,
-      "weights": { "decisive_delegator": 2 },
       "note": "Finished quickly (under 2.5 minutes)"
     },
     {
@@ -25,7 +25,6 @@
       "signal": "durationSeconds",
       "op": "gt",
       "value": 480,
-      "weights": { "analytical_validator": 1, "cautious_reassurance_seeker": 1 },
       "note": "Took their time (over 8 minutes)"
     },
     {
