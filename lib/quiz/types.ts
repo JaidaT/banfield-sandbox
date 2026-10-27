@@ -19,3 +19,24 @@ export interface ArchetypeData {
   archetypes: Archetype[]
   segments: Record<SegmentId, string>
 }
+
+export const QUESTION_KINDS = ['single', 'multi', 'text'] as const
+export type QuestionKind = (typeof QUESTION_KINDS)[number]
+
+export interface AnswerOption {
+  id: string
+  label: string
+  weights: Partial<Record<ArchetypeId, number>>
+}
+
+export interface Question {
+  id: string
+  kind: QuestionKind
+  prompt: string
+  help?: string
+  optional: boolean
+  maxSelections?: number
+  // Fit questions name the criterion they feed; their ratings live in fit.json.
+  criterion?: string
+  options: AnswerOption[]
+}

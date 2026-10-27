@@ -1,0 +1,147 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "draft": true,
+    "source": "Draft Quick Quiz bank. Behavioural questions adapt Banfield's four AI-drafted sample questions; 'coffee' and 'home' come from the Oct 2 / Oct 9 meetings; fit questions follow Banfield's fit criteria. Wording, options and weights must be reviewed by Banfield before use.",
+    "weights": "Weights are points toward archetype ids from archetypes.json. 3 = strong signal, 2 = moderate, 1 = light. Indirect questions (coffee) use light weights only.",
+    "fit": "Questions with a 'criterion' feed the fit assessment. Their ratings live in fit.json, not here, and they carry no archetype weights.",
+    "contact": "Name, email, phone and full site address are collected in a separate required contact step, not in this bank."
+  },
+  "questions": [
+    {
+      "id": "decision_style",
+      "kind": "single",
+      "prompt": "When a big decision lands on your plate, you usually...",
+      "options": [
+        { "id": "trust_expert", "label": "Find someone who knows their stuff and go with their call", "weights": { "decisive_delegator": 3 } },
+        { "id": "research", "label": "Research until I'm confident I understand every option", "weights": { "analytical_validator": 3, "hands_on_controller": 1 } },
+        { "id": "talk_it_through", "label": "Talk it through with the people in my life first", "weights": { "cautious_reassurance_seeker": 3 } },
+        { "id": "follow_ideas", "label": "Follow the idea that excites me and see where it goes", "weights": { "creative_collaborator": 3 } },
+        { "id": "map_it_out", "label": "Map out every step and keep an eye on it myself", "weights": { "hands_on_controller": 3, "analytical_validator": 1 } }
+      ]
+    },
+    {
+      "id": "involvement",
+      "kind": "single",
+      "prompt": "How involved do you want to be in the design process?",
+      "options": [
+        { "id": "show_me_the_result", "label": "Show me the finished plan. I trust you.", "weights": { "decisive_delegator": 3 } },
+        { "id": "milestones", "label": "Bring me in at the big moments to riff on ideas", "weights": { "creative_collaborator": 2, "decisive_delegator": 1 } },
+        { "id": "explain_the_why", "label": "Walk me through the details and the why behind them", "weights": { "analytical_validator": 2, "hands_on_controller": 2 } },
+        { "id": "hands_on", "label": "Hands on. I want a say in selections, vendors and budget.", "weights": { "hands_on_controller": 3 } },
+        { "id": "not_sure", "label": "Honestly not sure yet. I'd like to learn how it all works.", "weights": { "cautious_reassurance_seeker": 3 } }
+      ]
+    },
+    {
+      "id": "different_concept",
+      "kind": "single",
+      "prompt": "We show you a design that's quite different from what you pictured. Your first reaction?",
+      "options": [
+        { "id": "love_it", "label": "Great, that's why I hired you", "weights": { "decisive_delegator": 3 } },
+        { "id": "exciting", "label": "Ooh, let's see where this goes", "weights": { "creative_collaborator": 3 } },
+        { "id": "why", "label": "Interesting. Tell me why it works better.", "weights": { "analytical_validator": 3 } },
+        { "id": "compare", "label": "I'd want to compare it side by side with my original idea", "weights": { "hands_on_controller": 3 } },
+        { "id": "nervous", "label": "A little nervous. I'd rather stay close to what I imagined.", "weights": { "cautious_reassurance_seeker": 3 } }
+      ]
+    },
+    {
+      "id": "confidence",
+      "kind": "multi",
+      "prompt": "What makes you feel confident during a big project?",
+      "help": "Pick up to two.",
+      "maxSelections": 2,
+      "options": [
+        { "id": "clear_recommendation", "label": "A clear recommendation from someone experienced", "weights": { "decisive_delegator": 2 } },
+        { "id": "see_it_first", "label": "Seeing it visualized before committing", "weights": { "creative_collaborator": 2 } },
+        { "id": "budget_visibility", "label": "Knowing exactly where the budget is going", "weights": { "hands_on_controller": 2, "analytical_validator": 1 } },
+        { "id": "reasoning", "label": "Understanding the reasoning behind each choice", "weights": { "analytical_validator": 2 } },
+        { "id": "whats_next", "label": "Always knowing what happens next", "weights": { "cautious_reassurance_seeker": 2 } },
+        { "id": "in_the_details", "label": "Being involved in the details", "weights": { "hands_on_controller": 2 } }
+      ]
+    },
+    {
+      "id": "coffee",
+      "kind": "single",
+      "prompt": "Important question first: how do you take your coffee?",
+      "help": "It's not that deep. Or is it?",
+      "options": [
+        { "id": "black_to_go", "label": "Black, in a travel mug, already out the door", "weights": { "decisive_delegator": 1 } },
+        { "id": "pour_over", "label": "Pour-over. Beans weighed. Timer running.", "weights": { "analytical_validator": 1, "hands_on_controller": 1 } },
+        { "id": "something_new", "label": "Whatever looks new on the menu", "weights": { "creative_collaborator": 1 } },
+        { "id": "usual_order", "label": "My usual order, at my usual spot", "weights": { "cautious_reassurance_seeker": 1 } },
+        { "id": "no_coffee", "label": "Not a coffee person" }
+      ]
+    },
+    {
+      "id": "home_meaning",
+      "kind": "text",
+      "prompt": "What does home mean to you?",
+      "help": "A word, a sentence, a whole paragraph. Whatever comes to mind.",
+      "optional": true
+    },
+    {
+      "id": "project_scope",
+      "kind": "single",
+      "prompt": "What are you dreaming up?",
+      "criterion": "scope",
+      "options": [
+        { "id": "furniture_styling", "label": "Furniture and styling" },
+        { "id": "facelift", "label": "A refresh: finishes, lighting, the fun stuff" },
+        { "id": "renovation", "label": "A renovation" },
+        { "id": "new_build", "label": "A new build" },
+        { "id": "not_sure", "label": "Not sure yet" }
+      ]
+    },
+    {
+      "id": "timeframe",
+      "kind": "single",
+      "prompt": "When would you love to get started?",
+      "criterion": "timeframe",
+      "options": [
+        { "id": "asap", "label": "Yesterday (in the next 3 months)" },
+        { "id": "3_to_6_months", "label": "In 3 to 6 months" },
+        { "id": "6_to_12_months", "label": "In 6 to 12 months" },
+        { "id": "over_a_year", "label": "More than a year out" },
+        { "id": "just_exploring", "label": "Just exploring for now" }
+      ]
+    },
+    {
+      "id": "investment",
+      "kind": "single",
+      "prompt": "Roughly what investment feels comfortable for this project?",
+      "help": "A ballpark is perfect. It just helps us point you in the right direction.",
+      "criterion": "investment",
+      "options": [
+        { "id": "under_50k", "label": "Under $50K" },
+        { "id": "50k_to_150k", "label": "$50K to $150K" },
+        { "id": "150k_to_400k", "label": "$150K to $400K" },
+        { "id": "over_400k", "label": "$400K+" },
+        { "id": "not_sure", "label": "Not sure yet" }
+      ]
+    },
+    {
+      "id": "readiness",
+      "kind": "single",
+      "prompt": "Where are you at right now?",
+      "criterion": "readiness",
+      "options": [
+        { "id": "just_ideas", "label": "Collecting ideas" },
+        { "id": "planning", "label": "Planning and budgeting" },
+        { "id": "ready", "label": "Ready to get going" },
+        { "id": "underway", "label": "Already underway with a builder" }
+      ]
+    },
+    {
+      "id": "service",
+      "kind": "single",
+      "prompt": "What kind of help are you looking for?",
+      "criterion": "service",
+      "options": [
+        { "id": "full_service", "label": "Take it from idea to move-in" },
+        { "id": "design_only", "label": "Design plans I can take to my builder" },
+        { "id": "consult", "label": "A one-time consult to point me in the right direction" },
+        { "id": "not_sure", "label": "Not sure. Help me figure it out." }
+      ]
+    }
+  ]
+}
