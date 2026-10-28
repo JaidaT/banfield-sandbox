@@ -171,12 +171,12 @@ Note: Banfield's Brand Standards (pp. 24-28) list Performance-Minded Planner as 
 - **When is the full questionnaire sent?** This document says hired clients only (after the Meet + Inspire call); it may instead be sent after booking but before the call. Banfield's Oct 9 email only covers the short survey. Confirm with Banfield.
 - **Where should the short quiz ask for contact details?** P1 requires name, email, phone and full site address, but asking up front can feel like signing up and cause drop-off. Options: ask at the end, framed as booking ("Where should Jamie reach you?"), and/or show the client result first. Confirm which details must be required.
 - **Short quiz and full questionnaire are independent.** Many leads will skip the short quiz and book directly, and nobody should have to sign up or log in. The full questionnaire must work on its own; when short-quiz answers exist (matched by booking email behind the scenes) it skips or pre-fills those questions so nothing is asked twice.
+  - **Team note (2026-10-27, not a question for Banfield):** until submissions are stored, the team pairs short-quiz and full-questionnaire results by hand using the person's name and email. Decide automatic matching (booking email or a personal link) once the full questionnaire's timing is confirmed and storage exists.
 - **Unvalidated archetypes:** The archetype-to-question mapping hasn't been tested with real users. Validate it in USER_RESEARCH.md.
 
 The following were added 2026-10-27 for the next Banfield meeting (also on docs/Jamie_Meeting_Sheet.pdf):
 - **Where should each finished brief go?** Nothing is sent anywhere yet. Is an email to Jamie OK, and to which address?
 - **Which Squarespace plan is the site on?** It decides whether the quiz iframe can resize itself (needs code injection).
-- **Matching the short quiz and full questionnaire at first:** is it OK for the team to pair results by name and email by hand until submissions are stored? Automatic matching (by booking email or a personal link) needs storage.
 - **Moving four questions into the short quiz?** P7 says detail orientation, what they are most nervous or excited about, past designer experience and who the decision makers are belong in the Quick Quiz. None are in `data/questions.json` yet. Adding them gives more insight before the call but lengthens a quiz meant to take about 5 minutes.
 - **Privacy and consent:** the quiz collects names, phone numbers and home addresses. Does Banfield have privacy wording to reuse, and will they approve a short consent line?
 - **How should Banfield edit content after launch?** A Google Sheet, an admin page, or the project team makes changes (see the Later section of IMPLEMENTATION_PLAN.md).
