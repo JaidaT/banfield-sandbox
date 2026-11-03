@@ -20,7 +20,7 @@ function conditionMet(submission: Submission, condition: FitCondition): boolean 
   return Array.isArray(answer) ? answer.includes(condition.option) : answer === condition.option
 }
 
-// Works out the starting label from project type + investment (see fit.json),
+// Works out the starting label from project type + investment (see lead-rules.json),
 // with a plain-language reason for the brief.
 function startingLabel(
   submission: Submission,
@@ -50,7 +50,7 @@ function startingLabel(
 
 // Reads only fit questions and fit rules. It never looks at the site address or
 // archetype weights, so location and working style never change the label.
-export function assessFit(
+export function assessLead(
   submission: Submission,
   questions: Question[],
   rules: LeadRules,

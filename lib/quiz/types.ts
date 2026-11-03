@@ -46,7 +46,7 @@ export interface Question {
   max?: number
   step?: number
   // Marks a fit question (project, investment, timing and so on). Fit questions
-  // never carry archetype weights; how they count lives in fit.json.
+  // never carry archetype weights; how they count lives in lead-rules.json.
   criterion?: string
   options: AnswerOption[]
 }
@@ -187,7 +187,7 @@ export interface QuizData {
   archetypes: Archetype[]
   questions: Question[]
   signalRules: SignalRule[]
-  fitRules: LeadRules
+  leadRules: LeadRules
 }
 
 // Team-facing guidance for one of the client's leading archetypes.
@@ -239,7 +239,7 @@ export interface TeamBrief {
   contact: Contact
   blend: ArchetypeBlend
   highlights: ArchetypeGuidance[]
-  fit: LeadAssessment
+  lead: LeadAssessment
   behaviour: {
     durationSeconds: number
     skippedQuestions: string[]

@@ -1,6 +1,6 @@
 import archetypesJson from '@/data/archetypes.json'
 import clientResultJson from '@/data/client-result.json'
-import fitJson from '@/data/fit.json'
+import leadRulesJson from '@/data/lead-rules.json'
 import questionsJson from '@/data/questions.json'
 import samplesJson from '@/data/sample-submissions.json'
 import signalsJson from '@/data/signals.json'
@@ -385,8 +385,8 @@ export function parseLeadRules(raw: unknown, questions: Question[]): LeadRules {
   }
 }
 
-export function loadFitRules(): LeadRules {
-  return parseLeadRules(fitJson as unknown, loadQuestions())
+export function loadLeadRules(): LeadRules {
+  return parseLeadRules(leadRulesJson as unknown, loadQuestions())
 }
 
 export function parseSampleSubmissions(raw: unknown, questions: Question[]): SampleSubmission[] {
@@ -473,7 +473,7 @@ export function loadQuizData(): QuizData {
       signalsJson as unknown,
       archetypes.map((a) => a.id),
     ),
-    fitRules: parseLeadRules(fitJson as unknown, questions),
+    leadRules: parseLeadRules(leadRulesJson as unknown, questions),
   }
 }
 

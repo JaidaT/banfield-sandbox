@@ -10,7 +10,7 @@ export function formatDuration(seconds: number): string {
 // Plain-text version of the brief for pasting into Claude or JobTread.
 // ASCII only, so it pastes cleanly anywhere.
 export function briefToText(brief: TeamBrief): string {
-  const { contact, fit, behaviour } = brief
+  const { contact, lead, behaviour } = brief
   const site = contact.siteAddress
   const lines: string[] = [
     `PRE-CALL BRIEF: ${contact.name}`,
@@ -22,11 +22,11 @@ export function briefToText(brief: TeamBrief): string {
     `Phone: ${contact.phone}`,
     `Site: ${site.street}, ${site.city}, ${site.postalCode}`,
     '',
-    `LEAD: ${fit.temperature.toUpperCase()}`,
-    ...fit.reasons,
+    `LEAD: ${lead.temperature.toUpperCase()}`,
+    ...lead.reasons,
   ]
-  for (const d of fit.details) lines.push(`- ${d.label}: ${d.answer ?? 'not answered'}`)
-  for (const flag of fit.redFlags) lines.push(`! ${flag.note}`)
+  for (const d of lead.details) lines.push(`- ${d.label}: ${d.answer ?? 'not answered'}`)
+  for (const flag of lead.redFlags) lines.push(`! ${flag.note}`)
 
   lines.push('', 'HOW TO WORK WITH THEM')
   if (brief.highlights.length === 0) lines.push('Not enough answers to identify a client type.')

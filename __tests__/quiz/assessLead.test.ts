@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { assessFit } from '@/lib/quiz/assessFit'
-import { loadFitRules, loadQuestions, loadSampleSubmissions } from '@/lib/quiz/load'
+import { assessLead } from '@/lib/quiz/assessLead'
+import { loadLeadRules, loadQuestions, loadSampleSubmissions } from '@/lib/quiz/load'
 import type { LeadRules, Question, Submission } from '@/lib/quiz/types'
 
 const QUESTIONS: Question[] = [
@@ -91,9 +91,9 @@ function submission(answers: Submission['answers'], city = 'Burnaby'): Submissio
   }
 }
 
-const lead = (answers: Submission['answers']) => assessFit(submission(answers), QUESTIONS, RULES)
+const lead = (answers: Submission['answers']) => assessLead(submission(answers), QUESTIONS, RULES)
 
-describe('assessFit: starting label from project type + investment', () => {
+describe('assessLead: starting label from project type + investment', () => {
   test('hot at or above "hot from", with a plain-language reason', () => {
     expect(lead({ project: 'reno', money: 150000 }).temperature).toBe('hot')
     const result = lead({ project: 'reno', money: 200000 })
@@ -134,7 +134,7 @@ describe('assessFit: starting label from project type + investment', () => {
   })
 })
 
-describe('assessFit: warning signs', () => {
+describe('assessLead: warning signs', () => {
   test('one warning sign lowers the label one step', () => {
     const result = lead({ project: 'styling', money: 60000, when: 'exploring' })
     expect(result).toMatchObject({ temperature: 'warm', startingTemperature: 'hot', lowered: true })
@@ -159,7 +159,7 @@ describe('assessFit: warning signs', () => {
   })
 })
 
-describe('assessFit: details and independence', () => {
+describe('assessLead: details and independence', () => {
   test('lists each detail row with a readable answer, and none when unanswered', () => {
     const result = lead({ project: 'reno', money: 500000 })
     expect(result.details).toEqual([
@@ -173,8 +173,8 @@ describe('assessFit: details and independence', () => {
   // DECISIONS.md: location removed from fit entirely.
   test('the site address never changes the result', () => {
     const answers = { project: 'reno', money: 200000 }
-    expect(assessFit(submission(answers, 'Edmonton'), QUESTIONS, RULES)).toEqual(
-      assessFit(submission(answers, 'Burnaby'), QUESTIONS, RULES),
+    expect(assessLead(submission(answers, 'Edmonton'), QUESTIONS, RULES)).toEqual(
+      assessLead(submission(answers, 'Burnaby'), QUESTIONS, RULES),
     )
   })
 
@@ -188,12 +188,12 @@ describe('assessFit: details and independence', () => {
 
 describe('assessing the sample submissions', () => {
   const questions = loadQuestions()
-  const rules = loadFitRules()
+  const rules = loadLeadRules()
   const samples = loadSampleSubmissions()
-  const fitFor = (id: string) => {
+  const leadFor = (id: string) => {
     const sample = samples.find((s) => s.id === id)
     if (!sample) throw new Error(`no sample ${id}`)
-    return assessFit(sample, questions, rules)
+    return assessLead(sample, questions, rules)
   }
 
   test.each([
@@ -204,11 +204,11 @@ describe('assessing the sample submissions', () => {
     ['skipper', 'warm'],
     ['out-of-area-hot', 'hot'],
   ])('%s is a %s lead', (id, temperature) => {
-    expect(fitFor(id).temperature).toBe(temperature)
+    expect(leadFor(id).temperature).toBe(temperature)
   })
 
   test('the explorer raises the early-stage warning signs', () => {
-    expect(fitFor('weak-fit-explorer').redFlags.map((f) => f.id)).toEqual([
+    expect(leadFor('weak-fit-explorer').redFlags.map((f) => f.id)).toEqual([
       'just_exploring',
       'early_one_time_session',
       'early_no_budget',
@@ -216,7 +216,7 @@ describe('assessing the sample submissions', () => {
   })
 
   test('the skipper is lowered from hot to warm by the builder note', () => {
-    const result = fitFor('skipper')
+    const result = leadFor('skipper')
     expect(result.redFlags.map((f) => f.id)).toEqual(['builder_underway'])
     expect(result).toMatchObject({ startingTemperature: 'hot', lowered: true })
   })

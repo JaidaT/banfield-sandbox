@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadFitRules, loadQuestions, parseLeadRules } from '@/lib/quiz/load'
+import { loadLeadRules, loadQuestions, parseLeadRules } from '@/lib/quiz/load'
 import type { Question } from '@/lib/quiz/types'
 
 const QUESTIONS: Question[] = [
@@ -23,9 +23,9 @@ const QUESTIONS: Question[] = [
   },
 ]
 
-describe('loadFitRules', () => {
-  test('loads the lead rules from data/fit.json, with thresholds for every project type', () => {
-    const rules = loadFitRules()
+describe('loadLeadRules', () => {
+  test('loads the lead rules from data/lead-rules.json, with thresholds for every project type', () => {
+    const rules = loadLeadRules()
     const project = loadQuestions().find((q) => q.id === rules.projectQuestion)
     for (const o of project?.options ?? []) {
       expect(rules.thresholds[o.id], `no thresholds for ${o.id}`).toBeDefined()
@@ -33,12 +33,12 @@ describe('loadFitRules', () => {
   })
 
   test('the investment question is the $0 to $500K+ slider in $10K steps', () => {
-    const investment = loadQuestions().find((q) => q.id === loadFitRules().investmentQuestion)
+    const investment = loadQuestions().find((q) => q.id === loadLeadRules().investmentQuestion)
     expect(investment).toMatchObject({ kind: 'range', min: 0, max: 500000, step: 10000 })
   })
 
   test('the brief shows project type, investment, timeframe, stage and type of help', () => {
-    expect(loadFitRules().details.map((d) => d.questionId)).toEqual([
+    expect(loadLeadRules().details.map((d) => d.questionId)).toEqual([
       'project_scope',
       'investment',
       'timeframe',
@@ -50,7 +50,7 @@ describe('loadFitRules', () => {
   // Brand Standards: a one-time session is Banfield's paid "Designer on Call" service,
   // so choosing it is never a warning sign on its own.
   test('wanting a one-time session alone is not a warning sign', () => {
-    for (const flag of loadFitRules().redFlags) {
+    for (const flag of loadLeadRules().redFlags) {
       const onlyConsult = flag.when.every((c) => c.question === 'service' && c.option === 'consult')
       expect(onlyConsult, flag.id).toBe(false)
     }

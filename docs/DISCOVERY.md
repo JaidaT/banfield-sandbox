@@ -201,7 +201,7 @@ Attended by Jamie, Rachael, Jaida, Sarah, Jinwon and Sofiia. The team demoed the
 **Not discussed (still open below):** where the brief goes, the four P7 questions, placement of "What does home mean to you?", the headline font licence, Hands-On Controller life stages, and the exact booking tool.
 
 **To validate at a future meeting (v2 drafts, added 2026-11-02)**
-- **Budget thresholds per project type** (in `data/fit.json`): furniture and styling hot from $50K, warm from $20K; refresh hot from $100K, warm from $40K; renovation hot from $150K, warm from $50K; new build hot from $400K, warm from $150K; "Not sure yet" treated like a renovation. Below "warm from" is cold.
+- **Budget thresholds per project type** (in `data/lead-rules.json`): furniture and styling hot from $50K, warm from $20K; refresh hot from $100K, warm from $40K; renovation hot from $150K, warm from $50K; new build hot from $400K, warm from $150K; "Not sure yet" treated like a renovation. Below "warm from" is cold.
 - **Warning signs lower the label one step:** just exploring; just exploring + one session; still collecting ideas + no budget in mind; already under construction with a builder. Is one step the right amount, and are these the right signs?
 - **"Not sure yet" on budget starts at warm.** Is that fair?
 - **"Type of help" wording:** does "Start to finish: you design it and stay involved until the project is complete" accurately describe the full service? Do the other three answers match what Banfield offers?

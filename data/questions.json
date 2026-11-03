@@ -4,7 +4,7 @@
     "draft": true,
     "source": "Draft Quick Quiz bank. Behavioural questions adapt Banfield's four AI-drafted sample questions; 'coffee' and 'home' come from the Oct 2 / Oct 9 meetings; fit questions follow Banfield's fit criteria. Wording, options and weights must be reviewed by Banfield before use.",
     "weights": "Weights are points toward archetype ids from archetypes.json. 3 = strong signal, 2 = moderate, 1 = light. Indirect questions (coffee) use light weights only.",
-    "fit": "Questions with a 'criterion' are fit questions. How they count toward hot, warm or cold lives in fit.json, not here, and they carry no archetype weights.",
+    "fit": "Questions with a 'criterion' are fit questions. How they count toward hot, warm or cold lives in lead-rules.json, not here, and they carry no archetype weights.",
     "range": "A 'range' question is a slider from 'min' to 'max' in steps of 'step'. Its answer is a number, or the id of one of its options (such as 'Not sure yet'). The top of the slider means 'this much or more'.",
     "contact": "Name, email, phone and full site address are collected in a separate required contact step, not in this bank.",
     "wording": "2026-11-02 drafts after the Oct 28 meeting: the project stage question and answers, and the four 'type of help' answers (each says how long Banfield is involved). Banfield must confirm that 'stay involved until the project is complete' accurately describes their full service.",

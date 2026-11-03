@@ -80,8 +80,8 @@ describe('buildTeamBrief', () => {
 
   test('includes the lead assessment with its warning signs', () => {
     const brief = briefFor('weak-fit-explorer')
-    expect(brief.fit.temperature).toBe('cold')
-    expect(brief.fit.redFlags.length).toBe(3)
+    expect(brief.lead.temperature).toBe('cold')
+    expect(brief.lead.redFlags.length).toBe(3)
   })
 })
 
@@ -96,7 +96,7 @@ describe('briefToText', () => {
       '400 Demo Cres, Kelowna, V1Y 0A4',
       brief.headline,
       brief.highlights[0].communication,
-      brief.fit.redFlags[0].note,
+      brief.lead.redFlags[0].note,
     ]) {
       expect(text).toContain(expected)
     }

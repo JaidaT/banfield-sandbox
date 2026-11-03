@@ -53,7 +53,7 @@ describe('buildClientResult', () => {
       ...data.archetypes.flatMap((a) => [a.id, a.label.replace(/^The /, ''), a.tagline]),
       ...Object.keys(loadSegments()),
       ...Object.values(loadSegments()),
-      ...data.fitRules.redFlags.map((f) => f.note),
+      ...data.leadRules.redFlags.map((f) => f.note),
     ].map((s) => s.toLowerCase())
     for (const s of samples) {
       const result = buildClientResult(s, data.questions, copy)

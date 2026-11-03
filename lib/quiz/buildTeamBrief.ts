@@ -1,5 +1,5 @@
 import { answerLabels } from './answers'
-import { assessFit } from './assessFit'
+import { assessLead } from './assessLead'
 import { scoreArchetypes } from './scoreArchetypes'
 import { evaluateSignals, skippedQuestions } from './signals'
 import type {
@@ -26,7 +26,7 @@ function readableAnswer(question: Question, submission: Submission): string | nu
 
 export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrief {
   const blend = scoreArchetypes(submission, data.questions, data.archetypes, data.signalRules)
-  const fit = assessFit(submission, data.questions, data.fitRules)
+  const lead = assessLead(submission, data.questions, data.leadRules)
   const signals = evaluateSignals(submission, data.questions, data.signalRules)
 
   const top = blend.insufficient
@@ -50,7 +50,7 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
     ]
   })
 
-  const leadLabel = `${fit.temperature[0].toUpperCase()}${fit.temperature.slice(1)} lead`
+  const leadLabel = `${lead.temperature[0].toUpperCase()}${lead.temperature.slice(1)} lead`
   const typeLine =
     highlights.length === 0
       ? 'Not enough answers to identify a client type'
@@ -68,7 +68,7 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
     contact: submission.contact,
     blend,
     highlights,
-    fit,
+    lead,
     behaviour: {
       durationSeconds: signals.values.durationSeconds,
       skippedQuestions: skippedQuestions(submission, data.questions).map((q) => q.prompt),

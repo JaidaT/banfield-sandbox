@@ -20,7 +20,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 // Team-facing only. Never link to this from client-facing pages.
 export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
-  const { contact, fit, behaviour } = brief
+  const { contact, lead, behaviour } = brief
   const site = contact.siteAddress
 
   return (
@@ -52,27 +52,27 @@ export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
         <p className="mb-3">
           <span
             data-testid="lead-temperature"
-            className={`rounded-full px-3 py-1 text-sm font-semibold capitalize ${LEAD_STYLES[fit.temperature]}`}
+            className={`rounded-full px-3 py-1 text-sm font-semibold capitalize ${LEAD_STYLES[lead.temperature]}`}
           >
-            {fit.temperature} lead
+            {lead.temperature} lead
           </span>
         </p>
         <ul className="mb-3 flex flex-col gap-1 text-sm">
-          {fit.reasons.map((r) => (
+          {lead.reasons.map((r) => (
             <li key={r}>{r}</li>
           ))}
         </ul>
         <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-          {fit.details.map((d) => (
+          {lead.details.map((d) => (
             <div key={d.id} className="contents">
               <dt className="text-charcoal/60">{d.label}</dt>
               <dd>{d.answer ?? 'Not answered'}</dd>
             </div>
           ))}
         </dl>
-        {fit.redFlags.length > 0 && (
+        {lead.redFlags.length > 0 && (
           <ul className="mt-4 flex flex-col gap-2">
-            {fit.redFlags.map((f) => (
+            {lead.redFlags.map((f) => (
               <li key={f.id} className="rounded-lg border-l-4 border-accent bg-white/70 px-3 py-2 text-sm">
                 {f.note}
               </li>

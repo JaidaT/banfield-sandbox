@@ -47,7 +47,7 @@ describe('TeamBriefView', () => {
   test('shows red flag notes', () => {
     const brief = buildTeamBrief(sample('skipper'), data)
     render(<TeamBriefView brief={brief} />)
-    expect(screen.getByText(brief.fit.redFlags[0].note)).toBeDefined()
+    expect(screen.getByText(brief.lead.redFlags[0].note)).toBeDefined()
   })
 })
 
