@@ -34,3 +34,8 @@
 **Context:** Banfield asked for an investment slider starting at $0 instead of fixed ranges.
 **Decision:** Add a `range` question kind with `min`, `max` and `step` in `data/questions.json`, whose answer is a number, plus an optional escape option ("Not sure yet") stored as an option id. Investment uses $0 to $500K+ in $10K steps. Fit thresholds are amounts, so Banfield can change them without touching the question.
 **Alternatives considered:** Keep fixed ranges and draw them as a slider (rejected because the thresholds would be tied to the range boundaries); free-number text input (rejected because typing is slower on mobile and invites typos).
+
+## 2026-11-02 — Location removed from fit entirely
+**Context:** Banfield confirmed location should not affect fit, but they still want to know where each project is. The lead temperature entry above kept a service area list for an information-only "Lower Mainland" note. The team of about 5 beginner coders must be able to understand and change the whole build within a month.
+**Decision:** No service area list and no in-area check. The site address (street, city, postal code) stays in the brief's contact section, which is how the team sees location. Supersedes the "Location is shown as information only" part of 2026-11-02 — Lead temperature (hot, warm, cold) replaces the strong, possible, weak overall fit.
+**Alternatives considered:** Keep the information-only note (rejected because city-name matching is easy to get subtly wrong, e.g. "North Van" vs "North Vancouver", and the 22-city list is one more thing to maintain for little benefit). A "Local" tag can be added later if Banfield asks for one.

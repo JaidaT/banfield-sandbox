@@ -61,35 +61,35 @@ Goal: apply Banfield's Oct 28 feedback (see "Oct 28 meeting with Banfield" in DI
 
 How the lead label works (draft, all numbers in `data/fit.json` for Banfield to review):
 1. Project type + investment give the starting label. Each project type has two thresholds: at or above "hot from" is hot, at or above "warm from" is warm, below that is cold.
-2. "Not sure yet" on investment, or an unanswered or "Not sure" project type, starts at warm.
+2. "Not sure yet" on investment, or a skipped project type question, starts at warm. Every project type answer, including "Not sure yet", has its own thresholds, so "not sure what project, $300K" can still be hot.
 3. If any warning sign is raised (for example "just exploring", or the existing red flags), the label drops one step: hot to warm, warm to cold. It never drops more than one step.
 4. Client type (personality) is shown right below the label and never changes it.
-5. Location is shown as information only ("Lower Mainland" or "Outside the Lower Mainland") and never changes the label.
+5. Location plays no part in fit. The site address still shows in the brief's contact section so the team knows where the project is. There is no service area list and no in-area check.
 
 Work test-first: for each step, write or update the failing test, then change the code.
 
 ### Phase 1: Data and types
-- [x] `lib/quiz/types.ts` (added as `LeadRules` and `LeadAssessment` next to the old `FitRules` and `FitAssessment`; the old types and the strong/possible/weak ratings are removed when `assessFit` switches over in Phase 2): add a `range` question kind (`min`, `max`, `step`, plus an optional escape option such as "Not sure yet"); allow a number as an `Answer`; add `LeadTemperature` (`hot | warm | cold`); replace `FitAssessment` with the lead result (`temperature`, `startingTemperature`, `lowered`, plain-language `reasons`, detail rows for project type, investment, timeframe, readiness and type of help, `location` with city and in-area flag, and `redFlags`); update `FitRules` (per-project-type thresholds, starting labels for unsure answers, service areas, warning signs) and drop the per-criterion strong/possible/weak ratings
-- [ ] `lib/quiz/load.ts`: validate range questions (min below max, step above 0, numbers only); validate the new `fit.json` shape (every project type option has thresholds, "hot from" is at or above "warm from", warning signs name real questions and options); keep failing loudly with clear messages
+- [x] `lib/quiz/types.ts` (added as `LeadRules` and `LeadAssessment` next to the old `FitRules` and `FitAssessment`; the old types and the strong/possible/weak ratings are removed when `assessFit` switches over in Phase 2): add a `range` question kind (`min`, `max`, `step`, plus an optional escape option such as "Not sure yet"); allow a number as an `Answer`; add `LeadTemperature` (`hot | warm | cold`); replace `FitAssessment` with the lead result (`temperature`, `startingTemperature`, `lowered`, plain-language `reasons`, detail rows for project type, investment, timeframe, readiness and type of help, and `redFlags`); update `FitRules` (per-project-type thresholds, starting labels for unsure answers, warning signs) and drop the per-criterion strong/possible/weak ratings
+- [x] `lib/quiz/load.ts` (range questions and `ignoreIfSkipped` in `parseQuestionBank`; new `parseLeadRules` next to the old `parseFitRules`, sharing the red flag checks; no service areas): validate range questions (min below max, step above 0, numbers only); validate the new `fit.json` shape (every project type option has thresholds, "hot from" is at or above "warm from", warning signs name real questions and options); keep failing loudly with clear messages
 - [ ] `lib/quiz/submission.ts`: a range answer must be a number inside min to max on a step, or the escape option id
 - [ ] `data/questions.json` (version 0.2.0, still a draft): turn `investment` into a range question ($0 to $500K+, $10K steps, "Not sure yet" escape), worded with "investment"; reword the `service` answers "Take it from idea to move-in" and "Design plans I can take to my builder" and the `readiness` prompt "Where are you at right now?" (draft wording, flagged for Banfield review); add an optional final text question `anything_else` ("Anything else we missed?") with `ignoreIfSkipped: true` (add the optional `ignoreIfSkipped` flag to `Question` in `types.ts` and validate it in `load.ts`)
-- [ ] `data/fit.json` (version 0.2.0, still a draft): per-project-type "hot from" and "warm from" amounts; starting label `warm` for unsure answers; add a "just exploring" warning sign alongside the existing red flags; keep `serviceAreas` for the location note only
-- [ ] `data/sample-submissions.json`: investment answers become numbers; make sure the samples cover hot, warm, cold, one that is lowered by a warning sign (a big renovation that is "just exploring") and one outside the Lower Mainland that is still hot
+- [ ] `data/fit.json` (version 0.2.0, still a draft): per-project-type "hot from" and "warm from" amounts, including "Not sure yet"; starting label `warm` for unsure answers; add a "just exploring" warning sign alongside the existing red flags; remove `serviceAreas` and the old `criteria` ratings
+- [ ] `data/sample-submissions.json`: investment answers become numbers; make sure the samples cover hot, warm, cold, and one that is lowered by a warning sign (a big renovation that is "just exploring"); keep at least one sample outside the Lower Mainland to show location has no effect
 
 ### Phase 2: Logic
-- [ ] `lib/quiz/assessFit.ts`: compute the starting label from project type + investment, lower it one step if any warning sign is raised, and return the reasons in plain language (for example "Renovation at $200K: hot. Lowered to warm: just exploring for now."); location never affects the label; still never reads archetype weights
+- [ ] `lib/quiz/assessFit.ts`: compute the starting label from project type + investment, lower it one step if any warning sign is raised, and return the reasons in plain language (for example "Renovation at $200K: hot. Lowered to warm: just exploring for now."); never reads the site address or archetype weights
 - [ ] `lib/quiz/signals.ts`: questions marked `ignoreIfSkipped: true` in `data/questions.json` (only "Anything else we missed?" for now) are not counted as skipped, so leaving it blank never adds to "Skipped 2 or more questions". "What does home mean to you?" still counts
 - [ ] `lib/quiz/buildTeamBrief.ts`: `HIGHLIGHT_MAX` from 3 to 2; headline puts the lead first ("Warm lead | 92% Creative Collaborator"); readable answers format money ("$200K", "$500K+")
 - [ ] `lib/quiz/briefToText.ts`: the lead section comes first, then client type and guidance, then notes and answers
 - [ ] `lib/quiz/buildClientResult.ts`: format the investment answer if it is shown; never show the lead label
 
 ### Phase 3: UI
-- [ ] `components/TeamBriefView.tsx`: the lead label (hot, warm or cold) with its reasons at the top, above the client type blend; project details table with the location note; warning signs listed under it
+- [ ] `components/TeamBriefView.tsx`: the lead label (hot, warm or cold) with its reasons at the top, above the client type blend; project details table; warning signs listed under it; the site address stays in the contact section
 - [ ] `app/team/page.tsx`: show each sample's lead label in the list
 
 ### Phase 4: Tests and validation
 - [ ] Loader tests: valid range questions and the new `fit.json` load; a missing threshold, "hot from" below "warm from", or a warning sign naming an unknown option throws
-- [ ] `assessFit` tests: each starting label per threshold, unsure answers start warm, one warning sign lowers one step, two warning signs still lower only one step, cold stays cold, location never changes the label, and changing archetype answers never changes the label
+- [ ] `assessFit` tests: each starting label per threshold, unsure answers start warm, one warning sign lowers one step, two warning signs still lower only one step, cold stays cold, changing the site address never changes the label, and changing archetype answers never changes the label
 - [ ] Signal tests: a blank "Anything else we missed?" is not counted as skipped, and a blank "What does home mean to you?" still is
 - [ ] Brief tests: at most 2 guidance cards, lead-first headline, money formatting, lead section first in the copied text
 - [ ] Client result tests: no "hot lead", "warm lead" or "cold lead" text (in addition to the existing archetype and fit leak checks) for every sample

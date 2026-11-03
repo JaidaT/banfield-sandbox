@@ -122,8 +122,6 @@ export interface LeadRules {
   // Starting label when the project type or investment is unanswered or "Not sure".
   unsureStart: LeadTemperature
   details: LeadDetailRule[]
-  // Used only for the location note in the brief.
-  serviceAreas: string[]
   // Any raised flag lowers the label by one step (never more than one).
   redFlags: RedFlag[]
 }
@@ -207,7 +205,6 @@ export interface LeadAssessment {
   // Plain-language explanation, e.g. "Renovation at $200K: hot".
   reasons: string[]
   details: LeadDetail[]
-  location: { city: string; inServiceArea: boolean }
   redFlags: RedFlag[]
 }
 

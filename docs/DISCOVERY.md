@@ -172,7 +172,7 @@ Attended by Jamie, Rachael, Jaida, Sarah, Jinwon and Sofiia. The team demoed the
 - A progress bar is wanted.
 
 **Fit redesign (replaces the fit approach in P6)**
-- Location barely matters. Banfield takes projects outside the Lower Mainland (e.g. Ontario, Edmonton, Revelstoke); being local is a bonus, not a requirement.
+- Location does not affect fit. Banfield takes projects outside the Lower Mainland (e.g. Ontario, Edmonton, Revelstoke). They still want to know where the project is, so the site address stays in the brief.
 - Fit should come from project type and budget together, not from each criterion on its own.
 - Personality (archetype) matters a lot to whether a client is right for Banfield.
 - Leads should be labelled hot, warm or cold.
