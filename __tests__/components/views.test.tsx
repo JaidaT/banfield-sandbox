@@ -19,7 +19,7 @@ const sample = (id: string) => {
 
 describe('TeamBriefView', () => {
   test('shows the headline, contact details and a copy button', () => {
-    const brief = buildTeamBrief(sample('weak-fit-explorer'), data)
+    const brief = buildTeamBrief(sample('cold-explorer'), data)
     render(<TeamBriefView brief={brief} />)
     expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('Riley Thompson')
     expect(screen.getByText(brief.headline)).toBeDefined()

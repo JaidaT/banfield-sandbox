@@ -20,7 +20,7 @@ describe('buildTeamBrief', () => {
 
   test('headline puts the lead label first, then the leading client type', () => {
     expect(briefFor('decisive-delegator').headline).toMatch(/^Hot lead \| \d+% Decisive Delegator/)
-    expect(briefFor('weak-fit-explorer').headline).toMatch(/^Cold lead \| \d+% Creative Collaborator/)
+    expect(briefFor('cold-explorer').headline).toMatch(/^Cold lead \| \d+% Creative Collaborator/)
   })
 
   test('shows guidance for at most two client types', () => {
@@ -75,11 +75,11 @@ describe('buildTeamBrief', () => {
     const investment = (id: string) => briefFor(id).answers.find((a) => a.questionId === 'investment')?.answer
     expect(investment('decisive-delegator')).toBe('$200K')
     expect(investment('analytical-validator')).toBe('$500K+')
-    expect(investment('weak-fit-explorer')).toBe('Not sure yet')
+    expect(investment('cold-explorer')).toBe('Not sure yet')
   })
 
   test('includes the lead assessment with its warning signs', () => {
-    const brief = briefFor('weak-fit-explorer')
+    const brief = briefFor('cold-explorer')
     expect(brief.lead.temperature).toBe('cold')
     expect(brief.lead.warningSigns.length).toBe(3)
   })
@@ -87,7 +87,7 @@ describe('buildTeamBrief', () => {
 
 describe('briefToText', () => {
   test('includes contact details, headline, guidance and fit notes', () => {
-    const brief = briefFor('weak-fit-explorer')
+    const brief = briefFor('cold-explorer')
     const text = briefToText(brief)
     for (const expected of [
       'Riley Thompson',

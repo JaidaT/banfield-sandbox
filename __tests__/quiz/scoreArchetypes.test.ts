@@ -162,7 +162,7 @@ describe('scoring the sample submissions', () => {
   test.each([
     ['decisive-delegator', 'decisive_delegator'],
     ['analytical-validator', 'analytical_validator'],
-    ['weak-fit-explorer', 'creative_collaborator'],
+    ['cold-explorer', 'creative_collaborator'],
     ['skipper', 'hands_on_controller'],
   ])('%s comes out as %s', (sampleId, archetypeId) => {
     expect(blendFor(sampleId).scores[0].id).toBe(archetypeId)

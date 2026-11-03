@@ -200,7 +200,7 @@ describe('assessing the sample submissions', () => {
     ['decisive-delegator', 'hot'],
     ['analytical-validator', 'hot'],
     ['mixed-cautious-controller', 'warm'],
-    ['weak-fit-explorer', 'cold'],
+    ['cold-explorer', 'cold'],
     ['skipper', 'warm'],
     ['out-of-area-hot', 'hot'],
   ])('%s is a %s lead', (id, temperature) => {
@@ -208,7 +208,7 @@ describe('assessing the sample submissions', () => {
   })
 
   test('the explorer raises the early-stage warning signs', () => {
-    expect(leadFor('weak-fit-explorer').warningSigns.map((f) => f.id)).toEqual([
+    expect(leadFor('cold-explorer').warningSigns.map((f) => f.id)).toEqual([
       'just_exploring',
       'early_one_time_session',
       'early_no_budget',
