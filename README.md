@@ -1,8 +1,10 @@
 # banfield-sandbox
 
-A Next.js web app built with help from Claude Code (an AI coding assistant in VS Code).
+A prototype of the Quick Quiz for Banfield Design Co., built with help from Claude Code (an AI coding assistant in VS Code).
 
-This README tells you how to get the project running on your computer and how our team makes changes. If you're new to any of this, follow it step by step in order.
+**This repo is a sandbox.** We use it to try out ideas. Branches stay separate and are never merged into `main`. The final product will be rebuilt separately, using this prototype as a reference.
+
+This README tells you how to get the project running on your computer, how our team makes changes, and how the prototype works. If you're new to any of this, follow it step by step in order.
 
 ---
 
@@ -12,17 +14,8 @@ This README tells you how to get the project running on your computer and how ou
 |---|---|---|
 | [Node.js](https://nodejs.org) **version 22** | Runs the app and its tools | `node --version` shows `v22.x.x` |
 | [Git](https://git-scm.com/downloads) | Tracks changes to the code | `git --version` |
-| [VS Code](https://code.visualstudio.com) | The code editor | — |
+| [VS Code](https://code.visualstudio.com) | The code editor | - |
 | Claude Code extension for VS Code | The AI assistant | Search "Claude Code" in VS Code's Extensions panel |
-| [GitHub CLI](https://cli.github.com) (`gh`) | Lets Claude open pull requests for you | `gh --version` |
-
-After installing the GitHub CLI, log in once:
-
-```
-gh auth login
-```
-
-Pick **GitHub.com**, then **HTTPS**, then log in with your browser.
 
 > You also need to be added as a collaborator on this repo. Ask the repo owner if you can't push.
 
@@ -41,23 +34,25 @@ npm install
 - `git clone` downloads the project.
 - `npm install` downloads the packages the project needs into a `node_modules/` folder. This can take a minute.
 
-Then open the project in VS Code: **File → Open Folder** → choose the `banfield-sandbox` folder. Open the folder, not single files, so Claude can see the whole project.
+Then open the project in VS Code: **File > Open Folder** > choose the `banfield-sandbox` folder. Open the folder, not single files, so Claude can see the whole project.
 
 ### Check that it works
 
-In VS Code's terminal (**Terminal → New Terminal**):
+In VS Code's terminal (**Terminal > New Terminal**):
 
 ```
 npm test
 ```
 
-You should see `Tests  1 passed`. Then:
+You should see a line like `Tests  147 passed` with no failures. The number grows as we add tests. Then:
 
 ```
 npm run dev
 ```
 
-Open http://localhost:3000 in your browser. You should see the app. Press `Ctrl + C` in the terminal to stop it.
+Open http://localhost:3000/team in your browser. You should see the sample briefs. Press `Ctrl + C` in the terminal to stop it.
+
+> After you pull changes someone else made, run `npm install` again in case the packages changed.
 
 ---
 
@@ -67,26 +62,31 @@ Every change follows the same steps. The commands that start with `/` are typed 
 
 ### Step 1: `/sync` (check you're up to date)
 
-Make sure you're on `main` and have the latest code:
+Switch to the branch you want to start from and get the latest version of it:
+
+- For a fresh idea, start from `main`.
+- To build on someone's earlier work, start from their branch. For example, `jaida/questionnaire-output-v2` was made from `jaida/questionnaire-output`.
 
 ```
 git switch main
 git pull
 ```
 
+(Replace `main` with the branch you're starting from.)
+
 Then type `/sync` in Claude Code. It reports whether your branch is up to date and lists any files you've changed. It never changes anything.
 
 ### Step 2: Create your own branch
 
-Never work directly on `main`. Make a branch, which is your own copy to work in. Name it `name/feature-x`, using your first name and a short description of what you're doing:
+Make a branch, which is your own copy to work in. Name it `name/feature-x`, using your first name and a short description of what you're doing:
 
 ```
 git switch -c name/feature-x
 ```
 
-For example, `jaida/login-page`. Use lowercase and hyphens, no spaces.
+For example, `jaida/progress-bar`. Use lowercase and hyphens, no spaces.
 
-Only push to branches that start with your own name. Other people's branches are theirs. Your work reaches `main` only through a pull request (Steps 5 and 6).
+Only push to branches that start with your own name. Other people's branches are theirs. **Never push to `main`.** GitHub won't stop you, so check which branch you're on first with `git branch --show-current`.
 
 ### Step 3: `/blueprint` (plan before coding)
 
@@ -106,34 +106,43 @@ Ask Claude to build the next item on the plan. Claude follows **test-driven deve
 
 You can run all tests yourself at any time with `npm test`.
 
-### Step 5: `/done` (check and ship)
+### Step 5: Check your work and back it up
 
-Type `/done` in Claude Code. It:
+When a piece of work is done, run the three checks in the terminal:
 
-- runs lint (code style checks), tests and a build. If anything fails, it stops and tells you.
-- commits your work, pushes your branch, and opens a **pull request (PR)** on GitHub.
-- waits for the automatic checks (CI) to pass.
+```
+npm run lint
+npm test
+npm run build
+```
 
-### Step 6: Get it reviewed and merged
+- `npm run lint` checks code style.
+- `npm test` runs every test.
+- `npm run build` checks the whole app can be built.
 
-Ask a teammate to look at your PR on GitHub. Once it's approved and the checks are green, click **Merge pull request** on GitHub.
+If all three pass, ask Claude to commit your work, then back it up to GitHub:
 
-### Step 7: `/landed` (clean up)
+```
+git push
+```
 
-After the merge, type `/landed` in Claude Code. It confirms `main` still passes its checks, deletes your old branch, and switches you back to `main`, ready for the next task.
+The first time you push a new branch, use `git push -u origin name/feature-x` instead. After that, plain `git push` works.
+
+There are no pull requests and nothing is merged into `main`. Your branch on GitHub *is* the finished work.
 
 ### Quick reference
 
 ```
-git switch main                 # go to main
+git switch main                 # go to the branch you're starting from
 git pull                        # get latest
 /sync                           # check status
 git switch -c name/feature-x    # new branch
 /blueprint                      # plan
 (build with Claude, tests first)
-/done                           # check + open PR
-(merge PR on GitHub)
-/landed                         # clean up
+npm run lint                    # check style
+npm test                        # run tests
+npm run build                   # check it builds
+git push                        # back up to GitHub
 ```
 
 ---
@@ -142,18 +151,78 @@ git switch -c name/feature-x    # new branch
 
 | Path | What it is |
 |---|---|
-| `app/` | The app's pages |
+| `data/` | **The quiz's content and rules**: questions, client types, lead rules, wording. Most changes Banfield asks for happen here, not in the code. |
+| `lib/quiz/` | **The logic**: turns a set of answers into a team brief and a client result. No screens here. |
+| `components/` | **Pieces of screens** used by the pages, such as the brief and the copy button |
+| `app/` | The pages, one folder per web address (see section 5) |
 | `__tests__/` | Tests. `npm test` runs every file ending in `.test.tsx` or `.test.ts`. |
 | `docs/DECISIONS.md` | Log of important decisions and why we made them. Only add to it; never delete entries. |
-| `docs/IMPLEMENTATION_PLAN.md` | Checklist for the feature currently being built |
-| `docs/DISCOVERY.md`, `docs/USER_RESEARCH.md`, `docs/COMPETITIVE_MATRIX.md` | Research about users and competitors |
+| `docs/IMPLEMENTATION_PLAN.md` | Checklists for each feature, with what's done |
+| `docs/DISCOVERY.md` | What Banfield needs, meeting notes, and open questions |
+| `docs/BRAND_NOTES.md` | Banfield's services, voice, colours and fonts |
+| `docs/USER_RESEARCH.md`, `docs/COMPETITIVE_MATRIX.md` | Research about users and competitors |
 | `CLAUDE.md` | Rules Claude reads before doing any work. Keep it short. |
-| `.claude/skills/` | Our custom `/sync`, `/blueprint`, `/done` and `/landed` commands |
-| `.github/workflows/ci.yml` | The automatic checks that run on GitHub for every push and PR |
+| `.claude/skills/` | Our custom `/sync` and `/blueprint` commands |
+| `.github/workflows/ci.yml` | Automatic checks on GitHub. They only run for `main` and pull requests, so they don't run on our sandbox branches. Run the checks yourself (Step 5). |
 
 ---
 
-## 5. Staying safe with Claude
+## 5. How the Quick Quiz prototype works
+
+The quiz screen isn't built yet. Instead, six made-up people's answers (`data/sample-submissions.json`) show what the quiz will produce.
+
+### What happens to a set of answers
+
+```
+Answers
+  |-- scoreArchetypes  ->  client type blend   (e.g. 64% Cautious / 36% Hands-On)
+  |-- assessLead       ->  hot, warm or cold lead, with the reason
+  |-- signals          ->  notes like "Finished quickly"
+  |
+  |-- buildTeamBrief     ->  the team brief (team only)
+  `-- buildClientResult  ->  the client's result screen (never shows client types or lead labels)
+```
+
+### The pages
+
+| Address | What it shows | Who sees it |
+|---|---|---|
+| `/team` | List of the sample people | Team only |
+| `/team/brief/<id>` | One person's pre-call brief, with a "Copy as text" button | Team only |
+| `/result/<id>` | What that person would see after the quiz | Client |
+| `/book` | Placeholder for the booking page | Client |
+
+### The data files
+
+| File | What it controls |
+|---|---|
+| `questions.json` | Every question and answer, and which client types each answer points to |
+| `archetypes.json` | The 5 client types and the guidance shown for each |
+| `lead-rules.json` | Hot, warm and cold: budget thresholds per project type, and the warning signs |
+| `signals.json` | Notes based on how someone took the quiz (time taken, skipped questions) |
+| `client-result.json` | The wording on the client's result screen |
+| `sample-submissions.json` | The six made-up people |
+
+Each file starts with a `_meta` section explaining its fields in plain English. Read it before editing.
+
+### How to make common changes
+
+- **Change a question's wording:** edit its `prompt` or an answer's `label` in `questions.json`. Don't change any `id`, because other files refer to them.
+- **Change a budget threshold:** edit `hotFrom` or `warmFrom` in `lead-rules.json`.
+- **Add a warning sign:** add an entry to `warningSigns` in `lead-rules.json`.
+- **After any change:** run `npm test`. If you made a mistake in a data file (a typo in an id, a missing threshold), the tests fail with a message saying exactly what and where.
+
+### Rules the code always follows
+
+- Client types and lead labels **never** appear on client screens. Tests check every sample for this.
+- Location never affects the lead label.
+- A client's type never changes the lead label.
+
+For why things work this way, see `docs/DECISIONS.md`.
+
+---
+
+## 6. Staying safe with Claude
 
 - **Read before you approve.** Claude asks permission before running commands or editing files. Don't click through without reading.
 - **Stay on a cautious permission mode.** Use "Ask before edits" or "Edit automatically", not a mode that skips all approvals.
@@ -163,22 +232,25 @@ git switch -c name/feature-x    # new branch
 
 ---
 
-## 6. Common problems
+## 7. Common problems
 
 **`npm install` fails with `ERESOLVE could not resolve`**
 Two packages disagree on a version. Don't use `--force` or `--legacy-peer-deps`. Copy the error and ask Claude or the team.
 
 **`npm test` fails**
-Read the test name in the error. It tells you which behavior broke. Paste the error into Claude Code and ask what it means.
+Read the test name in the error. It tells you which behaviour broke. Paste the error into Claude Code and ask what it means.
+
+**`npm test` or `npm run dev` fails with a message about a data file**
+You made a mistake editing a file in `data/`. The message names the file, the entry and the problem, for example `lead rules have no thresholds for project type castle`. Fix that entry, or undo your edit with Git.
+
+**Buttons do nothing when testing on a phone**
+Open the site on your phone using your computer's Wi-Fi address (for example `http://192.168.1.66:3000`), and restart `npm run dev` after pulling new changes. Wi-Fi addresses starting with `192.168.` are already allowed in `next.config.ts`.
 
 **Git says "Your branch is behind"**
 Run `git pull`.
 
-**Git says "protected branch" or "push declined" when you push**
-You're trying to push straight to `main`, which is protected. Make your own branch (Step 2), push that, and open a PR with `/done`.
-
-**`/done` or `/landed` says `gh: command not found` or asks you to log in**
-Install the GitHub CLI and run `gh auth login` (see section 1).
+**I pushed to `main` by accident**
+Stop and tell the team before anyone pulls. Don't try to undo it yourself; ask Claude or the repo owner to help.
 
 **A `/` command doesn't appear in Claude Code**
-Make sure VS Code has the whole project folder open (**File → Open Folder**), not a single file.
+Make sure VS Code has the whole project folder open (**File > Open Folder**), not a single file.

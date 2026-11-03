@@ -1,8 +1,10 @@
 @AGENTS.md
 
 ## Development Process
-Enforce TDD workflow. Use /sync (preflight), /blueprint (design plan), and
-/done (validate).
+Enforce TDD workflow. Use /sync (preflight) and /blueprint (design plan).
+Validate with npm run lint, npm test and npm run build, then commit and git push.
+This repo is a sandbox: branches are never merged into main, so never open pull
+requests, merge, or suggest /done or /landed.
 Refer to docs/DECISIONS.md and docs/IMPLEMENTATION_PLAN.md for context before work.
 Dev server: npm run dev (Next.js) or npx expo start (Expo).
 ## Security
