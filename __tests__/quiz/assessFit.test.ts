@@ -1,9 +1,32 @@
 import { describe, expect, test } from 'vitest'
 import { assessFit } from '@/lib/quiz/assessFit'
 import { loadFitRules, loadQuestions, loadSampleSubmissions } from '@/lib/quiz/load'
-import type { FitRules, Question, Submission } from '@/lib/quiz/types'
+import type { LeadRules, Question, Submission } from '@/lib/quiz/types'
 
 const QUESTIONS: Question[] = [
+  {
+    id: 'project',
+    kind: 'single',
+    prompt: 'What?',
+    optional: false,
+    criterion: 'scope',
+    options: [
+      { id: 'reno', label: 'A renovation', weights: {} },
+      { id: 'styling', label: 'Styling', weights: {} },
+      { id: 'not_sure', label: 'Not sure yet', weights: {} },
+    ],
+  },
+  {
+    id: 'money',
+    kind: 'range',
+    prompt: 'How much?',
+    optional: false,
+    criterion: 'investment',
+    min: 0,
+    max: 500000,
+    step: 10000,
+    options: [{ id: 'not_sure', label: 'Not sure yet', weights: {} }],
+  },
   {
     id: 'when',
     kind: 'single',
@@ -12,29 +35,46 @@ const QUESTIONS: Question[] = [
     criterion: 'timeframe',
     options: [
       { id: 'soon', label: 'Soon', weights: {} },
-      { id: 'never', label: 'Never', weights: {} },
+      { id: 'exploring', label: 'Just exploring', weights: {} },
     ],
   },
   {
-    id: 'money',
+    id: 'coffee',
     kind: 'single',
-    prompt: 'Budget?',
+    prompt: 'Coffee?',
     optional: false,
-    criterion: 'investment',
     options: [
-      { id: 'big', label: 'Big', weights: {} },
-      { id: 'small', label: 'Small', weights: {} },
+      { id: 'black', label: 'Black', weights: { decisive_delegator: 1 } },
+      { id: 'latte', label: 'Latte', weights: { creative_collaborator: 1 } },
     ],
   },
 ]
 
-const RULES: FitRules = {
-  criteria: {
-    timeframe: { id: 'timeframe', label: 'Timeframe', questionId: 'when', ratings: { soon: 'strong', never: 'weak' } },
-    investment: { id: 'investment', label: 'Investment', questionId: 'money', ratings: { big: 'strong', small: 'weak' } },
+const RULES: LeadRules = {
+  projectQuestion: 'project',
+  investmentQuestion: 'money',
+  thresholds: {
+    reno: { hotFrom: 150000, warmFrom: 50000 },
+    styling: { hotFrom: 50000, warmFrom: 20000 },
+    not_sure: { hotFrom: 150000, warmFrom: 50000 },
   },
-  serviceAreas: ['Burnaby', 'Port Moody'],
-  redFlags: [{ id: 'no_time', note: 'Never starting', when: [{ question: 'when', option: 'never' }] }],
+  unsureStart: 'warm',
+  details: [
+    { id: 'project', label: 'Project type', questionId: 'project' },
+    { id: 'investment', label: 'Investment', questionId: 'money' },
+    { id: 'timeframe', label: 'Timeframe', questionId: 'when' },
+  ],
+  redFlags: [
+    { id: 'exploring', note: 'Just exploring', when: [{ question: 'when', option: 'exploring' }] },
+    {
+      id: 'reno_exploring',
+      note: 'Renovation, but just exploring',
+      when: [
+        { question: 'project', option: 'reno' },
+        { question: 'when', option: 'exploring' },
+      ],
+    },
+  ],
 }
 
 function submission(answers: Submission['answers'], city = 'Burnaby'): Submission {
@@ -51,45 +91,98 @@ function submission(answers: Submission['answers'], city = 'Burnaby'): Submissio
   }
 }
 
-describe('assessFit', () => {
-  test('rates each criterion from the answer, with the answer label', () => {
-    const fit = assessFit(submission({ when: 'soon', money: 'small' }), QUESTIONS, RULES)
-    expect(fit.criteria).toContainEqual({ id: 'timeframe', label: 'Timeframe', rating: 'strong', answer: 'Soon' })
-    expect(fit.criteria).toContainEqual({ id: 'investment', label: 'Investment', rating: 'weak', answer: 'Small' })
+const lead = (answers: Submission['answers']) => assessFit(submission(answers), QUESTIONS, RULES)
+
+describe('assessFit: starting label from project type + investment', () => {
+  test('hot at or above "hot from", with a plain-language reason', () => {
+    expect(lead({ project: 'reno', money: 150000 }).temperature).toBe('hot')
+    const result = lead({ project: 'reno', money: 200000 })
+    expect(result).toMatchObject({ temperature: 'hot', startingTemperature: 'hot', lowered: false })
+    expect(result.reasons).toEqual(['A renovation at $200K: hot'])
   })
 
-  test('rates location strong inside the service area, ignoring case and spaces', () => {
-    const fit = assessFit(submission({}, '  port moody '), QUESTIONS, RULES)
-    expect(fit.criteria).toContainEqual({ id: 'location', label: 'Location', rating: 'strong', answer: 'port moody' })
+  test('warm from "warm from" up to just below "hot from"', () => {
+    expect(lead({ project: 'reno', money: 50000 }).temperature).toBe('warm')
+    expect(lead({ project: 'reno', money: 140000 }).temperature).toBe('warm')
   })
 
-  test('rates location possible (never weak) outside the service area', () => {
-    const fit = assessFit(submission({}, 'Kelowna'), QUESTIONS, RULES)
-    expect(fit.criteria.find((c) => c.id === 'location')?.rating).toBe('possible')
+  test('cold below "warm from"', () => {
+    expect(lead({ project: 'reno', money: 40000 }).temperature).toBe('cold')
+    expect(lead({ project: 'reno', money: 0 }).temperature).toBe('cold')
   })
 
-  test('marks a skipped fit question as unanswered', () => {
-    const fit = assessFit(submission({ when: 'soon' }), QUESTIONS, RULES)
-    expect(fit.criteria.find((c) => c.id === 'investment')).toMatchObject({ rating: 'unanswered' })
+  test('each project type uses its own thresholds', () => {
+    expect(lead({ project: 'styling', money: 60000 }).temperature).toBe('hot')
+    expect(lead({ project: 'reno', money: 60000 }).temperature).toBe('warm')
   })
 
-  test('raises a red flag only when every condition matches', () => {
-    expect(assessFit(submission({ when: 'never' }), QUESTIONS, RULES).redFlags.map((f) => f.id)).toEqual(['no_time'])
-    expect(assessFit(submission({ when: 'soon' }), QUESTIONS, RULES).redFlags).toEqual([])
+  test('"Not sure yet" as a project type still uses its own thresholds', () => {
+    expect(lead({ project: 'not_sure', money: 200000 }).temperature).toBe('hot')
   })
 
-  test('overall is strong when every criterion is strong and nothing is flagged', () => {
-    expect(assessFit(submission({ when: 'soon', money: 'big' }), QUESTIONS, RULES).overall).toBe('strong')
+  test('an unsure or skipped investment, or a skipped project type, starts at warm', () => {
+    const cases: Submission['answers'][] = [
+      { project: 'reno', money: 'not_sure' },
+      { project: 'reno' },
+      { money: 300000 },
+    ]
+    for (const answers of cases) {
+      const result = lead(answers)
+      expect(result.temperature, JSON.stringify(answers)).toBe('warm')
+      expect(result.reasons[0], JSON.stringify(answers)).toMatch(/starts warm$/)
+    }
+  })
+})
+
+describe('assessFit: warning signs', () => {
+  test('one warning sign lowers the label one step', () => {
+    const result = lead({ project: 'styling', money: 60000, when: 'exploring' })
+    expect(result).toMatchObject({ temperature: 'warm', startingTemperature: 'hot', lowered: true })
+    expect(result.redFlags.map((f) => f.id)).toEqual(['exploring'])
+    expect(result.reasons[1]).toMatch(/lowered to warm/i)
   })
 
-  test('overall is possible with one concern or an unanswered question', () => {
-    expect(assessFit(submission({ when: 'soon', money: 'small' }), QUESTIONS, RULES).overall).toBe('possible')
-    expect(assessFit(submission({ when: 'soon' }), QUESTIONS, RULES).overall).toBe('possible')
+  test('two warning signs still lower it only one step', () => {
+    const result = lead({ project: 'reno', money: 200000, when: 'exploring' })
+    expect(result.redFlags).toHaveLength(2)
+    expect(result.temperature).toBe('warm')
   })
 
-  test('overall is weak with two or more concerns (weak ratings plus red flags)', () => {
-    // "never" is weak and also raises a red flag: two concerns.
-    expect(assessFit(submission({ when: 'never', money: 'big' }), QUESTIONS, RULES).overall).toBe('weak')
+  test('cold stays cold', () => {
+    const result = lead({ project: 'reno', money: 10000, when: 'exploring' })
+    expect(result).toMatchObject({ temperature: 'cold', lowered: false })
+  })
+
+  test('a flag is raised only when every condition matches', () => {
+    expect(lead({ project: 'styling', when: 'exploring' }).redFlags.map((f) => f.id)).toEqual(['exploring'])
+    expect(lead({ project: 'reno', when: 'soon' }).redFlags).toEqual([])
+  })
+})
+
+describe('assessFit: details and independence', () => {
+  test('lists each detail row with a readable answer, and none when unanswered', () => {
+    const result = lead({ project: 'reno', money: 500000 })
+    expect(result.details).toEqual([
+      { id: 'project', label: 'Project type', answer: 'A renovation' },
+      { id: 'investment', label: 'Investment', answer: '$500K+' },
+      { id: 'timeframe', label: 'Timeframe' },
+    ])
+    expect(lead({ money: 'not_sure' }).details[1].answer).toBe('Not sure yet')
+  })
+
+  // DECISIONS.md: location removed from fit entirely.
+  test('the site address never changes the result', () => {
+    const answers = { project: 'reno', money: 200000 }
+    expect(assessFit(submission(answers, 'Edmonton'), QUESTIONS, RULES)).toEqual(
+      assessFit(submission(answers, 'Burnaby'), QUESTIONS, RULES),
+    )
+  })
+
+  // DECISIONS.md: fit and client type are independent.
+  test('working-style answers never change the result', () => {
+    expect(lead({ project: 'reno', money: 200000, coffee: 'black' })).toEqual(
+      lead({ project: 'reno', money: 200000, coffee: 'latte' }),
+    )
   })
 })
 
@@ -104,31 +197,31 @@ describe('assessing the sample submissions', () => {
   }
 
   test.each([
-    ['decisive-delegator', 'strong'],
-    ['analytical-validator', 'strong'],
-    ['mixed-cautious-controller', 'possible'],
-    ['weak-fit-explorer', 'weak'],
-    ['skipper', 'possible'],
-  ])('%s is a %s fit', (id, overall) => {
-    expect(fitFor(id).overall).toBe(overall)
+    ['decisive-delegator', 'hot'],
+    ['analytical-validator', 'hot'],
+    ['mixed-cautious-controller', 'warm'],
+    ['weak-fit-explorer', 'cold'],
+    ['skipper', 'warm'],
+    ['out-of-area-hot', 'hot'],
+  ])('%s is a %s lead', (id, temperature) => {
+    expect(fitFor(id).temperature).toBe(temperature)
   })
 
-  test('the weak-fit explorer raises both early-stage notes', () => {
+  test('the explorer raises the early-stage warning signs', () => {
     expect(fitFor('weak-fit-explorer').redFlags.map((f) => f.id)).toEqual([
+      'just_exploring',
       'early_one_time_session',
       'early_no_budget',
     ])
   })
 
-  test('the skipper raises the builder-underway note', () => {
-    expect(fitFor('skipper').redFlags.map((f) => f.id)).toEqual(['builder_underway'])
+  test('the skipper is lowered from hot to warm by the builder note', () => {
+    const result = fitFor('skipper')
+    expect(result.redFlags.map((f) => f.id)).toEqual(['builder_underway'])
+    expect(result).toMatchObject({ startingTemperature: 'hot', lowered: true })
   })
 
-  // Fit and archetype are independent axes (DECISIONS.md).
-  test('changing working-style answers does not change fit', () => {
-    const sample = samples.find((s) => s.id === 'decisive-delegator')
-    if (!sample) throw new Error('missing sample')
-    const changed = { ...sample, answers: { ...sample.answers, decision_style: 'talk_it_through', coffee: 'pour_over' } }
-    expect(assessFit(changed, questions, rules)).toEqual(assessFit(sample, questions, rules))
+  test('the hot lead outside the Lower Mainland is in Edmonton', () => {
+    expect(samples.find((s) => s.id === 'out-of-area-hot')?.contact.siteAddress.city).toBe('Edmonton')
   })
 })

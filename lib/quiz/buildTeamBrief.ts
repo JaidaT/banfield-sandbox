@@ -1,3 +1,4 @@
+import { answerLabels } from './answers'
 import { assessFit } from './assessFit'
 import { scoreArchetypes } from './scoreArchetypes'
 import { evaluateSignals, skippedQuestions } from './signals'
@@ -10,22 +11,16 @@ import type {
   TeamBrief,
 } from './types'
 
-// Draft cutoffs: show guidance for types at 20% or more, at most three.
+// Draft cutoffs: show guidance for types at 20% or more, at most two (Oct 28 meeting).
 const HIGHLIGHT_MIN_PERCENT = 20
-const HIGHLIGHT_MAX = 3
+const HIGHLIGHT_MAX = 2
 
 export function shortLabel(label: string): string {
   return label.replace(/^The /, '')
 }
 
 function readableAnswer(question: Question, submission: Submission): string | null {
-  const answer = submission.answers[question.id]
-  if (answer === undefined) return null
-  if (question.kind === 'text') {
-    return typeof answer === 'string' && answer.trim() !== '' ? answer.trim() : null
-  }
-  const chosen = Array.isArray(answer) ? answer : [answer]
-  const labels = question.options.filter((o) => chosen.includes(o.id)).map((o) => o.label)
+  const labels = answerLabels(question, submission.answers[question.id])
   return labels.length > 0 ? labels.join('; ') : null
 }
 
@@ -55,7 +50,7 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
     ]
   })
 
-  const fitLabel = `${fit.overall[0].toUpperCase()}${fit.overall.slice(1)} fit`
+  const leadLabel = `${fit.temperature[0].toUpperCase()}${fit.temperature.slice(1)} lead`
   const typeLine =
     highlights.length === 0
       ? 'Not enough answers to identify a client type'
@@ -69,7 +64,7 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
 
   return {
     submissionId: submission.id,
-    headline: `${typeLine} | ${fitLabel}`,
+    headline: `${leadLabel} | ${typeLine}`,
     contact: submission.contact,
     blend,
     highlights,

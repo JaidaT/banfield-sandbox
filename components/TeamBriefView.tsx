@@ -1,13 +1,12 @@
 import CopyBriefButton from '@/components/CopyBriefButton'
 import { briefToText, formatDuration } from '@/lib/quiz/briefToText'
 import { shortLabel } from '@/lib/quiz/buildTeamBrief'
-import type { TeamBrief } from '@/lib/quiz/types'
+import type { LeadTemperature, TeamBrief } from '@/lib/quiz/types'
 
-const RATING_STYLES: Record<string, string> = {
-  strong: 'bg-navy text-frost',
-  possible: 'bg-accent text-charcoal',
-  weak: 'bg-charcoal text-frost',
-  unanswered: 'border border-charcoal/30 text-charcoal/70',
+const LEAD_STYLES: Record<LeadTemperature, string> = {
+  hot: 'bg-navy text-frost',
+  warm: 'bg-accent text-charcoal',
+  cold: 'bg-charcoal text-frost',
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -46,6 +45,40 @@ export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
           <dt className="text-charcoal/60">Site</dt>
           <dd>{`${site.street}, ${site.city}, ${site.postalCode}`}</dd>
         </dl>
+      </Section>
+
+      {/* Oct 28 meeting: the lead label sits above the client type. */}
+      <Section title="Lead">
+        <p className="mb-3">
+          <span
+            data-testid="lead-temperature"
+            className={`rounded-full px-3 py-1 text-sm font-semibold capitalize ${LEAD_STYLES[fit.temperature]}`}
+          >
+            {fit.temperature} lead
+          </span>
+        </p>
+        <ul className="mb-3 flex flex-col gap-1 text-sm">
+          {fit.reasons.map((r) => (
+            <li key={r}>{r}</li>
+          ))}
+        </ul>
+        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+          {fit.details.map((d) => (
+            <div key={d.id} className="contents">
+              <dt className="text-charcoal/60">{d.label}</dt>
+              <dd>{d.answer ?? 'Not answered'}</dd>
+            </div>
+          ))}
+        </dl>
+        {fit.redFlags.length > 0 && (
+          <ul className="mt-4 flex flex-col gap-2">
+            {fit.redFlags.map((f) => (
+              <li key={f.id} className="rounded-lg border-l-4 border-accent bg-white/70 px-3 py-2 text-sm">
+                {f.note}
+              </li>
+            ))}
+          </ul>
+        )}
       </Section>
 
       <Section title="Client type">
@@ -110,37 +143,6 @@ export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
           </div>
         </Section>
       )}
-
-      <Section title="Fit">
-        <p className="mb-3">
-          <span
-            data-testid="fit-overall"
-            className={`rounded-full px-3 py-1 text-sm font-semibold capitalize ${RATING_STYLES[fit.overall]}`}
-          >
-            {fit.overall}
-          </span>
-        </p>
-        <ul className="flex flex-col gap-1.5 text-sm">
-          {fit.criteria.map((c) => (
-            <li key={c.id} className="flex flex-wrap items-center gap-2">
-              <span className="font-semibold">{c.label}:</span>
-              <span>{c.answer ?? 'Not answered'}</span>
-              <span className={`rounded-full px-2 py-0.5 text-xs capitalize ${RATING_STYLES[c.rating]}`}>
-                {c.rating}
-              </span>
-            </li>
-          ))}
-        </ul>
-        {fit.redFlags.length > 0 && (
-          <ul className="mt-4 flex flex-col gap-2">
-            {fit.redFlags.map((f) => (
-              <li key={f.id} className="rounded-lg border-l-4 border-accent bg-white/70 px-3 py-2 text-sm">
-                {f.note}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Section>
 
       <Section title="Behaviour">
         <ul className="flex flex-col gap-1 text-sm">

@@ -60,7 +60,7 @@ describe('buildClientResult', () => {
       // The booking URL is percent-encoded, so check the readable text without it.
       const text = JSON.stringify({ ...result, cta: { ...result.cta, href: '' } }).toLowerCase()
       for (const word of forbidden) expect(text, `${s.id} leaks "${word}"`).not.toContain(word)
-      expect(text, s.id).not.toMatch(/\b(fit|archetype|percent)\b|%/)
+      expect(text, s.id).not.toMatch(/\b(fit|archetype|percent)\b|\b(hot|warm|cold) lead\b|%/)
     }
   })
 

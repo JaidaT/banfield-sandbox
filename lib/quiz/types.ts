@@ -45,7 +45,8 @@ export interface Question {
   min?: number
   max?: number
   step?: number
-  // Fit questions name the criterion they feed; their ratings live in fit.json.
+  // Marks a fit question (project, investment, timing and so on). Fit questions
+  // never carry archetype weights; how they count lives in fit.json.
   criterion?: string
   options: AnswerOption[]
 }
@@ -66,18 +67,6 @@ export interface SignalRule {
   note: string
 }
 
-export const FIT_RATINGS = ['strong', 'possible', 'weak'] as const
-export type FitRating = (typeof FIT_RATINGS)[number]
-
-export interface FitCriterion {
-  id: string
-  label: string
-  // The question whose `criterion` matches this id.
-  questionId: string
-  // Keyed by answer option id.
-  ratings: Record<string, FitRating>
-}
-
 export interface FitCondition {
   question: string
   option: string
@@ -88,12 +77,6 @@ export interface RedFlag {
   id: string
   note: string
   when: FitCondition[]
-}
-
-export interface FitRules {
-  criteria: Record<string, FitCriterion>
-  serviceAreas: string[]
-  redFlags: RedFlag[]
 }
 
 export const LEAD_TEMPERATURES = ['hot', 'warm', 'cold'] as const
@@ -175,20 +158,6 @@ export interface ArchetypeScore {
   percent: number
 }
 
-export interface CriterionResult {
-  id: string
-  label: string
-  rating: FitRating | 'unanswered'
-  // What the client chose (or their city, for location). Absent when unanswered.
-  answer?: string
-}
-
-export interface FitAssessment {
-  overall: FitRating
-  criteria: CriterionResult[]
-  redFlags: RedFlag[]
-}
-
 export interface LeadDetail {
   id: string
   label: string
@@ -218,7 +187,7 @@ export interface QuizData {
   archetypes: Archetype[]
   questions: Question[]
   signalRules: SignalRule[]
-  fitRules: FitRules
+  fitRules: LeadRules
 }
 
 // Team-facing guidance for one of the client's leading archetypes.
@@ -270,7 +239,7 @@ export interface TeamBrief {
   contact: Contact
   blend: ArchetypeBlend
   highlights: ArchetypeGuidance[]
-  fit: FitAssessment
+  fit: LeadAssessment
   behaviour: {
     durationSeconds: number
     skippedQuestions: string[]

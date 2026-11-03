@@ -1,14 +1,14 @@
 {
   "_meta": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "purpose": "Made-up Quick Quiz submissions for tests and demo pages. Not real clients. Names, emails (example.com), phone numbers (555-01xx) and street addresses are fictional.",
-    "answers": "Keys are question ids from questions.json. Pick-one questions take an option id, pick-several questions take a list of option ids, text questions take text. A missing question means it was skipped.",
+    "answers": "Keys are question ids from questions.json. Pick-one questions take an option id, pick-several questions take a list of option ids, text questions take text, slider questions take a number (or an option id such as \"not_sure\"). A missing question means it was skipped.",
     "note": "Each sample's 'note' says who it is meant to represent, so a reviewer can check the brief against the intent."
   },
   "samples": [
     {
       "id": "decisive-delegator",
-      "note": "Clear Decisive Delegator. Strong fit: renovation, $150K-$400K, ready in 3-6 months, full service, in Burnaby. Finished fast with short answers.",
+      "note": "Clear Decisive Delegator. Hot lead: renovation at $200K, ready in 3-6 months, full service, in Burnaby. Finished fast with short answers.",
       "contact": {
         "name": "Alex Morgan",
         "email": "alex.morgan@example.com",
@@ -24,7 +24,7 @@
         "home_meaning": "Calm. Somewhere that just works.",
         "project_scope": "renovation",
         "timeframe": "3_to_6_months",
-        "investment": "150k_to_400k",
+        "investment": 200000,
         "readiness": "ready",
         "service": "full_service"
       },
@@ -32,7 +32,7 @@
     },
     {
       "id": "analytical-validator",
-      "note": "Clear Analytical Validator. Strong fit: new build over $400K in Vancouver, 6-12 months out. Took their time and wrote a long, detailed answer.",
+      "note": "Clear Analytical Validator. Hot lead: new build at $500K+ in Vancouver, 6-12 months out. Took their time and wrote a long, detailed answer.",
       "contact": {
         "name": "Jordan Lee",
         "email": "jordan.lee@example.com",
@@ -48,7 +48,7 @@
         "home_meaning": "Home is where everything has a reason to be where it is. We want a house that performs well for decades: good air quality, low energy bills, materials that age well, and a layout we have actually thought through rather than inherited. We have read a lot about Passive House and want to understand the trade-offs.",
         "project_scope": "new_build",
         "timeframe": "6_to_12_months",
-        "investment": "over_400k",
+        "investment": 500000,
         "readiness": "planning",
         "service": "full_service"
       },
@@ -56,7 +56,7 @@
     },
     {
       "id": "mixed-cautious-controller",
-      "note": "Mixed blend: Cautious Reassurance Seeker and Hands-On Controller. Possible fit: renovation $50K-$150K in Coquitlam, wants to start ASAP, unsure what service they need.",
+      "note": "Mixed blend: Cautious Reassurance Seeker and Hands-On Controller. Warm lead: renovation at $100K in Coquitlam, wants to start ASAP, unsure what service they need.",
       "contact": {
         "name": "Casey Nguyen",
         "email": "casey.nguyen@example.com",
@@ -72,7 +72,7 @@
         "home_meaning": "Somewhere the kids can grow up and my mom can come stay with us.",
         "project_scope": "renovation",
         "timeframe": "asap",
-        "investment": "50k_to_150k",
+        "investment": 100000,
         "readiness": "planning",
         "service": "not_sure"
       },
@@ -80,7 +80,7 @@
     },
     {
       "id": "weak-fit-explorer",
-      "note": "Leans Creative Collaborator. Weak fit: furniture and styling only, just exploring, no budget in mind, wants a one-time session, and the site is outside the service area (Kelowna). Should raise the early-stage notes.",
+      "note": "Leans Creative Collaborator. Cold lead: furniture and styling only with no budget in mind (starts warm), then lowered by three warning signs: just exploring, wants a one-time session, still collecting ideas. In Kelowna, which has no effect.",
       "contact": {
         "name": "Riley Thompson",
         "email": "riley.thompson@example.com",
@@ -104,7 +104,7 @@
     },
     {
       "id": "skipper",
-      "note": "Leans Hands-On Controller. Skipped three questions (confidence, coffee, home) and finished very fast. Already underway with a builder in Surrey, wants design plans only. Should raise the 'builder underway' note.",
+      "note": "Leans Hands-On Controller. Skipped three questions (confidence, coffee, home) and finished very fast. Renovation at $250K (starts hot), lowered to a warm lead because they are already under construction with a builder in Surrey. Wants design plans only.",
       "contact": {
         "name": "Morgan Davis",
         "email": "morgan.davis@example.com",
@@ -117,11 +117,35 @@
         "different_concept": "compare",
         "project_scope": "renovation",
         "timeframe": "6_to_12_months",
-        "investment": "150k_to_400k",
+        "investment": 250000,
         "readiness": "underway",
         "service": "design_only"
       },
       "durationSeconds": 95
+    },
+    {
+      "id": "out-of-area-hot",
+      "note": "Leans Decisive Delegator with some Creative Collaborator. Hot lead: renovation at $300K, starting in 6-12 months, ready to go, full service. In Edmonton, to show location never lowers the label.",
+      "contact": {
+        "name": "Sam Patel",
+        "email": "sam.patel@example.com",
+        "phone": "780-555-0106",
+        "siteAddress": { "street": "600 Sample Way", "city": "Edmonton", "postalCode": "T5J 0A6" }
+      },
+      "answers": {
+        "decision_style": "trust_expert",
+        "involvement": "milestones",
+        "different_concept": "exciting",
+        "confidence": ["clear_recommendation", "see_it_first"],
+        "coffee": "black_to_go",
+        "home_meaning": "Room for everyone when the cousins visit.",
+        "project_scope": "renovation",
+        "timeframe": "6_to_12_months",
+        "investment": 300000,
+        "readiness": "ready",
+        "service": "full_service"
+      },
+      "durationSeconds": 260
     }
   ]
 }

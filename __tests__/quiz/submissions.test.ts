@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadFitRules, loadQuestions, loadSampleSubmissions } from '@/lib/quiz/load'
+import { loadQuestions, loadSampleSubmissions } from '@/lib/quiz/load'
 import { validateSubmission } from '@/lib/quiz/submission'
 import type { Question, Submission } from '@/lib/quiz/types'
 
@@ -168,13 +168,6 @@ describe('loadSampleSubmissions', () => {
 
   test('every sample says who it represents', () => {
     for (const s of loadSampleSubmissions()) expect(s.note, s.id).toBeTruthy()
-  })
-
-  test('includes a site outside the service area', () => {
-    const areas = loadFitRules().serviceAreas
-    expect(loadSampleSubmissions().some((s) => !areas.includes(s.contact.siteAddress.city))).toBe(
-      true,
-    )
   })
 
   test('includes someone who skipped two or more questions', () => {

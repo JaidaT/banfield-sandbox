@@ -1,19 +1,18 @@
+import { answerLabels, formatAmount } from './answers'
 import type {
-  CriterionResult,
-  FitAssessment,
   FitCondition,
-  FitRating,
-  FitRules,
+  LeadAssessment,
+  LeadRules,
+  LeadTemperature,
   Question,
   Submission,
 } from './types'
 
-// Draft rule for Banfield to review: two or more concerns (weak ratings plus
-// raised red flags) make the overall fit weak.
-const CONCERNS_FOR_WEAK = 2
-
-function normalizeCity(city: string): string {
-  return city.trim().toLowerCase()
+// Order used when a warning sign lowers the label by one step.
+const ONE_STEP_DOWN: Record<LeadTemperature, LeadTemperature> = {
+  hot: 'warm',
+  warm: 'cold',
+  cold: 'cold',
 }
 
 function conditionMet(submission: Submission, condition: FitCondition): boolean {
@@ -21,41 +20,58 @@ function conditionMet(submission: Submission, condition: FitCondition): boolean 
   return Array.isArray(answer) ? answer.includes(condition.option) : answer === condition.option
 }
 
-// Reads only fit questions, the site address and fit rules. It never looks at
-// archetype weights, so fit stays independent of working style.
+// Works out the starting label from project type + investment (see fit.json),
+// with a plain-language reason for the brief.
+function startingLabel(
+  submission: Submission,
+  rules: LeadRules,
+  byId: Map<string, Question>,
+): { temperature: LeadTemperature; reason: string } {
+  const unsure = (why: string) => ({ temperature: rules.unsureStart, reason: `${why}: starts ${rules.unsureStart}` })
+
+  const project = submission.answers[rules.projectQuestion]
+  const thresholds = typeof project === 'string' ? rules.thresholds[project] : undefined
+  if (!thresholds) return unsure('Project type not answered')
+
+  const amount = submission.answers[rules.investmentQuestion]
+  if (typeof amount !== 'number') {
+    const investment = byId.get(rules.investmentQuestion)
+    const label = investment ? answerLabels(investment, amount)[0] : undefined
+    return unsure(label ? `Investment "${label}"` : 'Investment not answered')
+  }
+
+  const temperature: LeadTemperature =
+    amount >= thresholds.hotFrom ? 'hot' : amount >= thresholds.warmFrom ? 'warm' : 'cold'
+  const projectQuestion = byId.get(rules.projectQuestion)
+  const projectLabel = projectQuestion ? answerLabels(projectQuestion, project)[0] : project
+  const investmentMax = byId.get(rules.investmentQuestion)?.max
+  return { temperature, reason: `${projectLabel} at ${formatAmount(amount, investmentMax)}: ${temperature}` }
+}
+
+// Reads only fit questions and fit rules. It never looks at the site address or
+// archetype weights, so location and working style never change the label.
 export function assessFit(
   submission: Submission,
   questions: Question[],
-  rules: FitRules,
-): FitAssessment {
+  rules: LeadRules,
+): LeadAssessment {
   const byId = new Map(questions.map((q) => [q.id, q]))
-
-  const criteria: CriterionResult[] = Object.values(rules.criteria).map((criterion) => {
-    const answer = submission.answers[criterion.questionId]
-    const option =
-      typeof answer === 'string'
-        ? byId.get(criterion.questionId)?.options.find((o) => o.id === answer)
-        : undefined
-    if (!option) return { id: criterion.id, label: criterion.label, rating: 'unanswered' }
-    return {
-      id: criterion.id,
-      label: criterion.label,
-      rating: criterion.ratings[option.id],
-      answer: option.label,
-    }
-  })
-
-  const city = submission.contact.siteAddress.city.trim()
-  const inArea = rules.serviceAreas.some((area) => normalizeCity(area) === normalizeCity(city))
-  // Outside the list is "possible", never "weak": Jamie decides on location.
-  criteria.push({ id: 'location', label: 'Location', rating: inArea ? 'strong' : 'possible', answer: city })
-
+  const start = startingLabel(submission, rules, byId)
   const redFlags = rules.redFlags.filter((flag) => flag.when.every((c) => conditionMet(submission, c)))
 
-  const concerns = criteria.filter((c) => c.rating === 'weak').length + redFlags.length
-  let overall: FitRating = 'strong'
-  if (concerns >= CONCERNS_FOR_WEAK) overall = 'weak'
-  else if (concerns > 0 || criteria.some((c) => c.rating !== 'strong')) overall = 'possible'
+  // Any number of warning signs lowers the label one step, never more.
+  const temperature = redFlags.length > 0 ? ONE_STEP_DOWN[start.temperature] : start.temperature
+  const lowered = temperature !== start.temperature
+  const reasons = [start.reason]
+  if (lowered) reasons.push(`Lowered to ${temperature} by the warning signs below`)
 
-  return { overall, criteria, redFlags }
+  const details = rules.details.map((d) => {
+    const question = byId.get(d.questionId)
+    const labels = question ? answerLabels(question, submission.answers[d.questionId]) : []
+    return labels.length > 0
+      ? { id: d.id, label: d.label, answer: labels.join('; ') }
+      : { id: d.id, label: d.label }
+  })
+
+  return { temperature, startingTemperature: start.temperature, lowered, reasons, details, redFlags }
 }

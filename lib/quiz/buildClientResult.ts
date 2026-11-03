@@ -1,14 +1,8 @@
+import { answerLabels } from './answers'
 import type { ClientCopy, ClientResult, Question, Submission } from './types'
 
-function answerLabels(question: Question | undefined, submission: Submission): string[] {
-  if (!question) return []
-  const answer = submission.answers[question.id]
-  if (answer === undefined) return []
-  if (question.kind === 'text') {
-    return typeof answer === 'string' && answer.trim() !== '' ? [answer.trim()] : []
-  }
-  const chosen = Array.isArray(answer) ? answer : [answer]
-  return question.options.filter((o) => chosen.includes(o.id)).map((o) => o.label)
+function labelsFor(question: Question | undefined, submission: Submission): string[] {
+  return question ? answerLabels(question, submission.answers[question.id]) : []
 }
 
 function bookingHref(base: string, name: string, email: string): string {
@@ -28,14 +22,14 @@ export function buildClientResult(
   const sections: ClientResult['sections'] = []
 
   const projectLines = copy.projectLines.flatMap(({ question, prefix }) =>
-    answerLabels(byId.get(question), submission).map((label) => `${prefix}${label}`),
+    labelsFor(byId.get(question), submission).map((label) => `${prefix}${label}`),
   )
   if (projectLines.length > 0) sections.push({ title: copy.projectTitle, lines: projectLines })
 
-  const confidence = answerLabels(byId.get(copy.confidenceQuestion), submission)
+  const confidence = labelsFor(byId.get(copy.confidenceQuestion), submission)
   if (confidence.length > 0) sections.push({ title: copy.confidenceTitle, lines: confidence })
 
-  const home = answerLabels(byId.get(copy.homeQuestion), submission)
+  const home = labelsFor(byId.get(copy.homeQuestion), submission)
   if (home.length > 0) sections.push({ title: copy.homeTitle, lines: home })
 
   return {

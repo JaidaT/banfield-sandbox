@@ -27,13 +27,21 @@ describe('TeamBriefView', () => {
     expect(screen.getByRole('button', { name: /copy/i })).toBeDefined()
   })
 
-  test('shows guidance for each highlighted type, the fit and its notes', () => {
+  test('shows guidance for each highlighted type and the lead label', () => {
     const brief = buildTeamBrief(sample('mixed-cautious-controller'), data)
     render(<TeamBriefView brief={brief} />)
     for (const h of brief.highlights) {
       expect(screen.getByText(h.communication)).toBeDefined()
     }
-    expect(screen.getByTestId('fit-overall').textContent).toMatch(/possible/i)
+    expect(screen.getByTestId('lead-temperature').textContent).toMatch(/warm lead/i)
+  })
+
+  // Oct 28 meeting: fit sits above the client type in the brief.
+  test('the lead section comes before the client type section', () => {
+    render(<TeamBriefView brief={buildTeamBrief(sample('skipper'), data)} />)
+    const leadLabel = screen.getByTestId('lead-temperature')
+    const clientType = screen.getByRole('heading', { name: 'Client type' })
+    expect(leadLabel.compareDocumentPosition(clientType) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   test('shows red flag notes', () => {
@@ -86,7 +94,7 @@ describe('ClientResultView', () => {
       for (const a of data.archetypes) {
         expect(text, s.id).not.toContain(a.label.replace(/^The /, '').toLowerCase())
       }
-      expect(text, s.id).not.toMatch(/\b(strong|weak|possible) fit\b|%/)
+      expect(text, s.id).not.toMatch(/\b(strong|weak|possible) fit\b|\b(hot|warm|cold) lead\b|%/)
       unmount()
     }
   })

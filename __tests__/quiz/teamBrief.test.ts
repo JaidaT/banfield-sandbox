@@ -18,12 +18,16 @@ describe('buildTeamBrief', () => {
     expect(brief.contact).toEqual(samples[0].contact)
   })
 
-  test('headline names the leading client type and the fit', () => {
-    expect(briefFor('decisive-delegator').headline).toMatch(/^\d+% Decisive Delegator.*Strong fit$/)
-    expect(briefFor('weak-fit-explorer').headline).toMatch(/Creative Collaborator.*Weak fit$/)
+  test('headline puts the lead label first, then the leading client type', () => {
+    expect(briefFor('decisive-delegator').headline).toMatch(/^Hot lead \| \d+% Decisive Delegator/)
+    expect(briefFor('weak-fit-explorer').headline).toMatch(/^Cold lead \| \d+% Creative Collaborator/)
   })
 
-  test('highlights the top types (20% or more, at most three) with guidance from archetypes.json', () => {
+  test('shows guidance for at most two client types', () => {
+    for (const s of samples) expect(buildTeamBrief(s, data).highlights.length, s.id).toBeLessThanOrEqual(2)
+  })
+
+  test('highlights the top types (20% or more) with guidance from archetypes.json', () => {
     const brief = briefFor('mixed-cautious-controller')
     const ids = brief.highlights.map((h) => h.id)
     expect(ids).toEqual(['cautious_reassurance_seeker', 'hands_on_controller'])
@@ -35,7 +39,6 @@ describe('buildTeamBrief', () => {
       risks: cautious?.risks,
     })
     for (const h of brief.highlights) expect(h.percent).toBeGreaterThanOrEqual(20)
-    expect(brief.highlights.length).toBeLessThanOrEqual(3)
   })
 
   test('always highlights at least the top type when there is any data', () => {
@@ -68,10 +71,17 @@ describe('buildTeamBrief', () => {
     )
   })
 
-  test('includes the fit assessment with its red flags', () => {
+  test('shows investment amounts as money, "$500K+" at the top, and "Not sure yet"', () => {
+    const investment = (id: string) => briefFor(id).answers.find((a) => a.questionId === 'investment')?.answer
+    expect(investment('decisive-delegator')).toBe('$200K')
+    expect(investment('analytical-validator')).toBe('$500K+')
+    expect(investment('weak-fit-explorer')).toBe('Not sure yet')
+  })
+
+  test('includes the lead assessment with its warning signs', () => {
     const brief = briefFor('weak-fit-explorer')
-    expect(brief.fit.overall).toBe('weak')
-    expect(brief.fit.redFlags.length).toBe(2)
+    expect(brief.fit.temperature).toBe('cold')
+    expect(brief.fit.redFlags.length).toBe(3)
   })
 })
 
@@ -90,6 +100,13 @@ describe('briefToText', () => {
     ]) {
       expect(text).toContain(expected)
     }
+  })
+
+  test('the lead section comes before the client type guidance', () => {
+    const text = briefToText(briefFor('skipper'))
+    expect(text).toContain('LEAD: WARM')
+    expect(text.indexOf('LEAD:')).toBeLessThan(text.indexOf('HOW TO WORK WITH THEM'))
+    expect(text).toContain('- Investment: $250K')
   })
 
   test('marks skipped answers', () => {

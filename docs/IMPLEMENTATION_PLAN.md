@@ -73,29 +73,29 @@ Work test-first: for each step, write or update the failing test, then change th
 - [x] `lib/quiz/load.ts` (range questions and `ignoreIfSkipped` in `parseQuestionBank`; new `parseLeadRules` next to the old `parseFitRules`, sharing the red flag checks; no service areas): validate range questions (min below max, step above 0, numbers only); validate the new `fit.json` shape (every project type option has thresholds, "hot from" is at or above "warm from", warning signs name real questions and options); keep failing loudly with clear messages
 - [x] `lib/quiz/submission.ts`: a range answer must be a number inside min to max on a step, or the escape option id
 - [x] `data/questions.json` wording: project stage question "What stage is your project at right now?" with matching answers; the four "type of help" answers now say how long Banfield is involved ("Start to finish", "Design, then hand-off", "One session", "Not sure yet"); new final question `anything_else` with `ignoreIfSkipped: true`. Banfield must confirm "stay involved until the project is complete" describes their full service
-- [ ] `data/questions.json` slider (done in one go with `fit.json`, the samples and `assessFit`, because they break together; the wording parts of this step are done above) (version 0.2.0, still a draft): turn `investment` into a range question ($0 to $500K+, $10K steps, "Not sure yet" escape), worded with "investment"; reword the `service` answers "Take it from idea to move-in" and "Design plans I can take to my builder" and the `readiness` prompt "Where are you at right now?" (draft wording, flagged for Banfield review); add an optional final text question `anything_else` ("Anything else we missed?") with `ignoreIfSkipped: true` (add the optional `ignoreIfSkipped` flag to `Question` in `types.ts` and validate it in `load.ts`)
-- [ ] `data/fit.json` (version 0.2.0, still a draft): per-project-type "hot from" and "warm from" amounts, including "Not sure yet"; starting label `warm` for unsure answers; add a "just exploring" warning sign alongside the existing red flags; remove `serviceAreas` and the old `criteria` ratings
-- [ ] `data/sample-submissions.json`: investment answers become numbers; make sure the samples cover hot, warm, cold, and one that is lowered by a warning sign (a big renovation that is "just exploring"); keep at least one sample outside the Lower Mainland to show location has no effect
+- [x] `data/questions.json` slider (done in one go with `fit.json`, the samples and `assessFit`, because they break together; the wording parts of this step are done above) (version 0.2.0, still a draft): turn `investment` into a range question ($0 to $500K+, $10K steps, "Not sure yet" escape), worded with "investment"; reword the `service` answers "Take it from idea to move-in" and "Design plans I can take to my builder" and the `readiness` prompt "Where are you at right now?" (draft wording, flagged for Banfield review); add an optional final text question `anything_else` ("Anything else we missed?") with `ignoreIfSkipped: true` (add the optional `ignoreIfSkipped` flag to `Question` in `types.ts` and validate it in `load.ts`)
+- [x] `data/fit.json` (version 0.2.0, still a draft): per-project-type "hot from" and "warm from" amounts, including "Not sure yet"; starting label `warm` for unsure answers; add a "just exploring" warning sign alongside the existing red flags; remove `serviceAreas` and the old `criteria` ratings
+- [x] `data/sample-submissions.json`: investment answers become numbers; make sure the samples cover hot, warm, cold, and one that is lowered by a warning sign (the skipper: a $250K renovation lowered by "already under construction"; Sam in Edmonton added as a hot lead outside the Lower Mainland); keep at least one sample outside the Lower Mainland to show location has no effect
 
 ### Phase 2: Logic
-- [ ] `lib/quiz/assessFit.ts`: compute the starting label from project type + investment, lower it one step if any warning sign is raised, and return the reasons in plain language (for example "Renovation at $200K: hot. Lowered to warm: just exploring for now."); never reads the site address or archetype weights
+- [x] `lib/quiz/assessFit.ts`: compute the starting label from project type + investment, lower it one step if any warning sign is raised, and return the reasons in plain language (for example "Renovation at $200K: hot. Lowered to warm: just exploring for now."); never reads the site address or archetype weights
 - [x] `lib/quiz/signals.ts` (new `skippedQuestions` helper, also used for the brief's skipped list): questions marked `ignoreIfSkipped: true` in `data/questions.json` (only "Anything else we missed?" for now) are not counted as skipped, so leaving it blank never adds to "Skipped 2 or more questions". "What does home mean to you?" still counts
-- [ ] `lib/quiz/buildTeamBrief.ts`: `HIGHLIGHT_MAX` from 3 to 2; headline puts the lead first ("Warm lead | 92% Creative Collaborator"); readable answers format money ("$200K", "$500K+")
-- [ ] `lib/quiz/briefToText.ts`: the lead section comes first, then client type and guidance, then notes and answers
-- [ ] `lib/quiz/buildClientResult.ts`: format the investment answer if it is shown; never show the lead label
+- [x] `lib/quiz/buildTeamBrief.ts`: `HIGHLIGHT_MAX` from 3 to 2; headline puts the lead first ("Warm lead | 92% Creative Collaborator"); readable answers format money ("$200K", "$500K+")
+- [x] `lib/quiz/briefToText.ts`: the lead section comes first, then client type and guidance, then notes and answers
+- [x] `lib/quiz/buildClientResult.ts`: format the investment answer if it is shown (all answer text now comes from the shared `lib/quiz/answers.ts`); never show the lead label
 
 ### Phase 3: UI
-- [ ] `components/TeamBriefView.tsx`: the lead label (hot, warm or cold) with its reasons at the top, above the client type blend; project details table; warning signs listed under it; the site address stays in the contact section
-- [ ] `app/team/page.tsx`: show each sample's lead label in the list
+- [x] `components/TeamBriefView.tsx`: the lead label (hot, warm or cold) with its reasons at the top, above the client type blend; project details table; warning signs listed under it; the site address stays in the contact section
+- [x] `app/team/page.tsx`: show each sample's lead label in the list (comes from the headline, no code change needed)
 
 ### Phase 4: Tests and validation
-- [ ] Loader tests: valid range questions and the new `fit.json` load; a missing threshold, "hot from" below "warm from", or a warning sign naming an unknown option throws
-- [ ] `assessFit` tests: each starting label per threshold, unsure answers start warm, one warning sign lowers one step, two warning signs still lower only one step, cold stays cold, changing the site address never changes the label, and changing archetype answers never changes the label
+- [x] Loader tests: valid range questions and the new `fit.json` load; a missing threshold, "hot from" below "warm from", or a warning sign naming an unknown option throws
+- [x] `assessFit` tests: each starting label per threshold, unsure answers start warm, one warning sign lowers one step, two warning signs still lower only one step, cold stays cold, changing the site address never changes the label, and changing archetype answers never changes the label
 - [x] Signal tests: a blank "Anything else we missed?" is not counted as skipped, and a blank "What does home mean to you?" still is
-- [ ] Brief tests: at most 2 guidance cards, lead-first headline, money formatting, lead section first in the copied text
-- [ ] Client result tests: no "hot lead", "warm lead" or "cold lead" text (in addition to the existing archetype and fit leak checks) for every sample
-- [ ] Component tests: the lead label renders above the blend
-- [ ] Run `npm run lint`, `npm test` and `npm run build`, and check the brief and result pages at mobile width in `npm run dev`
+- [x] Brief tests: at most 2 guidance cards, lead-first headline, money formatting, lead section first in the copied text
+- [x] Client result tests: no "hot lead", "warm lead" or "cold lead" text (in addition to the existing archetype and fit leak checks) for every sample
+- [x] Component tests: the lead label renders above the blend
+- [ ] Run `npm run lint`, `npm test` and `npm run build`, and check the brief and result pages at mobile width in `npm run dev` (lint, test and build pass; the mobile-width visual check has not been done)
 
 ### Later (not in this plan)
 - Show the booking calendar on the result page (needs the booking tool and URL confirmed)

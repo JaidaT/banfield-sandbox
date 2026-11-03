@@ -1,88 +1,41 @@
 {
   "_meta": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "draft": true,
-    "source": "Draft fit rules from Banfield's fit criteria (scope, location, investment, timeframe, readiness, service requirements) and the DISCOVERY P6 evidence (free-help seekers, uncommitted callers). Every rating, service area and red flag is a guess and must be reviewed by Banfield before use.",
-    "ratings": "strong = a great fit; possible = worth a call, check on it; weak = likely not a fit, or not yet. Ratings are team-facing only and never shown to the client.",
-    "criteria": "Each key matches a 'criterion' on a fit question in questions.json. Every answer to that question needs a rating here; a test enforces this.",
-    "serviceAreas": "Lower Mainland municipalities (Brand Standards: studio in Port Moody, serving Vancouver and the Lower Mainland). A site address in one of these rates location as strong; anywhere else rates it possible so Jamie can decide.",
-    "redFlags": "Combinations of answers worth flagging in the team brief. A flag is raised when every condition in 'when' matches."
+    "source": "Draft lead rules after the Oct 28 meeting: fit comes from project type and investment together, leads are hot, warm or cold, and location plays no part. Every amount and warning sign is a guess and must be reviewed by Banfield (see 'To validate at a future meeting' in docs/DISCOVERY.md).",
+    "labels": "hot = a great fit; warm = worth a call, check on it; cold = likely not a fit, or not yet. Labels are team-facing only and never shown to the client.",
+    "projectQuestion": "The question id for project type. Every answer to it needs an entry in 'thresholds'; the app will not start if one is missing.",
+    "investmentQuestion": "The question id for the investment slider.",
+    "thresholds": "Investment amounts per project type. At or above 'hotFrom' is hot, at or above 'warmFrom' is warm, anything lower is cold. 'hotFrom' must not be below 'warmFrom'.",
+    "unsureStart": "The starting label when the project type is skipped, or the investment is skipped or 'Not sure yet'.",
+    "details": "Answers listed in the brief's lead section for context. They never change the label.",
+    "redFlags": "Warning signs shown in the brief. A sign is raised when every condition in 'when' matches. Any raised sign lowers the label one step (hot to warm, warm to cold), never more than one step."
   },
-  "criteria": {
-    "scope": {
-      "label": "Scope",
-      "ratings": {
-        "furniture_styling": "possible",
-        "facelift": "possible",
-        "renovation": "strong",
-        "new_build": "strong",
-        "not_sure": "possible"
-      }
-    },
-    "timeframe": {
-      "label": "Timeframe",
-      "ratings": {
-        "asap": "possible",
-        "3_to_6_months": "strong",
-        "6_to_12_months": "strong",
-        "over_a_year": "possible",
-        "just_exploring": "weak"
-      }
-    },
-    "investment": {
-      "label": "Investment",
-      "ratings": {
-        "under_50k": "weak",
-        "50k_to_150k": "possible",
-        "150k_to_400k": "strong",
-        "over_400k": "strong",
-        "not_sure": "possible"
-      }
-    },
-    "readiness": {
-      "label": "Readiness",
-      "ratings": {
-        "just_ideas": "possible",
-        "planning": "strong",
-        "ready": "strong",
-        "underway": "possible"
-      }
-    },
-    "service": {
-      "label": "Service requirements",
-      "ratings": {
-        "full_service": "strong",
-        "design_only": "possible",
-        "consult": "possible",
-        "not_sure": "possible"
-      }
-    }
+  "projectQuestion": "project_scope",
+  "investmentQuestion": "investment",
+  "thresholds": {
+    "furniture_styling": { "hotFrom": 50000, "warmFrom": 20000 },
+    "facelift": { "hotFrom": 100000, "warmFrom": 40000 },
+    "renovation": { "hotFrom": 150000, "warmFrom": 50000 },
+    "new_build": { "hotFrom": 400000, "warmFrom": 150000 },
+    "not_sure": { "hotFrom": 150000, "warmFrom": 50000 }
   },
-  "serviceAreas": [
-    "Port Moody",
-    "Vancouver",
-    "Burnaby",
-    "New Westminster",
-    "Richmond",
-    "Delta",
-    "Surrey",
-    "White Rock",
-    "Langley",
-    "North Vancouver",
-    "West Vancouver",
-    "Coquitlam",
-    "Port Coquitlam",
-    "Anmore",
-    "Belcarra",
-    "Maple Ridge",
-    "Pitt Meadows",
-    "Lions Bay",
-    "Bowen Island",
-    "Abbotsford",
-    "Mission",
-    "Chilliwack"
+  "unsureStart": "warm",
+  "details": [
+    { "id": "project", "label": "Project type", "questionId": "project_scope" },
+    { "id": "investment", "label": "Investment", "questionId": "investment" },
+    { "id": "timeframe", "label": "Timeframe", "questionId": "timeframe" },
+    { "id": "stage", "label": "Project stage", "questionId": "readiness" },
+    { "id": "help", "label": "Type of help", "questionId": "service" }
   ],
   "redFlags": [
+    {
+      "id": "just_exploring",
+      "note": "Just exploring for now. May not be ready to start.",
+      "when": [
+        { "question": "timeframe", "option": "just_exploring" }
+      ]
+    },
     {
       "id": "early_one_time_session",
       "note": "Just exploring and interested in a one-time session. Designer on Call may suit them better than a full project.",
@@ -101,7 +54,7 @@
     },
     {
       "id": "builder_underway",
-      "note": "Already underway with a builder. Design changes may be limited; ask what stage they are at.",
+      "note": "Already under construction with a builder. Design changes may be limited; ask what stage they are at.",
       "when": [
         { "question": "readiness", "option": "underway" }
       ]
