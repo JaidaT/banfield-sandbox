@@ -11,7 +11,7 @@
 **Alternatives considered:** A single combined score (rejected because it mixes two independent questions and hides why a lead is weak).
 
 ## 2026-10-26 — Team brief as an internal page with copy-as-text, no persistence yet
-**Context:** The prototype needs a skimmable pre-call brief for Jamie, with no CRM integration (copy-paste into Claude or JobTread is acceptable). No storage has been chosen yet.
+**Context:** The prototype needs a skimmable pre-call brief for Jamie, with no CRM integration (copy-paste into Claude or JobTread is acceptable). No storage has been chosen yet
 **Decision:** Server-rendered `/team/brief/[id]` and client-facing `/result/[id]` pages, computed on request from fixture submissions, with a "copy as text" button on the brief. Persistence and aggregate analytics are deferred.
 **Alternatives considered:** Text-only output (harder for Jamie to skim); emailing the brief (needs an email provider and secrets); a local JSON file or hosted database (premature before the quiz UI exists).
 
