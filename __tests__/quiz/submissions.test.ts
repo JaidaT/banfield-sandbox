@@ -27,6 +27,16 @@ const QUESTIONS: Question[] = [
     ],
   },
   { id: 'tell_us', kind: 'text', prompt: 'Tell us', optional: true, options: [] },
+  {
+    id: 'budget',
+    kind: 'range',
+    prompt: 'How much?',
+    optional: false,
+    min: 0,
+    max: 500000,
+    step: 10000,
+    options: [{ id: 'not_sure', label: 'Not sure yet', weights: {} }],
+  },
 ]
 
 function submission(overrides: Partial<Submission> = {}): Submission {
@@ -84,6 +94,38 @@ describe('validateSubmission', () => {
   test('flags a non-text answer to a text question', () => {
     const problems = validateSubmission(submission({ answers: { tell_us: ['a'] } }), QUESTIONS)
     expect(problems.join('\n')).toMatch(/tell_us/)
+  })
+
+  test('flags a number given to a pick-one question', () => {
+    const problems = validateSubmission(submission({ answers: { pick_one: 5 } }), QUESTIONS)
+    expect(problems.join('\n')).toMatch(/pick_one/)
+  })
+
+  test('accepts slider answers at the ends, on a step, or the escape option', () => {
+    for (const budget of [0, 200000, 500000, 'not_sure']) {
+      expect(validateSubmission(submission({ answers: { budget } }), QUESTIONS), String(budget)).toEqual(
+        [],
+      )
+    }
+  })
+
+  test('flags a slider answer below min or above max', () => {
+    for (const budget of [-10000, 510000]) {
+      const problems = validateSubmission(submission({ answers: { budget } }), QUESTIONS)
+      expect(problems.join('\n'), String(budget)).toMatch(/budget.*0.*500000/)
+    }
+  })
+
+  test('flags a slider answer between steps', () => {
+    const problems = validateSubmission(submission({ answers: { budget: 205000 } }), QUESTIONS)
+    expect(problems.join('\n')).toMatch(/budget.*step/)
+  })
+
+  test('flags a slider answer that is not a number or a known option', () => {
+    for (const budget of ['lots', ['not_sure'], Number.NaN]) {
+      const problems = validateSubmission(submission({ answers: { budget } }), QUESTIONS)
+      expect(problems.join('\n'), String(budget)).toMatch(/budget/)
+    }
   })
 
   test('flags missing contact details (DISCOVERY P1)', () => {

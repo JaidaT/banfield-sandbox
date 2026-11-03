@@ -6,6 +6,23 @@ function checkAnswer(question: Question, answer: Answer): string | null {
   if (question.kind === 'text') {
     return typeof answer === 'string' ? null : `answer to ${question.id} must be text`
   }
+  if (question.kind === 'range') {
+    if (typeof answer === 'string') {
+      return optionIds.has(answer) ? null : `answer to ${question.id} is not an option: ${answer}`
+    }
+    if (typeof answer !== 'number' || !Number.isFinite(answer)) {
+      return `answer to ${question.id} must be a number or an option`
+    }
+    const min = question.min ?? 0
+    const max = question.max ?? 0
+    const step = question.step ?? 1
+    if (answer < min || answer > max) {
+      return `answer to ${question.id} must be from ${min} to ${max}: ${answer}`
+    }
+    return Number.isInteger((answer - min) / step)
+      ? null
+      : `answer to ${question.id} is not on a step of ${step}: ${answer}`
+  }
   if (question.kind === 'single') {
     if (typeof answer !== 'string') return `answer to ${question.id} must be a single option`
     return optionIds.has(answer) ? null : `answer to ${question.id} is not an option: ${answer}`
