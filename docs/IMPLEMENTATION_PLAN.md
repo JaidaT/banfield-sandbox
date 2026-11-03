@@ -123,3 +123,54 @@ Goal: make the prototype a clear reference for the team's rebuild. No behaviour 
 - `lib/quiz/load.ts` is mostly hand-written checks for the data files. A schema library such as Zod could do the same job in far less code.
 - The GitHub checks in `.github/workflows/ci.yml` only run for `main` and pull requests, so they never run on sandbox branches.
 - `main` is not protected on GitHub, so nothing stops an accidental push to it.
+
+## Long Questionnaire: Adaptive "Let Us Get to Know You" (2026-11-02)
+
+Goal: a prototype of the full questionnaire hired clients fill in during onboarding (DISCOVERY P7). It collects the same information as Banfield's current form, with no scoring and no client types, but only shows questions that apply (no kids questions for someone without kids), uses "add another" groups instead of fixed rows, moves section by section with a progress bar, and ends with a clean summary the team can paste into Claude or JobTread. Built on branch `jaida/long-questionnaire`.
+
+Constraints:
+- Own folders: `data/questionnaire/`, `lib/questionnaire/`, `components/questionnaire/`, `app/questionnaire/`. Nothing in `lib/questionnaire/` imports from `lib/quiz/`, so the long form stands on its own (DISCOVERY: it must work for people who never took the short quiz).
+- Questions, branching rules and wording live in data files, never in code, so the final questions can replace the placeholders by editing data.
+- Placeholder questions follow the audit of the current form in DISCOVERY P7 (contact, project and household, family and pets, entertaining, activities, work from home, travel, your home, mood, style images). The current form asks for each household member's gender identity; leave it out of the placeholders and flag it for Banfield.
+- Screens are deliberately plain wireframes (grey boxes, system font, no brand colours or images) with a visible "Prototype - not the final design" label. The real visuals come from the team's Figma wireframes.
+- No saving: answers live in the page while it is open. No photo uploads.
+
+Work test-first: for each step, write or update the failing test, then change the code.
+
+### Phase 1: Data and types
+- [ ] `lib/questionnaire/types.ts`: `Section` (id, title, intro, questions), `Question` kinds `short_text`, `long_text`, `single`, `multi`, `number`, `group` (repeating "add another" set of child questions with `min`, `max`, `addLabel`) and `rank_images` (image sets to put in order), `optional`, `help`, and `showIf` (a list of conditions that must all match: `{ question, equals }` for one choice, `{ question, includes }` for a multi choice); `Responses` (answers keyed by question id; a group's answer is a list of entries)
+- [ ] `lib/questionnaire/load.ts`: validate `data/questionnaire/questions.json` with clear errors: duplicate ids, unknown kinds, a `showIf` that points at a missing question, at an answer that does not exist, or at a later question, a group with `min` above `max`, a `rank_images` set with fewer than 2 images. `showIf` may only point at top-level questions, not at questions inside a group
+- [ ] `data/questionnaire/questions.json` (draft): placeholder sections and questions based on DISCOVERY P7, with `_meta` notes in plain English. Branching examples: kids yes/no then a kids group (name, age, activities); pets yes/no then a pets group (name, type, durability needs); hosting yes/no then how often and how many; work from home yes/no then how many people and what they need. Two `rank_images` sets with placeholder images
+- [ ] `public/questionnaire/`: plain numbered placeholder images (e.g. "Style A") for the ranking sets
+- [ ] `data/questionnaire/sample-responses.json`: 3 made-up households: one with kids and pets who hosts often, one couple with no kids or pets who works from home, and one that skipped every optional question
+
+### Phase 2: Logic (no screens)
+- [ ] `lib/questionnaire/visibility.ts`: `isVisible(question, responses)` and `visibleSections(sections, responses)`; a section with no visible questions is skipped
+- [ ] `lib/questionnaire/validate.ts`: list problems for a set of responses: required visible questions unanswered, answers that are not a listed choice, group entries outside `min`/`max`, a ranking that does not include every image exactly once. Hidden questions are never required
+- [ ] `lib/questionnaire/clean.ts`: drop answers to questions that are now hidden (someone said "yes" to kids, filled the group, then changed to "no"), so they never reach the summary
+- [ ] `lib/questionnaire/progress.ts`: current section number out of the visible sections, so the progress bar changes when branching adds or removes sections
+- [ ] `lib/questionnaire/summary.ts`: build the team summary: visible sections only, each answer in readable words, group entries listed one by one ("Louisa, 7, soccer and piano"), rankings as an ordered list, optional blanks shown as "Not answered"
+- [ ] `lib/questionnaire/summaryToText.ts`: plain ASCII text of the summary for pasting into Claude or JobTread
+
+### Phase 3: Wireframe screens
+- [ ] `app/questionnaire/page.tsx` and `components/questionnaire/QuestionnaireForm.tsx` (client component): one section per screen, Back and Next buttons, a progress bar from `progress.ts`, questions appear and disappear as answers change, "Add another" and "Remove" for groups, Next blocked with a plain message until required visible questions are answered. Plain wireframe styling and the "Prototype - not the final design" label
+- [ ] `components/questionnaire/RankImages.tsx`: put a set of placeholder images in order with simple up and down buttons (works on a phone; no drag and drop)
+- [ ] The final screen shows a thank-you and, below a clear "Team view (demo only)" divider, the summary built from the answers just entered, with the existing `components/CopyBriefButton.tsx` for "Copy as text"
+- [ ] `app/team/questionnaire/[id]/page.tsx`: the team summary for each sample household, linked from `app/team/page.tsx`
+
+### Phase 4: Tests and validation
+- [ ] Loader tests: the real file loads; each mistake listed in Phase 1 throws a message naming the question
+- [ ] Visibility tests: "no kids" hides the kids group; "yes" shows it; a section whose questions are all hidden is skipped; a multi-choice `includes` condition works
+- [ ] Validation and cleaning tests: hidden questions are never required; switching "yes" to "no" drops the hidden answers; group `min`/`max` and complete rankings are enforced
+- [ ] Progress tests: the total number of sections changes with branching
+- [ ] Summary tests: hidden sections and answers never appear; group entries and rankings read correctly; every sample's text is plain ASCII
+- [ ] Component tests: answering "No" to kids removes the kids questions from the screen; Next is blocked until required answers are given; "Add another" adds an entry; the ranking buttons reorder images
+- [ ] Run `npm run lint`, `npm test` and `npm run build`, and click through `/questionnaire` on a computer and on a phone
+
+### Later (not in this plan)
+- Save and resume (needs storage, plus a login or personal link)
+- Photo and floor-plan uploads (needs file storage)
+- Banfield's real questions, wording and style images (replace the placeholders in `data/questionnaire/`)
+- Sending the summary to the team instead of showing it on screen
+- Branching inside a group (e.g. a question that appears only for one child)
+- Ask Banfield whether to keep the gender identity question for household members

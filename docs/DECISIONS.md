@@ -44,3 +44,18 @@
 **Context:** After v2 the code mixed "fit" and "lead" for the hot/warm/cold result, called warning signs "red flags", and kept a "criterion" value on fit questions that nothing read any more. The team will rebuild the product from this prototype, so names must match what people see on screen.
 **Decision:** Renamed `assessFit` to `assessLead`, `data/fit.json` to `data/lead-rules.json`, `fitRules` to `leadRules`, `brief.fit` to `brief.lead`, `redFlags` to `warningSigns`, and replaced `"criterion": "..."` on questions with `"fitQuestion": true`. Earlier entries in this log keep their original names; this entry maps them to the current ones. Behaviour is unchanged.
 **Alternatives considered:** Keep "fit" everywhere (rejected because Banfield and the brief talk about hot, warm and cold leads); leave the names as they were (rejected because two names for one idea confuse beginner coders).
+
+## 2026-11-02 - Long questionnaire is a separate module from the short quiz
+**Context:** The long "Let us get to know you" questionnaire collects information for hired clients and has no scoring. DISCOVERY says it must work on its own for people who never took the short quiz, and the team will rebuild both later.
+**Decision:** Its code and data live in their own folders (`data/questionnaire/`, `lib/questionnaire/`, `components/questionnaire/`, `app/questionnaire/`). `lib/questionnaire/` does not import from `lib/quiz/`. Only generic screen pieces with no quiz knowledge, such as `CopyBriefButton`, are shared.
+**Alternatives considered:** Extend the short quiz's question format and loader (rejected because they are built around archetype weights and lead rules the long form does not use, and mixing them would make both harder to understand).
+
+## 2026-11-02 - Branching with showIf conditions on top-level questions
+**Context:** The current form shows everyone every question (fixed rows for 6 people, 3 pets, 12 activities), so people see questions that do not apply to them.
+**Decision:** Each question can have a `showIf` list of conditions that must all match an earlier top-level answer (`equals` for one choice, `includes` for a multi choice), the same "all conditions must match" pattern as the short quiz's warning signs. Repeating "add another" groups replace fixed rows. Answers to questions that become hidden are dropped before validation and the summary.
+**Alternatives considered:** Separate fixed paths for each kind of household (rejected because the combinations multiply quickly); any/or conditions and branching inside groups (deferred until the real questions show they are needed).
+
+## 2026-11-02 - Long questionnaire screens are plain wireframes with no saving
+**Context:** The team will design the real visuals in Figma. Banfield should not mistake the prototype's look for the final design. No storage has been chosen.
+**Decision:** The screens use plain wireframe styling (grey, system font, no brand colours) with a visible "Prototype - not the final design" label. Answers are kept only while the page is open. The finished summary is shown on the last screen under a "Team view (demo only)" divider, and sample households have their own team summary pages.
+**Alternatives considered:** Branded screens (rejected because they would look final); saving answers in the browser (deferred with save and resume, which needs real storage).
