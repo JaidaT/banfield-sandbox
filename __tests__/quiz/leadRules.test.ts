@@ -8,7 +8,7 @@ const QUESTIONS: Question[] = [
     kind: 'single',
     prompt: 'When?',
     optional: false,
-    criterion: 'timeframe',
+    fitQuestion: true,
     options: [
       { id: 'soon', label: 'Soon', weights: {} },
       { id: 'later', label: 'Later', weights: {} },
@@ -64,7 +64,7 @@ const LEAD_QUESTIONS: Question[] = [
     kind: 'single',
     prompt: 'What are you dreaming up?',
     optional: false,
-    criterion: 'scope',
+    fitQuestion: true,
     options: [
       { id: 'renovation', label: 'A renovation', weights: {} },
       { id: 'not_sure', label: 'Not sure yet', weights: {} },
@@ -75,7 +75,7 @@ const LEAD_QUESTIONS: Question[] = [
     kind: 'range',
     prompt: 'How much?',
     optional: false,
-    criterion: 'investment',
+    fitQuestion: true,
     min: 0,
     max: 500000,
     step: 10000,

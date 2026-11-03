@@ -99,6 +99,14 @@ function parseOption(raw: unknown, questionId: string, archetypeIds: Set<string>
   return { id: raw.id, label: raw.label, weights }
 }
 
+// Optional true/false settings on a question. Missing means false.
+function trueOrFalse(entry: Record<string, unknown>, field: string, id: string): boolean {
+  const value = entry[field]
+  if (value === undefined) return false
+  if (typeof value !== 'boolean') throw new Error(`question ${id} "${field}" must be true or false`)
+  return value
+}
+
 // A slider must be able to move from min to exactly max in whole steps.
 function parseRange(entry: Record<string, unknown>, id: string): { min: number; max: number; step: number } {
   for (const field of ['min', 'max', 'step'] as const) {
@@ -163,15 +171,10 @@ export function parseQuestionBank(raw: unknown, archetypeIds: readonly string[])
       options,
     }
     if (typeof entry.help === 'string') question.help = entry.help
-    if (entry.ignoreIfSkipped !== undefined) {
-      if (typeof entry.ignoreIfSkipped !== 'boolean') {
-        throw new Error(`question ${id} "ignoreIfSkipped" must be true or false`)
-      }
-      if (entry.ignoreIfSkipped) question.ignoreIfSkipped = true
-    }
+    if (trueOrFalse(entry, 'ignoreIfSkipped', id)) question.ignoreIfSkipped = true
     if (kind === 'range') Object.assign(question, parseRange(entry, id))
-    if (typeof entry.criterion === 'string') {
-      question.criterion = entry.criterion
+    if (trueOrFalse(entry, 'fitQuestion', id)) {
+      question.fitQuestion = true
       // Fit and archetype are independent axes, so fit answers never score archetypes.
       const weighted = options.find((o) => Object.keys(o.weights).length > 0)
       if (weighted) {

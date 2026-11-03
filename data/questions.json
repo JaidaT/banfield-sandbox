@@ -4,7 +4,7 @@
     "draft": true,
     "source": "Draft Quick Quiz bank. Behavioural questions adapt Banfield's four AI-drafted sample questions; 'coffee' and 'home' come from the Oct 2 / Oct 9 meetings; fit questions follow Banfield's fit criteria. Wording, options and weights must be reviewed by Banfield before use.",
     "weights": "Weights are points toward archetype ids from archetypes.json. 3 = strong signal, 2 = moderate, 1 = light. Indirect questions (coffee) use light weights only.",
-    "fit": "Questions with a 'criterion' are fit questions. How they count toward hot, warm or cold lives in lead-rules.json, not here, and they carry no archetype weights.",
+    "fit": "Questions marked fitQuestion: true are fit questions (project, investment, timing and so on). How they count toward hot, warm or cold lives in lead-rules.json, not here, and they carry no archetype weights.",
     "range": "A 'range' question is a slider from 'min' to 'max' in steps of 'step'. Its answer is a number, or the id of one of its options (such as 'Not sure yet'). The top of the slider means 'this much or more'.",
     "contact": "Name, email, phone and full site address are collected in a separate required contact step, not in this bank.",
     "wording": "2026-11-02 drafts after the Oct 28 meeting: the project stage question and answers, and the four 'type of help' answers (each says how long Banfield is involved). Banfield must confirm that 'stay involved until the project is complete' accurately describes their full service.",
@@ -85,7 +85,7 @@
       "id": "project_scope",
       "kind": "single",
       "prompt": "What are you dreaming up?",
-      "criterion": "scope",
+      "fitQuestion": true,
       "options": [
         { "id": "furniture_styling", "label": "Furniture and styling" },
         { "id": "facelift", "label": "A refresh: finishes, lighting, the fun stuff" },
@@ -98,7 +98,7 @@
       "id": "timeframe",
       "kind": "single",
       "prompt": "When would you love to get started?",
-      "criterion": "timeframe",
+      "fitQuestion": true,
       "options": [
         { "id": "asap", "label": "Yesterday (in the next 3 months)" },
         { "id": "3_to_6_months", "label": "In 3 to 6 months" },
@@ -112,7 +112,7 @@
       "kind": "range",
       "prompt": "Roughly what investment feels comfortable for this project?",
       "help": "A ballpark is perfect. It just helps us point you in the right direction.",
-      "criterion": "investment",
+      "fitQuestion": true,
       "min": 0,
       "max": 500000,
       "step": 10000,
@@ -124,7 +124,7 @@
       "id": "readiness",
       "kind": "single",
       "prompt": "What stage is your project at right now?",
-      "criterion": "readiness",
+      "fitQuestion": true,
       "options": [
         { "id": "just_ideas", "label": "Still collecting ideas" },
         { "id": "planning", "label": "Planning and setting a budget" },
@@ -136,7 +136,7 @@
       "id": "service",
       "kind": "single",
       "prompt": "What kind of help are you looking for?",
-      "criterion": "service",
+      "fitQuestion": true,
       "options": [
         { "id": "full_service", "label": "Start to finish: you design it and stay involved until the project is complete" },
         { "id": "design_only", "label": "Design, then hand-off: you create the design and plans, then my own contractor takes it from there" },

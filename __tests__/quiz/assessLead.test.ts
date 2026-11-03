@@ -9,7 +9,7 @@ const QUESTIONS: Question[] = [
     kind: 'single',
     prompt: 'What?',
     optional: false,
-    criterion: 'scope',
+    fitQuestion: true,
     options: [
       { id: 'reno', label: 'A renovation', weights: {} },
       { id: 'styling', label: 'Styling', weights: {} },
@@ -21,7 +21,7 @@ const QUESTIONS: Question[] = [
     kind: 'range',
     prompt: 'How much?',
     optional: false,
-    criterion: 'investment',
+    fitQuestion: true,
     min: 0,
     max: 500000,
     step: 10000,
@@ -32,7 +32,7 @@ const QUESTIONS: Question[] = [
     kind: 'single',
     prompt: 'When?',
     optional: false,
-    criterion: 'timeframe',
+    fitQuestion: true,
     options: [
       { id: 'soon', label: 'Soon', weights: {} },
       { id: 'exploring', label: 'Just exploring', weights: {} },

@@ -110,11 +110,30 @@ describe('parseQuestionBank', () => {
         id: 'timeframe',
         kind: 'single',
         prompt: 'When?',
-        criterion: 'timeframe',
+        fitQuestion: true,
         options: [{ id: 'soon', label: 'Soon', weights: { decisive_delegator: 1 } }],
       },
     ])
     expect(() => parseQuestionBank(bank, IDS)).toThrow(/timeframe.*fit.*weights/)
+  })
+
+  test('keeps fitQuestion when set, and leaves it off otherwise', () => {
+    const [when, coffee] = parseQuestionBank(
+      bankWith([
+        { id: 'when', kind: 'single', prompt: 'When?', fitQuestion: true, options: [{ id: 'soon', label: 'Soon' }] },
+        { id: 'coffee', kind: 'single', prompt: 'Coffee?', options: [{ id: 'black', label: 'Black' }] },
+      ]),
+      IDS,
+    )
+    expect(when.fitQuestion).toBe(true)
+    expect(coffee.fitQuestion).toBeUndefined()
+  })
+
+  test('throws when fitQuestion is not true or false', () => {
+    const bank = bankWith([
+      { id: 'when', kind: 'single', prompt: 'When?', fitQuestion: 'timeframe', options: [{ id: 'soon', label: 'Soon' }] },
+    ])
+    expect(() => parseQuestionBank(bank, IDS)).toThrow(/when.*fitQuestion/)
   })
 
   test('text questions need no options and default to an empty list', () => {

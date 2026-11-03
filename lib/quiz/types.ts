@@ -47,7 +47,7 @@ export interface Question {
   step?: number
   // Marks a fit question (project, investment, timing and so on). Fit questions
   // never carry archetype weights; how they count lives in lead-rules.json.
-  criterion?: string
+  fitQuestion?: boolean
   options: AnswerOption[]
 }
 
