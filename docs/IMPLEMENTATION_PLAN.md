@@ -106,3 +106,20 @@ Work test-first: for each step, write or update the failing test, then change th
 - The real coffee order in the full questionnaire
 - Flag quizzes finished in under 30 seconds, or add a CAPTCHA, if junk leads appear
 - An "after the quiz" booking form so people do not type their details twice, and recording direct bookings as "skipped quiz"
+
+## Cleanup for the Rebuild (2026-11-02)
+
+Goal: make the prototype a clear reference for the team's rebuild. No behaviour changes. Steps above that mention old names (`assessFit`, `data/fit.json`, `redFlags`, `criterion`) refer to what is now `assessLead`, `data/lead-rules.json`, `warningSigns` and `fitQuestion` (see DECISIONS.md).
+
+- [x] One word for the hot/warm/cold result: "lead" (`assessLead`, `leadRules`, `brief.lead`, `data/lead-rules.json`)
+- [x] `redFlags` renamed to `warningSigns`, matching the brief
+- [x] `"criterion": "..."` on questions replaced with `"fitQuestion": true` (shared `trueOrFalse` check in `load.ts`)
+- [x] Sample `weak-fit-explorer` renamed to `cold-explorer`
+- [x] Removed `vite-tsconfig-paths`; `vitest.config.mts` uses `resolve.tsconfigPaths`
+- [x] README rewritten for a sandbox repo (no pull requests or merging) with a section on how the prototype works; CLAUDE.md no longer points to `/done`
+- [ ] Update the teammate guide PDF (`docs/How_The_Prototype_Works.pdf`, kept out of Git) to v2 and the new names
+
+### Notes for the rebuild
+- `lib/quiz/load.ts` is mostly hand-written checks for the data files. A schema library such as Zod could do the same job in far less code.
+- The GitHub checks in `.github/workflows/ci.yml` only run for `main` and pull requests, so they never run on sandbox branches.
+- `main` is not protected on GitHub, so nothing stops an accidental push to it.
