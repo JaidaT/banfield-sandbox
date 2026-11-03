@@ -13,8 +13,13 @@ function compare(actual: number, op: Comparison, value: number): boolean {
   }
 }
 
+// Unanswered questions, leaving out those marked ignoreIfSkipped.
+export function skippedQuestions(submission: Submission, questions: Question[]): Question[] {
+  return questions.filter((q) => !q.ignoreIfSkipped && !(q.id in submission.answers))
+}
+
 export function measureSignals(submission: Submission, questions: Question[]): SignalValues {
-  const skippedCount = questions.filter((q) => !(q.id in submission.answers)).length
+  const skippedCount = skippedQuestions(submission, questions).length
   const lengths = questions
     .filter((q) => q.kind === 'text')
     .map((q) => submission.answers[q.id])

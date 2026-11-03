@@ -53,6 +53,7 @@ describe('buildTeamBrief', () => {
     const brief = briefFor('skipper')
     expect(brief.behaviour.skippedQuestions).toHaveLength(3)
     expect(brief.behaviour.skippedQuestions).toContain('What does home mean to you?')
+    expect(brief.behaviour.skippedQuestions).not.toContain('Anything else we missed?')
     expect(brief.behaviour.notes).toContain('Skipped 2 or more questions')
     expect(brief.behaviour.notes).toContain('Finished quickly (under 2.5 minutes)')
   })

@@ -87,6 +87,16 @@ describe('evaluateSignals', () => {
     expect(result.matched.map((r) => r.id)).toContain('skips')
   })
 
+  test('a question marked ignoreIfSkipped is not counted when left blank', () => {
+    const withExtra: Question[] = [
+      ...QUESTIONS,
+      { id: 'extra', kind: 'text', prompt: 'Extra', optional: true, ignoreIfSkipped: true, options: [] },
+    ]
+    const result = evaluateSignals(submission({ one: 'to_a', many: ['x'] }), withExtra, rules)
+    expect(result.values.skippedCount).toBe(1)
+    expect(result.matched.map((r) => r.id)).not.toContain('skips')
+  })
+
   test('text-length rules do not apply when no text was written', () => {
     const result = evaluateSignals(submission({ one: 'to_a', words: '   ' }), QUESTIONS, rules)
     expect(result.values.avgTextLength).toBeNull()

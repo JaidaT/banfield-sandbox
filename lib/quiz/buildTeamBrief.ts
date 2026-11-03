@@ -1,6 +1,6 @@
 import { assessFit } from './assessFit'
 import { scoreArchetypes } from './scoreArchetypes'
-import { evaluateSignals } from './signals'
+import { evaluateSignals, skippedQuestions } from './signals'
 import type {
   AnswerLine,
   ArchetypeGuidance,
@@ -76,9 +76,7 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
     fit,
     behaviour: {
       durationSeconds: signals.values.durationSeconds,
-      skippedQuestions: data.questions
-        .filter((q) => !(q.id in submission.answers))
-        .map((q) => q.prompt),
+      skippedQuestions: skippedQuestions(submission, data.questions).map((q) => q.prompt),
       avgTextLength: signals.values.avgTextLength,
       notes: signals.matched.map((r) => r.note),
     },

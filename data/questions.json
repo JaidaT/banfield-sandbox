@@ -5,7 +5,9 @@
     "source": "Draft Quick Quiz bank. Behavioural questions adapt Banfield's four AI-drafted sample questions; 'coffee' and 'home' come from the Oct 2 / Oct 9 meetings; fit questions follow Banfield's fit criteria. Wording, options and weights must be reviewed by Banfield before use.",
     "weights": "Weights are points toward archetype ids from archetypes.json. 3 = strong signal, 2 = moderate, 1 = light. Indirect questions (coffee) use light weights only.",
     "fit": "Questions with a 'criterion' feed the fit assessment. Their ratings live in fit.json, not here, and they carry no archetype weights.",
-    "contact": "Name, email, phone and full site address are collected in a separate required contact step, not in this bank."
+    "contact": "Name, email, phone and full site address are collected in a separate required contact step, not in this bank.",
+    "wording": "2026-11-02 drafts after the Oct 28 meeting: the project stage question and answers, and the four 'type of help' answers (each says how long Banfield is involved). Banfield must confirm that 'stay involved until the project is complete' accurately describes their full service.",
+    "ignoreIfSkipped": "true means leaving the question blank does not count toward the 'Skipped 2 or more questions' note."
   },
   "questions": [
     {
@@ -121,13 +123,13 @@
     {
       "id": "readiness",
       "kind": "single",
-      "prompt": "Where are you at right now?",
+      "prompt": "What stage is your project at right now?",
       "criterion": "readiness",
       "options": [
-        { "id": "just_ideas", "label": "Collecting ideas" },
-        { "id": "planning", "label": "Planning and budgeting" },
-        { "id": "ready", "label": "Ready to get going" },
-        { "id": "underway", "label": "Already underway with a builder" }
+        { "id": "just_ideas", "label": "Still collecting ideas" },
+        { "id": "planning", "label": "Planning and setting a budget" },
+        { "id": "ready", "label": "Ready to get started" },
+        { "id": "underway", "label": "Already under construction with a builder" }
       ]
     },
     {
@@ -136,11 +138,19 @@
       "prompt": "What kind of help are you looking for?",
       "criterion": "service",
       "options": [
-        { "id": "full_service", "label": "Take it from idea to move-in" },
-        { "id": "design_only", "label": "Design plans I can take to my builder" },
-        { "id": "consult", "label": "A focused session to point me in the right direction" },
-        { "id": "not_sure", "label": "Not sure. Help me figure it out." }
+        { "id": "full_service", "label": "Start to finish: you design it and stay involved until the project is complete" },
+        { "id": "design_only", "label": "Design, then hand-off: you create the design and plans, then my own contractor takes it from there" },
+        { "id": "consult", "label": "One session: a single focused meeting to point me in the right direction" },
+        { "id": "not_sure", "label": "Not sure yet: help me figure out what I need" }
       ]
+    },
+    {
+      "id": "anything_else",
+      "kind": "text",
+      "prompt": "Anything else we missed?",
+      "help": "Anything you'd like Jamie to know before you chat. (Your dog's name counts.)",
+      "optional": true,
+      "ignoreIfSkipped": true
     }
   ]
 }
