@@ -22,7 +22,7 @@ export interface ArchetypeData {
 
 export type Weights = Partial<Record<ArchetypeId, number>>
 
-export const QUESTION_KINDS = ['single', 'multi', 'text'] as const
+export const QUESTION_KINDS = ['single', 'multi', 'text', 'range'] as const
 export type QuestionKind = (typeof QUESTION_KINDS)[number]
 
 export interface AnswerOption {
@@ -37,7 +37,14 @@ export interface Question {
   prompt: string
   help?: string
   optional: boolean
+  // Left out of the skipped count when unanswered (e.g. "Anything else we missed?").
+  ignoreIfSkipped?: boolean
   maxSelections?: number
+  // Range (slider) questions only. The answer is a number from min to max in
+  // steps of `step`, or the id of one of `options` (e.g. "Not sure yet").
+  min?: number
+  max?: number
+  step?: number
   // Fit questions name the criterion they feed; their ratings live in fit.json.
   criterion?: string
   options: AnswerOption[]
@@ -89,6 +96,38 @@ export interface FitRules {
   redFlags: RedFlag[]
 }
 
+export const LEAD_TEMPERATURES = ['hot', 'warm', 'cold'] as const
+export type LeadTemperature = (typeof LEAD_TEMPERATURES)[number]
+
+// Investment amounts for one project type: at or above `hotFrom` is hot, at or
+// above `warmFrom` is warm, anything lower is cold.
+export interface ProjectThresholds {
+  hotFrom: number
+  warmFrom: number
+}
+
+// A project answer shown in the brief for context. It never changes the label.
+export interface LeadDetailRule {
+  id: string
+  label: string
+  questionId: string
+}
+
+export interface LeadRules {
+  // The project type question (single choice) and the investment question (range).
+  projectQuestion: string
+  investmentQuestion: string
+  // Keyed by project type option id.
+  thresholds: Record<string, ProjectThresholds>
+  // Starting label when the project type or investment is unanswered or "Not sure".
+  unsureStart: LeadTemperature
+  details: LeadDetailRule[]
+  // Used only for the location note in the brief.
+  serviceAreas: string[]
+  // Any raised flag lowers the label by one step (never more than one).
+  redFlags: RedFlag[]
+}
+
 export interface SiteAddress {
   street: string
   city: string
@@ -103,8 +142,9 @@ export interface Contact {
 }
 
 // Single-choice: option id. Multi-choice: option ids. Text: free text.
+// Range: a number, or an option id such as "not_sure".
 // A question with no entry was skipped.
-export type Answer = string | string[]
+export type Answer = string | string[] | number
 
 export interface Submission {
   id: string
@@ -148,6 +188,26 @@ export interface CriterionResult {
 export interface FitAssessment {
   overall: FitRating
   criteria: CriterionResult[]
+  redFlags: RedFlag[]
+}
+
+export interface LeadDetail {
+  id: string
+  label: string
+  // Readable answer (e.g. "A renovation", "$200K"). Absent when unanswered.
+  answer?: string
+}
+
+// Team-facing only. Never shown to the client.
+export interface LeadAssessment {
+  temperature: LeadTemperature
+  // Before any warning sign lowered it.
+  startingTemperature: LeadTemperature
+  lowered: boolean
+  // Plain-language explanation, e.g. "Renovation at $200K: hot".
+  reasons: string[]
+  details: LeadDetail[]
+  location: { city: string; inServiceArea: boolean }
   redFlags: RedFlag[]
 }
 
