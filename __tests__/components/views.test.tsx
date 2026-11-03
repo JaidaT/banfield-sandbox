@@ -62,6 +62,52 @@ describe('CopyBriefButton', () => {
     expect(writeText).toHaveBeenCalledWith('hello brief')
     expect(screen.getByRole('button').textContent).toMatch(/copied/i)
   })
+
+  // Phones testing the dev server over Wi-Fi use plain http, where browsers
+  // turn off navigator.clipboard. The button falls back to the older copy command.
+  async function clickWithFallback(execResult: boolean | Error) {
+    let copied = ''
+    const execCommand = vi.fn(() => {
+      if (execResult instanceof Error) throw execResult
+      copied = document.querySelector('textarea')?.value ?? ''
+      return execResult
+    })
+    Object.assign(document, { execCommand })
+    render(<CopyBriefButton text="hello brief" />)
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /copy/i }))
+    })
+    return { execCommand, copied }
+  }
+
+  test('falls back to the older copy command when the clipboard is unavailable', async () => {
+    Object.assign(navigator, { clipboard: undefined })
+    const { execCommand, copied } = await clickWithFallback(true)
+    expect(execCommand).toHaveBeenCalledWith('copy')
+    expect(copied).toBe('hello brief')
+    expect(screen.getByRole('button').textContent).toMatch(/copied/i)
+    expect(document.querySelector('textarea')).toBeNull()
+  })
+
+  test('falls back when the clipboard refuses to copy', async () => {
+    Object.assign(navigator, { clipboard: { writeText: vi.fn().mockRejectedValue(new Error('blocked')) } })
+    const { execCommand } = await clickWithFallback(true)
+    expect(execCommand).toHaveBeenCalledWith('copy')
+    expect(screen.getByRole('button').textContent).toMatch(/copied/i)
+  })
+
+  test('says copy failed when both ways fail', async () => {
+    Object.assign(navigator, { clipboard: undefined })
+    await clickWithFallback(false)
+    expect(screen.getByRole('button').textContent).toMatch(/failed/i)
+  })
+
+  test('says copy failed when the older copy command throws', async () => {
+    Object.assign(navigator, { clipboard: undefined })
+    await clickWithFallback(new Error('not supported'))
+    expect(screen.getByRole('button').textContent).toMatch(/failed/i)
+    expect(document.querySelector('textarea')).toBeNull()
+  })
 })
 
 describe('ClientResultView', () => {

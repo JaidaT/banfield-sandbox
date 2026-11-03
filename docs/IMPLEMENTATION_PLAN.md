@@ -43,7 +43,7 @@ Before writing route code, read the relevant guides in `node_modules/next/dist/d
 - [x] Unit tests for `buildClientResult`: the output never contains any archetype id, label, tagline, segment name or fit rating (checked against every fixture), and it always includes the CTA
 - [x] Component tests: the brief page renders the blend and the copy button, and the result page renders the CTA with no team-only content
 - [x] Replace the starter `__tests__/page.test.tsx` once `app/page.tsx` changes
-- [ ] Run `npm run lint`, `npm test` and `npm run build`, and check both pages at mobile width in `npm run dev` (lint, test and build pass; the mobile-width visual check has not been done)
+- [ ] Run `npm run lint`, `npm test` and `npm run build`, and check both pages at mobile width in `npm run dev` (lint, test and build pass; the mobile-width check was done on the v2 pages instead, see the v2 section below)
 
 ### Later (not in this plan)
 - Quick Quiz UI and the handoff from submission to these outputs (includes the progress bar Banfield asked for on Oct 28)
@@ -95,7 +95,8 @@ Work test-first: for each step, write or update the failing test, then change th
 - [x] Brief tests: at most 2 guidance cards, lead-first headline, money formatting, lead section first in the copied text
 - [x] Client result tests: no "hot lead", "warm lead" or "cold lead" text (in addition to the existing archetype and fit leak checks) for every sample
 - [x] Component tests: the lead label renders above the blend
-- [ ] Run `npm run lint`, `npm test` and `npm run build`, and check the brief and result pages at mobile width in `npm run dev` (lint, test and build pass; the mobile-width visual check has not been done)
+- [x] Run `npm run lint`, `npm test` and `npm run build`, and check the brief and result pages at mobile width in `npm run dev` (all pass; mobile width checked by Jaida on 2026-11-02)
+- [x] Fix "Copy as text" doing nothing on a phone testing over Wi-Fi (found during the mobile check). Two causes, both safe to keep after launch: `allowedDevOrigins: ["192.168.*.*"]` in `next.config.ts` lets the dev server send the button's code to Wi-Fi devices (dev server only); and `components/CopyBriefButton.tsx` falls back to the older copy command when the clipboard feature is missing or blocked, as it is on plain http
 
 ### Later (not in this plan)
 - Show the booking calendar on the result page (needs the booking tool and URL confirmed)
