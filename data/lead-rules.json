@@ -9,7 +9,7 @@
     "thresholds": "Investment amounts per project type. At or above 'hotFrom' is hot, at or above 'warmFrom' is warm, anything lower is cold. 'hotFrom' must not be below 'warmFrom'.",
     "unsureStart": "The starting label when the project type is skipped, or the investment is skipped or 'Not sure yet'.",
     "details": "Answers listed in the brief's lead section for context. They never change the label.",
-    "redFlags": "Warning signs shown in the brief. A sign is raised when every condition in 'when' matches. Any raised sign lowers the label one step (hot to warm, warm to cold), never more than one step."
+    "warningSigns": "Warning signs shown in the brief. A sign is raised when every condition in 'when' matches. Any raised sign lowers the label one step (hot to warm, warm to cold), never more than one step."
   },
   "projectQuestion": "project_scope",
   "investmentQuestion": "investment",
@@ -28,7 +28,7 @@
     { "id": "stage", "label": "Project stage", "questionId": "readiness" },
     { "id": "help", "label": "Type of help", "questionId": "service" }
   ],
-  "redFlags": [
+  "warningSigns": [
     {
       "id": "just_exploring",
       "note": "Just exploring for now. May not be ready to start.",

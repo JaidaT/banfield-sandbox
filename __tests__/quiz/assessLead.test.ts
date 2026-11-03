@@ -64,7 +64,7 @@ const RULES: LeadRules = {
     { id: 'investment', label: 'Investment', questionId: 'money' },
     { id: 'timeframe', label: 'Timeframe', questionId: 'when' },
   ],
-  redFlags: [
+  warningSigns: [
     { id: 'exploring', note: 'Just exploring', when: [{ question: 'when', option: 'exploring' }] },
     {
       id: 'reno_exploring',
@@ -138,13 +138,13 @@ describe('assessLead: warning signs', () => {
   test('one warning sign lowers the label one step', () => {
     const result = lead({ project: 'styling', money: 60000, when: 'exploring' })
     expect(result).toMatchObject({ temperature: 'warm', startingTemperature: 'hot', lowered: true })
-    expect(result.redFlags.map((f) => f.id)).toEqual(['exploring'])
+    expect(result.warningSigns.map((f) => f.id)).toEqual(['exploring'])
     expect(result.reasons[1]).toMatch(/lowered to warm/i)
   })
 
   test('two warning signs still lower it only one step', () => {
     const result = lead({ project: 'reno', money: 200000, when: 'exploring' })
-    expect(result.redFlags).toHaveLength(2)
+    expect(result.warningSigns).toHaveLength(2)
     expect(result.temperature).toBe('warm')
   })
 
@@ -153,9 +153,9 @@ describe('assessLead: warning signs', () => {
     expect(result).toMatchObject({ temperature: 'cold', lowered: false })
   })
 
-  test('a flag is raised only when every condition matches', () => {
-    expect(lead({ project: 'styling', when: 'exploring' }).redFlags.map((f) => f.id)).toEqual(['exploring'])
-    expect(lead({ project: 'reno', when: 'soon' }).redFlags).toEqual([])
+  test('a warning sign is raised only when every condition matches', () => {
+    expect(lead({ project: 'styling', when: 'exploring' }).warningSigns.map((f) => f.id)).toEqual(['exploring'])
+    expect(lead({ project: 'reno', when: 'soon' }).warningSigns).toEqual([])
   })
 })
 
@@ -208,7 +208,7 @@ describe('assessing the sample submissions', () => {
   })
 
   test('the explorer raises the early-stage warning signs', () => {
-    expect(leadFor('weak-fit-explorer').redFlags.map((f) => f.id)).toEqual([
+    expect(leadFor('weak-fit-explorer').warningSigns.map((f) => f.id)).toEqual([
       'just_exploring',
       'early_one_time_session',
       'early_no_budget',
@@ -217,7 +217,7 @@ describe('assessing the sample submissions', () => {
 
   test('the skipper is lowered from hot to warm by the builder note', () => {
     const result = leadFor('skipper')
-    expect(result.redFlags.map((f) => f.id)).toEqual(['builder_underway'])
+    expect(result.warningSigns.map((f) => f.id)).toEqual(['builder_underway'])
     expect(result).toMatchObject({ startingTemperature: 'hot', lowered: true })
   })
 

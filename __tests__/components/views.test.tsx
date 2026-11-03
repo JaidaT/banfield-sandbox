@@ -44,10 +44,10 @@ describe('TeamBriefView', () => {
     expect(leadLabel.compareDocumentPosition(clientType) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
-  test('shows red flag notes', () => {
+  test('shows warning sign notes', () => {
     const brief = buildTeamBrief(sample('skipper'), data)
     render(<TeamBriefView brief={brief} />)
-    expect(screen.getByText(brief.lead.redFlags[0].note)).toBeDefined()
+    expect(screen.getByText(brief.lead.warningSigns[0].note)).toBeDefined()
   })
 })
 

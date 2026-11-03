@@ -67,16 +67,16 @@ export interface SignalRule {
   note: string
 }
 
-export interface FitCondition {
+export interface WarningCondition {
   question: string
   option: string
 }
 
 // Raised when every condition in `when` matches the submission's answers.
-export interface RedFlag {
+export interface WarningSign {
   id: string
   note: string
-  when: FitCondition[]
+  when: WarningCondition[]
 }
 
 export const LEAD_TEMPERATURES = ['hot', 'warm', 'cold'] as const
@@ -105,8 +105,8 @@ export interface LeadRules {
   // Starting label when the project type or investment is unanswered or "Not sure".
   unsureStart: LeadTemperature
   details: LeadDetailRule[]
-  // Any raised flag lowers the label by one step (never more than one).
-  redFlags: RedFlag[]
+  // Any raised sign lowers the label by one step (never more than one).
+  warningSigns: WarningSign[]
 }
 
 export interface SiteAddress {
@@ -174,7 +174,7 @@ export interface LeadAssessment {
   // Plain-language explanation, e.g. "Renovation at $200K: hot".
   reasons: string[]
   details: LeadDetail[]
-  redFlags: RedFlag[]
+  warningSigns: WarningSign[]
 }
 
 export interface ArchetypeBlend {

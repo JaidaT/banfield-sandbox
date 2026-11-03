@@ -1,6 +1,6 @@
 import { answerLabels, formatAmount } from './answers'
 import type {
-  FitCondition,
+  WarningCondition,
   LeadAssessment,
   LeadRules,
   LeadTemperature,
@@ -15,7 +15,7 @@ const ONE_STEP_DOWN: Record<LeadTemperature, LeadTemperature> = {
   cold: 'cold',
 }
 
-function conditionMet(submission: Submission, condition: FitCondition): boolean {
+function conditionMet(submission: Submission, condition: WarningCondition): boolean {
   const answer = submission.answers[condition.question]
   return Array.isArray(answer) ? answer.includes(condition.option) : answer === condition.option
 }
@@ -57,10 +57,10 @@ export function assessLead(
 ): LeadAssessment {
   const byId = new Map(questions.map((q) => [q.id, q]))
   const start = startingLabel(submission, rules, byId)
-  const redFlags = rules.redFlags.filter((flag) => flag.when.every((c) => conditionMet(submission, c)))
+  const warningSigns = rules.warningSigns.filter((flag) => flag.when.every((c) => conditionMet(submission, c)))
 
   // Any number of warning signs lowers the label one step, never more.
-  const temperature = redFlags.length > 0 ? ONE_STEP_DOWN[start.temperature] : start.temperature
+  const temperature = warningSigns.length > 0 ? ONE_STEP_DOWN[start.temperature] : start.temperature
   const lowered = temperature !== start.temperature
   const reasons = [start.reason]
   if (lowered) reasons.push(`Lowered to ${temperature} by the warning signs below`)
@@ -73,5 +73,5 @@ export function assessLead(
       : { id: d.id, label: d.label }
   })
 
-  return { temperature, startingTemperature: start.temperature, lowered, reasons, details, redFlags }
+  return { temperature, startingTemperature: start.temperature, lowered, reasons, details, warningSigns }
 }

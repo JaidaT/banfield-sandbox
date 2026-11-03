@@ -12,12 +12,12 @@ import type {
   ArchetypeData,
   ClientCopy,
   Comparison,
-  FitCondition,
+  WarningCondition,
   LeadDetailRule,
   LeadRules,
   LeadTemperature,
   ProjectThresholds,
-  RedFlag,
+  WarningSign,
   Question,
   QuestionKind,
   QuizData,
@@ -257,26 +257,26 @@ export function loadSignalRules(): SignalRule[] {
   )
 }
 
-function parseRedFlag(raw: unknown, index: number, questions: Question[]): RedFlag {
+function parseWarningSign(raw: unknown, index: number, questions: Question[]): WarningSign {
   if (!isRecord(raw) || typeof raw.id !== 'string' || raw.id === '') {
-    throw new Error(`red flag at index ${index} is missing an "id"`)
+    throw new Error(`warning sign at index ${index} is missing an "id"`)
   }
   const id = raw.id
   if (typeof raw.note !== 'string' || raw.note === '') {
-    throw new Error(`red flag ${id} is missing a "note" for the team brief`)
+    throw new Error(`warning sign ${id} is missing a "note" for the team brief`)
   }
   if (!Array.isArray(raw.when) || raw.when.length === 0) {
-    throw new Error(`red flag ${id} needs at least one condition in "when"`)
+    throw new Error(`warning sign ${id} needs at least one condition in "when"`)
   }
-  const when = raw.when.map((condition: unknown): FitCondition => {
-    if (!isRecord(condition)) throw new Error(`red flag ${id} has a condition that is not an object`)
+  const when = raw.when.map((condition: unknown): WarningCondition => {
+    if (!isRecord(condition)) throw new Error(`warning sign ${id} has a condition that is not an object`)
     const question = questions.find((q) => q.id === condition.question)
     if (!question) {
-      throw new Error(`red flag ${id} refers to unknown question: ${String(condition.question)}`)
+      throw new Error(`warning sign ${id} refers to unknown question: ${String(condition.question)}`)
     }
     if (!question.options.some((o) => o.id === condition.option)) {
       throw new Error(
-        `red flag ${id} refers to unknown answer ${String(condition.option)} on question ${question.id}`,
+        `warning sign ${id} refers to unknown answer ${String(condition.option)} on question ${question.id}`,
       )
     }
     return { question: question.id, option: condition.option as string }
@@ -284,16 +284,16 @@ function parseRedFlag(raw: unknown, index: number, questions: Question[]): RedFl
   return { id, note: raw.note, when }
 }
 
-function parseRedFlags(raw: unknown, questions: Question[]): RedFlag[] {
-  const rawFlags = raw === undefined ? [] : raw
-  if (!Array.isArray(rawFlags)) throw new Error('fit rules "redFlags" must be a list')
-  const redFlags = rawFlags.map((f: unknown, i: number) => parseRedFlag(f, i, questions))
+function parseWarningSigns(raw: unknown, questions: Question[]): WarningSign[] {
+  const rawSigns = raw === undefined ? [] : raw
+  if (!Array.isArray(rawSigns)) throw new Error('lead rules "warningSigns" must be a list')
+  const warningSigns = rawSigns.map((f: unknown, i: number) => parseWarningSign(f, i, questions))
   const seen = new Set<string>()
-  for (const f of redFlags) {
-    if (seen.has(f.id)) throw new Error(`duplicate red flag id: ${f.id}`)
+  for (const f of warningSigns) {
+    if (seen.has(f.id)) throw new Error(`duplicate warning sign id: ${f.id}`)
     seen.add(f.id)
   }
-  return redFlags
+  return warningSigns
 }
 
 function parseThresholds(raw: unknown, optionId: string): ProjectThresholds {
@@ -381,7 +381,7 @@ export function parseLeadRules(raw: unknown, questions: Question[]): LeadRules {
     thresholds,
     unsureStart: raw.unsureStart as LeadTemperature,
     details,
-    redFlags: parseRedFlags(raw.redFlags, questions),
+    warningSigns: parseWarningSigns(raw.warningSigns, questions),
   }
 }
 

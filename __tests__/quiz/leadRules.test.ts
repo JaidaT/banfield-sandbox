@@ -50,9 +50,9 @@ describe('loadLeadRules', () => {
   // Brand Standards: a one-time session is Banfield's paid "Designer on Call" service,
   // so choosing it is never a warning sign on its own.
   test('wanting a one-time session alone is not a warning sign', () => {
-    for (const flag of loadLeadRules().redFlags) {
-      const onlyConsult = flag.when.every((c) => c.question === 'service' && c.option === 'consult')
-      expect(onlyConsult, flag.id).toBe(false)
+    for (const sign of loadLeadRules().warningSigns) {
+      const onlyConsult = sign.when.every((c) => c.question === 'service' && c.option === 'consult')
+      expect(onlyConsult, sign.id).toBe(false)
     }
   })
 })
@@ -93,7 +93,7 @@ function leadRules(overrides: Record<string, unknown> = {}) {
     },
     unsureStart: 'warm',
     details: [{ id: 'timeframe', label: 'Timeframe', questionId: 'timeframe' }],
-    redFlags: [
+    warningSigns: [
       { id: 'late', note: 'Starting late', when: [{ question: 'timeframe', option: 'later' }] },
     ],
     ...overrides,
@@ -108,7 +108,7 @@ describe('parseLeadRules', () => {
     expect(lead.thresholds.renovation).toEqual({ hotFrom: 150000, warmFrom: 50000 })
     expect(lead.unsureStart).toBe('warm')
     expect(lead.details).toEqual([{ id: 'timeframe', label: 'Timeframe', questionId: 'timeframe' }])
-    expect(lead.redFlags.map((f) => f.id)).toEqual(['late'])
+    expect(lead.warningSigns.map((f) => f.id)).toEqual(['late'])
   })
 
   test('throws when the project question is missing or not single choice', () => {
@@ -186,23 +186,23 @@ describe('parseLeadRules', () => {
     )
   })
 
-  test('throws when a red flag points at an unknown question or answer', () => {
+  test('throws when a warning sign points at an unknown question or answer', () => {
     const badQuestion = [{ id: 'x', note: 'X', when: [{ question: 'nope', option: 'soon' }] }]
     const badOption = [{ id: 'y', note: 'Y', when: [{ question: 'timeframe', option: 'nope' }] }]
-    expect(() => parseLeadRules(leadRules({ redFlags: badQuestion }), LEAD_QUESTIONS)).toThrow(/x.*nope/)
-    expect(() => parseLeadRules(leadRules({ redFlags: badOption }), LEAD_QUESTIONS)).toThrow(/y.*nope/)
+    expect(() => parseLeadRules(leadRules({ warningSigns: badQuestion }), LEAD_QUESTIONS)).toThrow(/x.*nope/)
+    expect(() => parseLeadRules(leadRules({ warningSigns: badOption }), LEAD_QUESTIONS)).toThrow(/y.*nope/)
   })
 
-  test('throws when a red flag has no conditions or no note', () => {
+  test('throws when a warning sign has no conditions or no note', () => {
     const noWhen = [{ id: 'x', note: 'X', when: [] }]
     const noNote = [{ id: 'y', note: '', when: [{ question: 'timeframe', option: 'soon' }] }]
-    expect(() => parseLeadRules(leadRules({ redFlags: noWhen }), LEAD_QUESTIONS)).toThrow(/x.*condition/)
-    expect(() => parseLeadRules(leadRules({ redFlags: noNote }), LEAD_QUESTIONS)).toThrow(/y.*note/)
+    expect(() => parseLeadRules(leadRules({ warningSigns: noWhen }), LEAD_QUESTIONS)).toThrow(/x.*condition/)
+    expect(() => parseLeadRules(leadRules({ warningSigns: noNote }), LEAD_QUESTIONS)).toThrow(/y.*note/)
   })
 
-  test('throws on duplicate red flag ids', () => {
-    const flag = { id: 'dup', note: 'D', when: [{ question: 'timeframe', option: 'soon' }] }
-    expect(() => parseLeadRules(leadRules({ redFlags: [flag, flag] }), LEAD_QUESTIONS)).toThrow(
+  test('throws on duplicate warning sign ids', () => {
+    const sign = { id: 'dup', note: 'D', when: [{ question: 'timeframe', option: 'soon' }] }
+    expect(() => parseLeadRules(leadRules({ warningSigns: [sign, sign] }), LEAD_QUESTIONS)).toThrow(
       /duplicate.*dup/i,
     )
   })

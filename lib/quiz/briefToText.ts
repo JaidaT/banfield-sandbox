@@ -26,7 +26,7 @@ export function briefToText(brief: TeamBrief): string {
     ...lead.reasons,
   ]
   for (const d of lead.details) lines.push(`- ${d.label}: ${d.answer ?? 'not answered'}`)
-  for (const flag of lead.redFlags) lines.push(`! ${flag.note}`)
+  for (const flag of lead.warningSigns) lines.push(`! ${flag.note}`)
 
   lines.push('', 'HOW TO WORK WITH THEM')
   if (brief.highlights.length === 0) lines.push('Not enough answers to identify a client type.')

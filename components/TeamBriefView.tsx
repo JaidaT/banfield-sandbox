@@ -70,9 +70,9 @@ export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
             </div>
           ))}
         </dl>
-        {lead.redFlags.length > 0 && (
+        {lead.warningSigns.length > 0 && (
           <ul className="mt-4 flex flex-col gap-2">
-            {lead.redFlags.map((f) => (
+            {lead.warningSigns.map((f) => (
               <li key={f.id} className="rounded-lg border-l-4 border-accent bg-white/70 px-3 py-2 text-sm">
                 {f.note}
               </li>
