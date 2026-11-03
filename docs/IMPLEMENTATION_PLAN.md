@@ -46,7 +46,7 @@ Before writing route code, read the relevant guides in `node_modules/next/dist/d
 - [ ] Run `npm run lint`, `npm test` and `npm run build`, and check both pages at mobile width in `npm run dev` (lint, test and build pass; the mobile-width visual check has not been done)
 
 ### Later (not in this plan)
-- Quick Quiz UI and the handoff from submission to these outputs
+- Quick Quiz UI and the handoff from submission to these outputs (includes the progress bar Banfield asked for on Oct 28)
 - Persistence and aggregate analytics ("X% of visitors are type Y")
 - Real booking integration, photo and floor-plan uploads, and the follow-up email
 - Access control for `/team/*`
@@ -54,3 +54,53 @@ Before writing route code, read the relevant guides in `node_modules/next/dist/d
 - Next.js reported a known security vulnerability in version 16.4.0 during `npm run build` and recommends upgrading. Upgrade before anything is deployed
 - The full questionnaire must work on its own for people who skipped the short quiz. When short-quiz answers exist (matched by booking email, with no accounts or logins), it skips or pre-fills those questions so nothing is asked twice. Keep the scoring and brief functions working from any subset of answers so a brief can also come from the full questionnaire
 - A non-coder way for Banfield to edit archetypes, questions and fit rules (raw JSON on GitHub is too error-prone for them). Options: a Google Sheet as the source (fits their G Suite stack; preferred), an admin page, or plain-language errors plus an editing guide. Keep the existing validation as the safety net whichever method is chosen, and make its errors visible to whoever is editing. Confirm with Banfield how they want to edit before building
+
+## Quick Quiz v2: Oct 28 Meeting Changes (2026-11-02)
+
+Goal: apply Banfield's Oct 28 feedback (see "Oct 28 meeting with Banfield" in DISCOVERY.md) to the output pipeline. Fit becomes a hot, warm or cold lead label driven by project type and investment, the investment question becomes a slider, the brief puts fit first, and the questions get the requested rewording. Built on branch `jaida/questionnaire-output-v2`; `jaida/questionnaire-output` stays as the version Banfield saw.
+
+How the lead label works (draft, all numbers in `data/fit.json` for Banfield to review):
+1. Project type + investment give the starting label. Each project type has two thresholds: at or above "hot from" is hot, at or above "warm from" is warm, below that is cold.
+2. "Not sure yet" on investment, or an unanswered or "Not sure" project type, starts at warm.
+3. If any warning sign is raised (for example "just exploring", or the existing red flags), the label drops one step: hot to warm, warm to cold. It never drops more than one step.
+4. Client type (personality) is shown right below the label and never changes it.
+5. Location is shown as information only ("Lower Mainland" or "Outside the Lower Mainland") and never changes the label.
+
+Work test-first: for each step, write or update the failing test, then change the code.
+
+### Phase 1: Data and types
+- [ ] `lib/quiz/types.ts`: add a `range` question kind (`min`, `max`, `step`, plus an optional escape option such as "Not sure yet"); allow a number as an `Answer`; add `LeadTemperature` (`hot | warm | cold`); replace `FitAssessment` with the lead result (`temperature`, `startingTemperature`, `lowered`, plain-language `reasons`, detail rows for project type, investment, timeframe, readiness and type of help, `location` with city and in-area flag, and `redFlags`); update `FitRules` (per-project-type thresholds, starting labels for unsure answers, service areas, warning signs) and drop the per-criterion strong/possible/weak ratings
+- [ ] `lib/quiz/load.ts`: validate range questions (min below max, step above 0, numbers only); validate the new `fit.json` shape (every project type option has thresholds, "hot from" is at or above "warm from", warning signs name real questions and options); keep failing loudly with clear messages
+- [ ] `lib/quiz/submission.ts`: a range answer must be a number inside min to max on a step, or the escape option id
+- [ ] `data/questions.json` (version 0.2.0, still a draft): turn `investment` into a range question ($0 to $500K+, $10K steps, "Not sure yet" escape), worded with "investment"; reword the `service` answers "Take it from idea to move-in" and "Design plans I can take to my builder" and the `readiness` prompt "Where are you at right now?" (draft wording, flagged for Banfield review); add an optional final text question `anything_else` ("Anything else we missed?") with `ignoreIfSkipped: true` (add the optional `ignoreIfSkipped` flag to `Question` in `types.ts` and validate it in `load.ts`)
+- [ ] `data/fit.json` (version 0.2.0, still a draft): per-project-type "hot from" and "warm from" amounts; starting label `warm` for unsure answers; add a "just exploring" warning sign alongside the existing red flags; keep `serviceAreas` for the location note only
+- [ ] `data/sample-submissions.json`: investment answers become numbers; make sure the samples cover hot, warm, cold, one that is lowered by a warning sign (a big renovation that is "just exploring") and one outside the Lower Mainland that is still hot
+
+### Phase 2: Logic
+- [ ] `lib/quiz/assessFit.ts`: compute the starting label from project type + investment, lower it one step if any warning sign is raised, and return the reasons in plain language (for example "Renovation at $200K: hot. Lowered to warm: just exploring for now."); location never affects the label; still never reads archetype weights
+- [ ] `lib/quiz/signals.ts`: questions marked `ignoreIfSkipped: true` in `data/questions.json` (only "Anything else we missed?" for now) are not counted as skipped, so leaving it blank never adds to "Skipped 2 or more questions". "What does home mean to you?" still counts
+- [ ] `lib/quiz/buildTeamBrief.ts`: `HIGHLIGHT_MAX` from 3 to 2; headline puts the lead first ("Warm lead | 92% Creative Collaborator"); readable answers format money ("$200K", "$500K+")
+- [ ] `lib/quiz/briefToText.ts`: the lead section comes first, then client type and guidance, then notes and answers
+- [ ] `lib/quiz/buildClientResult.ts`: format the investment answer if it is shown; never show the lead label
+
+### Phase 3: UI
+- [ ] `components/TeamBriefView.tsx`: the lead label (hot, warm or cold) with its reasons at the top, above the client type blend; project details table with the location note; warning signs listed under it
+- [ ] `app/team/page.tsx`: show each sample's lead label in the list
+
+### Phase 4: Tests and validation
+- [ ] Loader tests: valid range questions and the new `fit.json` load; a missing threshold, "hot from" below "warm from", or a warning sign naming an unknown option throws
+- [ ] `assessFit` tests: each starting label per threshold, unsure answers start warm, one warning sign lowers one step, two warning signs still lower only one step, cold stays cold, location never changes the label, and changing archetype answers never changes the label
+- [ ] Signal tests: a blank "Anything else we missed?" is not counted as skipped, and a blank "What does home mean to you?" still is
+- [ ] Brief tests: at most 2 guidance cards, lead-first headline, money formatting, lead section first in the copied text
+- [ ] Client result tests: no "hot lead", "warm lead" or "cold lead" text (in addition to the existing archetype and fit leak checks) for every sample
+- [ ] Component tests: the lead label renders above the blend
+- [ ] Run `npm run lint`, `npm test` and `npm run build`, and check the brief and result pages at mobile width in `npm run dev`
+
+### Later (not in this plan)
+- Show the booking calendar on the result page (needs the booking tool and URL confirmed)
+- Export briefs as PDF or CSV (low priority)
+- Let the team edit the tips shown for weak (cold) leads through the admin page
+- A separate "budget set aside for design" question and a "win the lottery" money-values question (ideas only; need wording from Banfield)
+- The real coffee order in the full questionnaire
+- Flag quizzes finished in under 30 seconds, or add a CAPTCHA, if junk leads appear
+- An "after the quiz" booking form so people do not type their details twice, and recording direct bookings as "skipped quiz"

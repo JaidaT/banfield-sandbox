@@ -3,7 +3,7 @@
 ## Agreed direction (Oct 9, confirmed by Banfield in writing)
 Two separate tools, built from one shared question bank (build the full version first, then condense):
 1. **Quick Quiz (public, on website):** ~5 min, filled out *before* booking a discovery call with Jamie. Qualifies the lead and identifies the client type.
-2. **Full questionnaire (hired clients only):** Replaces the current "Let us get to know you" form. (Not to be confused with the Meet + Inspire session, which is the free 45-minute call the Quick Quiz books.)
+2. **Full questionnaire (hired clients only):** Replaces the current "Let us get to know you" form. Sent after the client hires Banfield, as part of onboarding (confirmed Oct 28). (Not to be confused with the Meet + Inspire session, which is the free 45-minute call the Quick Quiz books.)
 No client should answer the same question twice across the two.
 
 The team-facing brief must answer two separate questions:
@@ -159,8 +159,55 @@ Note: Banfield's Brand Standards (pp. 24-28) list Performance-Minded Planner as 
 - **Ownership:** Banfield gets the full code and wants to be able to edit questions later.
 - **Out of scope for now:** client portal app, DesignBox, JobTread integration, mid-project and testimonial surveys.
 
+## Oct 28 meeting with Banfield
+Attended by Jamie, Rachael, Jaida, Sarah, Jinwon and Sofiia. The team demoed the prototype using the sample briefs and the client result. Banfield loved the questions. The notes below update the sections above; where they differ, these win.
+
+**Answered**
+- The full questionnaire is sent after hiring, during onboarding. The two forms stay separate: the short quiz is lead generation, the full questionnaire is onboarding.
+- The Squarespace site is on the Core plan, so code injection works (the quiz iframe can resize itself).
+- Editing after launch: an admin page with a login. No Google Sheet.
+- Contact details are wanted even when someone does not book. Name and email are the minimum, and phone is ideal. Adding someone to a newsletter needs their permission.
+- Photo uploads and visual (image) questions belong in the full questionnaire only, not the short quiz. This replaces the upload line in P1 for the short quiz.
+- Completion time stays a note in the brief, with no effect on scoring.
+- A progress bar is wanted.
+
+**Fit redesign (replaces the fit approach in P6)**
+- Location barely matters. Banfield takes projects outside the Lower Mainland (e.g. Ontario, Edmonton, Revelstoke); being local is a bonus, not a requirement.
+- Fit should come from project type and budget together, not from each criterion on its own.
+- Personality (archetype) matters a lot to whether a client is right for Banfield.
+- Leads should be labelled hot, warm or cold.
+- Fit should appear above the archetype blend in the brief.
+
+**Requested changes**
+- Investment question: a slider starting at $0, using the word "investment". Possibly a separate question about budget set aside for design.
+- Reword the answers "Take it from idea to move-in" and "Design plans I can take to my builder".
+- Reword the question "Where are you at right now?".
+- Add a final optional text question along the lines of "Anything else we missed?".
+- Possible new question about money values, e.g. "If you won the lottery...".
+- The real coffee order belongs in the full questionnaire (the short-quiz coffee question stays as a personality question).
+- Reorder the brief (fit first).
+- Show at most 2 client types' guidance in the brief (currently up to 3).
+- Show the booking calendar on the result page.
+- Export briefs as PDF or CSV (low priority).
+- Let the team adjust the tips shown for weak-fit leads.
+- Simplify the wording in the client types document.
+
+**Still open**
+- **The quiz "hook":** what makes a visitor want to take it. Ideas raised: framing it as a fit check, "under 5 minutes, no credit card", tailored follow-up emails, showing the calendar only to good fits, and a "design personality" result.
+- **Scam and junk leads:** a CAPTCHA, or flagging quizzes finished in under 30 seconds. Decided to wait and see.
+- **Booking without retyping:** an "after the quiz" version of the booking form so people do not enter their details twice.
+- **Bookings without a quiz:** record these as "skipped quiz".
+
+**Not discussed (still open below):** where the brief goes, the four P7 questions, placement of "What does home mean to you?", the headline font licence, Hands-On Controller life stages, and the exact booking tool.
+
+**Action items**
+- Send Banfield a video demo and about 10 slides.
+- Testing: Donna agreed to take the quiz. Jamie offered to email the client list if the team drafts the message.
+- Sarah's dashboard idea is a future feature.
+- Promo filming is next week.
+
 ## Open questions / tensions to resolve
-- **Budget in the Quick Quiz:** "Investment" is a fit criterion, but Jamie said budget means little up front and worried the quiz could scare people off. Consider ranges, or a soft framing like "investment comfort".
+- **Budget in the Quick Quiz (resolved Oct 28):** Use a slider from $0 labelled "investment" (see the Oct 28 meeting notes). Earlier concern: Jamie said budget means little up front and worried the quiz could scare people off.
 - **Style labels:** The current form asks clients to circle styles like "Tuscan" and "Transitional". Jamie said these labels mean different things to everyone (P4). Replace them with image-based choices.
 - **Missing source (resolved 2026-10-26):** Banfield's segment definitions (Brand Standards, pp. 24-28, dated Aug 16, 2026) have been received. Relevant notes are in BRAND_NOTES.md.
 - **Performance-Minded Planner: segment or trait?** The Brand Standards call it one of five segments but its audit note says to treat it as a trait on another segment. Confirm with Banfield before the brief describes it either way.
@@ -168,18 +215,18 @@ Note: Banfield's Brand Standards (pp. 24-28) list Performance-Minded Planner as 
 - **Book with Jamie, or with the team? (resolved 2026-10-26):** Name Jamie. Banfield's current booking page describes Meet + Inspire as "a complimentary 45-minute Zoom session with Principal Designer Jamie Banfield", and the appointment is titled "Virtual Meet + Inspire - Discovery call (45 min) with jamie banfield".
 - **Which booking tool, and what is the booking page address?** Banfield plans to keep their current booking page, described as a Calendly plugin, but its layout ("APPOINTMENT", "Date & Time", "TIME ZONE: PACIFIC TIME - VANCOUVER") looks like Squarespace Scheduling (formerly Acuity). Pre-filling works differently: Calendly takes `name` and `email` in the link; Squarespace Scheduling takes `firstName`, `lastName`, `email` and `phone`. Confirm the tool and the exact booking URL so the quiz's CTA can pre-fill it.
 - **Should the quiz identify life-stage segment too? (resolved 2026-10-26):** No. Jamie left this to the project team. Household and segment questions (kids, parents living in, staying long-term) stay out of the short quiz to keep it short; Banfield's Oct 9 email asks the short quiz for client type (archetype), not segment. Household details belong in the full questionnaire.
-- **When is the full questionnaire sent?** This document says hired clients only (after the Meet + Inspire call); it may instead be sent after booking but before the call. Banfield's Oct 9 email only covers the short survey. Confirm with Banfield.
-- **Where should the short quiz ask for contact details?** P1 requires name, email, phone and full site address, but asking up front can feel like signing up and cause drop-off. Options: ask at the end, framed as booking ("Where should Jamie reach you?"), and/or show the client result first. Confirm which details must be required.
+- **When is the full questionnaire sent? (resolved Oct 28):** After the client hires Banfield, during onboarding.
+- **Where should the short quiz ask for contact details? (partly resolved Oct 28):** Name and email are the minimum and phone is ideal, collected even if the person does not book. Still to decide: where in the quiz to ask (the end, framed as "Where should Jamie reach you?", is still the suggestion) and whether the site address is needed.
 - **Short quiz and full questionnaire are independent.** Many leads will skip the short quiz and book directly, and nobody should have to sign up or log in. The full questionnaire must work on its own; when short-quiz answers exist (matched by booking email behind the scenes) it skips or pre-fills those questions so nothing is asked twice.
   - **Team note (2026-10-27, not a question for Banfield):** until submissions are stored, the team pairs short-quiz and full-questionnaire results by hand using the person's name and email. Decide automatic matching (booking email or a personal link) once the full questionnaire's timing is confirmed and storage exists.
 - **Unvalidated archetypes:** The archetype-to-question mapping hasn't been tested with real users. Validate it in USER_RESEARCH.md.
 
 The following were added 2026-10-27 for the next Banfield meeting (also on docs/Jamie_Meeting_Sheet.pdf):
 - **Where should each finished brief go?** Nothing is sent anywhere yet. Is an email to Jamie OK, and to which address?
-- **Which Squarespace plan is the site on?** It decides whether the quiz iframe can resize itself (needs code injection).
+- **Which Squarespace plan is the site on? (resolved Oct 28):** Core, so code injection works and the iframe can resize itself.
 - **Moving four questions into the short quiz?** P7 says detail orientation, what they are most nervous or excited about, past designer experience and who the decision makers are belong in the Quick Quiz. None are in `data/questions.json` yet. Adding them gives more insight before the call but lengthens a quiz meant to take about 5 minutes.
 - **Privacy and consent (before launch, not for the next meeting):** the real quiz will collect names, phone numbers and home addresses, so a short consent line is needed before it goes live. Not needed for the prototype, which uses made-up people. Ask Banfield by email once the quiz screen is being built: does their website have privacy wording to reuse, and will they approve the consent line?
-- **How should Banfield edit content after launch?** A Google Sheet, an admin page, or the project team makes changes (see the Later section of IMPLEMENTATION_PLAN.md).
+- **How should Banfield edit content after launch? (resolved Oct 28):** An admin page with a login. No Google Sheet.
 - **Which life stages do Hands-On Controller clients come from?** Its only listed segment is Performance-Minded Planner; if that is a trait (see above), the Hands-On Controller has no life-stage segment.
 - **Show "What does home mean to you?" near the top of the brief?** It is currently in the collapsed answers section, though P4 suggests it can be the most revealing answer.
 - **Headline font licence:** does Banfield have a web licence for Glacial Indifference? The prototype uses Quicksand until then.
