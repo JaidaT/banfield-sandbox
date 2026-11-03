@@ -117,7 +117,7 @@ Goal: make the prototype a clear reference for the team's rebuild. No behaviour 
 - [x] Sample `weak-fit-explorer` renamed to `cold-explorer`
 - [x] Removed `vite-tsconfig-paths`; `vitest.config.mts` uses `resolve.tsconfigPaths`
 - [x] README rewritten for a sandbox repo (no pull requests or merging) with a section on how the prototype works; CLAUDE.md no longer points to `/done`
-- [ ] Update the teammate guide PDF (`docs/How_The_Prototype_Works.pdf`, kept out of Git) to v2 and the new names
+- [x] Update the teammate guide PDF (`docs/How_The_Prototype_Works.pdf`, kept out of Git) to v2 and the new names
 
 ### Notes for the rebuild
 - `lib/quiz/load.ts` is mostly hand-written checks for the data files. A schema library such as Zod could do the same job in far less code.
