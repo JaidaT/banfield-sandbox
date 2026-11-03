@@ -98,6 +98,24 @@ function parseOption(raw: unknown, questionId: string, archetypeIds: Set<string>
   return { id: raw.id, label: raw.label, weights }
 }
 
+// A slider must be able to move from min to exactly max in whole steps.
+function parseRange(entry: Record<string, unknown>, id: string): { min: number; max: number; step: number } {
+  for (const field of ['min', 'max', 'step'] as const) {
+    if (typeof entry[field] !== 'number' || !Number.isFinite(entry[field])) {
+      throw new Error(`question ${id} is a range question and needs a number for "${field}"`)
+    }
+  }
+  const min = entry.min as number
+  const max = entry.max as number
+  const step = entry.step as number
+  if (min >= max) throw new Error(`question ${id} needs "min" (${min}) to be below "max" (${max})`)
+  if (step <= 0) throw new Error(`question ${id} needs a "step" above 0`)
+  if (!Number.isInteger((max - min) / step)) {
+    throw new Error(`question ${id} "step" (${step}) must divide evenly from ${min} to ${max}`)
+  }
+  return { min, max, step }
+}
+
 // Validates the question bank against the known archetype ids, so a typo in a
 // weight key fails here instead of silently skewing every score.
 export function parseQuestionBank(raw: unknown, archetypeIds: readonly string[]): Question[] {
@@ -125,7 +143,8 @@ export function parseQuestionBank(raw: unknown, archetypeIds: readonly string[])
 
     const rawOptions = entry.options === undefined ? [] : entry.options
     if (!Array.isArray(rawOptions)) throw new Error(`question ${id} has "options" that is not a list`)
-    if (kind !== 'text' && rawOptions.length === 0) {
+    // Range questions need no options; any they have are escapes like "Not sure yet".
+    if ((kind === 'single' || kind === 'multi') && rawOptions.length === 0) {
       throw new Error(`question ${id} is a choice question with no options`)
     }
     const options = rawOptions.map((o: unknown) => parseOption(o, id, known))
@@ -143,6 +162,13 @@ export function parseQuestionBank(raw: unknown, archetypeIds: readonly string[])
       options,
     }
     if (typeof entry.help === 'string') question.help = entry.help
+    if (entry.ignoreIfSkipped !== undefined) {
+      if (typeof entry.ignoreIfSkipped !== 'boolean') {
+        throw new Error(`question ${id} "ignoreIfSkipped" must be true or false`)
+      }
+      if (entry.ignoreIfSkipped) question.ignoreIfSkipped = true
+    }
+    if (kind === 'range') Object.assign(question, parseRange(entry, id))
     if (typeof entry.criterion === 'string') {
       question.criterion = entry.criterion
       // Fit and archetype are independent axes, so fit answers never score archetypes.

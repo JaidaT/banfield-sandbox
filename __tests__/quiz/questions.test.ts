@@ -121,4 +121,69 @@ describe('parseQuestionBank', () => {
     const [q] = parseQuestionBank(bankWith([{ id: 'home', kind: 'text', prompt: 'Tell us' }]), IDS)
     expect(q.options).toEqual([])
   })
+
+  test('keeps ignoreIfSkipped when set, and leaves it off otherwise', () => {
+    const [extra, home] = parseQuestionBank(
+      bankWith([
+        { id: 'extra', kind: 'text', prompt: 'Anything else?', ignoreIfSkipped: true },
+        { id: 'home', kind: 'text', prompt: 'Tell us' },
+      ]),
+      IDS,
+    )
+    expect(extra.ignoreIfSkipped).toBe(true)
+    expect(home.ignoreIfSkipped).toBeUndefined()
+  })
+
+  test('throws when ignoreIfSkipped is not true or false', () => {
+    const bank = bankWith([{ id: 'extra', kind: 'text', prompt: 'Anything else?', ignoreIfSkipped: 'yes' }])
+    expect(() => parseQuestionBank(bank, IDS)).toThrow(/extra.*ignoreIfSkipped/)
+  })
+})
+
+describe('parseQuestionBank: range (slider) questions', () => {
+  function slider(overrides: Record<string, unknown> = {}) {
+    return bankWith([
+      {
+        id: 'budget',
+        kind: 'range',
+        prompt: 'How much?',
+        min: 0,
+        max: 500000,
+        step: 10000,
+        options: [{ id: 'not_sure', label: 'Not sure yet' }],
+        ...overrides,
+      },
+    ])
+  }
+
+  test('accepts a valid slider and keeps min, max, step and the escape option', () => {
+    const [q] = parseQuestionBank(slider(), IDS)
+    expect(q.kind).toBe('range')
+    expect([q.min, q.max, q.step]).toEqual([0, 500000, 10000])
+    expect(q.options.map((o) => o.id)).toEqual(['not_sure'])
+  })
+
+  test('the escape option is optional', () => {
+    const [q] = parseQuestionBank(slider({ options: undefined }), IDS)
+    expect(q.options).toEqual([])
+  })
+
+  test('throws when min, max or step is missing or not a number', () => {
+    expect(() => parseQuestionBank(slider({ min: undefined }), IDS)).toThrow(/budget.*min/)
+    expect(() => parseQuestionBank(slider({ max: '500K' }), IDS)).toThrow(/budget.*max/)
+    expect(() => parseQuestionBank(slider({ step: undefined }), IDS)).toThrow(/budget.*step/)
+  })
+
+  test('throws when min is not below max', () => {
+    expect(() => parseQuestionBank(slider({ min: 500000 }), IDS)).toThrow(/budget.*min.*max/)
+  })
+
+  test('throws when step is zero or negative', () => {
+    expect(() => parseQuestionBank(slider({ step: 0 }), IDS)).toThrow(/budget.*step/)
+    expect(() => parseQuestionBank(slider({ step: -5 }), IDS)).toThrow(/budget.*step/)
+  })
+
+  test('throws when the slider cannot land exactly on max', () => {
+    expect(() => parseQuestionBank(slider({ step: 30000 }), IDS)).toThrow(/budget.*step/)
+  })
 })
