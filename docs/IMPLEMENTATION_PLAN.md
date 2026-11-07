@@ -148,7 +148,7 @@ Work test-first: for each step, write or update the failing test, then change th
 
 ### Phase 2: Logic (no screens)
 - [x] `lib/questionnaire/derived.ts`: `deriveValues(answers)` returns `household_min_age` and `adult_count` (18 and over) from the household repeater (null when no ages are entered)
-- [ ] `lib/questionnaire/visibility.ts`: `isVisible(condition, answers, derived)` for every condition shape; `visibleSteps`, `visibleQuestions` and `visibleOptions` built on it
+- [x] `lib/questionnaire/visibility.ts`: `matches(condition, answers, derived)` for every condition shape; `visibleSteps` (each step with its visible questions and the answer choices on offer) and `visibleAnswers` (answers to visible questions only) built on one walk through the questionnaire in order, so a leftover answer to a hidden question never opens its follow-ups
 - [ ] `lib/questionnaire/navigation.ts`: next and previous **visible** step, and "Step 4 of 11" progress that recalculates as answers change
 - [ ] `lib/questionnaire/validate.ts`: list problems: required visible questions unanswered, answers that are not a visible option, too many repeater entries, an image pick that is not in its set or the same image as favourite and least favourite. Hidden questions are never required
 - [ ] `lib/questionnaire/output.ts`: build the output: answers grouped by visible step, each question marked `answered`, `skipped` (visible but blank) or `hidden` (by a rule); empty repeater cards removed; hidden answers left out even though the screen keeps them in case the client switches back; seconds spent on each step
@@ -162,12 +162,12 @@ Work test-first: for each step, write or update the failing test, then change th
 - [ ] `app/team/questionnaire/[id]/page.tsx`: the team view for each persona, linked from `app/team/page.tsx`
 
 ### Phase 4: Tests and validation
-- [ ] Loader tests: the real file loads; each mistake listed in Phase 1 throws a message naming the step or question
-- [ ] Derived value tests: youngest age and adult count from the household repeater, and the empty case
-- [ ] Visibility tests: each condition shape; no pets skips the Pets step; a child under 18 shows the Kids step; furniture/styling hides square footage, contractor and Green/LEED; the spaces list is filtered by project type
+- [x] Loader tests: the real file loads; each mistake listed in Phase 1 throws a message naming the step or question (written with Phase 1)
+- [x] Derived value tests: youngest age and adult count from the household repeater, and the empty case (written with Phase 2)
+- [x] Visibility tests: each condition shape; no pets skips the Pets step; a child under 18 shows the Kids step; furniture/styling hides square footage, contractor and Green/LEED; the spaces list is filtered by project type (written with Phase 2)
 - [ ] Navigation tests: Back returns to the previous visible step; the total steps change when a branch changes
 - [ ] Output tests: hidden answers are left out after switching "yes" to "no", and come back if switched to "yes" again before submitting; empty repeater cards are dropped; skipped and hidden are marked differently; text is plain ASCII
-- [ ] Persona tests (QUESTIONNAIRE_DISCOVERY pass criteria): each persona sees exactly the steps its note lists, and no visible step shows more than 7 inputs
+- [x] Persona tests (QUESTIONNAIRE_DISCOVERY pass criteria): each persona sees exactly the steps its note lists, and no visible step shows more than 7 inputs (Everyday may show 8, see DECISIONS.md) (written with Phase 2, in `visibility.test.ts`)
 - [ ] Component tests: answering "No" to pets removes the Pets step from the progress count; an inline branch appears on the same step; Next is blocked only for contact and project type; "Add another" adds a card; favourite and least favourite can be picked
 - [ ] Run `npm run lint`, `npm test` and `npm run build`, and click through `/questionnaire` on a computer and on a phone
 
