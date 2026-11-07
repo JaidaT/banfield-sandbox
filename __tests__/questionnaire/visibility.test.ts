@@ -68,7 +68,7 @@ describe('visibleSteps on the real questionnaire', () => {
     expect(stepIds({ hosting_frequency: 'never' })).not.toContain('entertaining')
   })
 
-    test('"Any kids?" Yes shows Kids, even with no ages filled in', () => {
+  test('"Any kids?" Yes shows Kids, even with no ages filled in', () => {
     expect(stepIds({ has_kids: 'yes' })).toContain('kids')
     expect(stepIds({ has_kids: 'yes', people: [{ age: 40 }] })).toContain('kids')
     expect(stepIds({ has_kids: 'no' })).not.toContain('kids')
@@ -76,7 +76,6 @@ describe('visibleSteps on the real questionnaire', () => {
     expect(stepIds({ people: [{ age: 40 }, { age: 7 }] })).toContain('kids')
     expect(stepIds({ has_kids: 'no', people: [{ age: 40 }, { age: 7 }] })).toContain('kids')
   })
-
 
   test('furniture and styling hides square feet, contractor and Green/LEED', () => {
     const furniture = { project_type: 'furniture_styling' }

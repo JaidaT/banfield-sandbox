@@ -65,7 +65,12 @@ describe('questionnaire.json', () => {
 
   test('the big branches skip whole steps', () => {
     const step = (id: string) => questionnaire.steps.find((s) => s.id === id)?.showIf
-    expect(step('kids')).toEqual({ field: 'household_min_age', lessThan: 18 })
+    expect(step('kids')).toEqual({
+      any: [
+        { field: 'has_kids', equals: 'yes' },
+        { field: 'household_min_age', lessThan: 18 },
+      ],
+    })
     expect(step('pets')).toEqual({ field: 'has_pets', equals: 'yes' })
     // Only "Never" skips Entertaining.
     expect(step('entertaining')).toEqual({

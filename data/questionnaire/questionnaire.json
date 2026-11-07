@@ -235,6 +235,17 @@
             { "id": "occupation", "kind": "short_text", "prompt": "What they do", "help": "Optional: job, school, retired..." }
           ]
         },
+
+        {
+          "id": "has_kids",
+          "kind": "single",
+          "prompt": "Any kids living here or staying often?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "no", "label": "No" }
+          ]
+        },
+
         {
           "id": "considerations",
           "kind": "multi",
@@ -275,7 +286,12 @@
     {
       "id": "kids",
       "title": "Kids",
-      "showIf": { "field": "household_min_age", "lessThan": 18 },
+      "showIf": {
+        "any": [
+          { "field": "has_kids", "equals": "yes" },
+          { "field": "household_min_age", "lessThan": 18 }
+        ]
+      },
       "questions": [
         {
           "id": "kids",

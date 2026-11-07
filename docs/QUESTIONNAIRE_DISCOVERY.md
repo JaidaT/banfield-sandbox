@@ -137,8 +137,8 @@ Note: the live web page only shows the intro text and 6 style image sets. The fo
 | 2 | The project | Project type, spaces involved, sq ft, age of home, timeline + critical date + why, years lived / planning to stay | Always | Every space offered for every project type (team decision 2026-11-06; was "filtered by project type"). Sq ft and age hidden for furniture/styling. |
 | 3 | Investment & team | Overall investment, portion set aside for design, contractor? | Always | Contractor yes: name, company, phone, email. Contractor hidden for furniture/styling. |
 | 4 | About working together | Decision makers, detail orientation, excited about, nervous about, past designer + how it went | Always | Past designer yes: how it went |
-| 5 | Household | Who lives here (repeater: name, age), special considerations (checkboxes + note), daytime sleepers, any pets? | Always | - |
-| 6 | Kids | Per child: activities, what their space needs | Any household member under 18 | - |
+| 5 | Household | Who lives here (repeater: name, age), any kids living here or staying often?, special considerations (checkboxes + note), daytime sleepers, any pets? | Always | - |
+| 6 | Kids | Per child: activities, what their space needs | "Any kids?" is yes (asked on step 5), or any household member is under 18 (team decision 2026-11-07) | - |
 | 7 | Pets | Repeater: name, type. Allowed on furniture? Roam everywhere? Durability concerns | "Any pets?" is yes (asked on step 5) | - |
 | 8 | Everyday life | Your morning, where meals happen, storage pain points, work from home, family activities (repeater) | Always | Work from home yes: requirements |
 | 9 | Entertaining | Style, casual/formal, enough space, what you need | "How often do people come over?" is not "Rarely" | - |
