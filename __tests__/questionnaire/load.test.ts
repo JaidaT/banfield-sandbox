@@ -95,6 +95,15 @@ describe('parseQuestionnaire: valid files', () => {
     expect(q.steps[1].questions[0].options).toEqual([])
   })
 
+  test('keeps an optional picture on an answer option', () => {
+    const raw = withChange((r) => {
+      ;(firstQuestion(r).options as Record<string, unknown>[])[0].image = '/questionnaire/style-rustic.svg'
+    })
+    const options = parseQuestionnaire(raw).steps[0].questions[0].options
+    expect(options[0].image).toBe('/questionnaire/style-rustic.svg')
+    expect(options[1].image).toBeUndefined()
+  })
+
   test('accepts atLeast on a number or derived value', () => {
     const raw = withChange((r) => {
       ;(r.steps[2] as Record<string, unknown>).showIf = { field: 'adult_count', atLeast: 2 }
@@ -160,6 +169,13 @@ describe('parseQuestionnaire: mistakes in the file', () => {
       firstQuestion(r).options = [{ id: 'a', label: 'A' }, { id: 'a', label: 'Also A' }]
     })
     expect(() => parseQuestionnaire(dup)).toThrow(/project_type.*duplicate.*a/i)
+  })
+
+  test('throws on an option picture that is not a path', () => {
+    const raw = withChange((r) => {
+      ;(firstQuestion(r).options as Record<string, unknown>[])[0].image = ''
+    })
+    expect(() => parseQuestionnaire(raw)).toThrow(/project_type.*furniture_styling.*image/)
   })
 
   test('throws on a repeater without fields, inside another repeater, or with a bad max', () => {

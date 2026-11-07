@@ -79,3 +79,8 @@
 **Context:** The shared-taste question shows only when 2 or more adults live in the home. Rules could say "less than" a number but not "this number or more".
 **Decision:** Add `atLeast` (the value or above) for number questions and derived values, next to `lessThan`.
 **Alternatives considered:** Write it as "not less than 2" (rejected because there is no "not" in the rules, and adding one is harder to read than one more word); use `lessThan` with flipped logic elsewhere (not possible for this rule).
+
+## 2026-11-06 - Style names come back, each with a photo
+**Context:** QUESTIONNAIRE_DISCOVERY P5 suggested removing the current form's "What do you consider your style?" question because style names are jargon. The team wants to keep it, using the current form's wording and its 9 styles.
+**Decision:** Answer options may carry an optional `image` (a path under public/). The style question is a multi choice where each style shows a photo next to its name, so the picture explains the jargon. The prototype uses grey placeholders; real photos should come from Banfield's own portfolio. Supersedes the "Design style: Remove" row of the QUESTIONNAIRE_DISCOVERY form audit.
+**Alternatives considered:** Image sets only, with no names (rejected because the team wants to match the current form); names only (rejected because of P5); a new question kind for picture choices (rejected because one optional field on options is smaller to build and explain).

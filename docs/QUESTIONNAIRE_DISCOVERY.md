@@ -115,7 +115,7 @@ From Oct 9 and Oct 28:
 | Work from home + requirements | Gate + inline reveal. Drop "fax". | 8 Everyday life |
 | Travel (yes, purpose, frequency, collect, favourite places) | Gate + inline reveal. | 10 Travel & taste |
 | Your home (first word current/new, current/desired style, love/don't love) | Keep the first-word questions. Drop the style-name questions (P5). Add "What does home mean to you?" and "What is your morning like?". | 11 Your home, in words |
-| Design style (circle style labels) | **Remove.** Replaced by image sets. | 12 Style by pictures |
+| Design style (circle style labels) | Keep, with a photo for each style (team decision 2026-11-06; was "Remove"). | 12 Style by pictures |
 | Favourite piece, public place you love | Keep. | 10 Travel & taste |
 | Green/LEED | Keep. Hide for furniture/styling. | 12 Style by pictures |
 | Wish list, specific features | Keep. | 13 Wish list |

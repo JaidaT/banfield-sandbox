@@ -114,6 +114,10 @@ function parseOptions(raw: unknown, name: string, ctx: RuleContext, rulesAllowed
     if (seen.has(entry.id)) throw new Error(`${name} has duplicate option id: ${entry.id}`)
     seen.add(entry.id)
     const option: AnswerOption = { id: entry.id, label: entry.label }
+    if (entry.image !== undefined) {
+      if (!nonEmptyString(entry.image)) throw new Error(`${name} option ${entry.id} "image" must be a picture path`)
+      option.image = entry.image
+    }
     if (entry.showIf !== undefined) {
       if (!rulesAllowed) throw new Error(`${name}: rules inside a repeater card are not supported yet`)
       option.showIf = parseCondition(entry.showIf, `${name} option ${entry.id}`, ctx)

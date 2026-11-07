@@ -35,6 +35,9 @@ export type Condition = FieldCondition | { any: FieldCondition[] } | { all: Fiel
 export interface AnswerOption {
   id: string
   label: string
+  // Optional picture shown with the label, a path under public/
+  // (e.g. the style question). Leave it out for words-only choices.
+  image?: string
   // Option filter: only offered when this matches (e.g. spaces by project type).
   showIf?: Condition
 }
