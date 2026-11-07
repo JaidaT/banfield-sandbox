@@ -39,6 +39,9 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   // True after "Edit" on the review screen, to offer "Back to review".
   const [returnToReview, setReturnToReview] = useState(false)
 
+  // Goes up each time Next or Submit is blocked, so the cursor can jumpt to the first problem
+  const [blockedCount, setBlockedCount] = useState(0)
+
   const hasMoved = useRef(false)
   const headingRef = useRef<HTMLHeadingElement>(null)
 
@@ -47,6 +50,16 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   useEffect(() => {
     if (hasMoved.current) headingRef.current?.focus()
   }, [current])
+
+  // After a blocked Next, put the cursor in the first box with a problem
+  // The browsers scrolls to it, and screen readers read out its message
+  useEffect(() => {
+    if (blockedCount === 0) return
+    const first = document.querySelector<HTMLElement>(
+      'input[aria-invalid="true"], textarea[aria-invalid="true"], fieldset[aria-invalid="true"] input',
+    )
+    first?.focus()
+  }, [blockedCount])
 
   function problemsHere() {
     return current === REVIEW ? allProblems(questionnaire, answers) : stepProblems(questionnaire, answers, current)
@@ -62,6 +75,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   function leaveTo(target: string) {
     if (problemsHere().length > 0) {
       setShowProblems(true)
+      setBlockedCount((n) => n + 1)
       return
     }
     goTo(target)
