@@ -166,6 +166,8 @@ Work test-first: for each step, write the failing test, then change the code. Ea
   - Tests (`outputToText.test.ts`): heading, time and skipped steps; step headings; repeater cards on one line; every persona is plain ASCII; phone punctuation is converted
 
 ### Phase 3: Wireframe screens
+- [x] `components/questionnaire/QuestionField.tsx`: one question with its label, hint and problem message, for text, long text, number, date, single choice (radio buttons) and multiple choice (tick boxes, with a picture when the choice has one). Repeater cards reuse it for their fields
+  - Tests (`__tests__/components/questionField.test.tsx`): each kind reports its answer; only choices on offer show; pictures show; a problem message is announced and marks the input
 - [ ] `app/questionnaire/page.tsx` and `components/questionnaire/QuestionnaireForm.tsx` (client component): a welcome screen, one step per screen, Back and Next between visible steps, "Step N of M" with a progress bar, fields appearing and disappearing on the same step as answers change, Next blocked with a plain message only when contact or project type is missing. Records time per step. Plain wireframe styling and the "Prototype - not the final design" label
   - Tests: answering "No" to pets removes the Pets step from the progress count; an inline follow-up appears on the same step; Next is blocked only for contact and project type
 - [ ] `components/questionnaire/Repeater.tsx`: "Add another" and "Remove" cards on one step
