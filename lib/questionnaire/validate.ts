@@ -9,7 +9,8 @@ export interface Problem {
   message: string
 }
 
-function isBlank(value: AnswerValue | undefined): boolean {
+// True for a missing answer, spaces only, an empty list or an empty object.
+export function isBlank(value: AnswerValue | undefined): boolean {
   if (value === undefined) return true
   if (typeof value === 'string') return value.trim() === ''
   if (typeof value === 'number') return false
