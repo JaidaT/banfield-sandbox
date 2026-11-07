@@ -1,7 +1,11 @@
 import questionnaireJson from '@/data/questionnaire/questionnaire.json'
+import sampleAnswersJson from '@/data/questionnaire/sample-answers.json'
 import { DERIVED_VALUES, QUESTION_KINDS } from './types'
 import type {
+  Answers,
+  AnswerValue,
   AnswerOption,
+  SampleHousehold,
   Condition,
   DerivedName,
   FieldCondition,
@@ -244,6 +248,102 @@ export function parseQuestionnaire(raw: unknown): Questionnaire {
 // The real questionnaire from data/questionnaire/questionnaire.json.
 export function loadQuestionnaire(): Questionnaire {
   return parseQuestionnaire(questionnaireJson as unknown)
+}
+
+// Checks one answer against its question. `where` names the sample and question.
+// Repeater cards and picture picks are checked inside; returns the answer as typed.
+function checkAnswer(question: Question, value: unknown, where: string): AnswerValue {
+  const optionIds = new Set(question.options.map((o) => o.id))
+  switch (question.kind) {
+    case 'short_text':
+    case 'long_text':
+    case 'date':
+      if (typeof value !== 'string') throw new Error(`${where} must be text`)
+      return value
+    case 'number':
+      if (typeof value !== 'number') throw new Error(`${where} must be a number`)
+      return value
+    case 'single':
+      if (typeof value !== 'string' || !optionIds.has(value)) {
+        throw new Error(`${where} has unknown answer ${String(value)}`)
+      }
+      return value
+    case 'multi':
+      if (!Array.isArray(value)) throw new Error(`${where} must be a list of answers`)
+      for (const v of value) {
+        if (typeof v !== 'string' || !optionIds.has(v)) throw new Error(`${where} has unknown answer ${String(v)}`)
+      }
+      return value as string[]
+    case 'repeater': {
+      if (!Array.isArray(value)) throw new Error(`${where} must be a list of cards`)
+      const fields = new Map((question.fields ?? []).map((f) => [f.id, f]))
+      return value.map((card: unknown, i: number) => {
+        if (!isRecord(card)) throw new Error(`${where} card ${i + 1} is not an object`)
+        for (const [key, v] of Object.entries(card)) {
+          const field = fields.get(key)
+          if (!field) throw new Error(`${where} card ${i + 1} has unknown field ${key}`)
+          checkAnswer(field, v, `${where} card ${i + 1} ${key}`)
+        }
+        return card as Record<string, string | number | string[]>
+      })
+    }
+    case 'pick_images': {
+      if (!isRecord(value)) throw new Error(`${where} must be an object keyed by image set`)
+      const sets = new Map((question.imageSets ?? []).map((s) => [s.id, new Set(s.images.map((img) => img.id))]))
+      for (const [setId, pick] of Object.entries(value)) {
+        const imageIds = sets.get(setId)
+        if (!imageIds) throw new Error(`${where} has unknown image set ${setId}`)
+        if (!isRecord(pick)) throw new Error(`${where} ${setId} must have "favourite" and/or "least"`)
+        for (const key of ['favourite', 'least'] as const) {
+          const id = pick[key]
+          if (id !== undefined && (typeof id !== 'string' || !imageIds.has(id))) {
+            throw new Error(`${where} ${setId} has unknown image ${String(id)}`)
+          }
+        }
+        if (pick.favourite !== undefined && pick.favourite === pick.least) {
+          throw new Error(`${where} ${setId} has the same image as favourite and least favourite`)
+        }
+      }
+      return value as Record<string, { favourite?: string; least?: string }>
+    }
+  }
+}
+
+// Validates the sample households so a typo in an answer fails with a message
+// naming the sample and question.
+export function parseSampleHouseholds(raw: unknown, questionnaire: Questionnaire): SampleHousehold[] {
+  if (!isRecord(raw) || !Array.isArray(raw.samples)) throw new Error('sample answers must have a "samples" list')
+  const questions = new Map(questionnaire.steps.flatMap((s) => s.questions).map((q) => [q.id, q]))
+  const stepIds = new Set(questionnaire.steps.map((s) => s.id))
+  const seen = new Set<string>()
+
+  return raw.samples.map((entry: unknown, index: number): SampleHousehold => {
+    if (!isRecord(entry) || !nonEmptyString(entry.id)) throw new Error(`sample at index ${index} is missing an "id"`)
+    const id = entry.id
+    if (seen.has(id)) throw new Error(`duplicate sample id: ${id}`)
+    seen.add(id)
+    if (!nonEmptyString(entry.label) || typeof entry.note !== 'string') {
+      throw new Error(`sample ${id} needs a "label" and a "note"`)
+    }
+    if (!Array.isArray(entry.expectedSteps)) throw new Error(`sample ${id} needs an "expectedSteps" list`)
+    for (const step of entry.expectedSteps) {
+      if (typeof step !== 'string' || !stepIds.has(step)) throw new Error(`sample ${id} expects unknown step ${String(step)}`)
+    }
+    if (!isRecord(entry.answers)) throw new Error(`sample ${id} needs an "answers" object`)
+
+    const answers: Answers = {}
+    for (const [questionId, value] of Object.entries(entry.answers)) {
+      const question = questions.get(questionId)
+      if (!question) throw new Error(`sample ${id} answers unknown question ${questionId}`)
+      answers[questionId] = checkAnswer(question, value, `sample ${id} question ${questionId}`)
+    }
+    return { id, label: entry.label, note: entry.note, expectedSteps: entry.expectedSteps as string[], answers }
+  })
+}
+
+// The made-up households from data/questionnaire/sample-answers.json.
+export function loadSampleHouseholds(): SampleHousehold[] {
+  return parseSampleHouseholds(sampleAnswersJson as unknown, loadQuestionnaire())
 }
 
 // Steps that would show more than 7 inputs if every question on them showed.

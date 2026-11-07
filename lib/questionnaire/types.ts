@@ -97,5 +97,15 @@ export type ImagePicks = Record<string, { favourite?: string; least?: string }>
 export type AnswerValue = string | number | string[] | RepeaterEntry[] | ImagePicks
 export type Answers = Record<string, AnswerValue>
 
+// A made-up household from data/questionnaire/sample-answers.json, used for
+// tests and the team pages. expectedSteps lists the step ids it should see.
+export interface SampleHousehold {
+  id: string
+  label: string
+  note: string
+  expectedSteps: string[]
+  answers: Answers
+}
+
 // null when the household repeater has no ages yet, so age rules do not match.
 export type DerivedValues = Record<DerivedName, number | null>
