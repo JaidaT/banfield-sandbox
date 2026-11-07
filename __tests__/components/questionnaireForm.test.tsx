@@ -42,6 +42,19 @@ describe('QuestionnaireForm', () => {
     expect(stepHeading()).toBe('The project')
   })
 
+  test('Next with a required box empty puts the cursor in the first one', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="contact" />)
+    screen.getByRole('button', { name: 'Next' }).focus()
+    click('Next')
+    expect(document.activeElement).toBe(screen.getByLabelText('Your name'))
+  })
+
+  test('for a pick-one question, the cursor goes to its first choice', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="project" />)
+    click('Next')
+    expect(document.activeElement).toBe(screen.getByLabelText('Furniture and styling'))
+  })
+
   test('Next is not blocked on a step with no required questions', () => {
     render(<QuestionnaireForm questionnaire={questionnaire} startAt="household" />)
     click('Next')
