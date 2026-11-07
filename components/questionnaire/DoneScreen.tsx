@@ -1,0 +1,26 @@
+import type { Ref } from 'react'
+import QuestionnaireTeamView from './QuestionnaireTeamView'
+import { HEADING } from './styles'
+import type { QuestionnaireOutput } from '@/lib/questionnaire/output'
+
+interface Props {
+  output: QuestionnaireOutput
+  headingRef: Ref<HTMLHeadingElement>
+}
+
+// The thank-you after Submit. Below a divider, the prototype also shows what
+// the team would receive (in the real product this would be sent, not shown).
+export default function DoneScreen({ output, headingRef }: Props) {
+  return (
+    <>
+      <h2 ref={headingRef} tabIndex={-1} className={HEADING}>
+        Thank you!
+      </h2>
+      <p>We will read through everything before we meet. Talk soon.</p>
+      <div className="mt-6 border-t-4 border-double border-neutral-400 pt-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-600">Team view (demo only)</p>
+        <QuestionnaireTeamView output={output} />
+      </div>
+    </>
+  )
+}
