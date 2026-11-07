@@ -176,8 +176,8 @@ Work test-first: for each step, write the failing test, then change the code. Ea
   - Tests (`__tests__/components/pickImages.test.tsx`): favourite and least favourite can be picked; one picture is never both; un-picking
 - [x] Review step ("Check your answers"): the answers grouped by step (`components/questionnaire/AnswersSummary.tsx`) with an "Edit" button for each step, and "Back to review" after editing; Submit, then a thank-you; below a "Team view (demo only)" divider, `components/questionnaire/QuestionnaireTeamView.tsx` with time taken, skipped steps, the answers and `components/CopyBriefButton.tsx` for "Copy as text"
   - Tests (`__tests__/components/questionnaireForm.test.tsx`): review shows answers in words; "Edit" returns to that step and "Back to review" comes straight back; Submit shows the thank-you and team view; the time spent is shown
-- [ ] `app/team/questionnaire/[id]/page.tsx`: the team view for each persona, linked from `app/team/page.tsx`
-  - Tests: each persona's page shows its name and skipped steps
+- [x] `app/team/questionnaire/[id]/page.tsx`: the team view for each persona, linked from `app/team/page.tsx` along with a "Try the full questionnaire" link to `/questionnaire`
+  - Tests (`__tests__/components/questionnaireTeamPages.test.tsx`): a page per persona; each shows its name, intended note and skipped steps; an unknown id is "not found"; the team page links to each persona and to the questionnaire
 
 ### Phase 4: Final checks
 - [ ] Run `npm run lint`, `npm test` and `npm run build`
