@@ -28,13 +28,15 @@ function matchesOne(condition: FieldCondition, answers: Answers, derived: Derive
   if ('equals' in condition) return value === condition.equals
   if ('in' in condition) return typeof value === 'string' && condition.in.includes(value)
   if ('includes' in condition) return Array.isArray(value) && (value as unknown[]).includes(condition.includes)
+  if ('excludes' in condition) return !Array.isArray(value) || !(value as unknown[]).includes(condition.excludes)
   // lessThan and atLeast: a missing number never matches.
   if (typeof value !== 'number') return false
   if ('lessThan' in condition) return value < condition.lessThan
   return value >= condition.atLeast
 }
 
-// True when the rule matches these answers. A missing answer never matches.
+// True when the rule matches these answers. A missing answer never matches,
+// except for "excludes", where a blank checkbox counts as not ticked.
 export function matches(condition: Condition, answers: Answers, derived: DerivedValues): boolean {
   if ('any' in condition) return condition.any.some((c) => matchesOne(c, answers, derived))
   return matchesOne(condition, answers, derived)

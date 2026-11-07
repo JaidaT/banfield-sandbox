@@ -16,7 +16,7 @@ import type {
   Step,
 } from './types'
 
-const OPERATORS = ['equals', 'in', 'includes', 'lessThan', 'atLeast'] as const
+const OPERATORS = ['equals', 'in', 'includes', 'excludes', 'lessThan', 'atLeast'] as const
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -35,7 +35,7 @@ interface RuleContext {
 function parseFieldCondition(raw: Record<string, unknown>, owner: string, ctx: RuleContext): FieldCondition {
   const used = OPERATORS.filter((op) => op in raw)
   if (!nonEmptyString(raw.field) || used.length !== 1) {
-    throw new Error(`${owner} rule must name a "field" and use exactly one of equals, in, includes, lessThan or atLeast`)
+    throw new Error(`${owner} rule must name a "field" and use exactly one of equals, in, includes, excludes, lessThan or atLeast`)
   }
   const field = raw.field
   const op = used[0]
@@ -82,9 +82,15 @@ function parseFieldCondition(raw: Record<string, unknown>, owner: string, ctx: R
     throw wrongFit()
   }
   if (kind === 'multi') {
-    if (op !== 'includes') throw wrongFit()
-    checkOption(raw.includes)
-    return { field, includes: raw.includes as string }
+    if (op === 'includes') {
+      checkOption(raw.includes)
+      return { field, includes: raw.includes as string }
+    }
+    if (op === 'excludes') {
+      checkOption(raw.excludes)
+      return { field, excludes: raw.excludes as string }
+    }
+    throw wrongFit()
   }
   throw new Error(`${owner} rule cannot depend on ${field} (a ${kind} question)`)
 }

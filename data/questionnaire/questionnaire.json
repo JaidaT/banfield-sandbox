@@ -35,9 +35,54 @@
             { "id": "text", "label": "Text" }
           ]
         },
-        { "id": "current_address", "kind": "short_text", "prompt": "Where do you live now?", "help": "Street, city and postal code." },
+        { "id": "home_country", "kind": "short_text", "prompt": "Country" },
+        { "id": "home_address_1", "kind": "short_text", "prompt": "Address Line 1", "help": "Your current home address." },
+        { "id": "home_address_2", "kind": "short_text", "prompt": "Address Line 2", "help": "Apartment, suite or unit, if any." },
+        { "id": "home_city", "kind": "short_text", "prompt": "City" },
+        { "id": "home_province", "kind": "short_text", "prompt": "Province" },
+        { "id": "home_postal_code", "kind": "short_text", "prompt": "Postal Code" },
+        
+
+        { 
+          "id": "same_mailing_address",
+          "kind": "multi",
+          "prompt": "Mailing address",
+          "options": [
+            { "id": "same", "label": "Same as my home address" }
+          ]
+        },
+
+        { "id": "mailing_country", "kind": "short_text", "prompt": "Country", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
+        { "id": "mailing_address_1", "kind": "short_text", "prompt": "Address Line 1", "help": "Your current mailing address", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
+        { "id": "mailing_address_2", "kind": "short_text", "prompt": "Address Line 2", "help": "Apartment, suite or unit, if any.", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
+        { "id": "mailing_city", "kind": "short_text", "prompt": "City", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
+        { "id": "mailing_province", "kind": "short_text", "prompt": "Province", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
+        { "id": "mailing_postal_code", "kind": "short_text", "prompt": "Postal Code", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
+
+
         { "id": "project_address", "kind": "short_text", "prompt": "Where is the project?", "help": "Leave blank if it's the same as above." },
-        { "id": "mailing_address", "kind": "short_text", "prompt": "Mailing address", "help": "Leave blank if it's the same." }
+
+        { 
+          "id": "referral_source", 
+          "kind": "single", 
+          "prompt": "How did you hear about Banfield Design Co.?", 
+          "options": [
+            { "id": "instagram", "label": "Instagram" },
+            { "id": "pinterest", "label": "Pinterest" },
+            { "id": "google", "label": "Google" },
+            { "id": "houzz", "label": "Houzz" },
+            { "id": "friend_family", "label": "A friend or family member" },
+            { "id": "past_client", "label": "We've worked together before" },
+            { "id": "other", "label": "Somewhere else" }
+          ]
+        },
+        { 
+          "id": "referral_details",
+          "kind": "short_text",
+          "prompt": "Who can we thank?",
+          "help": "Who sent you our way, or where you found us.",
+          "showIf": { "field": "referral_source", "in": ["friend_family", "other"] }
+        }
       ]
     },
     {
@@ -573,6 +618,12 @@
           "kind": "long_text",
           "prompt": "If so, where would you like to include it, or what would you like to learn more about?",
           "showIf": { "field": "green_design", "in": ["yes", "maybe_info", "maybe_cost"] }
+        },
+        {
+          "id": "inspiration_links",
+          "kind": "long_text",
+          "prompt": "Got inspiration? Share links to photos, Pinterest boards, mood boards, etc.",
+          "help": "Paste one link per line"
         },
         { "id": "anything_else", "kind": "long_text", "prompt": "Anything else we missed?", "help": "Big or small, we want to hear it." }
       ]

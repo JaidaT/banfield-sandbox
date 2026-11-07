@@ -22,6 +22,13 @@ describe('matches: each rule shape', () => {
     expect(matches({ field: 'rooms', includes: 'basement' }, answers, noDerived)).toBe(false)
   })
 
+  test('excludes: matches when the option is not ticked, including a blank answer', () => {
+    expect(matches({ field: 'rooms', excludes: 'basement' }, answers, noDerived)).toBe(true)
+    expect(matches({ field: 'rooms', excludes: 'kitchen' }, answers, noDerived)).toBe(false)
+    expect(matches({ field: 'rooms', excludes: 'kitchen' }, {}, noDerived)).toBe(true)
+    expect(matches({ field: 'rooms', excludes: 'kitchen' }, { rooms: [] }, noDerived)).toBe(true)
+  })
+
   test('lessThan and atLeast, on answers and derived values', () => {
     expect(matches({ field: 'size', lessThan: 1500 }, answers, noDerived)).toBe(true)
     expect(matches({ field: 'size', atLeast: 1200 }, answers, noDerived)).toBe(true)
@@ -38,7 +45,7 @@ describe('matches: each rule shape', () => {
     expect(matches({ any: [no, no] }, answers, noDerived)).toBe(false)
   })
 
-  test('a missing answer or an empty household never matches', () => {
+  test('a missing answer never matches equals, in, includes or numbers', () => {
     expect(matches({ field: 'type', equals: 'renovation' }, {}, noDerived)).toBe(false)
     expect(matches({ field: 'size', lessThan: 5000 }, {}, noDerived)).toBe(false)
     expect(matches({ field: 'household_min_age', lessThan: 18 }, {}, noDerived)).toBe(false)
@@ -84,6 +91,11 @@ describe('visibleSteps on the real questionnaire', () => {
     expect(questionIds({ people: [{ age: 34 }, { age: 36 }] }, 'style')).toContain('shared_taste')
   })
 
+  test('mailing address boxes show unless "same as home" is ticked', () => {
+    expect(questionIds({}, 'contact')).toContain('mailing_country')
+    expect(questionIds({ same_mailing_address: ['same'] }, 'contact')).not.toContain('mailing_country')
+  })
+
   test('a leftover answer to a hidden question does not open its follow-ups', () => {
     // Said Yes to a contractor on a renovation, then switched to furniture.
     const answers = { project_type: 'furniture_styling', has_contractor: 'yes' }
@@ -118,9 +130,10 @@ describe('sample households (QUESTIONNAIRE_DISCOVERY pass criteria)', () => {
       expect(stepIds(sample.answers)).toEqual(sample.expectedSteps)
     })
 
-    test(`${sample.label} sees at most 7 inputs per step (Everyday may reach 8, see DECISIONS.md)`, () => {
+    test(`${sample.label} sees at most 7 inputs per step (Contact may reach 20, Everyday 8, see DECISIONS.md)`, () => {
       for (const { step, questions } of visibleSteps(questionnaire, sample.answers)) {
-        expect(questions.length, step.id).toBeLessThanOrEqual(step.id === 'everyday' ? 8 : 7)
+        const limit = step.id === 'contact' ? 20 : step.id === 'everyday' ? 8 : 7
+        expect(questions.length, step.id).toBeLessThanOrEqual(limit)
       }
     })
 

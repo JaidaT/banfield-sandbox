@@ -18,12 +18,14 @@ export const DERIVED_VALUES = ['household_min_age', 'adult_count'] as const
 export type DerivedName = (typeof DERIVED_VALUES)[number]
 
 // One check against an earlier answer or a derived value. Exactly one of
-// equals, in, includes, lessThan or atLeast is used.
+// equals, in, includes, excludes, lessThan or atLeast is used.
 export type FieldCondition =
   | { field: string; equals: string | number }
   | { field: string; in: string[] }
   // For multi-choice answers: the person ticked this option.
   | { field: string; includes: string }
+  // For multi-choice answers: this person did NOT tick this option (blank counts).
+  | { field: string; excludes: string}
   // For numbers: below the value, or the value and above.
   | { field: string; lessThan: number }
   | { field: string; atLeast: number }
