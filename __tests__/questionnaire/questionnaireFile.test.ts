@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire } from '@/lib/questionnaire/load'
 
@@ -74,6 +76,15 @@ describe('questionnaire.json', () => {
 
   test('shared taste only shows for 2 or more adults', () => {
     expect(question('shared_taste').showIf).toEqual({ field: 'adult_count', atLeast: 2 })
+  })
+
+  test('every picture named in the file exists in public/', () => {
+    const paths = allQuestions.flatMap((q) => [
+      ...q.options.flatMap((o) => (o.image ? [o.image] : [])),
+      ...(q.imageSets ?? []).flatMap((set) => set.images.map((img) => img.src)),
+    ])
+    expect(paths.length).toBe(17)
+    for (const p of paths) expect(existsSync(join(process.cwd(), 'public', p)), p).toBe(true)
   })
 
   test('text has no special characters (plain ASCII only)', () => {
