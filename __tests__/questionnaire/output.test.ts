@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
-import { buildOutput } from '@/lib/questionnaire/output'
+import { buildOutput, contactName } from '@/lib/questionnaire/output'
 import type { Answers } from '@/lib/questionnaire/types'
 import type { OutputAnswer, QuestionnaireOutput } from '@/lib/questionnaire/output'
 
@@ -70,6 +70,11 @@ describe('buildOutput', () => {
     expect(find(some, 'people')?.cards).toEqual([[{ label: 'Name', value: 'Pat' }, { label: 'Age', value: '30' }]])
     const none = buildOutput(questionnaire, { people: [{ name: '', occupation: ' ' }] })
     expect(find(none, 'people')).toEqual({ id: 'people', prompt: 'Who lives here?', status: 'skipped' })
+  })
+
+  test('contactName finds the name from the contact step, or nothing if skipped', () => {
+    expect(contactName(buildOutput(questionnaire, { name: 'Pat Example' }))).toBe('Pat Example')
+    expect(contactName(buildOutput(questionnaire, {}))).toBeUndefined()
   })
 
   test('the welcome step is left out because it has no questions', () => {

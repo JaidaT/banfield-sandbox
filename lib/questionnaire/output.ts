@@ -112,3 +112,16 @@ export function buildOutput(questionnaire: Questionnaire, answers: Answers): Que
     skippedSteps: questionnaire.steps.filter((s) => !shownStepIds.has(s.id)).map((s) => s.title),
   }
 }
+
+// The contact name question in questionnaire.json. If its id changes there,
+// change it here too.
+const NAME_QUESTION = 'name'
+
+// The person's name from the contact step, or undefined if they skipped it.
+export function contactName(output: QuestionnaireOutput): string | undefined {
+  for (const step of output.steps) {
+    const answer = step.answers.find((a) => a.id === NAME_QUESTION)
+    if (answer) return answer.value
+  }
+  return undefined
+}

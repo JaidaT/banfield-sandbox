@@ -1,7 +1,5 @@
+import { contactName } from './output'
 import type { OutputAnswer, QuestionnaireOutput } from './output'
-
-// The contact name question in questionnaire.json, used for the heading.
-const NAME_QUESTION = 'name'
 
 // Phones often type curly quotes, long dashes and a one-character "...".
 // These become plain characters. Accented letters (Rene with an accent) are
@@ -25,9 +23,8 @@ function answerLines(answer: OutputAnswer): string[] {
 // Plain-text version of the questionnaire output, for "Copy as text".
 // Hidden questions are left out; skipped ones say "(skipped)".
 export function outputToText(output: QuestionnaireOutput): string {
-  const name = output.steps.flatMap((s) => s.answers).find((a) => a.id === NAME_QUESTION)?.value
   const lines: string[] = [
-    `GET TO KNOW YOU: ${name ?? 'No name given'}`,
+    `GET TO KNOW YOU: ${contactName(output) ?? 'No name given'}`,
     `Steps skipped: ${output.skippedSteps.length === 0 ? 'none' : output.skippedSteps.join(', ')}`,
   ]
 

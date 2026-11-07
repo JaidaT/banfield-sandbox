@@ -4,7 +4,7 @@ import QuestionnaireTeamView from "@/components/questionnaire/QuestionnaireTeamV
 import { HEADING, HINT } from "@/components/questionnaire/styles";
 import WireframePage from "@/components/questionnaire/WireframePage";
 import { loadQuestionnaire, loadSampleHouseholds } from "@/lib/questionnaire/load";
-import { buildOutput } from "@/lib/questionnaire/output";
+import { buildOutput, contactName } from "@/lib/questionnaire/output";
 
 export function generateStaticParams() {
   return loadSampleHouseholds().map((s) => ({ id: s.id }));
@@ -17,7 +17,7 @@ export default async function HouseholdPage({ params }: PageProps<"/team/questio
   const sample = loadSampleHouseholds().find((s) => s.id === id);
   if (!sample) notFound();
   const output = buildOutput(loadQuestionnaire(), sample.answers);
-  const name = output.steps.flatMap((s) => s.answers).find((a) => a.id === "name")?.value ?? sample.label;
+  const name = contactName(output) ?? sample.label;
 
   return (
     <WireframePage banner="Team only - sample household - not the final design">
