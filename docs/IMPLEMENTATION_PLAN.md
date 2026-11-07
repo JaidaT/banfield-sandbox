@@ -170,8 +170,8 @@ Work test-first: for each step, write the failing test, then change the code. Ea
   - Tests (`__tests__/components/questionField.test.tsx`): each kind reports its answer; only choices on offer show; pictures show; a problem message is announced and marks the input
 - [ ] `app/questionnaire/page.tsx` and `components/questionnaire/QuestionnaireForm.tsx` (client component): a welcome screen, one step per screen, Back and Next between visible steps, "Step N of M" with a progress bar, fields appearing and disappearing on the same step as answers change, Next blocked with a plain message only when contact or project type is missing. Records time per step. Plain wireframe styling and the "Prototype - not the final design" label
   - Tests: answering "No" to pets removes the Pets step from the progress count; an inline follow-up appears on the same step; Next is blocked only for contact and project type
-- [ ] `components/questionnaire/Repeater.tsx`: "Add another" and "Remove" cards on one step
-  - Tests: "Add another" adds a card; "Remove" removes it
+- [x] `components/questionnaire/Repeater.tsx`: "Add another" and "Remove" cards on one step, starting with one empty card; the add button turns off at the limit
+  - Tests (`__tests__/components/repeater.test.tsx`): "Add another" adds a card; "Remove" removes it and keeps the others; typing stores the card; the limit
 - [ ] `components/questionnaire/PickImages.tsx`: pick a favourite and a least favourite from each placeholder set, with buttons that work on a phone
   - Tests: favourite and least favourite can be picked
 - [ ] Review step: the answers grouped by step with an "Edit" link back to each step, then a thank-you; below a "Team view (demo only)" divider, the output with `components/CopyBriefButton.tsx` for "Copy as text"
