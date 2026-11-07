@@ -172,8 +172,8 @@ Work test-first: for each step, write the failing test, then change the code. Ea
   - Tests: answering "No" to pets removes the Pets step from the progress count; an inline follow-up appears on the same step; Next is blocked only for contact and project type
 - [x] `components/questionnaire/Repeater.tsx`: "Add another" and "Remove" cards on one step, starting with one empty card; the add button turns off at the limit
   - Tests (`__tests__/components/repeater.test.tsx`): "Add another" adds a card; "Remove" removes it and keeps the others; typing stores the card; the limit
-- [ ] `components/questionnaire/PickImages.tsx`: pick a favourite and a least favourite from each placeholder set, with buttons that work on a phone
-  - Tests: favourite and least favourite can be picked
+- [x] `components/questionnaire/PickImages.tsx`: pick a favourite and a least favourite from each placeholder set, with big "Favourite" and "Least favourite" buttons under each picture that work on a phone. Picking a picture for the other role moves it, and tapping again un-picks
+  - Tests (`__tests__/components/pickImages.test.tsx`): favourite and least favourite can be picked; one picture is never both; un-picking
 - [ ] Review step: the answers grouped by step with an "Edit" link back to each step, then a thank-you; below a "Team view (demo only)" divider, the output with `components/CopyBriefButton.tsx` for "Copy as text"
   - Tests: "Edit" returns to that step; the team view shows the output text
 - [ ] `app/team/questionnaire/[id]/page.tsx`: the team view for each persona, linked from `app/team/page.tsx`
