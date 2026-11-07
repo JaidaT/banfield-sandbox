@@ -99,7 +99,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
     input = (
       <input
         id={id}
-        type={question.kind === 'date' ? 'date' : 'text'}
+        type="text"
         value={typeof value === 'string' ? value : ''}
         onChange={(e) => onChange(e.target.value)}
         className={INPUT_CLASS}

@@ -7,7 +7,6 @@ export const QUESTION_KINDS = [
   'single',
   'multi',
   'number',
-  'date',
   'repeater',
   'pick_images',
 ] as const
@@ -29,8 +28,9 @@ export type FieldCondition =
   | { field: string; lessThan: number }
   | { field: string; atLeast: number }
 
-// At most one level of any/all, so rules stay readable.
-export type Condition = FieldCondition | { any: FieldCondition[] } | { all: FieldCondition[] }
+// A plain rule, or "any": matches when at least one of its rules matches.
+// One level only, so rules stay readable.
+export type Condition = FieldCondition | { any: FieldCondition[] }
 
 export interface AnswerOption {
   id: string
@@ -91,7 +91,7 @@ export type RepeaterEntry = Record<string, string | number | string[]>
 // pick_images answers, keyed by image set id.
 export type ImagePicks = Record<string, { favourite?: string; least?: string }>
 
-// Text, choice and date answers are strings; number answers are numbers;
+// Text and choice answers are strings; number answers are numbers;
 // multi-choice answers are lists of option ids. A missing key means unanswered.
 export type AnswerValue = string | number | string[] | RepeaterEntry[] | ImagePicks
 export type Answers = Record<string, AnswerValue>

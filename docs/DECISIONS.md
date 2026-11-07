@@ -94,3 +94,8 @@
 **Context:** The long questionnaire recorded seconds spent on each step and showed the total and per-step times in the team view and the copied text. The team decided this is not wanted for the long questionnaire.
 **Decision:** The long questionnaire records no time. `buildOutput` takes only the questionnaire and the answers, and the team view and "Copy as text" no longer show times. The Quick Quiz keeps its completion-time note unchanged (see 2026-10-26 - Completion-time signals are note-only until validated).
 **Alternatives considered:** Keep recording time but hide it (rejected because unused tracking is extra code and collects data nobody asked for).
+
+## 2026-11-07 - Remove unused questionnaire features
+**Context:** The team asked for the long questionnaire code to be as easy as possible for beginners to understand. Three features were built but nothing used them: the `date` question kind, the `all` rule ("show if A and B"), and `stepSizeWarnings`, which only ran in its own test.
+**Decision:** All three are removed. The loader now rejects `"kind": "date"` as an unknown kind and an `all` rule with a message saying it is not supported. The 7-input limit (2026-11-06 - At most 7 inputs per step) is still checked by the persona tests in `visibility.test.ts`. Each can be added back from git history if a real question needs it.
+**Alternatives considered:** Keep them for later (rejected because unused code is extra reading and testing for beginners, and none is hard to add back).

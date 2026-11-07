@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { parseQuestionnaire, stepSizeWarnings } from '@/lib/questionnaire/load'
+import { parseQuestionnaire } from '@/lib/questionnaire/load'
 
 // A small valid questionnaire; each test changes one thing to break it.
 function base() {
@@ -111,7 +111,7 @@ describe('parseQuestionnaire: valid files', () => {
     expect(parseQuestionnaire(raw).steps[2].showIf).toEqual({ field: 'adult_count', atLeast: 2 })
   })
 
-  test('accepts in, includes, any and all conditions', () => {
+  test('accepts in, includes and any conditions', () => {
     const raw = withChange((r) => {
       r.steps[0].questions.push(
         {
@@ -130,9 +130,6 @@ describe('parseQuestionnaire: valid files', () => {
           showIf: { any: [{ field: 'rooms', includes: 'kitchen' }, { field: 'project_type', equals: 'renovation' }] },
         } as never,
       )
-      ;(r.steps[2] as Record<string, unknown>).showIf = {
-        all: [{ field: 'household_min_age', lessThan: 18 }, { field: 'adult_count', lessThan: 3 }],
-      }
     })
     const q = parseQuestionnaire(raw)
     expect(q.steps[0].questions[3].showIf).toEqual({
@@ -158,6 +155,8 @@ describe('parseQuestionnaire: mistakes in the file', () => {
 
   test('throws on an unknown kind or a missing prompt', () => {
     expect(() => parseQuestionnaire(withChange((r) => { firstQuestion(r).kind = 'slider' }))).toThrow(/project_type.*slider/)
+    // "date" was removed 2026-11-07 because no question used it.
+    expect(() => parseQuestionnaire(withChange((r) => { secondQuestion(r).kind = 'date' }))).toThrow(/square_feet.*unknown kind: date/)
     expect(() => parseQuestionnaire(withChange((r) => { firstQuestion(r).prompt = '' }))).toThrow(/project_type.*prompt/)
   })
 
@@ -245,9 +244,17 @@ describe('parseQuestionnaire: mistakes in rules', () => {
     const two = withChange((r) => { secondQuestion(r).showIf = { field: 'project_type', equals: 'renovation', in: ['renovation'] } })
     expect(() => parseQuestionnaire(two)).toThrow(/square_feet.*one of/)
     const nested = withChange((r) => {
-      secondQuestion(r).showIf = { any: [{ all: [{ field: 'project_type', equals: 'renovation' }] }] }
+      secondQuestion(r).showIf = { any: [{ any: [{ field: 'project_type', equals: 'renovation' }] }] }
     })
     expect(() => parseQuestionnaire(nested)).toThrow(/square_feet.*nested/)
+  })
+
+  // Removed 2026-11-07 because no rule used it (see DECISIONS.md).
+  test('throws on an "all" rule', () => {
+    const raw = withChange((r) => {
+      secondQuestion(r).showIf = { all: [{ field: 'project_type', equals: 'renovation' }] }
+    })
+    expect(() => parseQuestionnaire(raw)).toThrow(/square_feet.*"all".*not supported/)
   })
 
   test('throws on an unknown derived value', () => {
@@ -255,19 +262,5 @@ describe('parseQuestionnaire: mistakes in rules', () => {
       ;(r.steps[2] as Record<string, unknown>).showIf = { field: 'household_max_age', lessThan: 18 }
     })
     expect(() => parseQuestionnaire(raw)).toThrow(/kids.*household_max_age/)
-  })
-})
-
-describe('stepSizeWarnings', () => {
-  test('lists steps with more than 7 inputs when every question shows (a repeater counts as one)', () => {
-    const withExtras = (count: number) =>
-      withChange((r) => {
-        for (let i = 0; i < count; i++) {
-          r.steps[2].questions.push({ id: `extra_${i}`, kind: 'short_text', prompt: `Extra ${i}` } as never)
-        }
-      })
-    expect(stepSizeWarnings(parseQuestionnaire(withExtras(6)))).toEqual([])
-    expect(stepSizeWarnings(parseQuestionnaire(withExtras(7)))).toEqual(['Step kids has 8 inputs when every question shows'])
-    expect(stepSizeWarnings(parseQuestionnaire(base()))).toEqual([])
   })
 })

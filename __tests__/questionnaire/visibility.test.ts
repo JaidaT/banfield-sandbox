@@ -31,11 +31,11 @@ describe('matches: each rule shape', () => {
     expect(matches({ field: 'adult_count', atLeast: 2 }, {}, derived)).toBe(true)
   })
 
-  test('any and all', () => {
+  test('any: matches when at least one rule matches', () => {
     const yes = { field: 'type', equals: 'renovation' }
     const no = { field: 'type', equals: 'new_build' }
     expect(matches({ any: [no, yes] }, answers, noDerived)).toBe(true)
-    expect(matches({ all: [no, yes] }, answers, noDerived)).toBe(false)
+    expect(matches({ any: [no, no] }, answers, noDerived)).toBe(false)
   })
 
   test('a missing answer or an empty household never matches', () => {

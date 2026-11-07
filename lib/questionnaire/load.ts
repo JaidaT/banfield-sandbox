@@ -16,10 +16,6 @@ import type {
   Step,
 } from './types'
 
-// A step with more inputs than this is flagged for review. QUESTIONNAIRE_DISCOVERY
-// P3 suggested 6; the team raised it to 7 on 2026-11-06 (see DECISIONS.md).
-const MAX_INPUTS_PER_STEP = 7
-
 const OPERATORS = ['equals', 'in', 'includes', 'lessThan', 'atLeast'] as const
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -93,20 +89,17 @@ function parseFieldCondition(raw: Record<string, unknown>, owner: string, ctx: R
   throw new Error(`${owner} rule cannot depend on ${field} (a ${kind} question)`)
 }
 
-// One level of any/all at most, so rules stay readable for the team.
+// A plain rule, or "any" (matches when at least one of its rules matches).
+// "any" cannot contain another "any", so rules stay readable for the team.
 function parseCondition(raw: unknown, owner: string, ctx: RuleContext, nested = false): Condition {
   if (!isRecord(raw)) throw new Error(`${owner} has a rule that is not an object`)
-  for (const group of ['any', 'all'] as const) {
-    if (!(group in raw)) continue
-    if (nested) throw new Error(`${owner} has a nested "any"/"all" rule; only one level is allowed`)
-    const list = raw[group]
-    if (!Array.isArray(list) || list.length === 0) {
-      throw new Error(`${owner} rule "${group}" must be a list of conditions`)
-    }
-    const conditions = list.map((c: unknown) => parseCondition(c, owner, ctx, true) as FieldCondition)
-    return group === 'any' ? { any: conditions } : { all: conditions }
+  if ('all' in raw) throw new Error(`${owner} uses "all", which is not supported (see DECISIONS.md)`)
+  if (!('any' in raw)) return parseFieldCondition(raw, owner, ctx)
+  if (nested) throw new Error(`${owner} has a nested "any" rule; only one level is allowed`)
+  if (!Array.isArray(raw.any) || raw.any.length === 0) {
+    throw new Error(`${owner} rule "any" must be a list of conditions`)
   }
-  return parseFieldCondition(raw, owner, ctx)
+  return { any: raw.any.map((c: unknown) => parseCondition(c, owner, ctx, true) as FieldCondition) }
 }
 
 function parseOptions(raw: unknown, name: string): AnswerOption[] {
@@ -258,7 +251,6 @@ function checkAnswer(question: Question, value: unknown, where: string): AnswerV
   switch (question.kind) {
     case 'short_text':
     case 'long_text':
-    case 'date':
       if (typeof value !== 'string') throw new Error(`${where} must be text`)
       return value
     case 'number':
@@ -345,13 +337,4 @@ export function parseSampleHouseholds(raw: unknown, questionnaire: Questionnaire
 // The made-up households from data/questionnaire/sample-answers.json.
 export function loadSampleHouseholds(): SampleHousehold[] {
   return parseSampleHouseholds(sampleAnswersJson as unknown, loadQuestionnaire())
-}
-
-// Steps that would show more than 7 inputs if every question on them showed.
-// A warning list for review, not an error: inline branches may keep the real
-// number lower.
-export function stepSizeWarnings(questionnaire: Questionnaire): string[] {
-  return questionnaire.steps
-    .filter((s) => s.questions.length > MAX_INPUTS_PER_STEP)
-    .map((s) => `Step ${s.id} has ${s.questions.length} inputs when every question shows`)
 }

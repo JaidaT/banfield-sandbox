@@ -37,7 +37,6 @@ function matchesOne(condition: FieldCondition, answers: Answers, derived: Derive
 // True when the rule matches these answers. A missing answer never matches.
 export function matches(condition: Condition, answers: Answers, derived: DerivedValues): boolean {
   if ('any' in condition) return condition.any.some((c) => matchesOne(c, answers, derived))
-  if ('all' in condition) return condition.all.every((c) => matchesOne(c, answers, derived))
   return matchesOne(condition, answers, derived)
 }
 
