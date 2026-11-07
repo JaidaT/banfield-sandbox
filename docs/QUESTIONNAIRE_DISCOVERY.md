@@ -134,7 +134,7 @@ Note: the live web page only shows the intro text and 6 style image sets. The fo
 |---|---|---|---|---|
 | 0 | Welcome | - | Always | - |
 | 1 | Contact & site | Name, email, phone, contact preference, occupation (optional), mailing address | Always | "Site same as mailing?" No: site address |
-| 2 | The project | Project type, spaces involved, sq ft, age of home, timeline + critical date + why, years lived / planning to stay | Always | Spaces list filtered by project type. Sq ft and age hidden for furniture/styling. |
+| 2 | The project | Project type, spaces involved, sq ft, age of home, timeline + critical date + why, years lived / planning to stay | Always | Every space offered for every project type (team decision 2026-11-06; was "filtered by project type"). Sq ft and age hidden for furniture/styling. |
 | 3 | Investment & team | Overall investment, portion set aside for design, contractor? | Always | Contractor yes: name, company, phone, email. Contractor hidden for furniture/styling. |
 | 4 | About working together | Decision makers, detail orientation, excited about, nervous about, past designer + how it went | Always | Past designer yes: how it went |
 | 5 | Household | Who lives here (repeater: name, age), special considerations (checkboxes + note), daytime sleepers, any pets? | Always | - |
@@ -161,7 +161,7 @@ Allow only three kinds of rule, stored as data:
 
 1. **Step `showIf`**: skip a whole step.
 2. **Field `showIf`**: reveal a field inline on the same step.
-3. **Option filter**: limit an option list by an earlier answer (e.g. spaces by project type).
+3. ~~**Option filter**: limit an option list by an earlier answer (e.g. spaces by project type).~~ Removed by the team on 2026-11-06: any project type may involve any space (e.g. a facelift in the basement), and nothing else used it. See DECISIONS.md.
 
 Conditions use only these shapes, with no nesting deeper than one `any` or `all`:
 

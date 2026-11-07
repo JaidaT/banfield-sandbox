@@ -104,7 +104,7 @@ export function buildOutput(
   const steps = shown
     .filter(({ step }) => step.questions.length > 0)
     .map(({ step, questions }): OutputStep => {
-      const shownIds = new Set(questions.map((q) => q.question.id))
+      const shownIds = new Set(questions.map((q) => q.id))
       const out: OutputStep = {
         id: step.id,
         title: step.title,

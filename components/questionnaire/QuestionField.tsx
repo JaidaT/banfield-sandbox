@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import type { AnswerOption, AnswerValue, Question } from '@/lib/questionnaire/types'
+import type { AnswerValue, Question } from '@/lib/questionnaire/types'
 
 // Plain wireframe styles, shared by the questionnaire screens. Deliberately grey:
 // the real look will be designed in Figma.
@@ -10,8 +10,6 @@ const LABEL_CLASS = 'text-sm font-semibold'
 
 interface Props {
   question: Question
-  // The choices on offer right now (some may be hidden by a rule).
-  options: AnswerOption[]
   value: AnswerValue | undefined
   // undefined means "no answer" (a cleared number, or nothing ticked).
   onChange: (value: AnswerValue | undefined) => void
@@ -22,7 +20,7 @@ interface Props {
 
 // One question with its label, hint and problem message. Handles every kind
 // except "add another" cards (Repeater) and picture picks (PickImages).
-export default function QuestionField({ question, options, value, onChange, error, inputId }: Props) {
+export default function QuestionField({ question, value, onChange, error, inputId }: Props) {
   const id = inputId ?? `q-${question.id}`
   const helpId = `${id}-help`
   const errorId = `${id}-error`
@@ -51,7 +49,7 @@ export default function QuestionField({ question, options, value, onChange, erro
         <legend className={`${LABEL_CLASS} mb-1`}>{question.prompt}</legend>
         {help}
         <div className="flex flex-col gap-2">
-          {options.map((option) => (
+          {question.options.map((option) => (
             <label key={option.id} className="flex items-center gap-3 rounded border border-neutral-300 bg-white p-2">
               <input
                 type={question.kind === 'single' ? 'radio' : 'checkbox'}

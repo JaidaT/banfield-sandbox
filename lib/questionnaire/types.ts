@@ -38,8 +38,7 @@ export interface AnswerOption {
   // Optional picture shown with the label, a path under public/
   // (e.g. the style question). Leave it out for words-only choices.
   image?: string
-  // Option filter: only offered when this matches (e.g. spaces by project type).
-  showIf?: Condition
+  // No showIf here: rules go on steps and questions only (DECISIONS.md, 2026-11-06).
 }
 
 export interface ImageChoice {

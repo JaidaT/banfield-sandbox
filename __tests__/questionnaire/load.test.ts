@@ -111,7 +111,7 @@ describe('parseQuestionnaire: valid files', () => {
     expect(parseQuestionnaire(raw).steps[2].showIf).toEqual({ field: 'adult_count', atLeast: 2 })
   })
 
-  test('accepts in, includes, any and all conditions and option filters', () => {
+  test('accepts in, includes, any and all conditions', () => {
     const raw = withChange((r) => {
       r.steps[0].questions.push(
         {
@@ -120,7 +120,7 @@ describe('parseQuestionnaire: valid files', () => {
           prompt: 'Which spaces?',
           options: [
             { id: 'kitchen', label: 'Kitchen' },
-            { id: 'basement', label: 'Basement', showIf: { field: 'project_type', in: ['renovation'] } },
+            { id: 'basement', label: 'Basement' },
           ],
         } as never,
         {
@@ -135,7 +135,9 @@ describe('parseQuestionnaire: valid files', () => {
       }
     })
     const q = parseQuestionnaire(raw)
-    expect(q.steps[0].questions[2].options[1].showIf).toEqual({ field: 'project_type', in: ['renovation'] })
+    expect(q.steps[0].questions[3].showIf).toEqual({
+      any: [{ field: 'rooms', includes: 'kitchen' }, { field: 'project_type', equals: 'renovation' }],
+    })
   })
 })
 
@@ -169,6 +171,14 @@ describe('parseQuestionnaire: mistakes in the file', () => {
       firstQuestion(r).options = [{ id: 'a', label: 'A' }, { id: 'a', label: 'Also A' }]
     })
     expect(() => parseQuestionnaire(dup)).toThrow(/project_type.*duplicate.*a/i)
+  })
+
+  // Removed 2026-11-06 (see DECISIONS.md): put the rule on the question instead.
+  test('throws on a rule on a single answer choice', () => {
+    const raw = withChange((r) => {
+      ;(firstQuestion(r).options as Record<string, unknown>[])[1].showIf = { field: 'project_type', equals: 'renovation' }
+    })
+    expect(() => parseQuestionnaire(raw)).toThrow(/project_type.*renovation.*answer choices are not supported/)
   })
 
   test('throws on an option picture that is not a path', () => {

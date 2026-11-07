@@ -66,14 +66,13 @@
             { "id": "kitchen", "label": "Kitchen" },
             { "id": "living_room", "label": "Living room" },
             { "id": "dining", "label": "Dining" },
-            { "id": "primary_bedroom", "label": "Primary bedroom" },
-            { "id": "kids_rooms", "label": "Kids' rooms" },
-            { "id": "bathrooms", "label": "Bathrooms" },
+            { "id": "bedroom", "label": "Bedroom" },
+            { "id": "bathroom", "label": "Bathroom" },
             { "id": "home_office", "label": "Home office" },
             { "id": "laundry_mudroom", "label": "Laundry or mudroom" },
-            { "id": "basement", "label": "Basement", "showIf": { "field": "project_type", "in": ["renovation", "addition", "new_build"] } },
-            { "id": "outdoor", "label": "Outdoor spaces", "showIf": { "field": "project_type", "in": ["renovation", "addition", "new_build"] } },
-            { "id": "whole_home", "label": "Whole home", "showIf": { "field": "project_type", "in": ["renovation", "addition", "new_build"] } }
+            { "id": "basement", "label": "Basement" },
+            { "id": "outdoor", "label": "Outdoor spaces" },
+            { "id": "whole_home", "label": "Whole home" }
           ]
         },
         {
@@ -333,7 +332,7 @@
           "options": [
             { "id": "island", "label": "Kitchen island" },
             { "id": "dining_table", "label": "Dining table" },
-            { "id": "couch", "label": "The couch, honestly" },
+            { "id": "couch", "label": "The couch" },
             { "id": "depends", "label": "It depends" }
           ]
         },
@@ -359,7 +358,7 @@
           "kind": "single",
           "prompt": "Does anyone work from home?",
           "options": [
-            { "id": "full_time", "label": "Full time" },
+            { "id": "full_time", "label": "Yes, full time" },
             { "id": "some_days", "label": "Some days" },
             { "id": "no", "label": "No" }
           ]

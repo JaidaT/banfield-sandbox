@@ -22,7 +22,7 @@ const yesNo = question({
 describe('QuestionField', () => {
   test('text: a labelled box that reports what is typed, and the hint', () => {
     const onChange = vi.fn()
-    render(<QuestionField question={question({ id: 'name', kind: 'short_text', prompt: 'Your name', help: 'First and last.' })} options={[]} value={undefined} onChange={onChange} />)
+    render(<QuestionField question={question({ id: 'name', kind: 'short_text', prompt: 'Your name', help: 'First and last.' })} value={undefined} onChange={onChange} />)
     fireEvent.change(screen.getByLabelText('Your name'), { target: { value: 'Pat' } })
     expect(onChange).toHaveBeenCalledWith('Pat')
     expect(screen.getByText('First and last.')).toBeDefined()
@@ -30,7 +30,7 @@ describe('QuestionField', () => {
 
   test('number: reports a number, and nothing when cleared', () => {
     const onChange = vi.fn()
-    render(<QuestionField question={question({ id: 'age', kind: 'number', prompt: 'Age' })} options={[]} value={40} onChange={onChange} />)
+    render(<QuestionField question={question({ id: 'age', kind: 'number', prompt: 'Age' })} value={40} onChange={onChange} />)
     const box = screen.getByLabelText('Age')
     fireEvent.change(box, { target: { value: '41' } })
     expect(onChange).toHaveBeenLastCalledWith(41)
@@ -40,16 +40,11 @@ describe('QuestionField', () => {
 
   test('single choice: radio buttons in a group named by the question', () => {
     const onChange = vi.fn()
-    render(<QuestionField question={yesNo} options={yesNo.options} value="no" onChange={onChange} />)
+    render(<QuestionField question={yesNo} value="no" onChange={onChange} />)
     expect(screen.getByRole('group', { name: 'Any pets?' })).toBeDefined()
     expect((screen.getByLabelText('No') as HTMLInputElement).checked).toBe(true)
     fireEvent.click(screen.getByLabelText('Yes'))
     expect(onChange).toHaveBeenCalledWith('yes')
-  })
-
-  test('only the choices on offer are shown', () => {
-    render(<QuestionField question={yesNo} options={[yesNo.options[0]]} value={undefined} onChange={() => {}} />)
-    expect(screen.queryByLabelText('No')).toBeNull()
   })
 
   test('multiple choice: ticking adds to the list and unticking removes', () => {
@@ -60,7 +55,7 @@ describe('QuestionField', () => {
       options: [{ id: 'kitchen', label: 'Kitchen' }, { id: 'den', label: 'Den' }],
     })
     const onChange = vi.fn()
-    render(<QuestionField question={multi} options={multi.options} value={['kitchen']} onChange={onChange} />)
+    render(<QuestionField question={multi} value={['kitchen']} onChange={onChange} />)
     fireEvent.click(screen.getByLabelText('Den'))
     expect(onChange).toHaveBeenLastCalledWith(['kitchen', 'den'])
     fireEvent.click(screen.getByLabelText('Kitchen'))
@@ -74,13 +69,13 @@ describe('QuestionField', () => {
       prompt: 'Your style?',
       options: [{ id: 'glam', label: 'Sophisticated Glam', image: '/questionnaire/style-sophisticated-glam.svg' }],
     })
-    const { container } = render(<QuestionField question={style} options={style.options} value={undefined} onChange={() => {}} />)
+    const { container } = render(<QuestionField question={style} value={undefined} onChange={() => {}} />)
     expect(container.querySelector('img')?.getAttribute('src')).toContain('style-sophisticated-glam.svg')
     expect(screen.getByLabelText('Sophisticated Glam')).toBeDefined()
   })
 
   test('shows a problem message and marks the input', () => {
-    render(<QuestionField question={question({ id: 'name', kind: 'short_text', prompt: 'Your name' })} options={[]} value={undefined} onChange={() => {}} error='Please answer "Your name"' />)
+    render(<QuestionField question={question({ id: 'name', kind: 'short_text', prompt: 'Your name' })} value={undefined} onChange={() => {}} error='Please answer "Your name"' />)
     expect(screen.getByRole('alert').textContent).toBe('Please answer "Your name"')
     expect(screen.getByLabelText('Your name').getAttribute('aria-invalid')).toBe('true')
   })

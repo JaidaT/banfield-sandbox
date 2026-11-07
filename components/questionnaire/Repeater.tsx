@@ -43,7 +43,6 @@ export default function Repeater({ question, value, onChange, error }: Props) {
             <QuestionField
               key={field.id}
               question={field}
-              options={field.options}
               value={card[field.id]}
               onChange={(v) => setField(index, field.id, v)}
               inputId={`q-${question.id}-${index}-${field.id}`}

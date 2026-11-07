@@ -20,7 +20,7 @@ describe('buildOutput', () => {
       status: 'answered',
       value: 'Renovation',
     })
-    expect(find(output, 'spaces')?.value).toBe("Kitchen, Living room, Kids' rooms, Basement")
+    expect(find(output, 'spaces')?.value).toBe('Kitchen, Living room, Bedroom, Basement')
     expect(find(output, 'square_feet')?.value).toBe('2400')
   })
 

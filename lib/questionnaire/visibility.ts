@@ -1,7 +1,6 @@
 import { deriveValues } from './derived'
 import { DERIVED_VALUES } from './types'
 import type {
-  AnswerOption,
   Answers,
   AnswerValue,
   Condition,
@@ -13,15 +12,10 @@ import type {
   Step,
 } from './types'
 
-// A question as it shows right now, with only the answer choices on offer.
-export interface VisibleQuestion {
-  question: Question
-  options: AnswerOption[]
-}
-
+// A step that shows for the current answers, with only its visible questions.
 export interface VisibleStep {
   step: Step
-  questions: VisibleQuestion[]
+  questions: Question[]
 }
 
 function lookup(field: string, answers: Answers, derived: DerivedValues): AnswerValue | null | undefined {
@@ -47,17 +41,6 @@ export function matches(condition: Condition, answers: Answers, derived: Derived
   return matchesOne(condition, answers, derived)
 }
 
-// Keeps an answer only if it is still one of the choices on offer.
-function keepOffered(question: Question, options: AnswerOption[], value: AnswerValue | undefined) {
-  if (value === undefined) return undefined
-  if (question.kind !== 'single' && question.kind !== 'multi') return value
-  const offered = new Set(options.map((o) => o.id))
-  if (question.kind === 'single') return typeof value === 'string' && offered.has(value) ? value : undefined
-  if (!Array.isArray(value)) return undefined
-  const ticked = (value as string[]).filter((id) => offered.has(id))
-  return ticked.length > 0 ? ticked : undefined
-}
-
 // Walks the questionnaire in order. Rules only point at earlier questions, so
 // each rule is checked against the answers kept so far. That way a leftover
 // answer to a hidden question (say, a contractor "Yes" before switching to
@@ -69,13 +52,11 @@ function walk(questionnaire: Questionnaire, answers: Answers) {
 
   for (const step of questionnaire.steps) {
     if (!shows(step.showIf)) continue
-    const questions: VisibleQuestion[] = []
+    const questions: Question[] = []
     for (const question of step.questions) {
       if (!shows(question.showIf)) continue
-      const options = question.options.filter((o) => shows(o.showIf))
-      questions.push({ question, options })
-      const value = keepOffered(question, options, answers[question.id])
-      if (value !== undefined) kept[question.id] = value
+      questions.push(question)
+      if (answers[question.id] !== undefined) kept[question.id] = answers[question.id]
     }
     steps.push({ step, questions })
   }

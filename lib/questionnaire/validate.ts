@@ -24,7 +24,7 @@ function problemsOnStep({ step, questions }: VisibleStep, answers: Answers): Pro
   const problems: Problem[] = []
   const add = (questionId: string, message: string) => problems.push({ stepId: step.id, questionId, message })
 
-  for (const { question } of questions) {
+  for (const question of questions) {
     const value = answers[question.id]
     if (question.required && isBlank(value)) add(question.id, `Please answer "${question.prompt}"`)
 

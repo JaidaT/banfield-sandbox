@@ -8,12 +8,7 @@ const stepIds = (answers: Answers) => visibleSteps(questionnaire, answers).map((
 const questionIds = (answers: Answers, stepId: string) =>
   visibleSteps(questionnaire, answers)
     .find((s) => s.step.id === stepId)
-    ?.questions.map((q) => q.question.id) ?? []
-const optionIds = (answers: Answers, questionId: string) =>
-  visibleSteps(questionnaire, answers)
-    .flatMap((s) => s.questions)
-    .find((q) => q.question.id === questionId)
-    ?.options.map((o) => o.id) ?? []
+    ?.questions.map((q) => q.id) ?? []
 
 const noDerived = { household_min_age: null, adult_count: null }
 
@@ -77,11 +72,6 @@ describe('visibleSteps on the real questionnaire', () => {
     expect(questionIds(renovation, 'wish_list')).toContain('green_design')
   })
 
-  test('the spaces list is filtered by project type', () => {
-    expect(optionIds({ project_type: 'facelift' }, 'spaces')).not.toContain('basement')
-    expect(optionIds({ project_type: 'addition' }, 'spaces')).toContain('basement')
-  })
-
   test('a follow-up shows on the same step only when its answer matches', () => {
     expect(questionIds({ enough_storage: 'yes' }, 'everyday')).not.toContain('storage_focus')
     expect(questionIds({ enough_storage: 'not_sure' }, 'everyday')).toContain('storage_focus')
@@ -102,10 +92,9 @@ describe('visibleSteps on the real questionnaire', () => {
 })
 
 describe('visibleAnswers', () => {
-  test('drops answers to hidden questions and to choices no longer offered', () => {
+  test('drops answers to hidden questions', () => {
     const answers: Answers = {
       project_type: 'facelift',
-      spaces: ['kitchen', 'basement'],
       has_contractor: 'yes',
       contractor_name: 'Sample Builders',
       has_pets: 'no',
@@ -113,7 +102,6 @@ describe('visibleAnswers', () => {
     }
     expect(visibleAnswers(questionnaire, answers)).toEqual({
       project_type: 'facelift',
-      spaces: ['kitchen'],
       has_contractor: 'yes',
       contractor_name: 'Sample Builders',
       has_pets: 'no',
@@ -121,12 +109,6 @@ describe('visibleAnswers', () => {
     const furniture = visibleAnswers(questionnaire, { ...answers, project_type: 'furniture_styling' })
     expect(furniture).not.toHaveProperty('has_contractor')
     expect(furniture).not.toHaveProperty('contractor_name')
-  })
-
-  test('drops a multi-choice answer when none of its ticked choices are still offered', () => {
-    expect(visibleAnswers(questionnaire, { project_type: 'facelift', spaces: ['basement'] })).toEqual({
-      project_type: 'facelift',
-    })
   })
 })
 

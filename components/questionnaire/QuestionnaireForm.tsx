@@ -178,7 +178,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
         </h2>
         {step.step.intro ? <p className="leading-7">{step.step.intro}</p> : null}
 
-        {step.questions.map(({ question, options }) => {
+        {step.questions.map((question) => {
           const error = problems.find((p) => p.questionId === question.id)?.message
           const value = answers[question.id]
           if (question.kind === 'repeater') {
@@ -207,7 +207,6 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
             <QuestionField
               key={question.id}
               question={question}
-              options={options}
               value={value}
               onChange={(v) => setAnswer(question.id, v)}
               error={error}

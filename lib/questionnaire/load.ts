@@ -109,7 +109,7 @@ function parseCondition(raw: unknown, owner: string, ctx: RuleContext, nested = 
   return parseFieldCondition(raw, owner, ctx)
 }
 
-function parseOptions(raw: unknown, name: string, ctx: RuleContext, rulesAllowed: boolean): AnswerOption[] {
+function parseOptions(raw: unknown, name: string): AnswerOption[] {
   if (!Array.isArray(raw) || raw.length === 0) throw new Error(`${name} needs at least one option`)
   const seen = new Set<string>()
   return raw.map((entry: unknown): AnswerOption => {
@@ -124,8 +124,9 @@ function parseOptions(raw: unknown, name: string, ctx: RuleContext, rulesAllowed
       option.image = entry.image
     }
     if (entry.showIf !== undefined) {
-      if (!rulesAllowed) throw new Error(`${name}: rules inside a repeater card are not supported yet`)
-      option.showIf = parseCondition(entry.showIf, `${name} option ${entry.id}`, ctx)
+      throw new Error(
+        `${name} option ${entry.id}: rules on answer choices are not supported; put the rule on the question instead`,
+      )
     }
     return option
   })
@@ -176,7 +177,7 @@ function parseQuestion(raw: unknown, where: string, ctx: RuleContext, parent?: s
   }
 
   if (kind === 'single' || kind === 'multi') {
-    question.options = parseOptions(raw.options, name, ctx, !parent)
+    question.options = parseOptions(raw.options, name)
   } else if (raw.options !== undefined) {
     throw new Error(`${name} has "options", but only single and multi questions use them`)
   }
