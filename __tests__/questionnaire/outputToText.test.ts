@@ -5,27 +5,22 @@ import { outputToText } from '@/lib/questionnaire/outputToText'
 
 const questionnaire = loadQuestionnaire()
 const samples = Object.fromEntries(loadSampleHouseholds().map((s) => [s.id, s]))
-const textFor = (id: string, seconds: Record<string, number> = {}) =>
-  outputToText(buildOutput(questionnaire, samples[id].answers, seconds))
+const textFor = (id: string) => outputToText(buildOutput(questionnaire, samples[id].answers))
 
 describe('outputToText', () => {
-  test('starts with the name, the time taken and the skipped steps', () => {
-    const lines = textFor('furniture_couple', { contact: 90, project: 635 }).split('\n')
-    expect(lines.slice(0, 3)).toEqual([
-      'GET TO KNOW YOU: Ruth and Alan Example',
-      'Time to complete: 12 min 5 s',
-      'Steps skipped: Kids, Pets',
-    ])
+  test('starts with the name and the skipped steps', () => {
+    const lines = textFor('furniture_couple').split('\n')
+    expect(lines.slice(0, 2)).toEqual(['GET TO KNOW YOU: Ruth and Alan Example', 'Steps skipped: Kids, Pets'])
   })
 
-  test('says so when no steps were skipped and no time was recorded', () => {
+  test('says so when no steps were skipped', () => {
     const lines = textFor('growing_family').split('\n')
-    expect(lines.slice(0, 3)).toEqual(['GET TO KNOW YOU: Maya and Sam Example', 'Time to complete: not recorded', 'Steps skipped: none'])
+    expect(lines.slice(0, 2)).toEqual(['GET TO KNOW YOU: Maya and Sam Example', 'Steps skipped: none'])
   })
 
-  test('groups answers under step headings, with the time on that step', () => {
-    const text = textFor('furniture_couple', { contact: 90 })
-    expect(text).toContain('CONTACT AND SITE (1 min 30 s)\nYour name\n  Ruth and Alan Example')
+  test('groups answers under step headings', () => {
+    const text = textFor('furniture_couple')
+    expect(text).toContain('CONTACT AND SITE\nYour name\n  Ruth and Alan Example')
     expect(text).toContain('THE PROJECT\nWhat are we working on?\n  Furniture and styling')
   })
 

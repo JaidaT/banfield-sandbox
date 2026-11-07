@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, describe, expect, test } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuestionnaireForm from '@/components/questionnaire/QuestionnaireForm'
 import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
@@ -85,10 +85,6 @@ describe('QuestionnaireForm: review and submit', () => {
     click('Review my answers')
   }
 
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
   test('review shows the answers in words, grouped by step', () => {
     toReview()
     expect(screen.getByRole('heading', { level: 3, name: 'The project' })).toBeDefined()
@@ -111,15 +107,5 @@ describe('QuestionnaireForm: review and submit', () => {
     expect(screen.getByText('Team view (demo only)')).toBeDefined()
     expect(screen.getByText('Steps skipped: none')).toBeDefined()
     expect(screen.getByRole('button', { name: 'Copy as text' })).toBeDefined()
-  })
-
-  test('the team view shows the time spent', () => {
-    vi.useFakeTimers({ toFake: ['Date'] })
-    vi.setSystemTime(0)
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} />)
-    vi.setSystemTime(125_000)
-    click('Review my answers')
-    click('Submit')
-    expect(screen.getByText('Time to complete: 2 min 5 s')).toBeDefined()
   })
 })

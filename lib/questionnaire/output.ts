@@ -24,7 +24,6 @@ export interface OutputAnswer {
 export interface OutputStep {
   id: string
   title: string
-  seconds?: number
   answers: OutputAnswer[]
 }
 
@@ -33,7 +32,6 @@ export interface QuestionnaireOutput {
   steps: OutputStep[]
   // Titles of steps a rule skipped, e.g. ["Kids", "Pets"].
   skippedSteps: string[]
-  totalSeconds: number | null
 }
 
 function readablePicks(question: Question, picks: ImagePicks): string {
@@ -90,13 +88,8 @@ function outputAnswer(question: Question, value: AnswerValue | undefined): Outpu
   return text === '' ? { ...base, status: 'skipped' } : { ...base, status: 'answered', value: text }
 }
 
-// Builds the team summary. `secondsByStep` is the time spent on each step,
-// recorded by the screen.
-export function buildOutput(
-  questionnaire: Questionnaire,
-  answers: Answers,
-  secondsByStep: Record<string, number> = {},
-): QuestionnaireOutput {
+// Builds the team summary. No time is tracked (team decision 2026-11-06).
+export function buildOutput(questionnaire: Questionnaire, answers: Answers): QuestionnaireOutput {
   const shown = visibleSteps(questionnaire, answers)
   const kept = visibleAnswers(questionnaire, answers)
   const shownStepIds = new Set(shown.map((s) => s.step.id))
@@ -105,21 +98,17 @@ export function buildOutput(
     .filter(({ step }) => step.questions.length > 0)
     .map(({ step, questions }): OutputStep => {
       const shownIds = new Set(questions.map((q) => q.id))
-      const out: OutputStep = {
+      return {
         id: step.id,
         title: step.title,
         answers: step.questions.map((q) =>
           shownIds.has(q.id) ? outputAnswer(q, kept[q.id]) : { id: q.id, prompt: q.prompt, status: 'hidden' },
         ),
       }
-      if (secondsByStep[step.id] !== undefined) out.seconds = secondsByStep[step.id]
-      return out
     })
 
-  const times = Object.values(secondsByStep)
   return {
     steps,
     skippedSteps: questionnaire.steps.filter((s) => !shownStepIds.has(s.id)).map((s) => s.title),
-    totalSeconds: times.length > 0 ? times.reduce((sum, t) => sum + t, 0) : null,
   }
 }

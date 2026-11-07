@@ -72,14 +72,6 @@ describe('buildOutput', () => {
     expect(find(none, 'people')).toEqual({ id: 'people', prompt: 'Who lives here?', status: 'skipped' })
   })
 
-  test('adds seconds spent on each step and the total', () => {
-    const output = buildOutput(questionnaire, {}, { contact: 90, project: 30 })
-    expect(output.steps.find((s) => s.id === 'contact')?.seconds).toBe(90)
-    expect(output.steps.find((s) => s.id === 'household')?.seconds).toBeUndefined()
-    expect(output.totalSeconds).toBe(120)
-    expect(buildOutput(questionnaire, {}).totalSeconds).toBeNull()
-  })
-
   test('the welcome step is left out because it has no questions', () => {
     expect(buildOutput(questionnaire, {}).steps.map((s) => s.id)).not.toContain('welcome')
   })

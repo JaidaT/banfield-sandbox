@@ -34,21 +34,13 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   const firstStepId = questionnaire.steps[0].id
   const [current, setCurrent] = useState(startAt ?? firstStepId)
   const [answers, setAnswers] = useState<Answers>(initialAnswers ?? {})
-  // Seconds spent on each step, for the team view.
-  const [secondsByStep, setSecondsByStep] = useState<Record<string, number>>({})
   // Problem messages show only after Next or Submit is pressed, then update as the person types.
   const [showProblems, setShowProblems] = useState(false)
   // True after "Edit" on the review screen, to offer "Back to review".
   const [returnToReview, setReturnToReview] = useState(false)
 
-  const enteredAt = useRef<number | null>(null)
   const hasMoved = useRef(false)
   const headingRef = useRef<HTMLHeadingElement>(null)
-
-  // Start the clock for the first screen once the page is open.
-  useEffect(() => {
-    enteredAt.current = Date.now()
-  }, [])
 
   // After moving, put focus on the new heading. This also scrolls to the top
   // on a phone and tells screen readers the screen changed.
@@ -65,14 +57,6 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
       : stepProblems(questionnaire, answers, current)
 
   function goTo(target: string) {
-    const now = Date.now()
-    // Record time on the step being left (only steps with questions count).
-    const leaving = questionnaire.steps.find((s) => s.id === current)
-    if (enteredAt.current !== null && leaving && leaving.questions.length > 0) {
-      const seconds = Math.round((now - enteredAt.current) / 1000)
-      setSecondsByStep((prev) => ({ ...prev, [current]: (prev[current] ?? 0) + seconds }))
-    }
-    enteredAt.current = now
     hasMoved.current = true
     setShowProblems(false)
     setCurrent(target)
@@ -140,7 +124,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
         <p>We will read through everything before we meet. Talk soon.</p>
         <div className="mt-6 border-t-4 border-double border-neutral-400 pt-4">
           <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-600">Team view (demo only)</p>
-          <QuestionnaireTeamView output={buildOutput(questionnaire, answers, secondsByStep)} />
+          <QuestionnaireTeamView output={buildOutput(questionnaire, answers)} />
         </div>
       </>
     )
