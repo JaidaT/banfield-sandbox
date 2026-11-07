@@ -1,0 +1,83 @@
+import { describe, expect, test } from 'vitest'
+import { loadQuestionnaire } from '@/lib/questionnaire/load'
+
+// Checks on the real data/questionnaire/questionnaire.json (the draft wording).
+describe('questionnaire.json', () => {
+  const questionnaire = loadQuestionnaire()
+  const allQuestions = questionnaire.steps.flatMap((s) => s.questions)
+  const question = (id: string) => {
+    const found = allQuestions.find((q) => q.id === id)
+    if (!found) throw new Error(`no question ${id}`)
+    return found
+  }
+
+  test('loads with the steps from the step map, in order (the review step is built by the screens)', () => {
+    expect(questionnaire.steps.map((s) => s.id)).toEqual([
+      'welcome',
+      'contact',
+      'project',
+      'investment',
+      'working_together',
+      'household',
+      'kids',
+      'pets',
+      'everyday',
+      'entertaining',
+      'travel',
+      'home_words',
+      'style',
+      'wish_list',
+    ])
+  })
+
+  test('only contact details and project type are required', () => {
+    const required = allQuestions.filter((q) => q.required).map((q) => q.id)
+    expect(required).toEqual(['name', 'email', 'phone', 'project_type'])
+  })
+
+  test('project types match the current form plus furniture and facelift', () => {
+    expect(question('project_type').options.map((o) => o.label)).toEqual([
+      'Furniture and styling',
+      'Facelift (paint, flooring)',
+      'Renovation',
+      'Addition',
+      'New build',
+    ])
+  })
+
+  test('the style question uses the current form list, each with a picture', () => {
+    const options = question('style').options
+    expect(options.map((o) => o.label)).toEqual([
+      'Contemporary Rustic',
+      'Old World Elegant',
+      'Tuscan Traditional',
+      'Minimalistic / Clean',
+      'Modern Country',
+      'Sophisticated Glam',
+      'Eclectic / Collected',
+      'Traditional',
+      'French / Parisian',
+    ])
+    for (const o of options) expect(o.image, o.id).toMatch(/^\/questionnaire\/.+\.svg$/)
+  })
+
+  test('the big branches skip whole steps', () => {
+    const step = (id: string) => questionnaire.steps.find((s) => s.id === id)?.showIf
+    expect(step('kids')).toEqual({ field: 'household_min_age', lessThan: 18 })
+    expect(step('pets')).toEqual({ field: 'has_pets', equals: 'yes' })
+    // Only "Never" skips Entertaining.
+    expect(step('entertaining')).toEqual({
+      field: 'hosting_frequency',
+      in: ['rarely', 'few_times_year', 'monthly', 'all_the_time'],
+    })
+  })
+
+  test('shared taste only shows for 2 or more adults', () => {
+    expect(question('shared_taste').showIf).toEqual({ field: 'adult_count', atLeast: 2 })
+  })
+
+  test('text has no special characters (plain ASCII only)', () => {
+    const text = JSON.stringify(questionnaire)
+    expect(text).toMatch(/^[\x20-\x7E]*$/)
+  })
+})

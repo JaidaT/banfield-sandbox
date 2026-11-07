@@ -1,0 +1,582 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "draft": true,
+    "source": "Placeholder wording for the full 'Let us get to know you' questionnaire, following the step map in docs/QUESTIONNAIRE_DISCOVERY.md and reviewed by the team on 2026-11-06. Banfield must review all wording before use.",
+    "fromCurrentForm": "Kept from Banfield's current form as written: project types Renovation, Addition and New build; 'How detail oriented are you?' (High, Medium, Low); the 9 style names; the Green/LEED answers.",
+    "required": "Only name, email, phone and project type are required. Everything else can be skipped.",
+    "rules": "showIf on a step skips the whole step. showIf on a question shows it on the same step only when it matches. showIf on an option only offers that answer when it matches. Rules may only point at questions that come earlier in this file.",
+    "derived": "household_min_age and adult_count are worked out from the 'age' field of the 'people' repeater (adults are 18 and over). They can be used in rules like a question id.",
+    "images": "All pictures in public/questionnaire/ are grey placeholders. Real photos should come from Banfield's own portfolio.",
+    "review": "The last step (review and thank you) is built by the screens, so it is not in this file.",
+    "stepSize": "Steps should have at most 7 inputs when every question shows (a repeater counts as one). Breaking this gives a warning, not an error."
+  },
+  "steps": [
+    {
+      "id": "welcome",
+      "title": "Welcome",
+      "intro": "Let us get to know you. Grab a coffee (or a glass of wine, we won't judge) and pull the household in. Short answers are fine, and anything you skip, we'll cover together. Everything you share stays with our team.",
+      "questions": []
+    },
+    {
+      "id": "contact",
+      "title": "Contact and site",
+      "questions": [
+        { "id": "name", "kind": "short_text", "prompt": "Your name", "required": true },
+        { "id": "email", "kind": "short_text", "prompt": "Email", "required": true },
+        { "id": "phone", "kind": "short_text", "prompt": "Best phone number", "required": true },
+        {
+          "id": "contact_method",
+          "kind": "single",
+          "prompt": "How do you like to hear from us?",
+          "options": [
+            { "id": "email", "label": "Email" },
+            { "id": "phone", "label": "Phone call" },
+            { "id": "text", "label": "Text" }
+          ]
+        },
+        { "id": "current_address", "kind": "short_text", "prompt": "Where do you live now?", "help": "Street, city and postal code." },
+        { "id": "project_address", "kind": "short_text", "prompt": "Where is the project?", "help": "Leave blank if it's the same as above." },
+        { "id": "mailing_address", "kind": "short_text", "prompt": "Mailing address", "help": "Leave blank if it's the same." }
+      ]
+    },
+    {
+      "id": "project",
+      "title": "The project",
+      "questions": [
+        {
+          "id": "project_type",
+          "kind": "single",
+          "prompt": "What are we working on?",
+          "required": true,
+          "options": [
+            { "id": "furniture_styling", "label": "Furniture and styling" },
+            { "id": "facelift", "label": "Facelift (paint, flooring)" },
+            { "id": "renovation", "label": "Renovation" },
+            { "id": "addition", "label": "Addition" },
+            { "id": "new_build", "label": "New build" }
+          ]
+        },
+        {
+          "id": "spaces",
+          "kind": "multi",
+          "prompt": "Which spaces are involved?",
+          "help": "Pick all that apply.",
+          "options": [
+            { "id": "kitchen", "label": "Kitchen" },
+            { "id": "living_room", "label": "Living room" },
+            { "id": "dining", "label": "Dining" },
+            { "id": "primary_bedroom", "label": "Primary bedroom" },
+            { "id": "kids_rooms", "label": "Kids' rooms" },
+            { "id": "bathrooms", "label": "Bathrooms" },
+            { "id": "home_office", "label": "Home office" },
+            { "id": "laundry_mudroom", "label": "Laundry or mudroom" },
+            { "id": "basement", "label": "Basement", "showIf": { "field": "project_type", "in": ["renovation", "addition", "new_build"] } },
+            { "id": "outdoor", "label": "Outdoor spaces", "showIf": { "field": "project_type", "in": ["renovation", "addition", "new_build"] } },
+            { "id": "whole_home", "label": "Whole home", "showIf": { "field": "project_type", "in": ["renovation", "addition", "new_build"] } }
+          ]
+        },
+        {
+          "id": "square_feet",
+          "kind": "number",
+          "prompt": "Roughly how many square feet?",
+          "showIf": { "field": "project_type", "in": ["facelift", "renovation", "addition", "new_build"] }
+        },
+        {
+          "id": "home_age",
+          "kind": "number",
+          "prompt": "How old is the home, in years?",
+          "showIf": { "field": "project_type", "in": ["facelift", "renovation", "addition"] }
+        },
+        {
+          "id": "timeline",
+          "kind": "long_text",
+          "prompt": "When would you love it done, and why then?",
+          "help": "A baby on the way, a holiday, in-laws arriving... we want to know."
+        },
+        { "id": "years_here", "kind": "long_text", "prompt": "How long have you lived here, and how long do you plan to stay?" }
+      ]
+    },
+    {
+      "id": "investment",
+      "title": "Investment and team",
+      "questions": [
+        { "id": "overall_investment", "kind": "short_text", "prompt": "What's your overall investment for this project?", "help": "A ballpark is perfect." },
+        {
+          "id": "design_budget",
+          "kind": "single",
+          "prompt": "Have you set aside part of that for design?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "not_yet", "label": "Not yet" },
+            { "id": "not_sure", "label": "Not sure" }
+          ]
+        },
+        { "id": "design_budget_amount", "kind": "short_text", "prompt": "Roughly how much?", "showIf": { "field": "design_budget", "equals": "yes" } },
+        {
+          "id": "has_contractor",
+          "kind": "single",
+          "prompt": "Are you working with a contractor?",
+          "showIf": { "field": "project_type", "in": ["facelift", "renovation", "addition", "new_build"] },
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "no", "label": "No" }
+          ]
+        },
+        { "id": "contractor_name", "kind": "short_text", "prompt": "Contractor's name and company", "showIf": { "field": "has_contractor", "equals": "yes" } },
+        { "id": "contractor_contact", "kind": "short_text", "prompt": "Their phone or email", "showIf": { "field": "has_contractor", "equals": "yes" } }
+      ]
+    },
+    {
+      "id": "working_together",
+      "title": "About working together",
+      "questions": [
+        {
+          "id": "decision_makers",
+          "kind": "single",
+          "prompt": "Who makes the decisions?",
+          "options": [
+            { "id": "just_me", "label": "Just me" },
+            { "id": "me_and_partner", "label": "Me and my partner" },
+            { "id": "whole_family", "label": "The whole family" },
+            { "id": "someone_else", "label": "Someone else weighs in too" }
+          ]
+        },
+        {
+          "id": "detail_oriented",
+          "kind": "single",
+          "prompt": "How detail oriented are you?",
+          "options": [
+            { "id": "high", "label": "High" },
+            { "id": "medium", "label": "Medium" },
+            { "id": "low", "label": "Low" }
+          ]
+        },
+        { "id": "excited", "kind": "long_text", "prompt": "What are you most excited about?" },
+        { "id": "nervous", "kind": "long_text", "prompt": "What are you most nervous about?", "help": "Budget, timing, living through it... no wrong answers." },
+        {
+          "id": "past_professionals",
+          "kind": "multi",
+          "prompt": "Have you worked with a decorator, designer or architect before?",
+          "help": "Pick all that apply.",
+          "options": [
+            { "id": "decorator", "label": "Yes, a decorator" },
+            { "id": "designer", "label": "Yes, a designer" },
+            { "id": "architect", "label": "Yes, an architect" },
+            { "id": "no", "label": "No" }
+          ]
+        },
+        {
+          "id": "past_experience",
+          "kind": "long_text",
+          "prompt": "How did it go?",
+          "showIf": {
+            "any": [
+              { "field": "past_professionals", "includes": "decorator" },
+              { "field": "past_professionals", "includes": "designer" },
+              { "field": "past_professionals", "includes": "architect" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "household",
+      "title": "Household",
+      "questions": [
+        {
+          "id": "people",
+          "kind": "repeater",
+          "prompt": "Who lives here?",
+          "help": "Add everyone who lives in the home, including you.",
+          "addLabel": "Add a person",
+          "max": 12,
+          "fields": [
+            { "id": "name", "kind": "short_text", "prompt": "Name" },
+            { "id": "age", "kind": "number", "prompt": "Age" },
+            { "id": "occupation", "kind": "short_text", "prompt": "What they do", "help": "Optional: job, school, retired..." }
+          ]
+        },
+        {
+          "id": "considerations",
+          "kind": "multi",
+          "prompt": "Anything we should design around?",
+          "help": "Pick all that apply.",
+          "options": [
+            { "id": "mobility", "label": "Mobility needs" },
+            { "id": "aging_parents", "label": "Aging parents" },
+            { "id": "young_children", "label": "Young children" },
+            { "id": "day_sleeper", "label": "Someone sleeps during the day" },
+            { "id": "none", "label": "None of these" }
+          ]
+        },
+        { "id": "considerations_notes", "kind": "long_text", "prompt": "Tell us more", "help": "Optional." },
+        {
+          "id": "has_pets",
+          "kind": "single",
+          "prompt": "Any pets?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "no", "label": "No" }
+          ]
+        },
+        {
+          "id": "hosting_frequency",
+          "kind": "single",
+          "prompt": "How often do people come over?",
+          "options": [
+            { "id": "never", "label": "Never" },
+            { "id": "rarely", "label": "Rarely" },
+            { "id": "few_times_year", "label": "A few times a year" },
+            { "id": "monthly", "label": "Monthly-ish" },
+            { "id": "all_the_time", "label": "We're the house everyone comes to" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kids",
+      "title": "Kids",
+      "showIf": { "field": "household_min_age", "lessThan": 18 },
+      "questions": [
+        {
+          "id": "kids",
+          "kind": "repeater",
+          "prompt": "Tell us about each kid",
+          "addLabel": "Add a kid",
+          "max": 10,
+          "fields": [
+            { "id": "name", "kind": "short_text", "prompt": "Name" },
+            {
+              "id": "interests",
+              "kind": "multi",
+              "prompt": "What are they into?",
+              "options": [
+                { "id": "sports", "label": "Sports" },
+                { "id": "music", "label": "Music" },
+                { "id": "art", "label": "Art" },
+                { "id": "reading", "label": "Reading" },
+                { "id": "gaming", "label": "Gaming" },
+                { "id": "building", "label": "Building and making" }
+              ]
+            },
+            { "id": "space_needs", "kind": "long_text", "prompt": "What does their space need?" }
+          ]
+        },
+        {
+          "id": "homework",
+          "kind": "single",
+          "prompt": "Where does homework happen?",
+          "options": [
+            { "id": "their_room", "label": "Their room" },
+            { "id": "kitchen_table", "label": "Kitchen table" },
+            { "id": "dedicated_spot", "label": "A dedicated spot" },
+            { "id": "not_in_school", "label": "Not in school yet" }
+          ]
+        },
+        { "id": "toys", "kind": "long_text", "prompt": "Toys and gear: where does it all live right now?" }
+      ]
+    },
+    {
+      "id": "pets",
+      "title": "Pets",
+      "showIf": { "field": "has_pets", "equals": "yes" },
+      "questions": [
+        {
+          "id": "pets",
+          "kind": "repeater",
+          "prompt": "Tell us about your pets",
+          "addLabel": "Add a pet",
+          "max": 10,
+          "fields": [
+            { "id": "name", "kind": "short_text", "prompt": "Name" },
+            { "id": "kind", "kind": "short_text", "prompt": "What kind?", "help": "Dog, cat, bearded dragon..." }
+          ]
+        },
+        {
+          "id": "pets_on_furniture",
+          "kind": "single",
+          "prompt": "Are they allowed on the furniture?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "no", "label": "No" },
+            { "id": "they_dont_ask", "label": "They don't ask" }
+          ]
+        },
+        {
+          "id": "pets_roam",
+          "kind": "single",
+          "prompt": "Do they roam the whole house?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "some_rooms", "label": "Some rooms" },
+            { "id": "no", "label": "No" }
+          ]
+        },
+        { "id": "pet_durability", "kind": "long_text", "prompt": "What should we know about durability?", "help": "Shedding, scratching, muddy paws..." }
+      ]
+    },
+    {
+      "id": "everyday",
+      "title": "Everyday life",
+      "questions": [
+        {
+          "id": "morning",
+          "kind": "long_text",
+          "prompt": "What's your morning like?",
+          "help": "Walk us through it. Who's up first, where does the coffee happen, where does everyone scatter?"
+        },
+        {
+          "id": "meals",
+          "kind": "single",
+          "prompt": "Where do meals actually happen?",
+          "options": [
+            { "id": "island", "label": "Kitchen island" },
+            { "id": "dining_table", "label": "Dining table" },
+            { "id": "couch", "label": "The couch, honestly" },
+            { "id": "depends", "label": "It depends" }
+          ]
+        },
+        {
+          "id": "enough_storage",
+          "kind": "single",
+          "prompt": "Is there enough storage in your home right now?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "no", "label": "No" },
+            { "id": "not_sure", "label": "Not sure" }
+          ]
+        },
+        {
+          "id": "storage_focus",
+          "kind": "long_text",
+          "prompt": "Which areas or things should we focus on for storage?",
+          "help": "Shoes at the door, the pantry, toys, seasonal stuff...",
+          "showIf": { "field": "enough_storage", "in": ["no", "not_sure"] }
+        },
+        {
+          "id": "work_from_home",
+          "kind": "single",
+          "prompt": "Does anyone work from home?",
+          "options": [
+            { "id": "full_time", "label": "Full time" },
+            { "id": "some_days", "label": "Some days" },
+            { "id": "no", "label": "No" }
+          ]
+        },
+        {
+          "id": "work_needs",
+          "kind": "long_text",
+          "prompt": "What do they need?",
+          "help": "Quiet, video calls, two monitors, a door that closes...",
+          "showIf": { "field": "work_from_home", "in": ["full_time", "some_days"] }
+        },
+        {
+          "id": "activities",
+          "kind": "multi",
+          "prompt": "Which of these happen regularly in your home?",
+          "help": "Pick all that apply.",
+          "options": [
+            { "id": "cooking", "label": "Cooking" },
+            { "id": "movies_tv", "label": "Movies and TV" },
+            { "id": "games", "label": "Games" },
+            { "id": "music", "label": "Music" },
+            { "id": "reading", "label": "Reading" },
+            { "id": "working_out", "label": "Working out" },
+            { "id": "crafts", "label": "Crafts and hobbies" },
+            { "id": "gardening", "label": "Gardening" }
+          ]
+        },
+        { "id": "drink_order", "kind": "short_text", "prompt": "How do you actually take your coffee or tea?", "help": "The real order. We'll have it ready." }
+      ]
+    },
+    {
+      "id": "entertaining",
+      "title": "Entertaining",
+      "showIf": { "field": "hosting_frequency", "in": ["rarely", "few_times_year", "monthly", "all_the_time"] },
+      "questions": [
+        {
+          "id": "gathering_types",
+          "kind": "multi",
+          "prompt": "What does a typical get-together look like?",
+          "help": "Pick all that apply.",
+          "options": [
+            { "id": "casual", "label": "Casual drop-ins" },
+            { "id": "dinner_parties", "label": "Dinner parties" },
+            { "id": "holidays", "label": "Big holiday gatherings" },
+            { "id": "kids_friends", "label": "Kids' friends everywhere" }
+          ]
+        },
+        { "id": "guest_count", "kind": "short_text", "prompt": "How many people, usually?" },
+        {
+          "id": "space_works",
+          "kind": "single",
+          "prompt": "Does your space work for it now?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "mostly", "label": "Mostly" },
+            { "id": "not_at_all", "label": "Not at all" }
+          ]
+        },
+        { "id": "hosting_wishes", "kind": "long_text", "prompt": "What would make hosting easier?" }
+      ]
+    },
+    {
+      "id": "travel",
+      "title": "Travel and taste",
+      "questions": [
+        {
+          "id": "travels",
+          "kind": "single",
+          "prompt": "Do you travel much?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "no", "label": "No" }
+          ]
+        },
+        { "id": "travel_details", "kind": "long_text", "prompt": "Where do you go, how often, and what for?", "showIf": { "field": "travels", "equals": "yes" } },
+        {
+          "id": "travel_finds",
+          "kind": "long_text",
+          "prompt": "Do you bring things home from your trips?",
+          "help": "Art, textiles, ceramics...",
+          "showIf": { "field": "travels", "equals": "yes" }
+        },
+        { "id": "favourite_thing", "kind": "long_text", "prompt": "What's your favourite thing you own?" },
+        { "id": "favourite_place", "kind": "short_text", "prompt": "A public place you love being in?", "help": "A hotel, a restaurant, a library..." }
+      ]
+    },
+    {
+      "id": "home_words",
+      "title": "Your home, in words",
+      "questions": [
+        { "id": "word_now", "kind": "short_text", "prompt": "One word for your home right now" },
+        { "id": "word_future", "kind": "short_text", "prompt": "One word for how you want it to feel" },
+        { "id": "love", "kind": "long_text", "prompt": "What do you love about it?" },
+        { "id": "dont_love", "kind": "long_text", "prompt": "What don't you love?" },
+        { "id": "home_meaning", "kind": "long_text", "prompt": "What does home mean to you?" }
+      ]
+    },
+    {
+      "id": "style",
+      "title": "Style by pictures",
+      "questions": [
+        {
+          "id": "style",
+          "kind": "multi",
+          "prompt": "What do you consider your style? If you don't know, we will figure this out.",
+          "help": "Pick all that apply.",
+          "options": [
+            { "id": "contemporary_rustic", "label": "Contemporary Rustic", "image": "/questionnaire/style-contemporary-rustic.svg" },
+            { "id": "old_world_elegant", "label": "Old World Elegant", "image": "/questionnaire/style-old-world-elegant.svg" },
+            { "id": "tuscan_traditional", "label": "Tuscan Traditional", "image": "/questionnaire/style-tuscan-traditional.svg" },
+            { "id": "minimalistic_clean", "label": "Minimalistic / Clean", "image": "/questionnaire/style-minimalistic-clean.svg" },
+            { "id": "modern_country", "label": "Modern Country", "image": "/questionnaire/style-modern-country.svg" },
+            { "id": "sophisticated_glam", "label": "Sophisticated Glam", "image": "/questionnaire/style-sophisticated-glam.svg" },
+            { "id": "eclectic_collected", "label": "Eclectic / Collected", "image": "/questionnaire/style-eclectic-collected.svg" },
+            { "id": "traditional", "label": "Traditional", "image": "/questionnaire/style-traditional.svg" },
+            { "id": "french_parisian", "label": "French / Parisian", "image": "/questionnaire/style-french-parisian.svg" }
+          ]
+        },
+        {
+          "id": "style_sets",
+          "kind": "pick_images",
+          "prompt": "For each set, pick a favourite and a least favourite",
+          "imageSets": [
+            {
+              "id": "living_rooms",
+              "images": [
+                { "id": "a", "label": "Living room A", "src": "/questionnaire/living-a.svg" },
+                { "id": "b", "label": "Living room B", "src": "/questionnaire/living-b.svg" },
+                { "id": "c", "label": "Living room C", "src": "/questionnaire/living-c.svg" },
+                { "id": "d", "label": "Living room D", "src": "/questionnaire/living-d.svg" }
+              ]
+            },
+            {
+              "id": "kitchens",
+              "images": [
+                { "id": "a", "label": "Kitchen A", "src": "/questionnaire/kitchen-a.svg" },
+                { "id": "b", "label": "Kitchen B", "src": "/questionnaire/kitchen-b.svg" },
+                { "id": "c", "label": "Kitchen C", "src": "/questionnaire/kitchen-c.svg" },
+                { "id": "d", "label": "Kitchen D", "src": "/questionnaire/kitchen-d.svg" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mood_words",
+          "kind": "multi",
+          "prompt": "Pick your mood words",
+          "help": "Pick all that apply.",
+          "options": [
+            { "id": "calm", "label": "Calm" },
+            { "id": "cozy", "label": "Cozy" },
+            { "id": "bright", "label": "Bright" },
+            { "id": "moody", "label": "Moody" },
+            { "id": "playful", "label": "Playful" },
+            { "id": "elegant", "label": "Elegant" },
+            { "id": "earthy", "label": "Earthy" },
+            { "id": "fresh", "label": "Fresh" }
+          ]
+        },
+        { "id": "colours_love", "kind": "short_text", "prompt": "Colours you love" },
+        { "id": "colours_avoid", "kind": "short_text", "prompt": "Colours you'd rather avoid" },
+        {
+          "id": "shared_taste",
+          "kind": "single",
+          "prompt": "Do the adults in the house share the same taste?",
+          "showIf": { "field": "adult_count", "atLeast": 2 },
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "meet_middle", "label": "We meet in the middle" },
+            { "id": "not_close", "label": "Not even close" }
+          ]
+        },
+        {
+          "id": "taste_differences",
+          "kind": "long_text",
+          "prompt": "How do your tastes differ?",
+          "showIf": { "field": "shared_taste", "in": ["meet_middle", "not_close"] }
+        }
+      ]
+    },
+    {
+      "id": "wish_list",
+      "title": "Wish list",
+      "questions": [
+        {
+          "id": "design_elements",
+          "kind": "long_text",
+          "prompt": "What design elements are on your wish list?",
+          "help": "The look and feel: lots of natural light, warm wood, an open layout, a statement light..."
+        },
+        {
+          "id": "features",
+          "kind": "long_text",
+          "prompt": "Any specific features you want?",
+          "help": "Things we'd build or buy: a walk-in pantry, heated floors, a steam shower, a dog wash station..."
+        },
+        {
+          "id": "green_design",
+          "kind": "single",
+          "prompt": "Are you interested in Green or LEED design?",
+          "help": "Green design uses healthier, energy-saving and longer-lasting materials. LEED is a rating system for buildings that meet green standards.",
+          "showIf": { "field": "project_type", "in": ["facelift", "renovation", "addition", "new_build"] },
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "no", "label": "No" },
+            { "id": "maybe_info", "label": "Maybe, I'd like to know more" },
+            { "id": "maybe_cost", "label": "Maybe, depending on cost" }
+          ]
+        },
+        {
+          "id": "green_details",
+          "kind": "long_text",
+          "prompt": "If so, where would you like to include it, or what would you like to learn more about?",
+          "showIf": { "field": "green_design", "in": ["yes", "maybe_info", "maybe_cost"] }
+        },
+        { "id": "anything_else", "kind": "long_text", "prompt": "Anything else we missed?", "help": "Big or small, we want to hear it." }
+      ]
+    }
+  ]
+}

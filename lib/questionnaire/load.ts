@@ -1,3 +1,4 @@
+import questionnaireJson from '@/data/questionnaire/questionnaire.json'
 import { DERIVED_VALUES, QUESTION_KINDS } from './types'
 import type {
   AnswerOption,
@@ -238,6 +239,11 @@ export function parseQuestionnaire(raw: unknown): Questionnaire {
     return step
   })
   return { steps }
+}
+
+// The real questionnaire from data/questionnaire/questionnaire.json.
+export function loadQuestionnaire(): Questionnaire {
+  return parseQuestionnaire(questionnaireJson as unknown)
 }
 
 // Steps that would show more than 7 inputs if every question on them showed.
