@@ -69,3 +69,8 @@
 **Context:** The questionnaire draft proposed a `skipIfQuickQuiz` flag. In the transcripts, Rachael (Oct 9) said the two forms "should be different so no one ever has to do it again twice", and on Oct 28 asked to keep them separate because many clients never take the Quick Quiz.
 **Decision:** The full questionnaire never reads Quick Quiz answers. It asks the detailed versions of shared topics (overall investment and the design portion; the literal drink order) and keeps the behavioural questions the Quick Quiz does not ask. If Banfield moves any question into the Quick Quiz, it is removed from the full questionnaire.
 **Alternatives considered:** Hide or pre-fill questions answered in the Quick Quiz (rejected because it needs matching by email, adds a rule type for beginners to maintain, and was not requested by Banfield).
+
+## 2026-11-06 - At most 7 inputs per step
+**Context:** QUESTIONNAIRE_DISCOVERY P3 suggested at most 6 inputs per step. When the team reviewed the draft wording, Contact & site needed 7 (current, project and mailing addresses), and Style by pictures reached 7 when both shared-taste questions show.
+**Decision:** `stepSizeWarnings` flags steps with more than 7 inputs when every question shows. It stays a warning for review, not an error.
+**Alternatives considered:** Keep 6 and remove a question such as mood words (rejected because the team wants to keep them); split the steps (rejected because each still covers one topic).

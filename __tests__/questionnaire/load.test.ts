@@ -224,13 +224,15 @@ describe('parseQuestionnaire: mistakes in rules', () => {
 })
 
 describe('stepSizeWarnings', () => {
-  test('lists steps with more than 6 inputs when every question shows (a repeater counts as one)', () => {
-    const raw = withChange((r) => {
-      for (let i = 0; i < 6; i++) {
-        r.steps[2].questions.push({ id: `extra_${i}`, kind: 'short_text', prompt: `Extra ${i}` } as never)
-      }
-    })
-    expect(stepSizeWarnings(parseQuestionnaire(raw))).toEqual(['Step kids has 7 inputs when every question shows'])
+  test('lists steps with more than 7 inputs when every question shows (a repeater counts as one)', () => {
+    const withExtras = (count: number) =>
+      withChange((r) => {
+        for (let i = 0; i < count; i++) {
+          r.steps[2].questions.push({ id: `extra_${i}`, kind: 'short_text', prompt: `Extra ${i}` } as never)
+        }
+      })
+    expect(stepSizeWarnings(parseQuestionnaire(withExtras(6)))).toEqual([])
+    expect(stepSizeWarnings(parseQuestionnaire(withExtras(7)))).toEqual(['Step kids has 8 inputs when every question shows'])
     expect(stepSizeWarnings(parseQuestionnaire(base()))).toEqual([])
   })
 })

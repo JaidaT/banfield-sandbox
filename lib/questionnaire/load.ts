@@ -11,8 +11,9 @@ import type {
   Step,
 } from './types'
 
-// A step with more inputs than this is flagged for review (QUESTIONNAIRE_DISCOVERY P3).
-const MAX_INPUTS_PER_STEP = 6
+// A step with more inputs than this is flagged for review. QUESTIONNAIRE_DISCOVERY
+// P3 suggested 6; the team raised it to 7 on 2026-11-06 (see DECISIONS.md).
+const MAX_INPUTS_PER_STEP = 7
 
 const OPERATORS = ['equals', 'in', 'includes', 'lessThan'] as const
 
@@ -232,7 +233,7 @@ export function parseQuestionnaire(raw: unknown): Questionnaire {
   return { steps }
 }
 
-// Steps that would show more than 6 inputs if every question on them showed.
+// Steps that would show more than 7 inputs if every question on them showed.
 // A warning list for review, not an error: inline branches may keep the real
 // number lower.
 export function stepSizeWarnings(questionnaire: Questionnaire): string[] {
