@@ -72,8 +72,8 @@
 
 ## 2026-11-06 - At most 7 inputs per step
 **Context:** QUESTIONNAIRE_DISCOVERY P3 suggested at most 6 inputs per step. When the team reviewed the draft wording, Contact & site needed 7 (current, project and mailing addresses), and Style by pictures reached 7 when both shared-taste questions show.
-**Decision:** `stepSizeWarnings` flags steps with more than 7 inputs when every question shows. It stays a warning for review, not an error.
-**Alternatives considered:** Keep 6 and remove a question such as mood words (rejected because the team wants to keep them); split the steps (rejected because each still covers one topic).
+**Decision:** `stepSizeWarnings` flags steps with more than 7 inputs when every question shows. It stays a warning for review, not an error. Everyday life is a known exception: it reaches 8 only when both the storage and work-from-home follow-ups show, and most people see 6 or 7. The team accepted this to test with real people.
+**Alternatives considered:** Keep 6 and remove a question such as mood words (rejected because the team wants to keep them); split the steps (rejected because each still covers one topic); move the coffee question or the work-from-home pair out of Everyday life to stay at 7 (rejected for now; revisit if testers find the step long).
 
 ## 2026-11-06 - atLeast rule for numbers
 **Context:** The shared-taste question shows only when 2 or more adults live in the home. Rules could say "less than" a number but not "this number or more".
