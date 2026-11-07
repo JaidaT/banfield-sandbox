@@ -147,7 +147,7 @@ Work test-first: for each step, write or update the failing test, then change th
 - [x] `data/questionnaire/sample-answers.json`: the 4 personas from QUESTIONNAIRE_DISCOVERY (growing family renovation, furniture/styling couple, solo new build, multi-generational), each with a note and an `expectedSteps` list. `parseSampleHouseholds` and `loadSampleHouseholds` check that every answer fits its question; tests in `__tests__/questionnaire/sampleAnswers.test.ts`. The solo new build answers "Never" to hosting so one persona tests the Entertaining skip. Whether each `expectedSteps` list matches the rules is checked by the persona tests in Phase 4
 
 ### Phase 2: Logic (no screens)
-- [ ] `lib/questionnaire/derived.ts`: `deriveValues(answers)` returns `household_min_age` and `adult_count` from the household repeater (empty when the household is not answered)
+- [x] `lib/questionnaire/derived.ts`: `deriveValues(answers)` returns `household_min_age` and `adult_count` (18 and over) from the household repeater (null when no ages are entered)
 - [ ] `lib/questionnaire/visibility.ts`: `isVisible(condition, answers, derived)` for every condition shape; `visibleSteps`, `visibleQuestions` and `visibleOptions` built on it
 - [ ] `lib/questionnaire/navigation.ts`: next and previous **visible** step, and "Step 4 of 11" progress that recalculates as answers change
 - [ ] `lib/questionnaire/validate.ts`: list problems: required visible questions unanswered, answers that are not a visible option, too many repeater entries, an image pick that is not in its set or the same image as favourite and least favourite. Hidden questions are never required
