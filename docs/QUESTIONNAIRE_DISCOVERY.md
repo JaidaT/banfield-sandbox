@@ -91,7 +91,7 @@ From Oct 9 and Oct 28:
 - Rachael wants as much data as possible, including time taken (Oct 9).
 - **Sandbox only needs to:**
   - Output the answers grouped by step, with skipped and hidden questions marked differently.
-  - Record time spent per step.
+  - ~~Record time spent per step.~~ Removed by the team on 2026-11-06: the long questionnaire records no time (see DECISIONS.md).
 - Export formats come later.
 
 ---
@@ -152,7 +152,7 @@ Rough length:
 - Busy family renovation: about 14 steps.
 - Furniture/styling couple with no kids or pets: about 11 steps.
 
-Measure real completion times in the sandbox. There is no agreed target yet (see open questions).
+~~Measure real completion times in the sandbox.~~ The sandbox no longer records time (team decision 2026-11-06); to judge length, time test sessions by hand. There is no agreed target yet (see open questions).
 
 Step 12 may be heavy with 6 image sets. If so, split it into "Style by pictures" and "Mood & colour".
 
