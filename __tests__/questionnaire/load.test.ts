@@ -95,6 +95,13 @@ describe('parseQuestionnaire: valid files', () => {
     expect(q.steps[1].questions[0].options).toEqual([])
   })
 
+  test('accepts atLeast on a number or derived value', () => {
+    const raw = withChange((r) => {
+      ;(r.steps[2] as Record<string, unknown>).showIf = { field: 'adult_count', atLeast: 2 }
+    })
+    expect(parseQuestionnaire(raw).steps[2].showIf).toEqual({ field: 'adult_count', atLeast: 2 })
+  })
+
   test('accepts in, includes, any and all conditions and option filters', () => {
     const raw = withChange((r) => {
       r.steps[0].questions.push(
@@ -198,6 +205,8 @@ describe('parseQuestionnaire: mistakes in rules', () => {
   test('throws when a rule does not fit its question', () => {
     const lessThanOnChoice = withChange((r) => { secondQuestion(r).showIf = { field: 'project_type', lessThan: 3 } })
     expect(() => parseQuestionnaire(lessThanOnChoice)).toThrow(/square_feet.*lessThan.*project_type/)
+    const atLeastOnChoice = withChange((r) => { secondQuestion(r).showIf = { field: 'project_type', atLeast: 2 } })
+    expect(() => parseQuestionnaire(atLeastOnChoice)).toThrow(/square_feet.*atLeast.*project_type/)
     const onText = withChange((r) => {
       ;(r.steps[3] as Record<string, unknown>).showIf = { field: 'kid_needs', equals: 'x' }
     })

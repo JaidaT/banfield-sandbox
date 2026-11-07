@@ -15,7 +15,7 @@ import type {
 // P3 suggested 6; the team raised it to 7 on 2026-11-06 (see DECISIONS.md).
 const MAX_INPUTS_PER_STEP = 7
 
-const OPERATORS = ['equals', 'in', 'includes', 'lessThan'] as const
+const OPERATORS = ['equals', 'in', 'includes', 'lessThan', 'atLeast'] as const
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -34,7 +34,7 @@ interface RuleContext {
 function parseFieldCondition(raw: Record<string, unknown>, owner: string, ctx: RuleContext): FieldCondition {
   const used = OPERATORS.filter((op) => op in raw)
   if (!nonEmptyString(raw.field) || used.length !== 1) {
-    throw new Error(`${owner} rule must name a "field" and use exactly one of equals, in, includes or lessThan`)
+    throw new Error(`${owner} rule must name a "field" and use exactly one of equals, in, includes, lessThan or atLeast`)
   }
   const field = raw.field
   const op = used[0]
@@ -59,9 +59,12 @@ function parseFieldCondition(raw: Record<string, unknown>, owner: string, ctx: R
     new Error(`${owner} rule cannot use ${op} on ${field} (a ${kind} question)`)
 
   if (kind === 'derived' || kind === 'number') {
-    if (op !== 'equals' && op !== 'lessThan') throw wrongFit()
-    if (typeof raw[op] !== 'number') throw new Error(`${owner} rule "${op}" on ${field} must be a number`)
-    return op === 'equals' ? { field, equals: raw.equals as number } : { field, lessThan: raw.lessThan as number }
+    if (op !== 'equals' && op !== 'lessThan' && op !== 'atLeast') throw wrongFit()
+    const value = raw[op]
+    if (typeof value !== 'number') throw new Error(`${owner} rule "${op}" on ${field} must be a number`)
+    if (op === 'equals') return { field, equals: value }
+    if (op === 'lessThan') return { field, lessThan: value }
+    return { field, atLeast: value }
   }
   if (kind === 'single') {
     if (op === 'equals') {

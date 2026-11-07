@@ -74,3 +74,8 @@
 **Context:** QUESTIONNAIRE_DISCOVERY P3 suggested at most 6 inputs per step. When the team reviewed the draft wording, Contact & site needed 7 (current, project and mailing addresses), and Style by pictures reached 7 when both shared-taste questions show.
 **Decision:** `stepSizeWarnings` flags steps with more than 7 inputs when every question shows. It stays a warning for review, not an error.
 **Alternatives considered:** Keep 6 and remove a question such as mood words (rejected because the team wants to keep them); split the steps (rejected because each still covers one topic).
+
+## 2026-11-06 - atLeast rule for numbers
+**Context:** The shared-taste question shows only when 2 or more adults live in the home. Rules could say "less than" a number but not "this number or more".
+**Decision:** Add `atLeast` (the value or above) for number questions and derived values, next to `lessThan`.
+**Alternatives considered:** Write it as "not less than 2" (rejected because there is no "not" in the rules, and adding one is harder to read than one more word); use `lessThan` with flipped logic elsewhere (not possible for this rule).
