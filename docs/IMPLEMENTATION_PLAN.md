@@ -137,39 +137,49 @@ Constraints:
 - Screens are deliberately plain wireframes (grey boxes, system font, no brand colours) with a visible "Prototype - not the final design" label.
 - No saving between visits, no photo uploads, no export.
 
-Work test-first: for each step, write or update the failing test, then change the code.
+Work test-first: for each step, write the failing test, then change the code. Each step lists its own tests, so a step is only ticked when its tests pass. (Changed 2026-11-06: tests used to be listed separately in Phase 4, which contradicted working test-first.)
 
 ### Phase 1: Data and types
 - [x] `lib/questionnaire/types.ts`: `Questionnaire` (steps), `Step` (id, title, intro, `showIf`, questions), `Question` kinds `short_text`, `long_text`, `single`, `multi`, `number`, `date`, `repeater` (child questions, `addLabel`, `max`) and `pick_images` (image sets, pick a favourite and a least favourite), `required` (default false), `help`, `showIf`, per-option `showIf` for option filters, and an optional per-option `image` (added 2026-11-06 for the style question); `Condition` (`equals`, `in`, `includes`, `lessThan`, `atLeast`, `any`, `all`); `Answers` (keyed by question id; a repeater's answer is a list of entries)
-- [x] `lib/questionnaire/load.ts` (`parseQuestionnaire` and `stepSizeWarnings`; loading the real file comes with the data file in the next step): validate `questionnaire.json` with clear errors: duplicate step or question ids, unknown kinds, a condition naming a field that is not an earlier question or a known derived value, a condition naming an answer that does not exist, `any`/`all` nested more than one level, a visible step with more than 7 inputs when every question on it shows (warning list for review, not an error), a repeater inside a repeater
-- [x] `data/questionnaire/questionnaire.json` (draft, wording reviewed by the team on 2026-11-06) and `loadQuestionnaire()`: 14 steps from the QUESTIONNAIRE_DISCOVERY step map (the review step is built by the screens) with placeholder wording in Jamie's voice and `_meta` notes in plain English. Includes "What is your morning like?", optional occupation, the literal drink order, overall investment and the portion set aside for design, the current form's project types, detail question and 9 style names, and "Anything else we missed?". Tests in `__tests__/questionnaire/questionnaireFile.test.ts`
-- [x] `public/questionnaire/`: plain grey placeholder images, labelled with their name, for the 9 styles and the 2 image sets (living rooms and kitchens, A to D), plus a test that every picture path in the file exists
-- [x] `data/questionnaire/sample-answers.json`: the 4 personas from QUESTIONNAIRE_DISCOVERY (growing family renovation, furniture/styling couple, solo new build, multi-generational), each with a note and an `expectedSteps` list. `parseSampleHouseholds` and `loadSampleHouseholds` check that every answer fits its question; tests in `__tests__/questionnaire/sampleAnswers.test.ts`. The solo new build answers "Never" to hosting so one persona tests the Entertaining skip. Whether each `expectedSteps` list matches the rules is checked by the persona tests in Phase 4
+- [x] `lib/questionnaire/load.ts` (`parseQuestionnaire` and `stepSizeWarnings`): validate `questionnaire.json` with clear errors: duplicate step or question ids, unknown kinds, a condition naming a field that is not an earlier question or a known derived value, a condition naming an answer that does not exist, `any`/`all` nested more than one level, a visible step with more than 7 inputs when every question on it shows (warning list for review, not an error), a repeater inside a repeater
+  - Tests (`load.test.ts`): a valid file loads; each mistake above throws a message naming the step or question
+- [x] `data/questionnaire/questionnaire.json` (draft, wording reviewed by the team on 2026-11-06) and `loadQuestionnaire()`: 14 steps from the QUESTIONNAIRE_DISCOVERY step map (the review step is built by the screens) with placeholder wording in Jamie's voice and `_meta` notes in plain English. Includes "What is your morning like?", optional occupation, the literal drink order, overall investment and the portion set aside for design, the current form's project types, detail question and 9 style names, and "Anything else we missed?"
+  - Tests (`questionnaireFile.test.ts`): the real file loads with the steps in order; only contact and project type are required; project types and style names match the current form; the step and shared-taste rules; plain ASCII text
+- [x] `public/questionnaire/`: plain grey placeholder images, labelled with their name, for the 9 styles and the 2 image sets (living rooms and kitchens, A to D)
+  - Tests (`questionnaireFile.test.ts`): every picture path in the file exists
+- [x] `data/questionnaire/sample-answers.json`: the 4 personas from QUESTIONNAIRE_DISCOVERY (growing family renovation, furniture/styling couple, solo new build, multi-generational), each with a note and an `expectedSteps` list. The solo new build answers "Never" to hosting so one persona tests the Entertaining skip
+  - Tests (`sampleAnswers.test.ts`): `parseSampleHouseholds` rejects answers that do not fit their question, unknown questions or steps, and bad picture picks
 
 ### Phase 2: Logic (no screens)
 - [x] `lib/questionnaire/derived.ts`: `deriveValues(answers)` returns `household_min_age` and `adult_count` (18 and over) from the household repeater (null when no ages are entered)
+  - Tests (`derived.test.ts`): youngest age and adult count, 17 vs 18, cards without an age, and the empty case
 - [x] `lib/questionnaire/visibility.ts`: `matches(condition, answers, derived)` for every condition shape; `visibleSteps` (each step with its visible questions and the answer choices on offer) and `visibleAnswers` (answers to visible questions only) built on one walk through the questionnaire in order, so a leftover answer to a hidden question never opens its follow-ups
+  - Tests (`visibility.test.ts`): each condition shape; no pets skips the Pets step; a child under 18 shows the Kids step; only "Never" skips Entertaining; furniture/styling hides square footage, contractor and Green/LEED; the spaces list is filtered by project type; a leftover hidden answer does not open its follow-ups
+  - Persona tests (`visibility.test.ts`, the QUESTIONNAIRE_DISCOVERY pass criteria): each persona sees exactly its `expectedSteps`, has no answers to hidden questions, and no visible step shows more than 7 inputs (Everyday may show 8, see DECISIONS.md)
 - [x] `lib/questionnaire/navigation.ts`: next and previous **visible** step (also from a step that has just become hidden), and "Step 4 of 11" progress that recalculates as answers change. Steps with no questions (the welcome) are not counted
+  - Tests (`navigation.test.ts`): Back and Next skip hidden steps; nothing before the first or after the last; the total changes when a branch changes
 - [x] `lib/questionnaire/validate.ts`: `stepProblems` (for blocking Next) and `allProblems` (before submit) list required visible questions left blank, too many repeater cards (empty cards ignored), and the same image as favourite and least favourite. Hidden questions are never required. Answers that are not a visible option are dropped by `visibleAnswers` instead, and an image outside its set can only come from a data typo, which `parseSampleHouseholds` catches
+  - Tests (`validate.test.ts`): only contact and project type are required; a hidden question is never required; the card limit; the same picture twice; the personas have no problems
 - [x] `lib/questionnaire/output.ts`: `buildOutput` groups answers by visible step (the welcome is left out), in the words people saw (choice labels, picture names), each question marked `answered`, `skipped` (visible but blank) or `hidden` (by a rule); lists skipped step titles; empty repeater cards removed; hidden answers left out even though the screen keeps them in case the client switches back; seconds spent on each step and in total
+  - Tests (`output.test.ts`): hidden answers are left out after switching "yes" to "no", and come back if switched to "yes" again; empty cards are dropped; skipped and hidden are marked differently; seconds per step and in total
 - [x] `lib/questionnaire/outputToText.ts`: plain text of the output, grouped by step, for the copy button, in the same format as the short quiz brief. Hidden questions are left out; skipped ones say "(skipped)". Curly quotes, long dashes and "..." typed on phones become plain ASCII; accented letters in names are kept
+  - Tests (`outputToText.test.ts`): heading, time and skipped steps; step headings; repeater cards on one line; every persona is plain ASCII; phone punctuation is converted
 
 ### Phase 3: Wireframe screens
 - [ ] `app/questionnaire/page.tsx` and `components/questionnaire/QuestionnaireForm.tsx` (client component): a welcome screen, one step per screen, Back and Next between visible steps, "Step N of M" with a progress bar, fields appearing and disappearing on the same step as answers change, Next blocked with a plain message only when contact or project type is missing. Records time per step. Plain wireframe styling and the "Prototype - not the final design" label
+  - Tests: answering "No" to pets removes the Pets step from the progress count; an inline follow-up appears on the same step; Next is blocked only for contact and project type
 - [ ] `components/questionnaire/Repeater.tsx`: "Add another" and "Remove" cards on one step
+  - Tests: "Add another" adds a card; "Remove" removes it
 - [ ] `components/questionnaire/PickImages.tsx`: pick a favourite and a least favourite from each placeholder set, with buttons that work on a phone
+  - Tests: favourite and least favourite can be picked
 - [ ] Review step: the answers grouped by step with an "Edit" link back to each step, then a thank-you; below a "Team view (demo only)" divider, the output with `components/CopyBriefButton.tsx` for "Copy as text"
+  - Tests: "Edit" returns to that step; the team view shows the output text
 - [ ] `app/team/questionnaire/[id]/page.tsx`: the team view for each persona, linked from `app/team/page.tsx`
+  - Tests: each persona's page shows its name and skipped steps
 
-### Phase 4: Tests and validation
-- [x] Loader tests: the real file loads; each mistake listed in Phase 1 throws a message naming the step or question (written with Phase 1)
-- [x] Derived value tests: youngest age and adult count from the household repeater, and the empty case (written with Phase 2)
-- [x] Visibility tests: each condition shape; no pets skips the Pets step; a child under 18 shows the Kids step; furniture/styling hides square footage, contractor and Green/LEED; the spaces list is filtered by project type (written with Phase 2)
-- [x] Navigation tests: Back returns to the previous visible step; the total steps change when a branch changes (written with Phase 2)
-- [x] Output tests: hidden answers are left out after switching "yes" to "no", and come back if switched to "yes" again before submitting; empty repeater cards are dropped; skipped and hidden are marked differently; text is plain ASCII (written with Phase 2)
-- [x] Persona tests (QUESTIONNAIRE_DISCOVERY pass criteria): each persona sees exactly the steps its note lists, and no visible step shows more than 7 inputs (Everyday may show 8, see DECISIONS.md) (written with Phase 2, in `visibility.test.ts`)
-- [ ] Component tests: answering "No" to pets removes the Pets step from the progress count; an inline branch appears on the same step; Next is blocked only for contact and project type; "Add another" adds a card; favourite and least favourite can be picked
-- [ ] Run `npm run lint`, `npm test` and `npm run build`, and click through `/questionnaire` on a computer and on a phone
+### Phase 4: Final checks
+- [ ] Run `npm run lint`, `npm test` and `npm run build`
+- [ ] Click through `/questionnaire` on a computer and on a phone, once as each persona
 
 ### Later (not in this plan)
 - Save and resume (team suggestion; nobody asked for it, and it needs storage or browser saving)
