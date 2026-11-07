@@ -1,6 +1,7 @@
 'use client'
 
 import QuestionField from './QuestionField'
+import { BUTTON_SMALL, HINT, LABEL, PROBLEM } from './styles'
 import type { AnswerValue, Question, RepeaterEntry } from '@/lib/questionnaire/types'
 
 interface Props {
@@ -9,8 +10,6 @@ interface Props {
   onChange: (value: RepeaterEntry[]) => void
   error?: string
 }
-
-const BUTTON_CLASS = 'rounded border border-neutral-500 bg-white px-3 py-2 text-sm font-semibold disabled:opacity-40'
 
 // "Add another" cards on one step (people, kids, pets). Each card shows the
 // repeater's fields. One empty card shows before anything is typed.
@@ -33,8 +32,8 @@ export default function Repeater({ question, value, onChange, error }: Props) {
 
   return (
     <fieldset className="flex flex-col gap-3">
-      <legend className="mb-1 text-sm font-semibold">{question.prompt}</legend>
-      {question.help ? <p className="text-sm text-neutral-600">{question.help}</p> : null}
+      <legend className={`${LABEL} mb-1`}>{question.prompt}</legend>
+      {question.help ? <p className={HINT}>{question.help}</p> : null}
 
       {cards.map((card, index) => (
         <fieldset key={index} className="flex flex-col gap-3 rounded border border-neutral-400 bg-neutral-50 p-3">
@@ -53,7 +52,7 @@ export default function Repeater({ question, value, onChange, error }: Props) {
               type="button"
               onClick={() => onChange(cards.filter((_, i) => i !== index))}
               aria-label={`Remove card ${index + 1}`}
-              className={`${BUTTON_CLASS} self-start`}
+              className={`${BUTTON_SMALL} self-start`}
             >
               Remove
             </button>
@@ -65,13 +64,13 @@ export default function Repeater({ question, value, onChange, error }: Props) {
         type="button"
         onClick={() => onChange([...cards, {}])}
         disabled={atLimit}
-        className={`${BUTTON_CLASS} self-start`}
+        className={`${BUTTON_SMALL} self-start`}
       >
         {question.addLabel ?? 'Add another'}
       </button>
-      {question.max !== undefined ? <p className="text-sm text-neutral-600">Up to {question.max}.</p> : null}
+      {question.max !== undefined ? <p className={HINT}>Up to {question.max}.</p> : null}
       {error ? (
-        <p role="alert" className="text-sm font-semibold text-red-700">
+        <p role="alert" className={PROBLEM}>
           {error}
         </p>
       ) : null}

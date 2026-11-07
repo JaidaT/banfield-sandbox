@@ -1,12 +1,8 @@
 'use client'
 
 import Image from 'next/image'
+import { HINT, INPUT, LABEL, PROBLEM } from './styles'
 import type { AnswerValue, Question } from '@/lib/questionnaire/types'
-
-// Plain wireframe styles, shared by the questionnaire screens. Deliberately grey:
-// the real look will be designed in Figma.
-export const INPUT_CLASS = 'w-full rounded border border-neutral-400 bg-white px-3 py-2 text-base'
-const LABEL_CLASS = 'text-sm font-semibold'
 
 interface Props {
   question: Question
@@ -28,12 +24,12 @@ export default function QuestionField({ question, value, onChange, error, inputI
   const shared = { 'aria-describedby': describedBy, 'aria-invalid': error ? true : undefined }
 
   const help = question.help ? (
-    <p id={helpId} className="text-sm text-neutral-600">
+    <p id={helpId} className={HINT}>
       {question.help}
     </p>
   ) : null
   const problem = error ? (
-    <p id={errorId} role="alert" className="text-sm font-semibold text-red-700">
+    <p id={errorId} role="alert" className={PROBLEM}>
       {error}
     </p>
   ) : null
@@ -46,7 +42,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
     }
     return (
       <fieldset className="flex flex-col gap-2" {...shared}>
-        <legend className={`${LABEL_CLASS} mb-1`}>{question.prompt}</legend>
+        <legend className={`${LABEL} mb-1`}>{question.prompt}</legend>
         {help}
         <div className="flex flex-col gap-2">
           {question.options.map((option) => (
@@ -79,7 +75,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
         rows={3}
         value={typeof value === 'string' ? value : ''}
         onChange={(e) => onChange(e.target.value)}
-        className={INPUT_CLASS}
+        className={INPUT}
         {...shared}
       />
     )
@@ -91,7 +87,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
         inputMode="numeric"
         value={typeof value === 'number' ? value : ''}
         onChange={(e) => onChange(e.target.value === '' ? undefined : Number(e.target.value))}
-        className={INPUT_CLASS}
+        className={INPUT}
         {...shared}
       />
     )
@@ -102,7 +98,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
         type="text"
         value={typeof value === 'string' ? value : ''}
         onChange={(e) => onChange(e.target.value)}
-        className={INPUT_CLASS}
+        className={INPUT}
         {...shared}
       />
     )
@@ -110,7 +106,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className={LABEL_CLASS}>
+      <label htmlFor={id} className={LABEL}>
         {question.prompt}
       </label>
       {help}

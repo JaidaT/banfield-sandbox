@@ -6,6 +6,8 @@ import PickImages from './PickImages'
 import QuestionField from './QuestionField'
 import QuestionnaireTeamView from './QuestionnaireTeamView'
 import Repeater from './Repeater'
+import { BUTTON, BUTTON_MAIN, HEADING, HINT, PROBLEM } from './styles'
+import WireframePage from './WireframePage'
 import { nextStepId, previousStepId, progress } from '@/lib/questionnaire/navigation'
 import { buildOutput } from '@/lib/questionnaire/output'
 import { allProblems, stepProblems } from '@/lib/questionnaire/validate'
@@ -15,10 +17,6 @@ import type { Answers, AnswerValue, ImagePicks, Questionnaire, RepeaterEntry } f
 // Screens that are not steps in the data file.
 const REVIEW = 'review'
 const DONE = 'done'
-
-const BUTTON_CLASS = 'rounded border border-neutral-700 px-5 py-2.5 text-base font-semibold'
-const PRIMARY_CLASS = `${BUTTON_CLASS} bg-neutral-800 text-white`
-const SECONDARY_CLASS = `${BUTTON_CLASS} bg-white`
 
 interface Props {
   questionnaire: Questionnaire
@@ -95,21 +93,21 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
     const lastStepId = shown.at(-1)?.step.id ?? firstStepId
     body = (
       <>
-        <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+        <h2 ref={headingRef} tabIndex={-1} className={HEADING}>
           Check your answers
         </h2>
         <p>Anything look off? Use Edit to change it. Skipped questions are fine; we will cover them together.</p>
         {problems.map((p) => (
-          <p key={p.questionId} role="alert" className="text-sm font-semibold text-red-700">
+          <p key={p.questionId} role="alert" className={PROBLEM}>
             {p.message}
           </p>
         ))}
         <AnswersSummary output={buildOutput(questionnaire, answers)} onEdit={edit} />
         <div className="flex gap-3 border-t border-neutral-300 pt-4">
-          <button type="button" onClick={() => goTo(lastStepId)} className={SECONDARY_CLASS}>
+          <button type="button" onClick={() => goTo(lastStepId)} className={BUTTON}>
             Back
           </button>
-          <button type="button" onClick={() => leaveTo(DONE)} className={PRIMARY_CLASS}>
+          <button type="button" onClick={() => leaveTo(DONE)} className={BUTTON_MAIN}>
             Submit
           </button>
         </div>
@@ -118,7 +116,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   } else if (current === DONE) {
     body = (
       <>
-        <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+        <h2 ref={headingRef} tabIndex={-1} className={HEADING}>
           Thank you!
         </h2>
         <p>We will read through everything before we meet. Talk soon.</p>
@@ -132,12 +130,12 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
     // A step with no questions, such as the welcome.
     body = (
       <>
-        <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+        <h2 ref={headingRef} tabIndex={-1} className={HEADING}>
           {step.step.title}
         </h2>
         {step.step.intro ? <p className="leading-7">{step.step.intro}</p> : null}
         <div>
-          <button type="button" onClick={next} className={PRIMARY_CLASS}>
+          <button type="button" onClick={next} className={BUTTON_MAIN}>
             {current === firstStepId ? "Let's start" : 'Next'}
           </button>
         </div>
@@ -151,13 +149,13 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
       <>
         {place ? (
           <div className="flex flex-col gap-1">
-            <p className="text-sm text-neutral-600">
+            <p className={HINT}>
               Step {place.number} of {place.total}
             </p>
             <progress value={place.number} max={place.total} className="h-2 w-full" aria-hidden="true" />
           </div>
         ) : null}
-        <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+        <h2 ref={headingRef} tabIndex={-1} className={HEADING}>
           {step.step.title}
         </h2>
         {step.step.intro ? <p className="leading-7">{step.step.intro}</p> : null}
@@ -200,15 +198,15 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
 
         <div className="flex gap-3 border-t border-neutral-300 pt-4">
           {back ? (
-            <button type="button" onClick={() => goTo(back)} className={SECONDARY_CLASS}>
+            <button type="button" onClick={() => goTo(back)} className={BUTTON}>
               Back
             </button>
           ) : null}
-          <button type="button" onClick={next} className={PRIMARY_CLASS}>
+          <button type="button" onClick={next} className={BUTTON_MAIN}>
             {isLast ? 'Review my answers' : 'Next'}
           </button>
           {returnToReview && !isLast ? (
-            <button type="button" onClick={() => leaveTo(REVIEW)} className={SECONDARY_CLASS}>
+            <button type="button" onClick={() => leaveTo(REVIEW)} className={BUTTON}>
               Back to review
             </button>
           ) : null}
@@ -219,20 +217,11 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
     // The current step was hidden by an answer change; this should not happen
     // because Back and Next only go to visible steps.
     body = (
-      <button type="button" onClick={() => goTo(firstStepId)} className={SECONDARY_CLASS}>
+      <button type="button" onClick={() => goTo(firstStepId)} className={BUTTON}>
         Start again
       </button>
     )
   }
 
-  return (
-    <div className="flex-1 bg-white font-[system-ui] text-neutral-900">
-      <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-6 sm:px-6">
-        <p className="rounded border border-dashed border-neutral-500 bg-neutral-100 px-3 py-2 text-center text-xs font-semibold uppercase tracking-widest text-neutral-600">
-          Prototype - not the final design
-        </p>
-        {body}
-      </main>
-    </div>
-  )
+  return <WireframePage banner="Prototype - not the final design">{body}</WireframePage>
 }

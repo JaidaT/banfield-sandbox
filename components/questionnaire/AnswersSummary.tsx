@@ -1,3 +1,4 @@
+import { BUTTON_SMALL, HINT } from './styles'
 import type { QuestionnaireOutput } from '@/lib/questionnaire/output'
 
 interface Props {
@@ -21,7 +22,7 @@ export default function AnswersSummary({ output, onEdit }: Props) {
                 type="button"
                 onClick={() => onEdit(step.id)}
                 aria-label={`Edit ${step.title}`}
-                className="rounded border border-neutral-500 bg-white px-3 py-1 text-sm font-semibold"
+                className={BUTTON_SMALL}
               >
                 Edit
               </button>
@@ -32,7 +33,7 @@ export default function AnswersSummary({ output, onEdit }: Props) {
               .filter((a) => a.status !== 'hidden')
               .map((answer) => (
                 <div key={answer.id}>
-                  <dt className="text-sm text-neutral-600">{answer.prompt}</dt>
+                  <dt className={HINT}>{answer.prompt}</dt>
                   <dd>
                     {answer.cards ? (
                       <ul className="flex flex-col gap-1">

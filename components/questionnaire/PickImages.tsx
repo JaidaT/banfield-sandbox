@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { HINT, LABEL, PROBLEM } from './styles'
 import type { ImagePicks, Question } from '@/lib/questionnaire/types'
 
 interface Props {
@@ -35,8 +36,8 @@ export default function PickImages({ question, value, onChange, error }: Props) 
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm font-semibold">{question.prompt}</p>
-      {question.help ? <p className="text-sm text-neutral-600">{question.help}</p> : null}
+      <p className={LABEL}>{question.prompt}</p>
+      {question.help ? <p className={HINT}>{question.help}</p> : null}
 
       {(question.imageSets ?? []).map((set, setIndex) => (
         <fieldset key={set.id} className="flex flex-col gap-2 rounded border border-neutral-400 p-3">
@@ -69,7 +70,7 @@ export default function PickImages({ question, value, onChange, error }: Props) 
       ))}
 
       {error ? (
-        <p role="alert" className="text-sm font-semibold text-red-700">
+        <p role="alert" className={PROBLEM}>
           {error}
         </p>
       ) : null}
