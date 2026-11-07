@@ -41,8 +41,6 @@
         { "id": "home_city", "kind": "short_text", "prompt": "City" },
         { "id": "home_province", "kind": "short_text", "prompt": "Province" },
         { "id": "home_postal_code", "kind": "short_text", "prompt": "Postal Code" },
-        
-
         { 
           "id": "same_mailing_address",
           "kind": "multi",
@@ -51,17 +49,13 @@
             { "id": "same", "label": "Same as my home address" }
           ]
         },
-
         { "id": "mailing_country", "kind": "short_text", "prompt": "Country", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
         { "id": "mailing_address_1", "kind": "short_text", "prompt": "Address Line 1", "help": "Your current mailing address", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
         { "id": "mailing_address_2", "kind": "short_text", "prompt": "Address Line 2", "help": "Apartment, suite or unit, if any.", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
         { "id": "mailing_city", "kind": "short_text", "prompt": "City", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
         { "id": "mailing_province", "kind": "short_text", "prompt": "Province", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
         { "id": "mailing_postal_code", "kind": "short_text", "prompt": "Postal Code", "showIf": { "field": "same_mailing_address", "excludes": "same" } },
-
-
         { "id": "project_address", "kind": "short_text", "prompt": "Where is the project?", "help": "Leave blank if it's the same as above." },
-
         { 
           "id": "referral_source", 
           "kind": "single", 
