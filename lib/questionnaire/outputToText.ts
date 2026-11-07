@@ -5,7 +5,7 @@ const NAME_QUESTION = 'name'
 
 // Same format as the short quiz brief. Copied, not imported, because
 // lib/questionnaire never imports from lib/quiz (see DECISIONS.md).
-function formatDuration(seconds: number): string {
+export function formatDuration(seconds: number): string {
   const minutes = Math.floor(seconds / 60)
   const rest = seconds % 60
   return minutes === 0 ? `${rest} s` : `${minutes} min ${rest} s`

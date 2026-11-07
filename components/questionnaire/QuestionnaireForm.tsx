@@ -1,16 +1,20 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import AnswersSummary from './AnswersSummary'
 import PickImages from './PickImages'
 import QuestionField from './QuestionField'
+import QuestionnaireTeamView from './QuestionnaireTeamView'
 import Repeater from './Repeater'
 import { nextStepId, previousStepId, progress } from '@/lib/questionnaire/navigation'
-import { stepProblems } from '@/lib/questionnaire/validate'
+import { buildOutput } from '@/lib/questionnaire/output'
+import { allProblems, stepProblems } from '@/lib/questionnaire/validate'
 import { visibleSteps } from '@/lib/questionnaire/visibility'
 import type { Answers, AnswerValue, ImagePicks, Questionnaire, RepeaterEntry } from '@/lib/questionnaire/types'
 
 // Screens that are not steps in the data file.
 const REVIEW = 'review'
+const DONE = 'done'
 
 const BUTTON_CLASS = 'rounded border border-neutral-700 px-5 py-2.5 text-base font-semibold'
 const PRIMARY_CLASS = `${BUTTON_CLASS} bg-neutral-800 text-white`
@@ -30,14 +34,21 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   const firstStepId = questionnaire.steps[0].id
   const [current, setCurrent] = useState(startAt ?? firstStepId)
   const [answers, setAnswers] = useState<Answers>(initialAnswers ?? {})
-  // Seconds spent on each step. Read by the review step (added next).
-  const [, setSecondsByStep] = useState<Record<string, number>>({})
-  // Problem messages show only after Next is pressed, then update as the person types.
+  // Seconds spent on each step, for the team view.
+  const [secondsByStep, setSecondsByStep] = useState<Record<string, number>>({})
+  // Problem messages show only after Next or Submit is pressed, then update as the person types.
   const [showProblems, setShowProblems] = useState(false)
+  // True after "Edit" on the review screen, to offer "Back to review".
+  const [returnToReview, setReturnToReview] = useState(false)
 
   const enteredAt = useRef<number | null>(null)
   const hasMoved = useRef(false)
   const headingRef = useRef<HTMLHeadingElement>(null)
+
+  // Start the clock for the first screen once the page is open.
+  useEffect(() => {
+    enteredAt.current = Date.now()
+  }, [])
 
   // After moving, put focus on the new heading. This also scrolls to the top
   // on a phone and tells screen readers the screen changed.
@@ -47,7 +58,11 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
 
   const shown = visibleSteps(questionnaire, answers)
   const step = shown.find((s) => s.step.id === current)
-  const problems = showProblems ? stepProblems(questionnaire, answers, current) : []
+  const problems = !showProblems
+    ? []
+    : current === REVIEW
+      ? allProblems(questionnaire, answers)
+      : stepProblems(questionnaire, answers, current)
 
   function goTo(target: string) {
     const now = Date.now()
@@ -63,12 +78,23 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
     setCurrent(target)
   }
 
-  function next() {
-    if (stepProblems(questionnaire, answers, current).length > 0) {
+  // Moves on only when the current step has no problems (or, on review, none at all).
+  function leaveTo(target: string) {
+    const found = current === REVIEW ? allProblems(questionnaire, answers) : stepProblems(questionnaire, answers, current)
+    if (found.length > 0) {
       setShowProblems(true)
       return
     }
-    goTo(nextStepId(questionnaire, answers, current) ?? REVIEW)
+    goTo(target)
+  }
+
+  function next() {
+    leaveTo(nextStepId(questionnaire, answers, current) ?? REVIEW)
+  }
+
+  function edit(stepId: string) {
+    setReturnToReview(true)
+    goTo(stepId)
   }
 
   function setAnswer(id: string, value: AnswerValue | undefined) {
@@ -88,10 +114,33 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
         <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
           Check your answers
         </h2>
-        <div className="flex gap-3">
+        <p>Anything look off? Use Edit to change it. Skipped questions are fine; we will cover them together.</p>
+        {problems.map((p) => (
+          <p key={p.questionId} role="alert" className="text-sm font-semibold text-red-700">
+            {p.message}
+          </p>
+        ))}
+        <AnswersSummary output={buildOutput(questionnaire, answers)} onEdit={edit} />
+        <div className="flex gap-3 border-t border-neutral-300 pt-4">
           <button type="button" onClick={() => goTo(lastStepId)} className={SECONDARY_CLASS}>
             Back
           </button>
+          <button type="button" onClick={() => leaveTo(DONE)} className={PRIMARY_CLASS}>
+            Submit
+          </button>
+        </div>
+      </>
+    )
+  } else if (current === DONE) {
+    body = (
+      <>
+        <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+          Thank you!
+        </h2>
+        <p>We will read through everything before we meet. Talk soon.</p>
+        <div className="mt-6 border-t-4 border-double border-neutral-400 pt-4">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-600">Team view (demo only)</p>
+          <QuestionnaireTeamView output={buildOutput(questionnaire, answers, secondsByStep)} />
         </div>
       </>
     )
@@ -175,6 +224,11 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
           <button type="button" onClick={next} className={PRIMARY_CLASS}>
             {isLast ? 'Review my answers' : 'Next'}
           </button>
+          {returnToReview && !isLast ? (
+            <button type="button" onClick={() => leaveTo(REVIEW)} className={SECONDARY_CLASS}>
+              Back to review
+            </button>
+          ) : null}
         </div>
       </>
     )

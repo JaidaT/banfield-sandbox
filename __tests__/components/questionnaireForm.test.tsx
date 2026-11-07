@@ -1,7 +1,7 @@
-import { afterEach, describe, expect, test } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuestionnaireForm from '@/components/questionnaire/QuestionnaireForm'
-import { loadQuestionnaire } from '@/lib/questionnaire/load'
+import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
 import type { Answers } from '@/lib/questionnaire/types'
 
 afterEach(cleanup)
@@ -75,5 +75,51 @@ describe('QuestionnaireForm', () => {
     render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" />)
     click('Review my answers')
     expect(stepHeading()).toBe('Check your answers')
+  })
+})
+
+describe('QuestionnaireForm: review and submit', () => {
+  const family = loadSampleHouseholds().find((s) => s.id === 'growing_family')!.answers
+  const toReview = () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} />)
+    click('Review my answers')
+  }
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  test('review shows the answers in words, grouped by step', () => {
+    toReview()
+    expect(screen.getByRole('heading', { level: 3, name: 'The project' })).toBeDefined()
+    expect(screen.getByText('Renovation')).toBeDefined()
+    expect(screen.getByText(/Golden retriever/)).toBeDefined()
+  })
+
+  test('"Edit" goes to that step, and "Back to review" comes straight back', () => {
+    toReview()
+    click('Edit The project')
+    expect(stepHeading()).toBe('The project')
+    click('Back to review')
+    expect(stepHeading()).toBe('Check your answers')
+  })
+
+  test('submitting shows a thank-you, then the team view with a copy button', () => {
+    toReview()
+    click('Submit')
+    expect(stepHeading()).toBe('Thank you!')
+    expect(screen.getByText('Team view (demo only)')).toBeDefined()
+    expect(screen.getByText('Steps skipped: none')).toBeDefined()
+    expect(screen.getByRole('button', { name: 'Copy as text' })).toBeDefined()
+  })
+
+  test('the team view shows the time spent', () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(0)
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} />)
+    vi.setSystemTime(125_000)
+    click('Review my answers')
+    click('Submit')
+    expect(screen.getByText('Time to complete: 2 min 5 s')).toBeDefined()
   })
 })
