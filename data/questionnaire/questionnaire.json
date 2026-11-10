@@ -24,11 +24,11 @@
       "questions": [
         { "id": "name", "kind": "short_text", "prompt": "Your name", "required": true },
         { "id": "email", "kind": "short_text", "prompt": "Email", "required": true },
-        { "id": "phone", "kind": "short_text", "prompt": "Best phone number", "required": true },
+        { "id": "phone", "kind": "short_text", "prompt": "Primary phone number", "required": true },
         {
           "id": "contact_method",
           "kind": "single",
-          "prompt": "How do you like to hear from us?",
+          "prompt": "How would you like to hear from us?",
           "options": [
             { "id": "email", "label": "Email" },
             { "id": "phone", "label": "Phone call" },

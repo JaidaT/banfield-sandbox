@@ -30,14 +30,14 @@ describe('QuestionnaireForm', () => {
     expect(screen.getAllByRole('alert').map((a) => a.textContent)).toEqual([
       'Please answer "Your name"',
       'Please answer "Email"',
-      'Please answer "Best phone number"',
+      'Please answer "Primary phone number"',
     ])
 
     fireEvent.change(screen.getByLabelText('Your name'), { target: { value: 'Pat' } })
     expect(screen.getAllByRole('alert')).toHaveLength(2)
-    // "Email" is also a choice under "How do you like to hear from us?", so ask for the text box.
+    // "Email" is also a choice under "How would you like to hear from us?", so ask for the text box.
     fireEvent.change(screen.getByRole('textbox', { name: 'Email' }), { target: { value: 'pat@example.com' } })
-    fireEvent.change(screen.getByLabelText('Best phone number'), { target: { value: '604-555-0100' } })
+    fireEvent.change(screen.getByLabelText('Primary phone number'), { target: { value: '604-555-0100' } })
     click('Next')
     expect(stepHeading()).toBe('The project')
   })
