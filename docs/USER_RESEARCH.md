@@ -1,19 +1,19 @@
 # User Research: Validating the Quick Quiz
 
 **For:** the project team and Banfield Design.
-**Status:** plan ready; no sessions run yet. Last updated 2026-10-26.
+**Status:** plan ready; no sessions run yet. The quiz screen now exists, so sessions use the real quiz at `/quiz`. Last updated 2026-11-10.
 
 ## Why we are testing
 
 The Quick Quiz does two jobs for Jamie before a discovery call:
 
 1. **Identify the client type.** For example, "mostly an Analytical Validator, partly a Hands-On Controller."
-2. **Assess fit.** Is this the right project for Banfield, based on scope, timing, budget, readiness and the kind of help they want?
+2. **Label the lead hot, warm or cold.** Is this the right project for Banfield? Since the Oct 28 meeting, this comes from the project type and the investment together, and drops one step if a warning sign shows up (for example "just exploring for now"). Location plays no part.
 
 The questions, and the points each answer gives toward a client type, are our best first draft. Before Banfield relies on the quiz, we need to check four things:
 
 - **Accuracy:** does the quiz name the same client type Jamie would?
-- **Fit:** does the fit assessment match Jamie's own judgement of the project?
+- **Lead label:** does hot, warm or cold match Jamie's own judgement of the project?
 - **Ease:** can people finish in about 5 minutes on a phone, without confusion?
 - **Tone:** does it feel like Jamie (warm, a little funny, not salesy), and does the result make people want to book a call rather than go it alone?
 
@@ -23,7 +23,7 @@ We will test with a small number of people. That is enough to catch confusing qu
 
 So we treat results as **direction, not proof**. One mismatch is a reason to look closer, not automatically a reason to change the quiz. A pattern across several people is a reason to change it.
 
-Because of this, the quiz currently **does not** use completion time to decide client type. Time taken is shown to Jamie as a note only (for example, "Finished quickly") until we have more evidence that speed actually says something about the person.
+Because of this, the quiz currently **does not** use completion time to decide client type. Time taken is shown to Jamie as a note only (for example, "Finished quickly") until we have more evidence that speed actually says something about the person. The quiz measures it itself, from pressing "Let's start" to pressing "See my results", so reading the welcome screen does not count.
 
 ## Who is taking part
 
@@ -34,11 +34,21 @@ Because of this, the quiz currently **does not** use completion time to decide c
 | **Classmates** (several) | Time to complete, confusing wording, phone usability, where people hesitate or skip. | Real client type, since they are not homeowners planning a project. |
 | **Jamie and the team** (answering as past clients) | Whether the questions can tell the five client types apart at all. Fast, and needs no new participants. | Real behaviour; Jamie's memory of a client is not the client. |
 
-## How to run the quiz before the app exists
+## How to run a session
 
-The quiz screen has not been built yet. For early sessions, put the current questions into a **Google Form** (or print them). Ask participants to answer on their phone if possible, since most real visitors will.
+Use the real quiz. On the computer, run `npm run dev`; on a phone on the same Wi-Fi, open the computer's address followed by `/quiz` (for example `http://192.168.1.68:3000/quiz`). Ask participants to answer on their phone if possible, since most real visitors will.
 
-For every session, note the start and end time. Afterwards, the answers can be entered into the prototype to produce the same team brief and client result Jamie would see.
+- **The time is recorded for you.** It appears in the team brief's Behaviour section ("Time to complete"). Note your own start and end time too, as a check.
+- **Take the phone back as soon as the client result appears.** This prototype shows the team brief, with the client type and the hot/warm/cold label, under a "Team view (demo only)" divider below the client result. Participants must not see it: it would colour everything they say afterwards, and real clients never see it. Read the brief yourself after the session.
+- **The contact screen comes last and is optional for now.** Ask participants to skip it or use made-up details (see Privacy and consent). Note whether they filled it in or skipped it: it helps Banfield decide whether contact details should be required before the result.
+- **If you see a red "1 Issue" box** while testing with `npm run dev` on a phone, tap the X and carry on. Some phone browsers add a hidden setting to the page, and the development tools report it. Visitors to the live site never see this.
+
+### What to watch on a phone
+
+- **The investment slider:** do people drag it easily, and do they find "Not sure yet"?
+- **"What makes you feel confident?":** after two picks the other boxes turn grey. Do people notice, or try to tick a third?
+- **The contact screen:** fill in or skip? Did "leave it blank" feel natural?
+- **The result screen:** does it make them want to book a call with Jamie?
 
 ## The four test methods
 
@@ -61,7 +71,7 @@ If two different client types keep producing the same result, the questions are 
 
 ### 3. Classmates with personas
 
-Give each classmate one persona card (below) and ask them to answer **as that person**. This makes their answers closer to a real homeowner's and tests whether the quiz can pick up each type.
+Give each classmate one persona card (below) and ask them to answer **as that person**. Skip the hot/warm/cold comparison for classmates: without a real project, the label only reflects made-up answers. This makes their answers closer to a real homeowner's and tests whether the quiz can pick up each type.
 
 Do not tell them which client type the card represents. Afterwards, check whether the quiz's result matches the card.
 
@@ -91,8 +101,9 @@ With so few people, these comments are more valuable than the numbers.
 | Device | Phone / laptop |
 | Time to complete | 6 min 10 s |
 | Questions skipped | "What does home mean to you?" |
+| Contact screen | Filled in / Skipped / Made-up details |
 | Quiz result: client type blend | 55% Analytical Validator / 30% Hands-On Controller |
-| Quiz result: fit | Strong / Possible / Weak |
+| Quiz result: lead label | Hot / Warm / Cold |
 | Match? | Yes / Partly / No |
 | Confusing or uncomfortable questions | "Investment question felt pushy" |
 | Reaction to the client-facing result | "Made me want to book a call" |
@@ -103,7 +114,7 @@ With so few people, these comments are more valuable than the numbers.
 These are starting targets, not pass/fail rules:
 
 - **Accuracy:** the quiz's top client type matches Jamie's guess or the persona card in most sessions, and the right type appears in the top two in nearly all of them.
-- **Fit:** the quiz's fit rating matches Jamie's judgement of the past client's project.
+- **Lead label:** the quiz's hot, warm or cold label matches Jamie's judgement of the past client's project.
 - **Ease:** most people finish in about 5 minutes, and no single question confuses more than one person.
 - **Tone:** nobody says the quiz felt like a sales form or a test, and the renovator's reaction to the result leans toward "I'd talk to Jamie" rather than "I don't need a designer."
 
@@ -122,7 +133,7 @@ All of these are edits to the question and rule files, not to the app's code. Ea
 
 - Ask every participant for permission before the session and explain that answers are used only to improve the quiz.
 - Record participants as P1, P2 and so on, never by name. The past client's real details stay with Banfield.
-- Do not store photos, addresses or contact details collected during testing in this project.
+- Do not store photos, addresses or contact details collected during testing in this project. On the quiz's contact screen, participants should skip it or use made-up details, and nobody should paste a participant's brief ("Copy as text") anywhere outside the session notes.
 
 ## Results log
 
