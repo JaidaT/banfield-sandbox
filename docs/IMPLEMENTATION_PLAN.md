@@ -449,9 +449,9 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/teamPages.test.tsx`): the list shows six rows in date order with name, date, lead label and type line; the tied sample's row shows "Close call"; "Brief" links to `/team/quick-quiz/<id>` and "Client result" to `/result/<id>`; each test note is labelled "Test note (prototype only)"; a brief page has its back link; an unknown id is "not found"
 - [x] Long questionnaire pages: new `app/team/long-questionnaire/page.tsx` (the list) and `app/team/long-questionnaire/[id]/page.tsx` (moved from `app/team/questionnaire/[id]`, its back link pointing to the new list). `app/team/questionnaire/` is removed
   - Tests (`__tests__/long-questionnaire/teamPages.test.tsx`, replacing `questionnaireTeamPages.test.tsx`): the list shows four rows in date order with household name, date, project type and steps skipped; each row links to `/team/long-questionnaire/<id>`; the existing household page tests still pass at the new address
-- [ ] `app/team/page.tsx`: just a heading and two links, "Quick Quiz sample briefs" and "Long questionnaire sample briefs"
+- [x] `app/team/page.tsx`: just a heading and two links, "Quick Quiz sample briefs" and "Long questionnaire sample briefs"
   - Tests: both links point to the new lists, and no sample is listed on `/team` itself
-- [ ] `app/page.tsx`: the home page described above
+- [x] `app/page.tsx`: the home page described above (the sample buttons read "View Quick Quiz sample briefs" and "View Long Questionnaire sample briefs", Jaida's original labels, so they name their product for everyone, not only screen readers)
   - Tests (`__tests__/page.test.tsx`): the title no longer says only "Quick Quiz"; the four links go to `/quiz`, `/team/quick-quiz`, `/questionnaire` and `/team/long-questionnaire`; each "View sample briefs" link names its product for screen readers
 
 ### Phase 4: Docs and checks
