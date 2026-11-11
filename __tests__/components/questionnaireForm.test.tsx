@@ -202,3 +202,18 @@ describe('QuestionnaireForm: no review screen (skipReview)', () => {
     expect(stepHeading()).not.toBe('Thank you!')
   })
 })
+
+describe('QuestionnaireForm: onStart', () => {
+  test('is called once when "Let\'s start" is pressed, not when the page opens or on later steps', () => {
+    const onStart = vi.fn()
+    render(<QuestionnaireForm questionnaire={questionnaire} onStart={onStart} />)
+    expect(onStart).not.toHaveBeenCalled()
+    click("Let's start")
+    expect(onStart).toHaveBeenCalledTimes(1)
+    fireEvent.change(screen.getByLabelText('Your name'), { target: { value: 'Pat' } })
+    fireEvent.change(screen.getByRole('textbox', { name: 'Email' }), { target: { value: 'pat@example.com' } })
+    fireEvent.change(screen.getByLabelText('Primary phone number'), { target: { value: '604-555-0100' } })
+    click('Next')
+    expect(onStart).toHaveBeenCalledTimes(1)
+  })
+})
