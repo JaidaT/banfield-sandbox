@@ -28,18 +28,22 @@ interface Props {
 interface QuizSetup {
   quizData: QuizData
   clientCopy: ClientCopy
-  startedAt: number
+  // null until "Let's start" is pressed.
+  startedAt: number | null
 }
 const QuizContext = createContext<QuizSetup | null>(null)
 
 // The Quick Quiz: the shared form's screens (one question per screen, contact
 // last, no review screen), ending on the quiz's own result screen.
 export default function QuizForm({ questionnaire, quizData, clientCopy, startAt, initialAnswers }: Props) {
-  // When the quiz opened, for the "time taken" note in the brief (a note only,
-  // with no effect on scoring; DECISIONS.md 2026-10-26). performance.now() is
-  // the timer for this: Next.js does not allow Date.now() while it prepares the
-  // page ahead of time, and says performance.now() is meant for timing.
-  const [startedAt] = useState(() => performance.now())
+  // When "Let's start" was pressed, for the "time taken" note in the brief (a
+  // note only, with no effect on scoring; DECISIONS.md 2026-10-26). Reading the
+  // welcome screen does not count. performance.now() is the timer: Next.js does
+  // not allow Date.now() while it prepares the page ahead of time, and says
+  // performance.now() is meant for timing.
+  const [startedAt, setStartedAt] = useState<number | null>(null)
+  // Only the first press counts, even if they go Back to the welcome screen.
+  const start = () => setStartedAt((first) => first ?? performance.now())
   return (
     <QuizContext value={{ quizData, clientCopy, startedAt }}>
       <QuestionnaireForm
@@ -47,6 +51,7 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
         startAt={startAt}
         initialAnswers={initialAnswers}
         skipReview
+        onStart={start}
         doneScreen={QuizResults}
       />
     </QuizContext>
@@ -59,8 +64,11 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
   const setup = use(QuizContext)
   if (!setup) throw new Error('QuizResults must be inside QuizForm')
   const { quizData, clientCopy, startedAt } = setup
-  // Worked out once, when the results first show.
-  const [seconds] = useState(() => Math.max(0, Math.round((performance.now() - startedAt) / 1000)))
+  // Worked out once, when the results first show. 0 when the quiz was opened
+  // past the welcome screen (tests and demo links), so "Let's start" was never pressed.
+  const [seconds] = useState(() =>
+    startedAt === null ? 0 : Math.max(0, Math.round((performance.now() - startedAt) / 1000)),
+  )
 
   // "quiz-demo": a placeholder id until submissions are saved (Later in the plan).
   const submission = answersToSubmission(answers, seconds, 'quiz-demo')

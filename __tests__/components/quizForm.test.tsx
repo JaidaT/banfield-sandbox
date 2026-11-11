@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuizPage, { metadata } from '@/app/quiz/page'
 import QuizForm from '@/components/quiz/QuizForm'
@@ -123,5 +123,31 @@ describe('the /quiz page', () => {
     expect(heading()).toBe(form.welcome.title)
     expect(screen.getByRole('button', { name: "Let's start" })).toBeDefined()
     expect(metadata.robots).toEqual({ index: false, follow: false })
+  })
+})
+
+describe('QuizForm: time taken', () => {
+  afterEach(() => vi.restoreAllMocks())
+
+  test('the clock starts when "Let\'s start" is pressed, not when the page opens', () => {
+    // A pretend timer, in milliseconds, so the result is exact.
+    let now = 1_000
+    vi.spyOn(performance, 'now').mockImplementation(() => now)
+    renderQuiz()
+
+    now = 10_000 // spent 9 seconds reading the welcome screen
+    click("Let's start")
+    for (let i = 0; i < quizData.questions.length; i++) click('Next')
+    now = 100_000
+    click('See my results')
+
+    // 100 - 10 = 90 seconds. Timing from when the page opened would say 1 min 39 s.
+    expect(teamPart().getByText('Time to complete: 1 min 30 s')).toBeDefined()
+  })
+
+  test('opened past the welcome screen (tests and demo links), the time counts as 0', () => {
+    renderQuiz({ startAt: 'contact' })
+    click('See my results')
+    expect(teamPart().getByText('Time to complete: 0 s')).toBeDefined()
   })
 })
