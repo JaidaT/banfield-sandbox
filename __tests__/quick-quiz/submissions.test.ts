@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestions, loadSampleSubmissions } from '@/lib/quick-quiz/load'
+import { loadQuestions, loadSampleSubmissions, parseSampleSubmissions } from '@/lib/quick-quiz/load'
+import { isDate } from '@/lib/form/format'
 import { validateSubmission } from '@/lib/quick-quiz/submission'
 import type { Question, Submission } from '@/lib/quick-quiz/types'
 
@@ -193,5 +194,20 @@ describe('loadSampleSubmissions', () => {
       (s) => questionIds.filter((id) => !(id in s.answers)).length >= 2,
     )
     expect(skippedTwo).toBe(true)
+  })
+})
+
+describe('sample dates (submittedAt)', () => {
+  test('every sample has a real date, and no two share one', () => {
+    const dates = loadSampleSubmissions().map((s) => s.submittedAt)
+    for (const d of dates) expect(isDate(d), String(d)).toBe(true)
+    expect(new Set(dates).size).toBe(dates.length)
+  })
+
+  test('a missing or impossible date throws a message naming the sample', () => {
+    const real = loadSampleSubmissions()[0]
+    const withDate = (submittedAt: unknown) => ({ samples: [{ ...real, submittedAt }] })
+    expect(() => parseSampleSubmissions(withDate(undefined), loadQuestions())).toThrow(/decisive-delegator.*submittedAt/)
+    expect(() => parseSampleSubmissions(withDate('2026-02-30'), loadQuestions())).toThrow(/decisive-delegator.*submittedAt/)
   })
 })

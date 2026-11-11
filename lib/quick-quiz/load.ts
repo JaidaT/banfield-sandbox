@@ -5,6 +5,7 @@ import questionsJson from '@/data/quick-quiz/questions.json'
 import quizFormJson from '@/data/quick-quiz/quiz-form.json'
 import samplesJson from '@/data/quick-quiz/sample-submissions.json'
 import signalsJson from '@/data/quick-quiz/signals.json'
+import { isDate } from '@/lib/form/format'
 import { validateSubmission } from './submission'
 import { COMPARISONS, LEAD_TEMPERATURES, QUESTION_KINDS, SIGNALS } from './types'
 import type {
@@ -418,6 +419,9 @@ export function parseSampleSubmissions(raw: unknown, questions: Question[]): Sam
       throw new Error(`sample at index ${index} needs an "id", "contact" and "answers"`)
     }
     const sample = entry as unknown as SampleSubmission
+    if (!isDate(entry.submittedAt)) {
+      throw new Error(`sample ${sample.id} needs "submittedAt" as a real date written YYYY-MM-DD`)
+    }
     const problems = validateSubmission(sample, questions)
     if (problems.length > 0) {
       throw new Error(`sample ${sample.id} is invalid:\n- ${problems.join('\n- ')}`)

@@ -3,11 +3,13 @@
     "version": "0.2.0",
     "purpose": "Made-up Quick Quiz submissions for tests and demo pages. Not real clients. Names, emails (example.com), phone numbers (555-01xx) and street addresses are fictional.",
     "answers": "Keys are question ids from questions.json. Pick-one questions take an option id, pick-several questions take a list of option ids, text questions take text, slider questions take a number (or an option id such as \"not_sure\"). A missing question means it was skipped.",
-    "note": "Each sample's 'note' says who it is meant to represent, so a reviewer can check the brief against the intent."
+    "note": "Each sample's 'note' says who it is meant to represent, so a reviewer can check the brief against the intent.",
+    "submittedAt": "A made-up date the sample was sent, written YYYY-MM-DD. The team list shows it and puts the newest first. Real quiz results get a date once they are saved."
   },
   "samples": [
     {
       "id": "decisive-delegator",
+      "submittedAt": "2026-11-09",
       "note": "Clear Decisive Delegator. Hot lead: renovation at $200K, ready in 3-6 months, full service, in Burnaby. Finished fast with short answers.",
       "contact": {
         "name": "Alex Morgan",
@@ -32,6 +34,7 @@
     },
     {
       "id": "analytical-validator",
+      "submittedAt": "2026-11-07",
       "note": "Clear Analytical Validator. Hot lead: new build at $500K+ in Vancouver, 6-12 months out. Took their time and wrote a long, detailed answer.",
       "contact": {
         "name": "Jordan Lee",
@@ -56,6 +59,7 @@
     },
     {
       "id": "mixed-cautious-controller",
+      "submittedAt": "2026-11-05",
       "note": "Mixed blend: Cautious Reassurance Seeker and Hands-On Controller. Warm lead: renovation at $100K in Coquitlam, wants to start ASAP, unsure what service they need.",
       "contact": {
         "name": "Casey Nguyen",
@@ -80,6 +84,7 @@
     },
     {
       "id": "cold-explorer",
+      "submittedAt": "2026-11-04",
       "note": "Leans Creative Collaborator. Cold lead: furniture and styling only with no budget in mind (starts warm), then lowered by three warning signs: just exploring, wants a one-time session, still collecting ideas. In Kelowna, which has no effect.",
       "contact": {
         "name": "Riley Thompson",
@@ -104,6 +109,7 @@
     },
     {
       "id": "skipper",
+      "submittedAt": "2026-11-02",
       "note": "Leans Hands-On Controller. Skipped three questions (confidence, coffee, home) and finished very fast. Renovation at $250K (starts hot), lowered to a warm lead because they are already under construction with a builder in Surrey. Wants design plans only.",
       "contact": {
         "name": "Morgan Davis",
@@ -125,6 +131,7 @@
     },
     {
       "id": "out-of-area-hot",
+      "submittedAt": "2026-11-10",
       "note": "An exact tie, 50% Decisive Delegator and 50% Creative Collaborator, so the brief shows a close-call note. Hot lead: renovation at $300K, starting in 6-12 months, ready to go, full service. In Edmonton, to show location never lowers the label.",
       "contact": {
         "name": "Sam Patel",

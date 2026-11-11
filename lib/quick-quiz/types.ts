@@ -137,6 +137,8 @@ export interface Submission {
 // A made-up submission used in tests and demo pages.
 export interface SampleSubmission extends Submission {
   note: string
+  // Made-up date it was sent, YYYY-MM-DD, for the team's sample list.
+  submittedAt: string
 }
 
 export interface SignalValues {
