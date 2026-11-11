@@ -223,6 +223,26 @@ export interface ClientCopy {
   cta: { label: string; text: string; bookingUrl: string; fallback: string }
 }
 
+// Quiz screen wording that is not in the question bank (data/quiz-form.json).
+export interface QuizForm {
+  // false: the contact fields can be left blank and the result still shows.
+  // true: name, email, phone and the full site address are required first.
+  contactRequired: boolean
+  welcome: { title: string; intro: string }
+  // Prompts for the contact screen, which comes last.
+  contact: {
+    title: string
+    introWhenRequired: string
+    introWhenOptional: string
+    name: string
+    email: string
+    phone: string
+    street: string
+    city: string
+    postalCode: string
+  }
+}
+
 // Client-facing. Deliberately has no archetype, blend or fit fields.
 export interface ClientResult {
   greeting: string

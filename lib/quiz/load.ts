@@ -2,6 +2,7 @@ import archetypesJson from '@/data/archetypes.json'
 import clientResultJson from '@/data/client-result.json'
 import leadRulesJson from '@/data/lead-rules.json'
 import questionsJson from '@/data/questions.json'
+import quizFormJson from '@/data/quiz-form.json'
 import samplesJson from '@/data/sample-submissions.json'
 import signalsJson from '@/data/signals.json'
 import { validateSubmission } from './submission'
@@ -21,6 +22,7 @@ import type {
   Question,
   QuestionKind,
   QuizData,
+  QuizForm,
   SampleSubmission,
   Signal,
   SignalRule,
@@ -482,4 +484,44 @@ export function loadQuizData(): QuizData {
 
 export function loadSampleSubmissions(): SampleSubmission[] {
   return parseSampleSubmissions(samplesJson as unknown, loadQuestions())
+}
+
+const WELCOME_FIELDS = ['title', 'intro'] as const
+const CONTACT_FIELDS = [
+  'title',
+  'introWhenRequired',
+  'introWhenOptional',
+  'name',
+  'email',
+  'phone',
+  'street',
+  'city',
+  'postalCode',
+] as const
+
+// Checks the quiz screen wording and the contactRequired setting.
+export function parseQuizForm(raw: unknown): QuizForm {
+  if (!isRecord(raw)) throw new Error('quiz form must be an object')
+  if (typeof raw.contactRequired !== 'boolean') {
+    throw new Error('quiz form "contactRequired" must be true or false')
+  }
+  const sections = { welcome: WELCOME_FIELDS, contact: CONTACT_FIELDS }
+  for (const [section, fields] of Object.entries(sections)) {
+    const part = raw[section]
+    if (!isRecord(part)) throw new Error(`quiz form is missing "${section}"`)
+    for (const field of fields) {
+      if (typeof part[field] !== 'string' || part[field] === '') {
+        throw new Error(`quiz form is missing "${section}.${field}"`)
+      }
+    }
+  }
+  return {
+    contactRequired: raw.contactRequired,
+    welcome: raw.welcome as QuizForm['welcome'],
+    contact: raw.contact as QuizForm['contact'],
+  }
+}
+
+export function loadQuizForm(): QuizForm {
+  return parseQuizForm(quizFormJson as unknown)
 }

@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "draft": true,
+    "purpose": "Quick Quiz screen wording that is not in questions.json: the welcome screen and the contact screen, which comes last. Draft in Jamie's voice; Banfield must review it.",
+    "contactRequired": "false: the contact fields can be left blank and the result still shows (the current choice, 2026-11-10). true: name, email, phone and the full site address must be filled in before the result. Switching needs no code change; the contact screen picks introWhenRequired or introWhenOptional to match.",
+    "contact": "The site address is the project's address, which Jamie uses for pre-call research. It may differ from where the person lives now."
+  },
+  "contactRequired": false,
+  "welcome": {
+    "title": "Let's get to know you",
+    "intro": "About 5 minutes, and there are no wrong answers. A few quick questions so Jamie can get a feel for you and your project before you chat."
+  },
+  "contact": {
+    "title": "Where should Jamie reach you?",
+    "introWhenRequired": "So Jamie can follow up and look at your project before you talk.",
+    "introWhenOptional": "So Jamie can follow up and look at your project before you talk. Rather not say yet? Leave it blank and go straight to your results.",
+    "name": "Your name",
+    "email": "Email",
+    "phone": "Phone",
+    "street": "Project street address",
+    "city": "City",
+    "postalCode": "Postal code"
+  }
+}
