@@ -455,9 +455,9 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/page.test.tsx`): the title no longer says only "Quick Quiz"; the four links go to `/quiz`, `/team/quick-quiz`, `/questionnaire` and `/team/long-questionnaire`; each "View sample briefs" link names its product for screen readers
 
 ### Phase 4: Docs and checks
-- [ ] `README.md`: the pages table uses the new addresses, and "Check that it works" opens the home page instead of `/team`
-- [ ] Search `app/`, `components/`, `lib/`, `__tests__/` and `README.md` for `/team/brief` and `/team/questionnaire`: none left
-- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [x] `README.md`: the pages table uses the new addresses, and "Check that it works" opens the home page instead of `/team`
+- [x] Search `app/`, `components/`, `lib/`, `__tests__/` and `README.md` for `/team/brief` and `/team/questionnaire`: none left (and on the built app both old addresses are "not found", every new one loads)
+- [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (413 tests, 2026-11-11)
 - [ ] Jaida clicks through the home page, both lists and a few rows, on a computer and a phone
 
 ### Later (not in this plan)

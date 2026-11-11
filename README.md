@@ -57,7 +57,7 @@ You should see a line like `Tests  147 passed` with no failures. The number grow
 npm run dev
 ```
 
-Open http://localhost:3000/team in your browser. You should see the sample briefs. Press `Ctrl + C` in the terminal to stop it.
+Open http://localhost:3000 in your browser. You should see the prototype home page, with a box for each questionnaire. Press `Ctrl + C` in the terminal to stop it.
 
 > After you pull changes someone else made, run `npm install` again in case the packages changed.
 
@@ -208,9 +208,12 @@ Answers
 |---|---|---|
 | `/quiz` | The Quick Quiz itself. The prototype shows the team brief under the result, marked "Team view (demo only)" | Client |
 | `/questionnaire` | The long questionnaire, with its team view after the thank-you | Client |
-| `/team` | List of the sample people and sample households | Team only |
-| `/team/questionnaire/<id>` | What the team sees for one sample household from the long questionnaire | Team only |
-| `/team/brief/<id>` | One person's pre-call brief, with a "Copy as text" button | Team only |
+| `/` | The prototype home page: a box for each questionnaire, with "Try" and "View sample briefs" | Team |
+| `/team` | Links to the two sample lists below | Team only |
+| `/team/quick-quiz` | The Quick Quiz sample results, newest first: name, date, lead label, client type, close call | Team only |
+| `/team/quick-quiz/<id>` | One person's pre-call brief, with a "Copy as text" button | Team only |
+| `/team/long-questionnaire` | The long questionnaire sample households, newest first: name, date, project type, steps skipped | Team only |
+| `/team/long-questionnaire/<id>` | What the team sees for one sample household | Team only |
 | `/result/<id>` | What that person would see after the quiz | Client |
 | `/book` | Placeholder for the booking page | Client |
 
