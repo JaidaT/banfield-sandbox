@@ -5,9 +5,24 @@ function labelsFor(question: Question | undefined, submission: Submission): stri
   return question ? answerLabels(question, submission.answers[question.id]) : []
 }
 
+// Adds the name and email to the booking link so the booking form is pre-filled.
+// Blank ones are left out, since the result can show before contact details.
 function bookingHref(base: string, name: string, email: string): string {
-  const separator = base.includes('?') ? '&' : '?'
-  return `${base}${separator}name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`
+  const params = [
+    ['name', name.trim()],
+    ['email', email.trim()],
+  ]
+    .filter(([, value]) => value !== '')
+    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+  if (params.length === 0) return base
+  return `${base}${base.includes('?') ? '&' : '?'}${params.join('&')}`
+}
+
+// "Thanks, {firstName}. ..." with the first name, or "Thanks. ..." with no name.
+function greet(greeting: string, firstName: string): string {
+  if (firstName !== '') return greeting.replace('{firstName}', firstName)
+  // No name: drop the placeholder and the comma and spaces before it.
+  return greeting.replace(/,?\s*\{firstName\}/, '')
 }
 
 // Client-facing result. Built only from the client's own answers and the copy
@@ -33,7 +48,7 @@ export function buildClientResult(
   if (home.length > 0) sections.push({ title: copy.homeTitle, lines: home })
 
   return {
-    greeting: copy.greeting.replace('{firstName}', firstName),
+    greeting: greet(copy.greeting, firstName),
     intro: copy.intro,
     sections,
     closing: copy.closing,

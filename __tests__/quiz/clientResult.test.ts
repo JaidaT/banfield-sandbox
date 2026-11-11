@@ -47,6 +47,17 @@ describe('buildClientResult', () => {
     }
   })
 
+  test('with no name, the greeting still reads well and the booking link leaves out what is blank', () => {
+    const s = samples.find((x) => x.id === 'decisive-delegator')!
+    const noName = { ...s, contact: { ...s.contact, name: '  ' } }
+    const result = buildClientResult(noName, data.questions, copy)
+    expect(result.greeting).toBe("Thanks. Here's what we heard.")
+    expect(result.cta.href).not.toContain('name=')
+    expect(result.cta.href).toContain(`email=${encodeURIComponent(s.contact.email)}`)
+    const nothing = { ...s, contact: { ...s.contact, name: '', email: '' } }
+    expect(buildClientResult(nothing, data.questions, copy).cta.href).toBe(copy.cta.bookingUrl)
+  })
+
   // DISCOVERY P3 and P6: archetype and fit labels are team-only.
   test('never includes archetype, segment or fit information', () => {
     const forbidden = [

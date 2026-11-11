@@ -1,5 +1,5 @@
 import CopyBriefButton from '@/components/CopyBriefButton'
-import { briefToText, formatDuration } from '@/lib/quiz/briefToText'
+import { briefName, briefToText, formatDuration, shownOrNotGiven, siteText } from '@/lib/quiz/briefToText'
 import { shortLabel } from '@/lib/quiz/buildTeamBrief'
 import type { LeadTemperature, TeamBrief } from '@/lib/quiz/types'
 
@@ -21,7 +21,6 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 // Team-facing only. Never link to this from client-facing pages.
 export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
   const { contact, lead, behaviour } = brief
-  const site = contact.siteAddress
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-6">
@@ -29,7 +28,7 @@ export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
         <p className="text-xs font-semibold uppercase tracking-widest text-charcoal/60">
           Pre-call brief - team only
         </p>
-        <h1 className="font-heading text-3xl font-bold text-navy">{contact.name}</h1>
+        <h1 className="font-heading text-3xl font-bold text-navy">{briefName(contact)}</h1>
         <p className="text-base font-medium">{brief.headline}</p>
         <div>
           <CopyBriefButton text={briefToText(brief)} />
@@ -39,11 +38,11 @@ export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
       <Section title="Contact">
         <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
           <dt className="text-charcoal/60">Email</dt>
-          <dd>{contact.email}</dd>
+          <dd>{shownOrNotGiven(contact.email)}</dd>
           <dt className="text-charcoal/60">Phone</dt>
-          <dd>{contact.phone}</dd>
+          <dd>{shownOrNotGiven(contact.phone)}</dd>
           <dt className="text-charcoal/60">Site</dt>
-          <dd>{`${site.street}, ${site.city}, ${site.postalCode}`}</dd>
+          <dd>{siteText(contact.siteAddress)}</dd>
         </dl>
       </Section>
 

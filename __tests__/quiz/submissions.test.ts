@@ -139,6 +139,23 @@ describe('validateSubmission', () => {
     expect(validateSubmission(noCity, QUESTIONS).join('\n')).toMatch(/city/)
   })
 
+  // The quiz can show the result before contact details (contactRequired: false in data/quiz-form.json).
+  test('blank contact details are allowed when contact is not required, and flagged when it is', () => {
+    const blank = submission({
+      contact: { name: '', email: '', phone: '  ', siteAddress: { street: '', city: '', postalCode: '' } },
+    })
+    expect(validateSubmission(blank, QUESTIONS, { contactRequired: false })).toEqual([])
+    const problems = validateSubmission(blank, QUESTIONS).join(' / ')
+    for (const field of ['name', 'email', 'phone', 'street', 'city', 'postalCode']) expect(problems).toMatch(field)
+    expect(validateSubmission(blank, QUESTIONS, { contactRequired: true })).toEqual(validateSubmission(blank, QUESTIONS))
+  })
+
+  test('a filled-in email without an @ is flagged even when contact is not required', () => {
+    const base = submission()
+    const bad = { ...base, contact: { ...base.contact, email: 'not-an-email' } }
+    expect(validateSubmission(bad, QUESTIONS, { contactRequired: false }).join(' / ')).toMatch(/email/)
+  })
+
   test('flags an email without an @', () => {
     const base = submission()
     const bad = { ...base, contact: { ...base.contact, email: 'not-an-email' } }

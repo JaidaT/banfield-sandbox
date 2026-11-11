@@ -85,6 +85,27 @@ describe('buildTeamBrief', () => {
   })
 })
 
+describe('blank contact details (contactRequired: false)', () => {
+  const sample = samples.find((s) => s.id === 'cold-explorer')!
+  const withContact = (contact: Partial<typeof sample.contact>, site: Partial<typeof sample.contact.siteAddress> = {}) =>
+    buildTeamBrief(
+      { ...sample, contact: { ...sample.contact, ...contact, siteAddress: { ...sample.contact.siteAddress, ...site } } },
+      data,
+    )
+
+  test('the copied text says "Not given" for each blank detail', () => {
+    const text = briefToText(withContact({ name: '', email: '', phone: '' }, { street: '', city: '', postalCode: '' }))
+    expect(text).toContain('PRE-CALL BRIEF: Name not given')
+    for (const line of ['Name: Not given', 'Email: Not given', 'Phone: Not given', 'Site: Not given']) {
+      expect(text).toContain(line)
+    }
+  })
+
+  test('a partly filled-in site address shows only the parts given', () => {
+    expect(briefToText(withContact({}, { street: '' }))).toContain('Site: Kelowna, V1Y 0A4')
+  })
+})
+
 describe('briefToText', () => {
   test('includes contact details, headline, guidance and fit notes', () => {
     const brief = briefFor('cold-explorer')

@@ -39,18 +39,27 @@ function checkAnswer(question: Question, answer: Answer): string | null {
 // Returns every problem found rather than throwing on the first, so a form or
 // a test can show them all. Unanswered questions are allowed: skipping is a
 // behavioural signal (DISCOVERY P2), not an error.
-export function validateSubmission(submission: Submission, questions: Question[]): string[] {
+// contactRequired (default true): false lets the contact details be blank, for
+// the quiz's contactRequired setting in data/quiz-form.json. A filled-in email
+// is still checked either way.
+export function validateSubmission(
+  submission: Submission,
+  questions: Question[],
+  { contactRequired = true }: { contactRequired?: boolean } = {},
+): string[] {
   const problems: string[] = []
   const { contact } = submission
 
-  for (const field of ['name', 'email', 'phone'] as const) {
-    if (!contact[field]?.trim()) problems.push(`contact ${field} is required`)
+  if (contactRequired) {
+    for (const field of ['name', 'email', 'phone'] as const) {
+      if (!contact[field]?.trim()) problems.push(`contact ${field} is required`)
+    }
+    for (const field of ['street', 'city', 'postalCode'] as const) {
+      if (!contact.siteAddress?.[field]?.trim()) problems.push(`site address ${field} is required`)
+    }
   }
   if (contact.email && !contact.email.includes('@')) {
     problems.push(`contact email looks invalid: ${contact.email}`)
-  }
-  for (const field of ['street', 'city', 'postalCode'] as const) {
-    if (!contact.siteAddress?.[field]?.trim()) problems.push(`site address ${field} is required`)
   }
   if (!Number.isFinite(submission.durationSeconds) || submission.durationSeconds < 0) {
     problems.push('duration must be zero or more seconds')

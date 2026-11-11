@@ -27,6 +27,14 @@ describe('TeamBriefView', () => {
     expect(screen.getByRole('button', { name: /copy/i })).toBeDefined()
   })
 
+  test('says "Not given" for blank contact details', () => {
+    const s = sample('cold-explorer')
+    const blank = { ...s, contact: { name: '', email: '', phone: '', siteAddress: { street: '', city: '', postalCode: '' } } }
+    render(<TeamBriefView brief={buildTeamBrief(blank, data)} />)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Name not given')
+    expect(screen.getAllByText('Not given')).toHaveLength(3)
+  })
+
   test('shows guidance for each highlighted type and the lead label', () => {
     const brief = buildTeamBrief(sample('mixed-cautious-controller'), data)
     render(<TeamBriefView brief={brief} />)
