@@ -357,7 +357,7 @@ Found while planning: the sample client `out-of-area-hot` scores exactly Decisiv
 Work test-first: for each step, write the failing test, then change the code.
 
 ### Phase 1: The setting
-- [ ] `data/quick-quiz/archetypes.json`: add `"closeCallPoints": 5` and a `_meta` line explaining it in plain words. `lib/quick-quiz/types.ts`: `QuizData` gains `closeCallPoints: number`. `lib/quick-quiz/load.ts`: read and check it, and put it in `loadQuizData()`
+- [x] `data/quick-quiz/archetypes.json`: add `"closeCallPoints": 5` and a `_meta` line explaining it in plain words. `lib/quick-quiz/types.ts`: `QuizData` gains `closeCallPoints: number`. `lib/quick-quiz/load.ts`: read and check it, and put it in `loadQuizData()`
   - Tests (`__tests__/quick-quiz/load.test.ts`): the real file gives 5; a missing value, text, a decimal, a negative number or more than 100 each throw a message naming `closeCallPoints`
 
 ### Phase 2: Finding close calls

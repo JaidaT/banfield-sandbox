@@ -188,6 +188,9 @@ export interface QuizData {
   questions: Question[]
   signalRules: SignalRule[]
   leadRules: LeadRules
+  // Client types this many percentage points apart or closer get a "Close
+  // call" note in the brief (closeCallPoints in archetypes.json).
+  closeCallPoints: number
 }
 
 // Team-facing guidance for one of the client's leading archetypes.

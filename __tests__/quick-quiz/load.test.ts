@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadArchetypes, loadQuizForm, parseArchetypes, parseQuizForm } from '@/lib/quick-quiz/load'
+import { loadArchetypes, loadQuizData, loadQuizForm, parseArchetypes, parseCloseCallPoints, parseQuizForm } from '@/lib/quick-quiz/load'
 
 describe('loadArchetypes', () => {
   test('loads every archetype from data/quick-quiz/archetypes.json', () => {
@@ -62,6 +62,23 @@ describe('parseArchetypes', () => {
       brief_tips: '',
     }
     expect(() => parseArchetypes({ archetypes: [a], segments: {} })).toThrow(/nowhere/)
+  })
+})
+
+describe('closeCallPoints (how close two client types must be to count as a close call)', () => {
+  test('the real archetypes file sets it to 5, and loadQuizData passes it on', () => {
+    expect(loadQuizData().closeCallPoints).toBe(5)
+  })
+
+  test('accepts a whole number from 0 to 100', () => {
+    expect(parseCloseCallPoints({ closeCallPoints: 0 })).toBe(0)
+    expect(parseCloseCallPoints({ closeCallPoints: 100 })).toBe(100)
+  })
+
+  test('a missing value, text, a decimal, a negative number or more than 100 each throw', () => {
+    for (const bad of [{}, { closeCallPoints: '5' }, { closeCallPoints: 2.5 }, { closeCallPoints: -1 }, { closeCallPoints: 101 }]) {
+      expect(() => parseCloseCallPoints(bad)).toThrow(/closeCallPoints.*whole number from 0 to 100/)
+    }
   })
 })
 

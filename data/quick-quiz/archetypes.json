@@ -4,8 +4,10 @@
     "source": "Archetype names, descriptions and segment mappings come from Banfield Design Co.'s written client-type document. Fields marked in 'draft_fields' are inferred from that document and the Oct 2 / Oct 9 meeting transcripts and must be reviewed by Banfield before use.",
     "draft_fields": ["signals", "communication", "pacing", "pitch", "risks", "brief_tips"],
     "visibility": "Team-facing only. Never show archetype ids, labels or scores to the client.",
-    "scoring": "Answer options in the question bank carry weights keyed by archetype id. Sum weights, normalize to percentages and report the blend (e.g. 60% analytical_validator / 30% hands_on_controller). Scoring must keep working if archetypes are added or removed."
+    "scoring": "Answer options in the question bank carry weights keyed by archetype id. Sum weights, normalize to percentages and report the blend (e.g. 60% analytical_validator / 30% hands_on_controller). Scoring must keep working if archetypes are added or removed.",
+    "closeCallPoints": "How close two client types can be, in percentage points, and still count as a close call. The team brief then shows a 'Close call' note telling Jamie the quiz could not really tell them apart (for example 34% and 31% with the setting at 5). A whole number from 0 to 100; 0 means exact ties only. Draft value; check it after user research."
   },
+  "closeCallPoints": 5,
   "archetypes": [
     {
       "id": "decisive_delegator",

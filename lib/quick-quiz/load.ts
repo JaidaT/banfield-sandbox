@@ -89,6 +89,16 @@ export function loadArchetypes(): Archetype[] {
   return parseArchetypes(archetypesJson as unknown)
 }
 
+// How many percentage points apart two client types can be and still count as
+// a close call in the team brief (DECISIONS.md 2026-11-11). 0 = exact ties only.
+export function parseCloseCallPoints(raw: unknown): number {
+  const value = isRecord(raw) ? raw.closeCallPoints : undefined
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0 || value > 100) {
+    throw new Error('archetypes data needs "closeCallPoints" as a whole number from 0 to 100')
+  }
+  return value
+}
+
 export function loadSegments(): ArchetypeData['segments'] {
   return (archetypesJson as unknown as ArchetypeData).segments
 }
@@ -479,6 +489,7 @@ export function loadQuizData(): QuizData {
       archetypes.map((a) => a.id),
     ),
     leadRules: parseLeadRules(leadRulesJson as unknown, questions),
+    closeCallPoints: parseCloseCallPoints(archetypesJson as unknown),
   }
 }
 
