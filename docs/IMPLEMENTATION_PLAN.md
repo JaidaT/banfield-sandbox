@@ -445,7 +445,7 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/long-questionnaire/sampleList.test.ts`): four rows, newest first; `furniture_couple` shows "Kids, Pets" skipped; the project type matches the household's answer
 
 ### Phase 3: Pages
-- [ ] Quick Quiz pages: new `app/team/quick-quiz/page.tsx` (the list) and `app/team/quick-quiz/[id]/page.tsx` (one brief, moved from `app/team/brief/[id]`, with a "Back to Quick Quiz samples" link). `app/team/brief/` is removed
+- [x] Quick Quiz pages: new `app/team/quick-quiz/page.tsx` (the list) and `app/team/quick-quiz/[id]/page.tsx` (one brief, moved from `app/team/brief/[id]`, with a "Back to Quick Quiz samples" link). `app/team/brief/` is removed
   - Tests (`__tests__/quick-quiz/teamPages.test.tsx`): the list shows six rows in date order with name, date, lead label and type line; the tied sample's row shows "Close call"; "Brief" links to `/team/quick-quiz/<id>` and "Client result" to `/result/<id>`; each test note is labelled "Test note (prototype only)"; a brief page has its back link; an unknown id is "not found"
 - [ ] Long questionnaire pages: new `app/team/long-questionnaire/page.tsx` (the list) and `app/team/long-questionnaire/[id]/page.tsx` (moved from `app/team/questionnaire/[id]`, its back link pointing to the new list). `app/team/questionnaire/` is removed
   - Tests (`__tests__/long-questionnaire/teamPages.test.tsx`, replacing `questionnaireTeamPages.test.tsx`): the list shows four rows in date order with household name, date, project type and steps skipped; each row links to `/team/long-questionnaire/<id>`; the existing household page tests still pass at the new address

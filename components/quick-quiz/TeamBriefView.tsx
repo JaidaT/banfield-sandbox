@@ -1,9 +1,11 @@
+import Link from 'next/link'
 import CopyBriefButton from '@/components/form/CopyBriefButton'
 import { briefName, briefToText, formatDuration, shownOrNotGiven, siteText } from '@/lib/quick-quiz/briefToText'
 import { shortLabel } from '@/lib/quick-quiz/buildTeamBrief'
 import type { LeadTemperature, TeamBrief } from '@/lib/quick-quiz/types'
 
-const LEAD_STYLES: Record<LeadTemperature, string> = {
+// Colours for the Hot / Warm / Cold label, also used by the team's sample list.
+export const LEAD_STYLES: Record<LeadTemperature, string> = {
   hot: 'bg-navy text-frost',
   warm: 'bg-accent text-charcoal',
   cold: 'bg-charcoal text-frost',
@@ -21,12 +23,26 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 // Team-facing only. Never link to this from client-facing pages.
 // embedded: inside another page (the quiz screen), a section instead of the
 // page's main area, since a page has only one.
-export default function TeamBriefView({ brief, embedded = false }: { brief: TeamBrief; embedded?: boolean }) {
+// back: a link above the brief, e.g. to the team's list of samples.
+export default function TeamBriefView({
+  brief,
+  embedded = false,
+  back,
+}: {
+  brief: TeamBrief
+  embedded?: boolean
+  back?: { href: string; label: string }
+}) {
   const Outer = embedded ? 'section' : 'main'
   const { contact, lead, behaviour } = brief
 
   return (
     <Outer className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-6">
+      {back && (
+        <Link href={back.href} className="self-start text-sm font-semibold text-navy underline">
+          {back.label}
+        </Link>
+      )}
       <header className="flex flex-col gap-3">
         <p className="text-xs font-semibold uppercase tracking-widest text-charcoal/60">
           Pre-call brief - team only
