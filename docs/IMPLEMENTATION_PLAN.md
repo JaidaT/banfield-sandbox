@@ -265,3 +265,65 @@ Work test-first: for each step, write the failing test, then change the code. Ea
 - The real booking calendar with pre-filled details, and an "after the quiz" booking form
 - Flagging quizzes finished in under 30 seconds, or a CAPTCHA, if junk leads appear
 - The quiz "hook" and whether the four behavioural questions move into the quiz (open questions in DISCOVERY.md)
+
+## Separate Folders for the Two Quizzes (2026-11-11)
+
+Goal: make the folders show that the Quick Quiz and the long questionnaire are two separate products that share one form engine. Today the shared engine lives in folders called `questionnaire`, so the Quick Quiz looks like it is borrowing from the long questionnaire. They will be used in different places (the Quick Quiz in an iframe on Banfield's website, the long questionnaire on its own subdomain, opened from a link Banfield sends), so each should be easy to find, change and host on its own. Nothing the visitor sees changes.
+
+Built on branch `foyer-v1`, made from `jaida/short-questionnaire` (which already has both quizzes). If the new layout is not liked, go back to `jaida/short-questionnaire`.
+
+The new layout (in `lib/`, `components/`, `data/` and `__tests__/`):
+
+| Folder | What goes in it |
+|---|---|
+| `form/` | The shared form engine: question types, checks, show/hide rules, steps, the answers-in-words output, and the screen pieces (form, steps, review, fields, slider, wireframe look, copy button). Knows nothing about either quiz. |
+| `quick-quiz/` | Everything only the Quick Quiz uses: scoring, lead label, team brief, client result, the converter, the quiz screen and its data files. |
+| `long-questionnaire/` | Everything only the long questionnaire uses: loading its data files, its sample households, its thank-you screen and team view, "Copy as text", and its data files. |
+
+Constraints (chosen with Jaida on 2026-11-11):
+- Folder names `form`, `quick-quiz` and `long-questionnaire`.
+- Web addresses stay the same (`/quiz`, `/questionnaire`, `/team`, `/result/<id>` and so on). Picture files in `public/questionnaire/` stay where they are, since they are web addresses too.
+- `jaida/long-questionnaire` and `jaida/short-questionnaire` are frozen as backups. All new work on both quizzes happens on `foyer-v1`, so the "Shared:" commit rule and cherry-picking are no longer needed.
+- The import rule is checked by `npm run lint`: `form/` never imports either quiz; `quick-quiz/` and `long-questionnaire/` never import each other. Pages in `app/` and tests may use any folder (the team pages list both quizzes, and the form's tests use the long questionnaire's data as examples).
+- Move files with `git mv` so Git keeps each file's history (`git log --follow <file>`).
+- No change to what any screen shows or what any function returns. Every existing test must pass after each step, with only its import paths changed.
+- One commit per step, so any step can be undone on its own.
+
+Work test-first where something new is built (Phase 1 and the guard). For a pure move, the check is that type checking and every existing test still pass.
+
+### Phase 1: Untangle before moving
+- [ ] `components/questionnaire/QuestionnaireForm.tsx`: the form stops choosing the long questionnaire's thank-you screen itself. `DoneScreenProps` gains `questionnaire`, `doneScreen` becomes required, and the default `DoneScreen` import is removed. A new client component `components/questionnaire/LongQuestionnaireForm.tsx` shows `QuestionnaireForm` with the long questionnaire's own done screen (which builds the output from `questionnaire` and the answers, then shows the same thank-you and team view as today). `app/questionnaire/page.tsx` uses it
+  - Tests (`questionnaireForm.test.tsx`): first a failing test that the long questionnaire's form, after Submit, shows the thank-you heading, the team view and "Copy as text", with the cursor on the heading; existing tests that relied on the default done screen use the new component; the quiz's done screen tests still pass
+- [ ] `lib/questionnaire/load.ts`: split the general checker from the long questionnaire's file loading. `parseQuestionnaire` and its helpers go to `lib/questionnaire/parse.ts`; `loadQuestionnaire`, `parseSampleHouseholds` and `loadSampleHouseholds` stay in `load.ts`. The `SampleHousehold` type moves out of `types.ts` into a new `lib/questionnaire/sampleTypes.ts`. `lib/quiz/toQuestionnaire.ts` imports from `parse.ts`
+  - Tests: `npx tsc --noEmit -p .` and all tests pass with only import paths changed
+
+### Phase 2: Move the files (one commit each)
+- [ ] Shared engine to `form/`: `lib/questionnaire/` `types.ts`, `parse.ts`, `derived.ts`, `format.ts`, `navigation.ts`, `output.ts`, `validate.ts`, `visibility.ts` to `lib/form/`; `components/questionnaire/` `QuestionnaireForm.tsx`, `IntroScreen.tsx`, `StepScreen.tsx`, `ReviewScreen.tsx`, `AnswersSummary.tsx`, `QuestionInput.tsx`, `QuestionField.tsx`, `RangeField.tsx`, `Repeater.tsx`, `PickImages.tsx`, `WireframePage.tsx`, `styles.ts`, plus `components/CopyBriefButton.tsx`, to `components/form/`. Update every import
+  - Tests: type checking and all tests pass
+- [ ] Long questionnaire to `long-questionnaire/`: the rest of `lib/questionnaire/` (`load.ts`, `outputToText.ts`, `sampleTypes.ts`) to `lib/long-questionnaire/`; `DoneScreen.tsx`, `QuestionnaireTeamView.tsx` and `LongQuestionnaireForm.tsx` to `components/long-questionnaire/`; `data/questionnaire/` to `data/long-questionnaire/`. The old `lib/questionnaire/`, `components/questionnaire/` and `data/questionnaire/` folders are gone
+  - Tests: type checking and all tests pass
+- [ ] Quick Quiz to `quick-quiz/`: `lib/quiz/` to `lib/quick-quiz/`; `components/quiz/QuizForm.tsx`, `components/ClientResultView.tsx` and `components/TeamBriefView.tsx` to `components/quick-quiz/`; `archetypes.json`, `client-result.json`, `lead-rules.json`, `questions.json`, `quiz-form.json`, `sample-submissions.json` and `signals.json` from `data/` to `data/quick-quiz/`. Nothing is left loose in `lib/`, `components/` or `data/`
+  - Tests: type checking and all tests pass
+- [ ] Tests to match: `__tests__/questionnaire/` and `__tests__/quiz/` split into `__tests__/form/`, `__tests__/quick-quiz/` and `__tests__/long-questionnaire/`, each test file going with the code it checks; `__tests__/components/` split the same way. `__tests__/page.test.tsx` stays at the top
+  - Tests: `npx vitest run` runs the same number of tests as before (349, plus any added in Phase 1) and all pass
+
+### Phase 3: The import guard
+- [ ] `eslint.config.mjs`: `no-restricted-imports` rules for `lib/` and `components/`: `form/` may not import `quick-quiz/`, `long-questionnaire/` or `data/`; `quick-quiz/` may not import `long-questionnaire/`; `long-questionnaire/` may not import `quick-quiz/`. Each rule's message says in plain words which folder may not be used and why
+  - Tests (`__tests__/lintGuard.test.ts`, using ESLint's `lintText` on small made-up files): first failing, then passing. A file in `lib/form/` importing `@/lib/quick-quiz/load` is an error; `lib/quick-quiz/` importing `@/lib/long-questionnaire/load` is an error, and the other way round; `lib/quick-quiz/` importing `@/lib/form/types` is allowed; a page in `app/` importing both quizzes is allowed
+  - Then `npm run lint` passes on the real code
+
+### Phase 4: Docs
+- [ ] `README.md`: section 4 ("What's in this project") shows the three folders and what goes in each, plus the import rule; section 5 points to `data/quick-quiz/` and drops the old "The quiz screen isn't built yet" line (it now exists at `/quiz`); the branch section says `foyer-v1` is the working branch and the older branches are backups
+- [x] `docs/DECISIONS.md`: the decision entry for this layout (added with this plan)
+
+### Phase 5: Final checks
+- [ ] Search for old paths (`lib/quiz/`, `lib/questionnaire/`, `components/quiz/`, `components/questionnaire/`, `data/questions.json` and the other moved data files) in `app/`, `components/`, `lib/`, `__tests__/` and `README.md`: none left. (Older plan sections and decisions keep the old paths, since they describe what was true then)
+- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [ ] `npm run dev` and click through `/`, `/quiz` (to the result), `/questionnaire` (to the thank-you screen), `/team`, one team brief, one client result and one long questionnaire sample: each looks the same as on `jaida/short-questionnaire`
+- [ ] Push `foyer-v1`
+
+### Later (not in this plan)
+- The Phase 4 click-through and timed run of `/quiz` from the Quick Quiz Screen plan, now done on `foyer-v1`
+- `lib/form/derived.ts` still knows two long-questionnaire ideas (`household_min_age`, `adult_count`); moving them out would need a way for each product to add its own derived values. Leave it unless it gets in the way
+- A unique code in each long questionnaire link, so the subdomain cannot be opened by anyone who guesses the address (hosting plan, 2026-11-11)
+- Hosting each quiz on its own (the iframe page and the subdomain), decided when the live site is set up
