@@ -1,16 +1,12 @@
-import type { Ref } from "react";
 import QuestionnaireTeamView from "./QuestionnaireTeamView";
+import type { DoneScreenProps } from "./QuestionnaireForm";
 import { HEADING } from "./styles";
-import type { QuestionnaireOutput } from "@/lib/questionnaire/output";
+import { buildOutput } from "@/lib/questionnaire/output";
 
-interface Props {
-  output: QuestionnaireOutput;
-  headingRef: Ref<HTMLHeadingElement>;
-}
-
-// The thank-you after Submit. Below a divider, the prototype also shows what
-// the team would receive (in the real product this would be sent, not shown).
-export default function DoneScreen({ output, headingRef }: Props) {
+// The long questionnaire's thank-you after Submit. Below a divider, the
+// prototype also shows what the team would receive (in the real product this
+// would be sent, not shown).
+export default function DoneScreen({ questionnaire, answers, headingRef }: DoneScreenProps) {
   return (
     <>
       <h2 ref={headingRef} tabIndex={-1} className={HEADING}>
@@ -28,7 +24,7 @@ export default function DoneScreen({ output, headingRef }: Props) {
         <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-600">
           Team view (demo only)
         </p>
-        <QuestionnaireTeamView output={output} />
+        <QuestionnaireTeamView output={buildOutput(questionnaire, answers)} />
       </div>
     </>
   );

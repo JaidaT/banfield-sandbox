@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import QuestionnaireForm from "@/components/questionnaire/QuestionnaireForm";
+import LongQuestionnaireForm from "@/components/questionnaire/LongQuestionnaireForm";
 import { loadQuestionnaire } from "@/lib/questionnaire/load";
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 // interactive form. A mistake in questionnaire.json fails the build here.
 export default function QuestionnairePage() {
   return (
-    <QuestionnaireForm
+    <LongQuestionnaireForm
       questionnaire={loadQuestionnaire()}
       initialAnswers={{ same_mailing_address: ["same"] }}
     />

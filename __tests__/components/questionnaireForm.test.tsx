@@ -1,6 +1,8 @@
 import type { Ref } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import QuestionnairePage from '@/app/questionnaire/page'
+import LongQuestionnaireForm from '@/components/questionnaire/LongQuestionnaireForm'
 import QuestionnaireForm from '@/components/questionnaire/QuestionnaireForm'
 import { loadQuestionnaire, loadSampleHouseholds, parseQuestionnaire } from '@/lib/questionnaire/load'
 import type { Answers } from '@/lib/questionnaire/types'
@@ -14,9 +16,19 @@ const stepHeading = () => screen.getByRole('heading', { level: 2 }).textContent
 const click = (name: string | RegExp) => fireEvent.click(screen.getByRole('button', { name }))
 const group = (name: string) => within(screen.getByRole('group', { name }))
 
-describe('QuestionnaireForm', () => {
+// The shared form has no final screen of its own, so tests of the form itself
+// pass this made-up one.
+function StandIn({ headingRef }: { headingRef: Ref<HTMLHeadingElement> }) {
+  return (
+    <h2 ref={headingRef} tabIndex={-1}>
+      Final screen
+    </h2>
+  )
+}
+
+describe('LongQuestionnaireForm: steps, checks and show/hide rules', () => {
   test('starts on the welcome screen, then shows the first step with progress', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} />)
     expect(screen.getByText('Prototype - not the final design')).toBeDefined()
     expect(screen.getByText(/glass of wine/)).toBeDefined()
     click("Let's start")
@@ -25,7 +37,7 @@ describe('QuestionnaireForm', () => {
   })
 
   test('Next is blocked until contact details are filled in, with a message on each', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="contact" />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="contact" />)
     click('Next')
     expect(stepHeading()).toBe('Contact and site')
     expect(screen.getAllByRole('alert').map((a) => a.textContent)).toEqual([
@@ -44,26 +56,26 @@ describe('QuestionnaireForm', () => {
   })
 
   test('Next with a required box empty puts the cursor in the first one', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="contact" />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="contact" />)
     screen.getByRole('button', { name: 'Next' }).focus()
     click('Next')
     expect(document.activeElement).toBe(screen.getByLabelText('Your name'))
   })
 
   test('for a pick-one question, the cursor goes to its first choice', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="project" />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="project" />)
     click('Next')
     expect(document.activeElement).toBe(screen.getByLabelText('Furniture and styling'))
   })
 
   test('Next is not blocked on a step with no required questions', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="household" />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="household" />)
     click('Next')
     expect(stepHeading()).toBe('Everyday life')
   })
 
   test('answering "Yes" to pets adds the Pets step to the progress count', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="household" initialAnswers={adult} />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="household" initialAnswers={adult} />)
     expect(screen.getByText('Step 5 of 10')).toBeDefined()
     fireEvent.click(group('Any pets?').getByLabelText('Yes'))
     expect(screen.getByText('Step 5 of 11')).toBeDefined()
@@ -72,7 +84,7 @@ describe('QuestionnaireForm', () => {
   })
 
   test('a follow-up question appears on the same step', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="everyday" />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="everyday" />)
     const followUp = 'Which areas or things should we focus on for storage?'
     expect(screen.queryByLabelText(followUp)).toBeNull()
     fireEvent.click(group('Is there enough storage in your home right now?').getByLabelText('No'))
@@ -80,22 +92,22 @@ describe('QuestionnaireForm', () => {
   })
 
   test('Back skips hidden steps', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="everyday" initialAnswers={{ ...adult, has_pets: 'no' }} />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="everyday" initialAnswers={{ ...adult, has_pets: 'no' }} />)
     click('Back')
     expect(stepHeading()).toBe('Household')
   })
 
   test('Next on the last step goes to the review screen', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="wish_list" />)
     click('Review my answers')
     expect(stepHeading()).toBe('Check your answers')
   })
 })
 
-describe('QuestionnaireForm: review and submit', () => {
+describe('LongQuestionnaireForm: review and submit', () => {
   const family = loadSampleHouseholds().find((s) => s.id === 'growing_family')!.answers
   const toReview = () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} />)
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} />)
     click('Review my answers')
   }
 
@@ -113,14 +125,26 @@ describe('QuestionnaireForm: review and submit', () => {
     click('Back to review')
     expect(stepHeading()).toBe('Check your answers')
   })
+})
 
-  test('submitting shows a thank-you, then the team view with a copy button', () => {
-    toReview()
+describe('LongQuestionnaireForm: the long questionnaire picks its own thank-you screen', () => {
+  const family = loadSampleHouseholds().find((s) => s.id === 'growing_family')!.answers
+
+  test('after Submit: the thank-you, with the cursor on it, then the team view with a copy button', () => {
+    render(<LongQuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} />)
+    click('Review my answers')
     click('Submit')
-    expect(stepHeading()).toBe('Thank you!')
+    const thanks = screen.getByRole('heading', { level: 2, name: 'Thank you!' })
+    expect(document.activeElement).toBe(thanks)
     expect(screen.getByText('Team view (demo only)')).toBeDefined()
     expect(screen.getByText('Steps skipped: none')).toBeDefined()
     expect(screen.getByRole('button', { name: 'Copy as text' })).toBeDefined()
+  })
+
+  test('the /questionnaire page shows it, starting on the welcome screen', () => {
+    render(<QuestionnairePage />)
+    expect(screen.getByText(/glass of wine/)).toBeDefined()
+    expect(screen.getByRole('button', { name: "Let's start" })).toBeDefined()
   })
 })
 
@@ -169,10 +193,10 @@ describe('QuestionnaireForm: no review screen (skipReview)', () => {
   const family = loadSampleHouseholds().find((s) => s.id === 'growing_family')!.answers
 
   test('the last step says "See my results" and goes straight to the final screen', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} skipReview />)
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} startAt="wish_list" initialAnswers={family} skipReview />)
     expect(screen.queryByRole('button', { name: 'Review my answers' })).toBeNull()
     click('See my results')
-    expect(stepHeading()).toBe('Thank you!')
+    expect(stepHeading()).toBe('Final screen')
     expect(screen.queryByText('Check your answers')).toBeNull()
   })
 
@@ -186,27 +210,27 @@ describe('QuestionnaireForm: no review screen (skipReview)', () => {
         },
       ],
     })
-    render(<QuestionnaireForm questionnaire={oneStep} skipReview />)
+    render(<QuestionnaireForm questionnaire={oneStep} doneScreen={StandIn} skipReview />)
     click('See my results')
     expect(stepHeading()).toBe('Where should Jamie reach you?')
     expect(screen.getByRole('alert').textContent).toBe('Please answer "Email"')
 
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'pat@example.com' } })
     click('See my results')
-    expect(stepHeading()).toBe('Thank you!')
+    expect(stepHeading()).toBe('Final screen')
   })
 
   test('steps before the last one still say Next', () => {
-    render(<QuestionnaireForm questionnaire={questionnaire} startAt="household" initialAnswers={family} skipReview />)
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} startAt="household" initialAnswers={family} skipReview />)
     click('Next')
-    expect(stepHeading()).not.toBe('Thank you!')
+    expect(stepHeading()).not.toBe('Final screen')
   })
 })
 
 describe('QuestionnaireForm: onStart', () => {
   test('is called once when "Let\'s start" is pressed, not when the page opens or on later steps', () => {
     const onStart = vi.fn()
-    render(<QuestionnaireForm questionnaire={questionnaire} onStart={onStart} />)
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} onStart={onStart} />)
     expect(onStart).not.toHaveBeenCalled()
     click("Let's start")
     expect(onStart).toHaveBeenCalledTimes(1)
