@@ -361,7 +361,7 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/load.test.ts`): the real file gives 5; a missing value, text, a decimal, a negative number or more than 100 each throw a message naming `closeCallPoints`
 
 ### Phase 2: Finding close calls
-- [ ] New `lib/quick-quiz/closeCalls.ts`: `findCloseCalls(scores, shownIds, points)` takes the sorted scores, the ids of the types shown in the headline and the setting, and returns the note's sentences (none, one or two), using the two rules above. Names are the full labels without "The" (as in the examples), joined as "A and B" or "A, B and C"
+- [x] New `lib/quick-quiz/closeCalls.ts`: `findCloseCalls(scores, shownIds, points)` takes the sorted scores, the ids of the types shown in the headline and the setting, and returns the note's sentences (none, one or two), using the two rules above. Names are the full labels without "The" (as in the examples), joined as "A and B" or "A, B and C"
   - Tests (`__tests__/quick-quiz/closeCalls.test.ts`), with made-up score lists:
     - a clear winner (80 / 13 / 7) gives no note
     - exactly level (50 / 50) gives the "main type unclear" sentence naming both
@@ -372,6 +372,7 @@ Work test-first: for each step, write the failing test, then change the code.
     - left out because of the 20% cutoff, not a tie (80 / 13) gives no note
     - with the setting at 0, only exact ties count
     - all scores 0 ("not enough answers") gives no note
+  - Done: 12 tests, adding: one type left out reads "is", two read "are"; both notes can show without naming a type twice; types with 0% are never named. With the setting at 0 the wording says "scored the same"
 - [ ] `lib/quick-quiz/buildTeamBrief.ts`: `TeamBrief` gains `closeCalls: string[]`, from `findCloseCalls` with the shown types and `data.closeCallPoints`. The headline, scores and tips do not change
   - Tests (`__tests__/quick-quiz/teamBrief.test.ts`): `out-of-area-hot` gets the "main type unclear" sentence naming Decisive Delegator and Creative Collaborator; the other five samples get none; every sample's headline is unchanged
 
