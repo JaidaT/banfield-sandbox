@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from 'vitest'
 import { useState } from 'react'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import Repeater from '@/components/questionnaire/Repeater'
-import { parseQuestionnaire } from '@/lib/questionnaire/load'
+import { parseQuestionnaire } from '@/lib/questionnaire/parse'
 import type { RepeaterEntry } from '@/lib/questionnaire/types'
 
 afterEach(cleanup)

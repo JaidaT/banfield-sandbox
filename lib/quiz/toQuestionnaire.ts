@@ -1,4 +1,4 @@
-import { parseQuestionnaire } from '@/lib/questionnaire/load'
+import { parseQuestionnaire } from '@/lib/questionnaire/parse'
 import { isBlank } from '@/lib/questionnaire/validate'
 import type { Answers, AnswerValue, Questionnaire } from '@/lib/questionnaire/types'
 import type { Question, QuizForm, Submission } from './types'

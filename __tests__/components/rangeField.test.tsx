@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import QuestionInput from '@/components/questionnaire/QuestionInput'
-import { parseQuestionnaire } from '@/lib/questionnaire/load'
+import { parseQuestionnaire } from '@/lib/questionnaire/parse'
 import type { Question } from '@/lib/questionnaire/types'
 
 afterEach(cleanup)

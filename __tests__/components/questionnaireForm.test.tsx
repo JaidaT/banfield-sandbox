@@ -4,7 +4,8 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import QuestionnairePage from '@/app/questionnaire/page'
 import LongQuestionnaireForm from '@/components/questionnaire/LongQuestionnaireForm'
 import QuestionnaireForm from '@/components/questionnaire/QuestionnaireForm'
-import { loadQuestionnaire, loadSampleHouseholds, parseQuestionnaire } from '@/lib/questionnaire/load'
+import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
+import { parseQuestionnaire } from '@/lib/questionnaire/parse'
 import type { Answers } from '@/lib/questionnaire/types'
 
 afterEach(cleanup)
