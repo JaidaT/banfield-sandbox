@@ -181,7 +181,7 @@ Work test-first: for each step, write the failing test, then change the code. Ea
 
 ### Phase 4: Final checks
 - [ ] Run `npm run lint`, `npm test` and `npm run build`
-- [ ] Click through `/questionnaire` on a computer and on a phone, once as each persona
+- [x] Click through `/questionnaire` on a computer and on a phone, once as each persona (looks good, checked by Jaida on `foyer-v1`, 2026-11-11)
 
 ### Later (not in this plan)
 - Save and resume (team suggestion; nobody asked for it, and it needs storage or browser saving)
@@ -253,7 +253,7 @@ Work test-first: for each step, write the failing test, then change the code. Ea
 ### Phase 4: Final checks
 - [x] Same result as the samples (checked that it catches a mistake: dropping the investment answer in the converter made 4 of the 6 samples fail): each sample submission, put through the form with `initialAnswers` from `submissionToAnswers` and sent from the contact screen, gives the same lead label and client type blend as `buildTeamBrief` on that sample (`quizForm.test.tsx`)
 - [x] Run `npm run lint`, `npm test` and `npm run build` (all pass, 349 tests, 2026-11-10)
-- [ ] Click through `/quiz` on a computer and on a phone, and time one run: it should take about 5 minutes
+- [x] Click through `/quiz` on a computer and on a phone, and time one run: it should take about 5 minutes (looks good, checked by Jaida on `foyer-v1`, 2026-11-11. Timed run with one tester: 7 min 19 s, over the 5-minute target; one person is not a pattern, so watch the time in the next sessions. Session notes go in USER_RESEARCH.md)
 
 ### Later (not in this plan)
 - The slider in the long questionnaire, if Banfield's feedback asks for it (the shared `range` kind is ready; cherry-pick the Phase 1 "Shared:" commits)
@@ -323,7 +323,7 @@ Work test-first where something new is built (Phase 1 and the guard). For a pure
 ### Phase 5: Final checks
 - [x] Search for old paths (`lib/quiz/`, `lib/questionnaire/`, `components/quiz/`, `components/questionnaire/`, `data/questions.json` and the other moved data files) in `app/`, `components/`, `lib/`, `__tests__/` and `README.md`: none left. (Older plan sections and decisions keep the old paths, since they describe what was true then)
 - [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (357 tests, 2026-11-11)
-- [ ] `npm run dev` and click through `/`, `/quiz` (to the result), `/questionnaire` (to the thank-you screen), `/team`, one team brief, one client result and one long questionnaire sample: each looks the same as on `jaida/short-questionnaire`
+- [x] `npm run dev` and click through `/`, `/quiz` (to the result), `/questionnaire` (to the thank-you screen), `/team`, one team brief, one client result and one long questionnaire sample: each looks the same as on `jaida/short-questionnaire` (all the same, checked by Jaida, 2026-11-11)
 - [x] Push `foyer-v1` (pushed after every step; every page also checked to load on the built app, 2026-11-11)
 
 ### Later (not in this plan)
@@ -388,7 +388,7 @@ Work test-first: for each step, write the failing test, then change the code.
 - [x] `docs/USER_RESEARCH.md`, "How to fill in Match?": if the brief shows a close-call note, record the result as nearly tied (for example "Partly (2nd, 33%, close call)"), and note whether Jamie found the note useful on the call
 - [x] `README.md`, section 5 ("Rules the code always follows" or the data files table): `closeCallPoints` and what the note means
 - Wording changed with Jaida on 2026-11-11: the "main type unclear" sentence ends "They could be either, or a real mix of both." (two types) or "They could be any one of these, or a real mix." (three or more), with no advice on what to do, since Jamie knows how to read a client. Replaces "Treat the client type as unclear and ask on the call." from the plan and DECISIONS.md
-- [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (381 tests, 2026-11-11). Checked on the built app that `/team/brief/out-of-area-hot` shows the note and a clear sample does not. Still to do by Jaida: look at `/team/brief/out-of-area-hot` and a tied `/quiz` run on a phone
+- [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (381 tests, 2026-11-11). Checked on the built app that `/team/brief/out-of-area-hot` shows the note and a clear sample does not. Also checked by Jaida on 2026-11-11 (looks good): `/team/brief/out-of-area-hot` and a tied `/quiz` run on a phone
 
 ### Later (not in this plan)
 - ~~`out-of-area-hot` leans Delegator but scores 50 / 50~~ Decided with Jaida on 2026-11-11 (option B): its answers stay, and its note in `data/quick-quiz/sample-submissions.json` now says it is an exact tie that shows the close-call note. It is the close-call example in the tests
