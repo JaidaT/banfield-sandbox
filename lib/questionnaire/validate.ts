@@ -36,6 +36,10 @@ function problemsOnStep({ step, questions }: VisibleStep, answers: Answers): Pro
       if (cards.length > question.max) add(question.id, `Please add no more than ${question.max}`)
     }
 
+    if (question.kind === 'multi' && question.maxSelections !== undefined && Array.isArray(value)) {
+      if (value.length > question.maxSelections) add(question.id, `Please pick no more than ${question.maxSelections}`)
+    }
+
     if (question.kind === 'pick_images' && value !== undefined) {
       const picks = value as ImagePicks
       ;(question.imageSets ?? []).forEach((set, i) => {

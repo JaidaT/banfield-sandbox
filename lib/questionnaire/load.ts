@@ -208,6 +208,15 @@ function parseQuestion(raw: unknown, where: string, ctx: RuleContext, parent?: s
     throw new Error(`${name} has "options", but only single, multi and range questions use them`)
   }
 
+  if (raw.maxSelections !== undefined) {
+    if (kind !== 'multi') throw new Error(`${name} has "maxSelections", but only multi questions use it`)
+    const limit = raw.maxSelections
+    if (typeof limit !== 'number' || !Number.isInteger(limit) || limit < 1) {
+      throw new Error(`${name} "maxSelections" must be a whole number of 1 or more`)
+    }
+    question.maxSelections = limit
+  }
+
   if (kind === 'range') parseRange(raw, name, question)
 
   if (kind === 'repeater') {
@@ -314,6 +323,9 @@ function checkAnswer(question: Question, value: unknown, where: string): AnswerV
       if (!Array.isArray(value)) throw new Error(`${where} must be a list of answers`)
       for (const v of value) {
         if (typeof v !== 'string' || !optionIds.has(v)) throw new Error(`${where} has unknown answer ${String(v)}`)
+      }
+      if (question.maxSelections !== undefined && value.length > question.maxSelections) {
+        throw new Error(`${where} picks more than ${question.maxSelections}`)
       }
       return value as string[]
     case 'repeater': {

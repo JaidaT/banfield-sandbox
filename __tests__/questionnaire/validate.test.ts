@@ -67,6 +67,39 @@ describe('repeaters and pictures', () => {
   })
 })
 
+describe('"pick up to" on tick boxes', () => {
+  const q = parseQuestionnaire({
+    steps: [
+      {
+        id: 'one',
+        title: 'One',
+        questions: [
+          {
+            id: 'confidence',
+            kind: 'multi',
+            prompt: 'What makes you feel confident?',
+            maxSelections: 2,
+            options: [
+              { id: 'a', label: 'A' },
+              { id: 'b', label: 'B' },
+              { id: 'c', label: 'C' },
+            ],
+          },
+        ],
+      },
+    ],
+  })
+
+  test('ticking more than the limit is a problem; the limit or fewer is fine', () => {
+    expect(stepProblems(q, { confidence: ['a', 'b', 'c'] }, 'one')).toEqual([
+      { stepId: 'one', questionId: 'confidence', message: 'Please pick no more than 2' },
+    ])
+    expect(stepProblems(q, { confidence: ['a', 'b'] }, 'one')).toEqual([])
+    expect(stepProblems(q, { confidence: ['a'] }, 'one')).toEqual([])
+    expect(stepProblems(q, {}, 'one')).toEqual([])
+  })
+})
+
 describe('sample households', () => {
   for (const sample of loadSampleHouseholds()) {
     test(`${sample.label} has no problems`, () => {

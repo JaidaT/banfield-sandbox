@@ -103,6 +103,34 @@ describe('parseSampleHouseholds', () => {
     expect(() => parseOne('lots')).toThrow(/test_home.*investment.*unknown answer lots/)
   })
 
+  test('a tick-box answer cannot pick more than its maxSelections', () => {
+    const withLimit = parseQuestionnaire({
+      steps: [
+        {
+          id: 'one',
+          title: 'One',
+          questions: [
+            {
+              id: 'confidence',
+              kind: 'multi',
+              prompt: 'Confident?',
+              maxSelections: 2,
+              options: [
+                { id: 'a', label: 'A' },
+                { id: 'b', label: 'B' },
+                { id: 'c', label: 'C' },
+              ],
+            },
+          ],
+        },
+      ],
+    })
+    const parseOne = (answer: unknown) =>
+      parseSampleHouseholds(sample({}, { expectedSteps: ['one'], answers: { confidence: answer } }), withLimit)
+    expect(parseOne(['a', 'b'])[0].answers.confidence).toEqual(['a', 'b'])
+    expect(() => parseOne(['a', 'b', 'c'])).toThrow(/test_home.*confidence.*more than 2/)
+  })
+
   test('throws on a picture pick that is not in its set, or the same picture twice', () => {
     expect(() => parse(sample({ style_sets: { pools: { favourite: 'a' } } }))).toThrow(/test_home.*style_sets.*pools/)
     expect(() => parse(sample({ style_sets: { kitchens: { favourite: 'z' } } }))).toThrow(/test_home.*style_sets.*z/)

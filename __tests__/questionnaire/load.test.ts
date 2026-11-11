@@ -172,6 +172,40 @@ describe('parseQuestionnaire: valid files', () => {
   })
 })
 
+describe('parseQuestionnaire: "pick up to" on tick boxes', () => {
+  // A tick-box question like the Quick Quiz's "Pick up to two".
+  const withTickBoxes = (maxSelections: unknown) =>
+    withChange((r) => {
+      r.steps[0].questions.push({
+        id: 'confidence',
+        kind: 'multi',
+        prompt: 'What makes you feel confident?',
+        maxSelections,
+        options: [
+          { id: 'a', label: 'A' },
+          { id: 'b', label: 'B' },
+          { id: 'c', label: 'C' },
+        ],
+      } as never)
+    })
+
+  test('keeps maxSelections on a multi question, and leaves it out when not given', () => {
+    expect(parseQuestionnaire(withTickBoxes(2)).steps[0].questions[2].maxSelections).toBe(2)
+    expect(parseQuestionnaire(withTickBoxes(undefined)).steps[0].questions[2].maxSelections).toBeUndefined()
+  })
+
+  test('throws when maxSelections is not a whole number of 1 or more', () => {
+    expect(() => parseQuestionnaire(withTickBoxes(0))).toThrow(/confidence.*maxSelections.*whole number of 1 or more/)
+    expect(() => parseQuestionnaire(withTickBoxes(1.5))).toThrow(/confidence.*maxSelections.*whole number of 1 or more/)
+    expect(() => parseQuestionnaire(withTickBoxes('two'))).toThrow(/confidence.*maxSelections.*whole number of 1 or more/)
+  })
+
+  test('throws when maxSelections is on a question that is not multi', () => {
+    const raw = withChange((r) => { firstQuestion(r).maxSelections = 2 })
+    expect(() => parseQuestionnaire(raw)).toThrow(/project_type.*maxSelections.*only multi/)
+  })
+})
+
 describe('parseQuestionnaire: mistakes in a slider', () => {
   test('throws when min is not below max', () => {
     expect(() => parseQuestionnaire(withSlider({ min: 500000 }))).toThrow(/investment.*"min".*below "max"/)

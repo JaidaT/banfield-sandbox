@@ -71,6 +71,8 @@ export interface Question {
   showIf?: Condition
   // single and multi. range: optional extra choices such as "Not sure yet".
   options: AnswerOption[]
+  // multi only: the most boxes that can be ticked ("Pick up to two").
+  maxSelections?: number
   // repeater: the questions on each "add another" card.
   fields?: Question[]
   addLabel?: string
