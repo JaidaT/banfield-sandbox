@@ -190,3 +190,75 @@ Work test-first: for each step, write the failing test, then change the code. Ea
 - Banfield's real questions, wording and style images (replace the placeholders in `data/questionnaire/`)
 - Sending the output to the team instead of showing it on screen
 - The open questions in QUESTIONNAIRE_DISCOVERY (gender identity, pet sex, image sets, length, one submission per household, addition as a project type, the four behavioural questions)
+
+## Quick Quiz Screen: Built on the Shared Form (2026-11-10)
+
+Goal: build the Quick Quiz screen people actually fill in, which has never existed (the scoring, team brief and client result only ran on sample submissions). It reuses the long questionnaire's form pieces (step screens, Back and Next, progress bar, required checks, jumping to the first problem, review, wireframe styles) and hands the answers to the existing Quick Quiz scoring, unchanged. Built on branch `jaida/short-questionnaire`, made from `jaida/long-questionnaire`.
+
+How it fits together:
+1. `data/questions.json` stays the Quick Quiz question bank, with its weights and lead rules, and scoring in `lib/quiz/` does not change.
+2. A converter turns the question bank into the shared form's format: a welcome screen, one question per screen, then a contact screen last.
+3. The shared form (`components/questionnaire/QuestionnaireForm.tsx`) shows it at `/quiz`, with no review screen: the contact screen's button goes straight to the result.
+4. The answers become a Quick Quiz `Submission`, and the screen shows the client result, then the team brief under a "Team view (demo only)" divider, the same way the long questionnaire shows its team view.
+
+Out of scope for this branch: where results are stored, how Banfield views them, and linking a result to a booking. The quiz ends with one `Submission` object, which is what those add-ons will save or attach later.
+
+Constraints:
+- Choices made with Jaida on 2026-11-10: one question per screen; contact details on the last screen ("Where should Jamie reach you?": name, email, phone, street, city, postal code); the plain grey wireframe look with the "Prototype - not the final design" label; no review screen.
+- The result is not blocked behind contact details for now, but switching that must be easy: one setting, `contactRequired` in `data/quiz-form.json`. `false` (for now): the contact fields can be left blank and the result still shows. `true`: all six are required before the result, as `validateSubmission` and DISCOVERY P1 expect.
+- `lib/quiz/` may import the shared form code in `lib/questionnaire/`; `lib/questionnaire/` never imports `lib/quiz/` (see DECISIONS.md).
+- Shared pieces stay where they are (`lib/questionnaire/`, `components/questionnaire/`) so fixes can be copied between branches. Commit each change to a shared piece on its own, with a message starting "Shared:", so it is easy to `git cherry-pick` onto `jaida/long-questionnaire`.
+- No quiz question is required (skipped questions are a behavioural note in the brief). Only the contact fields can be, through `contactRequired`.
+- Time taken is still recorded for the Quick Quiz (a note in the brief, no effect on scoring, see DECISIONS.md 2026-10-26). The long questionnaire stays without time tracking.
+- Archetype labels, scores and the lead label never appear in the client result (the existing client result tests already check this).
+- Mobile-first: test on a phone.
+
+Work test-first: for each step, write the failing test, then change the code. Each step lists its own tests, so a step is only ticked when its tests pass.
+
+### Phase 1: Shared form additions ("Shared:" commits)
+- [ ] `lib/questionnaire/types.ts` and `load.ts`: a `range` question kind (a slider) with `min`, `max`, `step`, optional answer options used as escape choices (for example "Not sure yet"), and an optional `"format": "money"`. Its answer is a number from min to max on a step, or the id of one of its options. The loader checks min below max, step above 0, and numbers only
+  - Tests (`load.test.ts`): a valid range loads; min not below max, a step of 0 or less, and text instead of numbers each throw a message naming the question
+- [ ] `lib/questionnaire/types.ts`, `load.ts` and `validate.ts`: an optional `maxSelections` on `multi` questions ("Pick up to two"). The loader checks it is a whole number of 1 or more; `stepProblems` reports too many ticks
+  - Tests (`load.test.ts`, `validate.test.ts`): a bad `maxSelections` throws; three ticks on a "pick up to two" question is a problem, two is not
+- [ ] `components/questionnaire/QuestionField.tsx`: the slider. It starts with no answer and says so, shows the chosen value in words under it (money format: "$200K", and "$500K+" at the top), and shows each escape option as a button that clears the slider. For `maxSelections`, the other tick boxes turn off once the limit is reached
+  - Tests (`questionField.test.tsx`): moving the slider reports a number; "Not sure yet" reports the option id; the money wording; the slider starts with no answer; with two boxes ticked on a "pick up to two" question the others are turned off, and un-ticking turns them back on
+- [ ] `lib/questionnaire/output.ts`: range answers in words (money format, or the escape option's label)
+  - Tests (`output.test.ts`): "$200K", "$500K+" at the top of the slider, and "Not sure yet"
+- [ ] `components/questionnaire/QuestionnaireForm.tsx`: an optional `renderDone(answers)` prop. When given, the final screen shows what it returns instead of the long questionnaire's `DoneScreen`; without it nothing changes
+  - Tests (`questionnaireForm.test.tsx`): with `renderDone`, Submit shows its content and gets the answers; without it, the existing thank-you test still passes
+- [ ] `components/questionnaire/QuestionnaireForm.tsx`: an optional `skipReview` prop. When set, the last step's button says "See my results" and goes straight to the final screen (still blocked if a required question is blank); without it the review screen stays, so the long questionnaire does not change
+  - Tests (`questionnaireForm.test.tsx`): with `skipReview`, the last step goes straight to the final screen; a blank required question still blocks it; without it, the existing review tests still pass
+
+### Phase 2: Quiz data and converter (no screens)
+- [ ] `data/quiz-form.json` and `parseQuizForm` / `loadQuizForm` in `lib/quiz/load.ts`: the wording that is not in the question bank, in Jamie's voice and marked as a draft: the welcome screen (title and intro, for example "About 5 minutes, no wrong answers"), and the contact screen title ("Where should Jamie reach you?") with prompts for name, email, phone, street, city and postal code; and the `contactRequired` setting (`false` for now)
+  - Tests (`load.test.ts` in `__tests__/quiz/`): the real file loads; missing wording throws a clear message; `contactRequired` must be true or false
+- [ ] `lib/quiz/submission.ts`: `validateSubmission` gets an option to accept blank contact details (used when `contactRequired` is `false`); an email that is filled in must still contain "@". `buildTeamBrief` and `briefToText` say "Not given" for blank contact details
+  - Tests (`submissions.test.ts`, `teamBrief.test.ts`): blank contact details pass with the option and fail without it; a filled-in email without "@" fails either way; the brief and its text say "Not given"; every existing sample still passes unchanged
+- [ ] `lib/quiz/toQuestionnaire.ts`: `quizQuestionnaire(questions, form)` builds a shared-form `Questionnaire`: the welcome step, one step per question in `questions.json` order (`text` becomes `long_text`, `range` and `maxSelections` carry over, weights and `fitQuestion` are left out), then the contact step last
+  - Tests (`__tests__/quiz/toQuestionnaire.test.ts`): the result passes `parseQuestionnaire`; one step per question in order, plus the welcome and contact steps; the six contact fields are required only when `contactRequired` is `true`, and nothing is required when it is `false`; the investment slider keeps its min, max, step and "Not sure yet"; the confidence question keeps "pick up to two"; no weights anywhere in the result
+- [ ] `lib/quiz/toQuestionnaire.ts`: `answersToSubmission(answers, durationSeconds, id)` turns the form's answers into a Quick Quiz `Submission` (contact fields into `contact`, everything else into `answers`, blank answers left out so they count as skipped), and `submissionToAnswers(submission)` does the reverse for tests and demo links
+  - Tests (`toQuestionnaire.test.ts`): every sample in `data/sample-submissions.json` goes to answers and back unchanged; the result passes `validateSubmission`; a blank "What does home mean to you?" ends up skipped; blank contact fields become empty contact details, not an error
+
+### Phase 3: Quiz screen
+- [ ] `components/quiz/QuizForm.tsx` (client component): shows `QuestionnaireForm` with the converted questionnaire and `skipReview`, notes the time when the page opens, and on "See my results" builds the submission, then shows `ClientResultView` and, under a "Team view (demo only)" divider, `TeamBriefView` with its "Copy as text" button. The question bank, lead rules and client wording are loaded on the server and passed in
+  - Tests (`__tests__/components/quizForm.test.tsx`): welcome, then "Step 1 of 13" on the first question; Next is not blocked on a skipped question; no review screen; with `contactRequired` off, "See my results" works with the contact screen blank; with it on, it is blocked until all six contact fields are filled in; after "See my results" the client result shows the booking button and no archetype or lead label above the divider, and the team brief shows below it
+- [ ] `app/quiz/page.tsx`: loads and checks the data on the server and shows `QuizForm`, with `robots: noindex` like the other prototype pages
+  - Tests (`quizForm.test.tsx`): the page renders the welcome screen
+- [ ] Links: "Try the Quick Quiz" on `app/page.tsx` (and remove "The quiz screen itself is not built yet") and on `app/team/page.tsx`
+  - Tests (`__tests__/page.test.tsx`, `questionnaireTeamPages.test.tsx`): both links point to `/quiz`
+
+### Phase 4: Final checks
+- [ ] Same result as the samples: each sample submission, put through the form with `initialAnswers` from `submissionToAnswers` and sent from the contact screen, gives the same lead label and client type blend as `buildTeamBrief` on that sample (`quizForm.test.tsx`)
+- [ ] Run `npm run lint`, `npm test` and `npm run build`
+- [ ] Click through `/quiz` on a computer and on a phone, and time one run: it should take about 5 minutes
+
+### Later (not in this plan)
+- The slider in the long questionnaire, if Banfield's feedback asks for it (the shared `range` kind is ready; cherry-pick the Phase 1 "Shared:" commits)
+- Copy any shared fixes made here back to `jaida/long-questionnaire` with `git cherry-pick`
+- Ask Banfield whether contact details should be required before the result (Oct 28: they want contact details even from people who do not book), and if so whether the site address is part of that. Switching is `contactRequired` in `data/quiz-form.json`
+- A consent line before the quiz collects real contact details (ask Banfield for privacy wording; see DISCOVERY.md)
+- Saving submissions and Banfield's view of all results (a separate branch and plan; where the brief goes is still an open question)
+- Linking a result to a booking: give each result a random code and carry it into the booking link. Banfield's booking page is Squarespace Scheduling (Acuity), seen 2026-11-10 (`app.acuityscheduling.com/schedule/39a39d2d/appointment/97428788/calendar/14476439`); it pre-fills `firstName`, `lastName`, `email`, `phone` and custom booking questions (`field:<id>=`). Needs saving first, and a "Quiz code" question added by Banfield
+- The real booking calendar with pre-filled details, and an "after the quiz" booking form
+- Flagging quizzes finished in under 30 seconds, or a CAPTCHA, if junk leads appear
+- The quiz "hook" and whether the four behavioural questions move into the quiz (open questions in DISCOVERY.md)
