@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestionnaire, loadSampleHouseholds, parseSampleHouseholds } from '@/lib/questionnaire/load'
+import { loadQuestionnaire, loadSampleHouseholds, parseQuestionnaire, parseSampleHouseholds } from '@/lib/questionnaire/load'
 
 const questionnaire = loadQuestionnaire()
 
@@ -68,6 +68,39 @@ describe('parseSampleHouseholds', () => {
     expect(() => parse(sample({ people: { name: 'Pat' } }))).toThrow(/test_home.*people.*list/)
     expect(() => parse(sample({ people: [{ name: 'Pat', shoe_size: 9 }] }))).toThrow(/test_home.*people.*shoe_size/)
     expect(() => parse(sample({ people: [{ name: 'Pat', age: 'forty' }] }))).toThrow(/test_home.*people.*age.*number/)
+  })
+
+  test('a slider answer is a number from min to max on a step, or one of its choices', () => {
+    // The real questionnaire has no slider yet, so this uses a one-question one.
+    const withSlider = parseQuestionnaire({
+      steps: [
+        {
+          id: 'money',
+          title: 'Money',
+          questions: [
+            {
+              id: 'investment',
+              kind: 'range',
+              prompt: 'Investment?',
+              min: 0,
+              max: 500000,
+              step: 10000,
+              options: [{ id: 'not_sure', label: 'Not sure yet' }],
+            },
+          ],
+        },
+      ],
+    })
+    const parseOne = (answer: unknown) =>
+      parseSampleHouseholds(sample({}, { expectedSteps: ['money'], answers: { investment: answer } }), withSlider)
+    expect(parseOne(200000)[0].answers.investment).toBe(200000)
+    expect(parseOne(0)[0].answers.investment).toBe(0)
+    expect(parseOne(500000)[0].answers.investment).toBe(500000)
+    expect(parseOne('not_sure')[0].answers.investment).toBe('not_sure')
+    expect(() => parseOne(600000)).toThrow(/test_home.*investment.*0 to 500000/)
+    expect(() => parseOne(-10000)).toThrow(/test_home.*investment.*0 to 500000/)
+    expect(() => parseOne(205000)).toThrow(/test_home.*investment.*steps of 10000/)
+    expect(() => parseOne('lots')).toThrow(/test_home.*investment.*unknown answer lots/)
   })
 
   test('throws on a picture pick that is not in its set, or the same picture twice', () => {

@@ -9,8 +9,13 @@ export const QUESTION_KINDS = [
   'number',
   'repeater',
   'pick_images',
+  'range',
 ] as const
 export type QuestionKind = (typeof QUESTION_KINDS)[number]
+
+// How a slider shows its number. "money": $200K, and $500K+ at the top.
+export const RANGE_FORMATS = ['money'] as const
+export type RangeFormat = (typeof RANGE_FORMATS)[number]
 
 // Values worked out from the answers (see derived.ts), usable in conditions
 // like a question id, e.g. { "field": "household_min_age", "lessThan": 18 }.
@@ -64,14 +69,20 @@ export interface Question {
   required: boolean
   // Field rule: shown inline on its step only when this matches.
   showIf?: Condition
-  // single and multi.
+  // single and multi. range: optional extra choices such as "Not sure yet".
   options: AnswerOption[]
   // repeater: the questions on each "add another" card.
   fields?: Question[]
   addLabel?: string
+  // repeater: the most cards allowed. range: the top of the slider.
   max?: number
   // pick_images: each set gets a favourite and a least favourite.
   imageSets?: ImageSet[]
+  // range (a slider): the answer is a number from min to max in steps of
+  // `step`, or the id of one of `options`.
+  min?: number
+  step?: number
+  format?: RangeFormat
 }
 
 export interface Step {
@@ -94,7 +105,8 @@ export type RepeaterEntry = Record<string, string | number | string[]>
 export type ImagePicks = Record<string, { favourite?: string; least?: string }>
 
 // Text and choice answers are strings; number answers are numbers;
-// multi-choice answers are lists of option ids. A missing key means unanswered.
+// multi-choice answers are lists of option ids; slider answers are a number or
+// the id of one of its choices. A missing key means unanswered.
 export type AnswerValue = string | number | string[] | RepeaterEntry[] | ImagePicks
 export type Answers = Record<string, AnswerValue>
 

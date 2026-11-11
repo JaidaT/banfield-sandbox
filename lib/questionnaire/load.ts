@@ -1,6 +1,6 @@
 import questionnaireJson from '@/data/questionnaire/questionnaire.json'
 import sampleAnswersJson from '@/data/questionnaire/sample-answers.json'
-import { DERIVED_VALUES, QUESTION_KINDS } from './types'
+import { DERIVED_VALUES, QUESTION_KINDS, RANGE_FORMATS } from './types'
 import type {
   Answers,
   AnswerValue,
@@ -13,6 +13,7 @@ import type {
   Question,
   QuestionKind,
   Questionnaire,
+  RangeFormat,
   Step,
 } from './types'
 
@@ -153,6 +154,29 @@ function parseImageSets(raw: unknown, name: string): ImageSet[] {
   })
 }
 
+// Checks a slider's numbers and format, and copies them onto the question.
+function parseRange(raw: Record<string, unknown>, name: string, question: Question) {
+  for (const key of ['min', 'max', 'step'] as const) {
+    if (typeof raw[key] !== 'number' || !Number.isFinite(raw[key])) {
+      throw new Error(`${name} "${key}" must be a number`)
+    }
+  }
+  const min = raw.min as number
+  const max = raw.max as number
+  const step = raw.step as number
+  if (min >= max) throw new Error(`${name} "min" must be below "max"`)
+  if (step <= 0) throw new Error(`${name} "step" must be more than 0`)
+  question.min = min
+  question.max = max
+  question.step = step
+  if (raw.format !== undefined) {
+    if (!RANGE_FORMATS.includes(raw.format as RangeFormat)) {
+      throw new Error(`${name} has unknown format: ${String(raw.format)}`)
+    }
+    question.format = raw.format as RangeFormat
+  }
+}
+
 // `parent` is the repeater's id when parsing the questions on its cards.
 function parseQuestion(raw: unknown, where: string, ctx: RuleContext, parent?: string): Question {
   if (!isRecord(raw) || !nonEmptyString(raw.id)) throw new Error(`${where} is missing an "id"`)
@@ -177,9 +201,14 @@ function parseQuestion(raw: unknown, where: string, ctx: RuleContext, parent?: s
 
   if (kind === 'single' || kind === 'multi') {
     question.options = parseOptions(raw.options, name)
+  } else if (kind === 'range') {
+    // A slider's choices (such as "Not sure yet") are optional.
+    if (raw.options !== undefined) question.options = parseOptions(raw.options, name)
   } else if (raw.options !== undefined) {
-    throw new Error(`${name} has "options", but only single and multi questions use them`)
+    throw new Error(`${name} has "options", but only single, multi and range questions use them`)
   }
+
+  if (kind === 'range') parseRange(raw, name, question)
 
   if (kind === 'repeater') {
     if (parent) throw new Error(`question ${parent} has a repeater inside a repeater (${id})`)
@@ -262,6 +291,20 @@ function checkAnswer(question: Question, value: unknown, where: string): AnswerV
     case 'number':
       if (typeof value !== 'number') throw new Error(`${where} must be a number`)
       return value
+    case 'range': {
+      if (typeof value === 'string') {
+        if (!optionIds.has(value)) throw new Error(`${where} has unknown answer ${value}`)
+        return value
+      }
+      const min = question.min ?? 0
+      const max = question.max ?? 0
+      const step = question.step ?? 1
+      if (typeof value !== 'number' || value < min || value > max) {
+        throw new Error(`${where} must be a number from ${min} to ${max}, or one of its choices`)
+      }
+      if ((value - min) % step !== 0) throw new Error(`${where} must be in steps of ${step} from ${min}`)
+      return value
+    }
     case 'single':
       if (typeof value !== 'string' || !optionIds.has(value)) {
         throw new Error(`${where} has unknown answer ${String(value)}`)

@@ -84,6 +84,26 @@ function withChange(change: (raw: Raw) => void): Raw {
 const firstQuestion = (raw: Raw) => raw.steps[0].questions[0] as Record<string, unknown>
 const secondQuestion = (raw: Raw) => raw.steps[0].questions[1] as Record<string, unknown>
 
+// A slider question like the Quick Quiz investment question.
+function slider(change: Record<string, unknown> = {}) {
+  return {
+    id: 'investment',
+    kind: 'range',
+    prompt: 'Roughly what investment feels comfortable?',
+    min: 0,
+    max: 500000,
+    step: 10000,
+    format: 'money',
+    options: [{ id: 'not_sure', label: 'Not sure yet' }],
+    ...change,
+  }
+}
+// The base questionnaire with a slider added to the first step.
+const withSlider = (change: Record<string, unknown> = {}) =>
+  withChange((r) => {
+    r.steps[0].questions.push(slider(change) as never)
+  })
+
 describe('parseQuestionnaire: valid files', () => {
   test('accepts a valid questionnaire and defaults required to false', () => {
     const q = parseQuestionnaire(base())
@@ -135,6 +155,42 @@ describe('parseQuestionnaire: valid files', () => {
     expect(q.steps[0].questions[3].showIf).toEqual({
       any: [{ field: 'rooms', includes: 'kitchen' }, { field: 'project_type', equals: 'renovation' }],
     })
+  })
+
+  test('accepts a slider with its numbers, money format and a "Not sure yet" choice', () => {
+    const question = parseQuestionnaire(withSlider()).steps[0].questions[2]
+    expect(question.kind).toBe('range')
+    expect([question.min, question.max, question.step]).toEqual([0, 500000, 10000])
+    expect(question.format).toBe('money')
+    expect(question.options).toEqual([{ id: 'not_sure', label: 'Not sure yet' }])
+  })
+
+  test('a slider does not need a format or any choices', () => {
+    const question = parseQuestionnaire(withSlider({ format: undefined, options: undefined })).steps[0].questions[2]
+    expect(question.format).toBeUndefined()
+    expect(question.options).toEqual([])
+  })
+})
+
+describe('parseQuestionnaire: mistakes in a slider', () => {
+  test('throws when min is not below max', () => {
+    expect(() => parseQuestionnaire(withSlider({ min: 500000 }))).toThrow(/investment.*"min".*below "max"/)
+    expect(() => parseQuestionnaire(withSlider({ min: 600000 }))).toThrow(/investment.*"min".*below "max"/)
+  })
+
+  test('throws when step is 0 or less', () => {
+    expect(() => parseQuestionnaire(withSlider({ step: 0 }))).toThrow(/investment.*"step".*more than 0/)
+    expect(() => parseQuestionnaire(withSlider({ step: -5 }))).toThrow(/investment.*"step".*more than 0/)
+  })
+
+  test('throws when min, max or step is missing or not a number', () => {
+    expect(() => parseQuestionnaire(withSlider({ min: '0' }))).toThrow(/investment.*"min".*number/)
+    expect(() => parseQuestionnaire(withSlider({ max: undefined }))).toThrow(/investment.*"max".*number/)
+    expect(() => parseQuestionnaire(withSlider({ step: 'big' }))).toThrow(/investment.*"step".*number/)
+  })
+
+  test('throws on an unknown format', () => {
+    expect(() => parseQuestionnaire(withSlider({ format: 'euros' }))).toThrow(/investment.*format.*euros/)
   })
 })
 
