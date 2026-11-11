@@ -2,14 +2,8 @@ import Link from 'next/link'
 import CopyBriefButton from '@/components/form/CopyBriefButton'
 import { briefName, briefToText, formatDuration, shownOrNotGiven, siteText } from '@/lib/quick-quiz/briefToText'
 import { shortLabel } from '@/lib/quick-quiz/buildTeamBrief'
-import type { LeadTemperature, TeamBrief } from '@/lib/quick-quiz/types'
-
-// Colours for the Hot / Warm / Cold label, also used by the team's sample list.
-export const LEAD_STYLES: Record<LeadTemperature, string> = {
-  hot: 'bg-navy text-frost',
-  warm: 'bg-accent text-charcoal',
-  cold: 'bg-charcoal text-frost',
-}
+import type { TeamBrief } from '@/lib/quick-quiz/types'
+import { LEAD_STYLES } from './leadStyles'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

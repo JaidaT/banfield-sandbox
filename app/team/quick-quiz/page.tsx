@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LEAD_STYLES } from "@/components/quick-quiz/TeamBriefView";
+import { LEAD_STYLES } from "@/components/quick-quiz/leadStyles";
 import { quickQuizRows } from "@/lib/quick-quiz/sampleList";
 
 // The team's list of Quick Quiz results, shaped like the real list of
