@@ -1,6 +1,7 @@
 import { parseQuestionnaire } from '@/lib/questionnaire/load'
-import type { Questionnaire } from '@/lib/questionnaire/types'
-import type { Question, QuizForm } from './types'
+import { isBlank } from '@/lib/questionnaire/validate'
+import type { Answers, AnswerValue, Questionnaire } from '@/lib/questionnaire/types'
+import type { Question, QuizForm, Submission } from './types'
 
 // Turns the Quick Quiz into the shared form's format, so the quiz can use the
 // same screens as the long questionnaire (DECISIONS.md, 2026-11-10). The quiz
@@ -73,4 +74,57 @@ export function quizQuestionnaire(questions: Question[], form: QuizForm): Questi
   }
   // JSON round-trip drops the undefined fields, as if read from a data file.
   return parseQuestionnaire(JSON.parse(JSON.stringify(raw)))
+}
+
+// The form's answers as a Quick Quiz submission, ready for scoring: contact
+// answers go into `contact` (blank ones become ""), every other answer stays
+// keyed by its quiz question id. Blank answers are left out, so they count as
+// skipped, a behavioural note in the brief.
+export function answersToSubmission(answers: Answers, durationSeconds: number, id: string): Submission {
+  const text = (field: keyof typeof CONTACT_FIELDS) => {
+    const value = answers[CONTACT_FIELDS[field]]
+    return typeof value === 'string' ? value.trim() : ''
+  }
+  const contactIds = new Set<string>(Object.values(CONTACT_FIELDS))
+  const quizAnswers: Submission['answers'] = {}
+  for (const [questionId, value] of Object.entries(answers)) {
+    if (contactIds.has(questionId) || isBlank(value)) continue
+    // Quiz questions only ever give text, a list of choices, or a number.
+    if (typeof value === 'string' || typeof value === 'number' || isChoiceList(value)) {
+      quizAnswers[questionId] = value
+    }
+  }
+  return {
+    id,
+    contact: {
+      name: text('name'),
+      email: text('email'),
+      phone: text('phone'),
+      siteAddress: { street: text('street'), city: text('city'), postalCode: text('postalCode') },
+    },
+    answers: quizAnswers,
+    durationSeconds,
+  }
+}
+
+function isChoiceList(value: AnswerValue): value is string[] {
+  return Array.isArray(value) && value.every((v) => typeof v === 'string')
+}
+
+// The reverse, for tests and demo links: a submission as the form's answers.
+export function submissionToAnswers(submission: Submission): Answers {
+  const { contact } = submission
+  const details: Record<keyof typeof CONTACT_FIELDS, string> = {
+    name: contact.name,
+    email: contact.email,
+    phone: contact.phone,
+    street: contact.siteAddress.street,
+    city: contact.siteAddress.city,
+    postalCode: contact.siteAddress.postalCode,
+  }
+  const answers: Answers = { ...submission.answers }
+  for (const [field, value] of Object.entries(details) as [keyof typeof CONTACT_FIELDS, string][]) {
+    if (value.trim() !== '') answers[CONTACT_FIELDS[field]] = value
+  }
+  return answers
 }

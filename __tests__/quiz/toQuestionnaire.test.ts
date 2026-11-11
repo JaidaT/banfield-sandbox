@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestions, loadQuizForm } from '@/lib/quiz/load'
-import { CONTACT_FIELDS, quizQuestionnaire } from '@/lib/quiz/toQuestionnaire'
+import { loadQuestions, loadQuizForm, loadSampleSubmissions } from '@/lib/quiz/load'
+import { validateSubmission } from '@/lib/quiz/submission'
+import { CONTACT_FIELDS, answersToSubmission, quizQuestionnaire, submissionToAnswers } from '@/lib/quiz/toQuestionnaire'
 import type { Question as FormQuestion } from '@/lib/questionnaire/types'
 
 const questions = loadQuestions()
@@ -89,5 +90,48 @@ describe('quizQuestionnaire', () => {
   test('contact field ids do not clash with quiz question ids', () => {
     const quizIds = new Set(questions.map((q) => q.id))
     for (const id of Object.values(CONTACT_FIELDS)) expect(quizIds.has(id), id).toBe(false)
+  })
+})
+
+describe('answersToSubmission and submissionToAnswers', () => {
+  test('every sample goes to form answers and back unchanged, and is still valid', () => {
+    for (const sample of loadSampleSubmissions()) {
+      const back = answersToSubmission(submissionToAnswers(sample), sample.durationSeconds, sample.id)
+      // Everything but the sample's note, which only describes the made-up person.
+      expect(back, sample.id).toEqual({ id: sample.id, contact: sample.contact, answers: sample.answers, durationSeconds: sample.durationSeconds })
+      expect(validateSubmission(back, questions), sample.id).toEqual([])
+    }
+  })
+
+  test('contact answers go into contact, and nothing else does', () => {
+    const answers = {
+      [CONTACT_FIELDS.name]: 'Pat Example',
+      [CONTACT_FIELDS.email]: 'pat@example.com',
+      [CONTACT_FIELDS.city]: 'Burnaby',
+      coffee: 'pour_over',
+    }
+    const submission = answersToSubmission(answers, 240, 'quiz-1')
+    expect(submission).toEqual({
+      id: 'quiz-1',
+      durationSeconds: 240,
+      contact: {
+        name: 'Pat Example',
+        email: 'pat@example.com',
+        phone: '',
+        siteAddress: { street: '', city: 'Burnaby', postalCode: '' },
+      },
+      answers: { coffee: 'pour_over' },
+    })
+  })
+
+  test('blank answers are left out, so they count as skipped', () => {
+    const submission = answersToSubmission({ home_meaning: '   ', confidence: [], coffee: 'pour_over' }, 60, 'quiz-1')
+    expect(submission.answers).toEqual({ coffee: 'pour_over' })
+  })
+
+  test('blank contact details become empty, and are valid when contact is not required', () => {
+    const submission = answersToSubmission({ coffee: 'pour_over' }, 60, 'quiz-1')
+    expect(submission.contact).toEqual({ name: '', email: '', phone: '', siteAddress: { street: '', city: '', postalCode: '' } })
+    expect(validateSubmission(submission, questions, { contactRequired: false })).toEqual([])
   })
 })
