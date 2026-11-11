@@ -6,6 +6,8 @@ export interface SampleHousehold {
   id: string
   label: string
   note: string
+  // Made-up date it was sent, YYYY-MM-DD, for the team's sample list.
+  submittedAt: string
   expectedSteps: string[]
   answers: Answers
 }

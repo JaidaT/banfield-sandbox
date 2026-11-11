@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire, loadSampleHouseholds, parseSampleHouseholds } from '@/lib/long-questionnaire/load'
 import { parseQuestionnaire } from '@/lib/form/parse'
+import { isDate } from '@/lib/form/format'
 
 const questionnaire = loadQuestionnaire()
 
@@ -12,6 +13,7 @@ function sample(answers: Record<string, unknown> = {}, extra: Record<string, unk
         id: 'test_home',
         label: 'Test home',
         note: 'For tests',
+        submittedAt: '2026-11-01',
         expectedSteps: ['welcome', 'contact'],
         answers: { name: 'Pat Example', project_type: 'renovation', ...answers },
         ...extra,
@@ -138,5 +140,18 @@ describe('parseSampleHouseholds', () => {
     expect(() => parse(sample({ style_sets: { kitchens: { favourite: 'a', least: 'a' } } }))).toThrow(
       /test_home.*style_sets.*same/,
     )
+  })
+})
+
+describe('sample dates (submittedAt)', () => {
+  test('every household has a real date, and no two share one', () => {
+    const dates = loadSampleHouseholds().map((s) => s.submittedAt)
+    for (const d of dates) expect(isDate(d), String(d)).toBe(true)
+    expect(new Set(dates).size).toBe(dates.length)
+  })
+
+  test('a missing or impossible date throws a message naming the sample', () => {
+    expect(() => parse(sample({}, { submittedAt: undefined }))).toThrow(/test_home.*submittedAt/)
+    expect(() => parse(sample({}, { submittedAt: '2026-13-01' }))).toThrow(/test_home.*submittedAt/)
   })
 })

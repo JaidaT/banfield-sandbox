@@ -2,6 +2,7 @@
   "_meta": {
     "version": "0.1.0",
     "source": "The 4 test personas from docs/QUESTIONNAIRE_DISCOVERY.md (Sandbox success criteria). Names, emails, phones and addresses are made up; never put real client details here.",
+    "submittedAt": "A made-up date the household sent the questionnaire, written YYYY-MM-DD. The team list shows it and puts the newest first.",
     "expectedSteps": "The step ids each household should see, given its answers. The persona tests compare this list with the steps the rules actually show.",
     "answers": "Keyed by question id from questionnaire.json. Skipped questions are simply left out. Hidden questions are never answered here.",
     "soloNewBuild": "The persona note says 'rarely hosts'. Only 'Never' skips Entertaining (team decision 2026-11-06), so this household answers Never to test the skip."
@@ -9,6 +10,7 @@
   "samples": [
     {
       "id": "growing_family",
+      "submittedAt": "2026-11-08",
       "label": "Growing family renovation",
       "note": "Two parents, kids aged 7 and 10, a dog. Entertains often. Should see every step.",
       "expectedSteps": [
@@ -99,6 +101,7 @@
     },
     {
       "id": "furniture_couple",
+      "submittedAt": "2026-11-06",
       "label": "Furniture and styling couple",
       "note": "Couple in their 60s, no kids or pets. Should skip Kids and Pets, and never see square feet, contractor or Green/LEED.",
       "expectedSteps": [
@@ -164,6 +167,7 @@
     },
     {
       "id": "solo_new_build",
+      "submittedAt": "2026-11-03",
       "label": "Solo professional, new build",
       "note": "Lives alone, works from home full time, travels for business, never hosts. Should skip Kids, Pets and Entertaining, and never see the shared taste questions.",
       "expectedSteps": [
@@ -237,6 +241,7 @@
     },
     {
       "id": "multi_generational",
+      "submittedAt": "2026-11-01",
       "label": "Multi-generational addition",
       "note": "Two parents, a teenager and a grandparent with mobility needs. Should see Kids (the teen is under 18) but skip Pets, and see the shared taste questions (3 adults).",
       "expectedSteps": [

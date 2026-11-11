@@ -1,5 +1,6 @@
 import questionnaireJson from '@/data/long-questionnaire/questionnaire.json'
 import sampleAnswersJson from '@/data/long-questionnaire/sample-answers.json'
+import { isDate } from '@/lib/form/format'
 import { checkAnswer, isRecord, nonEmptyString, parseQuestionnaire } from '@/lib/form/parse'
 import type { SampleHousehold } from './sampleTypes'
 import type { Answers, Questionnaire } from '@/lib/form/types'
@@ -25,6 +26,7 @@ export function parseSampleHouseholds(raw: unknown, questionnaire: Questionnaire
     if (!nonEmptyString(entry.label) || typeof entry.note !== 'string') {
       throw new Error(`sample ${id} needs a "label" and a "note"`)
     }
+    if (!isDate(entry.submittedAt)) throw new Error(`sample ${id} needs "submittedAt" as a real date written YYYY-MM-DD`)
     if (!Array.isArray(entry.expectedSteps)) throw new Error(`sample ${id} needs an "expectedSteps" list`)
     for (const step of entry.expectedSteps) {
       if (typeof step !== 'string' || !stepIds.has(step)) throw new Error(`sample ${id} expects unknown step ${String(step)}`)
@@ -37,7 +39,14 @@ export function parseSampleHouseholds(raw: unknown, questionnaire: Questionnaire
       if (!question) throw new Error(`sample ${id} answers unknown question ${questionId}`)
       answers[questionId] = checkAnswer(question, value, `sample ${id} question ${questionId}`)
     }
-    return { id, label: entry.label, note: entry.note, expectedSteps: entry.expectedSteps as string[], answers }
+    return {
+      id,
+      label: entry.label,
+      note: entry.note,
+      submittedAt: entry.submittedAt,
+      expectedSteps: entry.expectedSteps as string[],
+      answers,
+    }
   })
 }
 
