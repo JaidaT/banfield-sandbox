@@ -153,6 +153,16 @@ describe('QuizForm: time taken', () => {
   })
 })
 
+describe('QuizForm: close call', () => {
+  test('a tied quiz shows the close-call note in the team view, never in the client part', () => {
+    const tied = loadSampleSubmissions().find((s) => s.id === 'out-of-area-hot')!
+    renderQuiz({ startAt: 'contact', initialAnswers: submissionToAnswers(tied) })
+    click('See my results')
+    expect(teamPart().getByRole('note', { name: 'Close call' }).textContent).toMatch(/^Close call: Decisive Delegator and Creative Collaborator/)
+    expect(screen.getByRole('region', { name: 'Your results' }).textContent).not.toMatch(/close call/i)
+  })
+})
+
 // Phase 4 check: the whole route (form answers -> converter -> scoring ->
 // brief on screen) gives each sample client the same result as its sample
 // brief. Time taken is 0 here, which only adds notes and never changes these.

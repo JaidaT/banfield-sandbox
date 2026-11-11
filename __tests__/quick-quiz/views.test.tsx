@@ -27,6 +27,20 @@ describe('TeamBriefView', () => {
     expect(screen.getByRole('button', { name: /copy/i })).toBeDefined()
   })
 
+  test('a close call shows as a note under the headline', () => {
+    const brief = buildTeamBrief(sample('out-of-area-hot'), data)
+    render(<TeamBriefView brief={brief} />)
+    const note = screen.getByRole('note', { name: 'Close call' })
+    expect(note.textContent).toBe(brief.closeCalls[0])
+    // Right after the headline, before the copy button.
+    expect(screen.getByText(brief.headline).nextElementSibling).toBe(note)
+  })
+
+  test('a clear client type shows no close-call note', () => {
+    render(<TeamBriefView brief={buildTeamBrief(sample('cold-explorer'), data)} />)
+    expect(screen.queryByRole('note', { name: 'Close call' })).toBeNull()
+  })
+
   test('says "Not given" for blank contact details', () => {
     const s = sample('cold-explorer')
     const blank = { ...s, contact: { name: '', email: '', phone: '', siteAddress: { street: '', city: '', postalCode: '' } } }

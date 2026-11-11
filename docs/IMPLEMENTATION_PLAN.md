@@ -377,11 +377,11 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/teamBrief.test.ts`): `out-of-area-hot` gets the "main type unclear" sentence naming Decisive Delegator and Creative Collaborator; the other five samples get none; every sample's headline is unchanged
 
 ### Phase 3: Showing it
-- [ ] `components/quick-quiz/TeamBriefView.tsx`: each close-call sentence shows under the headline, starting with a bold "Close call:", in a plain bordered box so it stands out in the grey wireframe. Nothing shows when there are none
+- [x] `components/quick-quiz/TeamBriefView.tsx`: each close-call sentence shows under the headline, starting with a bold "Close call:", in a plain bordered box so it stands out in the grey wireframe. Nothing shows when there are none
   - Tests (`__tests__/quick-quiz/views.test.tsx`): the tied sample's brief shows "Close call" under the headline; a clear sample's does not
-- [ ] `lib/quick-quiz/briefToText.ts`: "Copy as text" puts the close-call sentences on the lines right after the headline
+- [x] `lib/quick-quiz/briefToText.ts`: "Copy as text" puts the close-call sentences on the lines right after the headline
   - Tests (`__tests__/quick-quiz/teamBrief.test.ts` or wherever `briefToText` is tested): the tied sample's text has the sentence on the line after the headline; a clear sample's text is unchanged
-- [ ] The quiz screen: a quiz answered with a tie shows the note in the "Team view (demo only)" part and nowhere in the client's part
+- [x] The quiz screen: a quiz answered with a tie shows the note in the "Team view (demo only)" part and nowhere in the client's part
   - Tests (`__tests__/quick-quiz/quizForm.test.tsx`): `out-of-area-hot` put through the quiz screen shows "Close call" in the team view, not in "Your results"
 
 ### Phase 4: Docs and checks

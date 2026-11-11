@@ -103,6 +103,20 @@ describe('close calls', () => {
     expect(buildTeamBrief(sample, { ...data, closeCallPoints: 0 }).closeCalls[0]).toMatch(/scored the same/)
   })
 
+  test('"Copy as text" puts the close-call note on the line after the headline', () => {
+    const brief = briefFor('out-of-area-hot')
+    const lines = briefToText(brief).split('\n')
+    expect(lines[1]).toBe(brief.headline)
+    expect(lines[2]).toBe(brief.closeCalls[0])
+    expect(lines[3]).toBe('')
+  })
+
+  test('"Copy as text" is unchanged when there is no close call', () => {
+    const lines = briefToText(briefFor('cold-explorer')).split('\n')
+    expect(lines[2]).toBe('')
+    expect(lines.join('\n')).not.toContain('Close call')
+  })
+
   test('the headline does not change with a close call', () => {
     expect(briefFor('out-of-area-hot').headline).toBe('Hot lead | 50% Decisive Delegator / 50% Creative Collaborator')
   })

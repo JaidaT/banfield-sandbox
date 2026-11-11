@@ -31,6 +31,7 @@ export function briefToText(brief: TeamBrief): string {
   const lines: string[] = [
     `PRE-CALL BRIEF: ${briefName(contact)}`,
     brief.headline,
+    ...brief.closeCalls,
     '',
     'CONTACT',
     `Name: ${shownOrNotGiven(contact.name)}`,

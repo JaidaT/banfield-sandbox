@@ -33,6 +33,17 @@ export default function TeamBriefView({ brief, embedded = false }: { brief: Team
         </p>
         <h1 className="font-heading text-3xl font-bold text-navy">{briefName(contact)}</h1>
         <p className="text-base font-medium">{brief.headline}</p>
+        {brief.closeCalls.length > 0 && (
+          // The quiz could not really tell client types apart (findCloseCalls).
+          <div role="note" aria-label="Close call" className="flex flex-col gap-1 rounded-md border-2 border-navy p-3 text-sm">
+            {brief.closeCalls.map((sentence) => (
+              <p key={sentence}>
+                <strong>Close call:</strong>
+                {sentence.replace(/^Close call:/, '')}
+              </p>
+            ))}
+          </div>
+        )}
         <div>
           <CopyBriefButton text={briefToText(brief)} />
         </div>
