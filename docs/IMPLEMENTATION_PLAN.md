@@ -324,7 +324,7 @@ Work test-first where something new is built (Phase 1 and the guard). For a pure
 - [x] Search for old paths (`lib/quiz/`, `lib/questionnaire/`, `components/quiz/`, `components/questionnaire/`, `data/questions.json` and the other moved data files) in `app/`, `components/`, `lib/`, `__tests__/` and `README.md`: none left. (Older plan sections and decisions keep the old paths, since they describe what was true then)
 - [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (357 tests, 2026-11-11)
 - [ ] `npm run dev` and click through `/`, `/quiz` (to the result), `/questionnaire` (to the thank-you screen), `/team`, one team brief, one client result and one long questionnaire sample: each looks the same as on `jaida/short-questionnaire`
-- [ ] Push `foyer-v1`
+- [x] Push `foyer-v1` (pushed after every step; every page also checked to load on the built app, 2026-11-11)
 
 ### Later (not in this plan)
 - The Phase 4 click-through and timed run of `/quiz` from the Quick Quiz Screen plan, now done on `foyer-v1`
