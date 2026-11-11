@@ -88,7 +88,7 @@ describe('buildTeamBrief', () => {
 describe('close calls', () => {
   test('the tied sample (50 / 50) gets the "main type unclear" note naming both types', () => {
     expect(briefFor('out-of-area-hot').closeCalls).toEqual([
-      'Close call: Decisive Delegator and Creative Collaborator are within 5 points of each other. Treat the client type as unclear and ask on the call.',
+      'Close call: Decisive Delegator and Creative Collaborator are within 5 points of each other. They could be either, or a real mix of both.',
     ])
   })
 

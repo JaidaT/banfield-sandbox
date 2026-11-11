@@ -340,7 +340,7 @@ Built on `foyer-v1`. Quick Quiz only (`lib/quick-quiz/`, `components/quick-quiz/
 
 What a close call is (chosen with Jaida on 2026-11-11). Percentages are the whole-number ones shown in the brief; "within 5 points" means the difference is 5 or less:
 1. **Main type unclear:** the second type is within 5 points of the top type. Every type within 5 points of the top type is named.
-   - Example: Delegator 34%, Analytical 31%, Cautious 30% gives "Close call: Decisive Delegator, Analytical Validator and Cautious Reassurance Seeker are within 5 points of each other. Treat the client type as unclear and ask on the call."
+   - Example: Delegator 34%, Analytical 31%, Cautious 30% gives "Close call: Decisive Delegator, Analytical Validator and Cautious Reassurance Seeker are within 5 points of each other. They could be any one of these, or a real mix."
 2. **A type left out of the headline is level with one shown:** the headline already shows two types, and a type that is not shown is within 5 points of the second one. Types already named in rule 1 are not named again.
    - Example: Creative 40%, Delegator 20%, Cautious 20%, Hands-On 20% gives "Close call: Cautious Reassurance Seeker and Hands-On Controller scored within 5 points of Decisive Delegator but are not in the headline."
    - Not a close call: Delegator 80%, Hands-On 13%. Hands-On is left out because it is under the 20% cutoff, not because of a tie, and only one type is shown.
@@ -387,6 +387,7 @@ Work test-first: for each step, write the failing test, then change the code.
 ### Phase 4: Docs and checks
 - [x] `docs/USER_RESEARCH.md`, "How to fill in Match?": if the brief shows a close-call note, record the result as nearly tied (for example "Partly (2nd, 33%, close call)"), and note whether Jamie found the note useful on the call
 - [x] `README.md`, section 5 ("Rules the code always follows" or the data files table): `closeCallPoints` and what the note means
+- Wording changed with Jaida on 2026-11-11: the "main type unclear" sentence ends "They could be either, or a real mix of both." (two types) or "They could be any one of these, or a real mix." (three or more), with no advice on what to do, since Jamie knows how to read a client. Replaces "Treat the client type as unclear and ask on the call." from the plan and DECISIONS.md
 - [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (381 tests, 2026-11-11). Checked on the built app that `/team/brief/out-of-area-hot` shows the note and a clear sample does not. Still to do by Jaida: look at `/team/brief/out-of-area-hot` and a tied `/quiz` run on a phone
 
 ### Later (not in this plan)

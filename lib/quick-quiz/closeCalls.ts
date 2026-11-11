@@ -26,7 +26,9 @@ export function findCloseCalls(scores: ArchetypeScore[], shownIds: string[], poi
   const level = scored.filter((s) => top.percent - s.percent <= points)
   if (level.length >= 2) {
     const how = points === 0 ? 'scored the same' : `are within ${points} points of each other`
-    notes.push(`Close call: ${joinNames(level)} ${how}. Treat the client type as unclear and ask on the call.`)
+    // No advice on what to do about it: Jamie knows how to read a client.
+    const could = level.length === 2 ? 'They could be either, or a real mix of both.' : 'They could be any one of these, or a real mix.'
+    notes.push(`Close call: ${joinNames(level)} ${how}. ${could}`)
   }
 
   // 2. A type left out of a full headline is level with the last type shown,

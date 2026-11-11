@@ -28,21 +28,21 @@ describe('findCloseCalls', () => {
     expect(check(scores(['D', 80], ['H', 13], ['A', 7], ['C', 0], ['R', 0]))).toEqual([])
   })
 
-  test('an exact tie for the top names both, and says to ask on the call', () => {
+  test('an exact tie for the top names both, and says they could be either or a mix', () => {
     expect(check(scores(['D', 50], ['R', 50], ['A', 0], ['C', 0], ['H', 0]))).toEqual([
-      'Close call: Decisive Delegator and Creative Collaborator are within 5 points of each other. Treat the client type as unclear and ask on the call.',
+      'Close call: Decisive Delegator and Creative Collaborator are within 5 points of each other. They could be either, or a real mix of both.',
     ])
   })
 
   test('all five level names all five', () => {
     expect(check(scores(['D', 20], ['A', 20], ['C', 20], ['R', 20], ['H', 20]))).toEqual([
-      'Close call: Decisive Delegator, Analytical Validator, Cautious Reassurance Seeker, Creative Collaborator and Hands-On Controller are within 5 points of each other. Treat the client type as unclear and ask on the call.',
+      'Close call: Decisive Delegator, Analytical Validator, Cautious Reassurance Seeker, Creative Collaborator and Hands-On Controller are within 5 points of each other. They could be any one of these, or a real mix.',
     ])
   })
 
   test('a near tie names every type within 5 points of the top, and no others', () => {
     expect(check(scores(['D', 34], ['A', 31], ['C', 30], ['R', 5], ['H', 0]))).toEqual([
-      'Close call: Decisive Delegator, Analytical Validator and Cautious Reassurance Seeker are within 5 points of each other. Treat the client type as unclear and ask on the call.',
+      'Close call: Decisive Delegator, Analytical Validator and Cautious Reassurance Seeker are within 5 points of each other. They could be any one of these, or a real mix.',
     ])
   })
 
@@ -66,7 +66,7 @@ describe('findCloseCalls', () => {
   test('both notes can show, without naming a type twice', () => {
     // Top two within 5, and a third type left out within 5 of the second but 7 from the top.
     expect(check(scores(['D', 35], ['A', 32], ['C', 28], ['R', 5], ['H', 0]))).toEqual([
-      'Close call: Decisive Delegator and Analytical Validator are within 5 points of each other. Treat the client type as unclear and ask on the call.',
+      'Close call: Decisive Delegator and Analytical Validator are within 5 points of each other. They could be either, or a real mix of both.',
       'Close call: Cautious Reassurance Seeker scored within 5 points of Analytical Validator but is not in the headline.',
     ])
   })
@@ -82,7 +82,7 @@ describe('findCloseCalls', () => {
       'Close call: Cautious Reassurance Seeker scored the same as Analytical Validator but is not in the headline.',
     ])
     expect(check(scores(['D', 50], ['R', 50], ['A', 0], ['C', 0], ['H', 0]), 0)).toEqual([
-      'Close call: Decisive Delegator and Creative Collaborator scored the same. Treat the client type as unclear and ask on the call.',
+      'Close call: Decisive Delegator and Creative Collaborator scored the same. They could be either, or a real mix of both.',
     ])
   })
 
