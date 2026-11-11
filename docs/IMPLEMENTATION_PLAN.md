@@ -394,3 +394,73 @@ Work test-first: for each step, write the failing test, then change the code.
 - ~~`out-of-area-hot` leans Delegator but scores 50 / 50~~ Decided with Jaida on 2026-11-11 (option B): its answers stay, and its note in `data/quick-quiz/sample-submissions.json` now says it is an exact tie that shows the close-call note. It is the close-call example in the tests
 - After user research: check whether 5 points is the right setting (does Jamie agree the flagged briefs were unclear, and that unflagged ones were clear?)
 - Breaking ties by something other than list order (for example the answer to the most telling question). Not needed while the note makes ties visible
+
+## Home Page and Separate Sample Lists (2026-11-11)
+
+Goal: make the prototype's front door show both products, and give each product its own sample list that looks like the real list of completed submissions Banfield will use. Today the home page is titled "Quick Quiz" only, and `/team` mixes both products' samples on one page. A list that looks real lets Banfield react to something concrete ("hot leads at the top", "show the phone number") before the real submissions list is built.
+
+Built on `foyer-v1`. Only pages, sample data and small list helpers change; the scoring, the brief, the forms and `/quiz` and `/questionnaire` stay the same.
+
+Choices (all of Claude's recommendations, accepted by Jaida on 2026-11-11):
+- **Home page** (`/`): titled "Banfield Design Co. - prototype", with one box per product, side by side on a computer and stacked on a phone. Quick Quiz box: "For website visitors, about 5 minutes", buttons "Try the Quick Quiz" (`/quiz`) and "View sample briefs" (`/team/quick-quiz`). Long questionnaire box: "For hired clients, opened from a link", buttons "Try the Long Questionnaire" (`/questionnaire`) and "View sample briefs" (`/team/long-questionnaire`). The buttons' names say which product they belong to for screen readers.
+- **Web addresses**, each product under its own name:
+
+| Page | Was | Now |
+|---|---|---|
+| Quick Quiz sample list | `/team` (shared) | `/team/quick-quiz` |
+| One Quick Quiz brief | `/team/brief/<id>` | `/team/quick-quiz/<id>` |
+| Long questionnaire sample list | `/team` (shared) | `/team/long-questionnaire` |
+| One long questionnaire result | `/team/questionnaire/<id>` | `/team/long-questionnaire/<id>` |
+| `/team` | both lists | two links, one to each list |
+| `/result/<id>`, `/quiz`, `/questionnaire` | | unchanged |
+
+  The old brief addresses are removed (only the prototype's own links and tests used them).
+- **Each list looks like a real submissions list**: one row per person, newest first.
+  - Quick Quiz row: name, date, a Hot / Warm / Cold label, the client type line, a small "Close call" marker when the brief has one, and links "Brief" and "Client result".
+  - Long questionnaire row: household name, date, project type, steps skipped, and a link to the full result.
+  - The "Intended: ..." testing note stays on each row as a small grey line labelled "Test note (prototype only)".
+- **Made-up dates**: each sample in `data/quick-quiz/sample-submissions.json` and `data/long-questionnaire/sample-answers.json` gets a `submittedAt` date (`YYYY-MM-DD`, early November 2026, all different). Only the samples get dates; the quiz's own output does not change until saving exists.
+- Each brief and result page gets a "Back to ... samples" link to its own list.
+- Left out for now: filters and search, and a login for the team pages (already under Later).
+
+Constraints:
+- The folder rule stays: list helpers live in their own product's folder; anything both use goes in `form/`. Pages in `app/` may use both.
+- Dates are shown the same on every computer and in every time zone ("Nov 3, 2026"), so they are formatted from the `YYYY-MM-DD` text, never through the browser's clock or language settings.
+- No client page links to a team page.
+
+Work test-first: for each step, write the failing test, then change the code.
+
+### Phase 1: Sample dates
+- [ ] `lib/form/format.ts`: `formatDate("2026-11-03")` gives "Nov 3, 2026", and `isDate` checks a `YYYY-MM-DD` text is a real date
+  - Tests (`__tests__/form/format.test.ts`): "2026-11-03" gives "Nov 3, 2026"; "2026-12-25" gives "Dec 25, 2026"; `isDate` refuses "2026-02-30", "2026-1-3", "Nov 3" and a number
+- [ ] Quick Quiz samples: `submittedAt` added to each sample in `data/quick-quiz/sample-submissions.json` (and explained in its `_meta`); `SampleSubmission` gains `submittedAt: string`; `parseSampleSubmissions` checks it with `isDate`
+  - Tests (`__tests__/quick-quiz/submissions.test.ts`): every real sample has a date; a missing or impossible date throws a message naming the sample
+- [ ] Long questionnaire samples: the same for `data/long-questionnaire/sample-answers.json`, `SampleHousehold` and `parseSampleHouseholds`
+  - Tests (`__tests__/long-questionnaire/sampleAnswers.test.ts`): every real sample has a date; a missing or impossible date throws a message naming the sample
+
+### Phase 2: List rows
+- [ ] New `lib/quick-quiz/sampleList.ts`: `quickQuizRows()` gives one row per sample, newest first: id, name ("Name not given" if blank), date in words, lead temperature, the client type line (as in the headline), whether there is a close call, and the test note
+  - Tests (`__tests__/quick-quiz/sampleList.test.ts`): six rows, newest first; `out-of-area-hot` has a close call and the others do not; each row's lead temperature and type line match its brief
+- [ ] New `lib/long-questionnaire/sampleList.ts`: `longQuestionnaireRows()` gives one row per sample household, newest first: id, household name, date in words, project type in words ("Not given" if skipped), steps skipped ("none" if none), and the test note
+  - Tests (`__tests__/long-questionnaire/sampleList.test.ts`): four rows, newest first; `furniture_couple` shows "Kids, Pets" skipped; the project type matches the household's answer
+
+### Phase 3: Pages
+- [ ] Quick Quiz pages: new `app/team/quick-quiz/page.tsx` (the list) and `app/team/quick-quiz/[id]/page.tsx` (one brief, moved from `app/team/brief/[id]`, with a "Back to Quick Quiz samples" link). `app/team/brief/` is removed
+  - Tests (`__tests__/quick-quiz/teamPages.test.tsx`): the list shows six rows in date order with name, date, lead label and type line; the tied sample's row shows "Close call"; "Brief" links to `/team/quick-quiz/<id>` and "Client result" to `/result/<id>`; each test note is labelled "Test note (prototype only)"; a brief page has its back link; an unknown id is "not found"
+- [ ] Long questionnaire pages: new `app/team/long-questionnaire/page.tsx` (the list) and `app/team/long-questionnaire/[id]/page.tsx` (moved from `app/team/questionnaire/[id]`, its back link pointing to the new list). `app/team/questionnaire/` is removed
+  - Tests (`__tests__/long-questionnaire/teamPages.test.tsx`, replacing `questionnaireTeamPages.test.tsx`): the list shows four rows in date order with household name, date, project type and steps skipped; each row links to `/team/long-questionnaire/<id>`; the existing household page tests still pass at the new address
+- [ ] `app/team/page.tsx`: just a heading and two links, "Quick Quiz sample briefs" and "Long questionnaire sample briefs"
+  - Tests: both links point to the new lists, and no sample is listed on `/team` itself
+- [ ] `app/page.tsx`: the home page described above
+  - Tests (`__tests__/page.test.tsx`): the title no longer says only "Quick Quiz"; the four links go to `/quiz`, `/team/quick-quiz`, `/questionnaire` and `/team/long-questionnaire`; each "View sample briefs" link names its product for screen readers
+
+### Phase 4: Docs and checks
+- [ ] `README.md`: the pages table uses the new addresses, and "Check that it works" opens the home page instead of `/team`
+- [ ] Search `app/`, `components/`, `lib/`, `__tests__/` and `README.md` for `/team/brief` and `/team/questionnaire`: none left
+- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [ ] Jaida clicks through the home page, both lists and a few rows, on a computer and a phone
+
+### Later (not in this plan)
+- Ask Banfield how they want the real list sorted (newest first, or hot leads first) and what each row should show
+- Filters and search (for example "only hot leads"), once Banfield has seen the basic list
+- A login for the team pages (already under Later in earlier plans)
