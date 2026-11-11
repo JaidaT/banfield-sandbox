@@ -441,7 +441,7 @@ Work test-first: for each step, write the failing test, then change the code.
 ### Phase 2: List rows
 - [x] New `lib/quick-quiz/sampleList.ts`: `quickQuizRows()` gives one row per sample, newest first: id, name ("Name not given" if blank), date in words, lead temperature, the client type line (as in the headline), whether there is a close call, and the test note
   - Tests (`__tests__/quick-quiz/sampleList.test.ts`): six rows, newest first; `out-of-area-hot` has a close call and the others do not; each row's lead temperature and type line match its brief
-- [ ] New `lib/long-questionnaire/sampleList.ts`: `longQuestionnaireRows()` gives one row per sample household, newest first: id, household name, date in words, project type in words ("Not given" if skipped), steps skipped ("none" if none), and the test note
+- [x] New `lib/long-questionnaire/sampleList.ts`: `longQuestionnaireRows()` gives one row per sample household, newest first: id, household name, date in words, project type in words ("Not given" if skipped), steps skipped ("none" if none), and the test note
   - Tests (`__tests__/long-questionnaire/sampleList.test.ts`): four rows, newest first; `furniture_couple` shows "Kids, Pets" skipped; the project type matches the household's answer
 
 ### Phase 3: Pages
