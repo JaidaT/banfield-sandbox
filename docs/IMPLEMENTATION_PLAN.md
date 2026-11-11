@@ -317,7 +317,7 @@ Work test-first where something new is built (Phase 1 and the guard). For a pure
   - Done: 7 guard tests, 357 tests in all. Paths are matched with "@/" or "../" in front. An import of `@/data/quick-quiz/...` from `form/` is reported twice (a data file and a Quick Quiz path), which is fine. Also checked by hand: a real file in `lib/form/` importing the Quick Quiz fails `npm run lint` with the plain message
 
 ### Phase 4: Docs
-- [ ] `README.md`: section 4 ("What's in this project") shows the three folders and what goes in each, plus the import rule; section 5 points to `data/quick-quiz/` and drops the old "The quiz screen isn't built yet" line (it now exists at `/quiz`); the branch section says `foyer-v1` is the working branch and the older branches are backups
+- [x] `README.md`: section 4 ("What's in this project") shows the three folders and what goes in each, plus the import rule; section 5 points to `data/quick-quiz/` and drops the old "The quiz screen isn't built yet" line (it now exists at `/quiz`); the branch section says `foyer-v1` is the working branch and the older branches are backups
 - [x] `docs/DECISIONS.md`: the decision entry for this layout (added with this plan)
 
 ### Phase 5: Final checks

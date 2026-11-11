@@ -1,8 +1,15 @@
 # banfield-sandbox
 
-A prototype of the Quick Quiz for Banfield Design Co., built with help from Claude Code (an AI coding assistant in VS Code).
+A prototype of two questionnaires for Banfield Design Co., built with help from Claude Code (an AI coding assistant in VS Code):
+
+- **The Quick Quiz**: about 5 minutes, for website visitors (to be shown in an iframe on Banfield's website). It works out the client type and a hot, warm or cold lead label for the team.
+- **The long questionnaire** ("Let us get to know you"): for clients who have hired Banfield (to be hosted on its own subdomain, opened from a link Banfield sends).
+
+They are separate products that share one form engine (see section 4).
 
 **This repo is a sandbox.** We use it to try out ideas. Branches stay separate and are never merged into `main`. The final product will be rebuilt separately, using this prototype as a reference.
+
+**The working branch is `foyer-v1`**, which has both questionnaires. The older `jaida/...` branches are kept as backups and no longer changed.
 
 This README tells you how to get the project running on your computer, how our team makes changes, and how the prototype works. If you're new to any of this, follow it step by step in order.
 
@@ -64,15 +71,15 @@ Every change follows the same steps. The commands that start with `/` are typed 
 
 Switch to the branch you want to start from and get the latest version of it:
 
-- For a fresh idea, start from `main`.
-- To build on someone's earlier work, start from their branch. For example, `jaida/questionnaire-output-v2` was made from `jaida/questionnaire-output`.
+- For work on either questionnaire, start from `foyer-v1`. It has the latest version of both.
+- To build on someone's earlier work, start from their branch. For example, `foyer-v1` was made from `jaida/short-questionnaire`.
 
 ```
-git switch main
+git switch foyer-v1
 git pull
 ```
 
-(Replace `main` with the branch you're starting from.)
+(Replace `foyer-v1` with the branch you're starting from.)
 
 Then type `/sync` in Claude Code. It reports whether your branch is up to date and lists any files you've changed. It never changes anything.
 
@@ -151,9 +158,9 @@ git push                        # back up to GitHub
 
 | Path | What it is |
 |---|---|
-| `data/` | **The quiz's content and rules**: questions, client types, lead rules, wording. Most changes Banfield asks for happen here, not in the code. |
-| `lib/quiz/` | **The logic**: turns a set of answers into a team brief and a client result. No screens here. |
-| `components/` | **Pieces of screens** used by the pages, such as the brief and the copy button |
+| `data/` | **Content and rules**: questions, client types, lead rules, wording. Most changes Banfield asks for happen here, not in the code. |
+| `lib/` | **The logic**, with no screens: checking answers, scoring, building the team brief |
+| `components/` | **Pieces of screens** used by the pages |
 | `app/` | The pages, one folder per web address (see section 5) |
 | `__tests__/` | Tests. `npm test` runs every file ending in `.test.tsx` or `.test.ts`. |
 | `docs/DECISIONS.md` | Log of important decisions and why we made them. Only add to it; never delete entries. |
@@ -165,11 +172,23 @@ git push                        # back up to GitHub
 | `.claude/skills/` | Our custom `/sync` and `/blueprint` commands |
 | `.github/workflows/ci.yml` | Automatic checks on GitHub. They only run for `main` and pull requests, so they don't run on our sandbox branches. Run the checks yourself (Step 5). |
 
+### Three folders inside `data/`, `lib/`, `components/` and `__tests__/`
+
+Each of these has the same three folders, so you always know where something belongs:
+
+| Folder | What goes in it |
+|---|---|
+| `form/` | **The shared form engine** both questionnaires are built on: question types, required checks, show/hide rules, Back and Next, the progress bar, the slider, the wireframe look. It knows nothing about either questionnaire. (`data/` has no `form/` folder: the engine has no content of its own.) |
+| `quick-quiz/` | **Only the Quick Quiz**: scoring, the lead label, the team brief, the client result, the quiz screen and its data files |
+| `long-questionnaire/` | **Only the long questionnaire**: its questions, sample households, thank-you screen and team view |
+
+**The rule:** `form/` never uses either questionnaire, and `quick-quiz/` and `long-questionnaire/` never use each other. Anything both need goes in `form/`. `npm run lint` checks this and explains what to do if it's broken. Pages in `app/` may use anything, since the team pages show both.
+
 ---
 
 ## 5. How the Quick Quiz prototype works
 
-The quiz screen isn't built yet. Instead, six made-up people's answers (`data/sample-submissions.json`) show what the quiz will produce.
+Try the quiz at `/quiz`. Six made-up people's answers (`data/quick-quiz/sample-submissions.json`) also show what the quiz produces for each type of client.
 
 ### What happens to a set of answers
 
@@ -187,12 +206,17 @@ Answers
 
 | Address | What it shows | Who sees it |
 |---|---|---|
-| `/team` | List of the sample people | Team only |
+| `/quiz` | The Quick Quiz itself. The prototype shows the team brief under the result, marked "Team view (demo only)" | Client |
+| `/questionnaire` | The long questionnaire, with its team view after the thank-you | Client |
+| `/team` | List of the sample people and sample households | Team only |
+| `/team/questionnaire/<id>` | What the team sees for one sample household from the long questionnaire | Team only |
 | `/team/brief/<id>` | One person's pre-call brief, with a "Copy as text" button | Team only |
 | `/result/<id>` | What that person would see after the quiz | Client |
 | `/book` | Placeholder for the booking page | Client |
 
 ### The data files
+
+These are in `data/quick-quiz/`. (The long questionnaire's are in `data/long-questionnaire/`.)
 
 | File | What it controls |
 |---|---|
@@ -201,6 +225,7 @@ Answers
 | `lead-rules.json` | Hot, warm and cold: budget thresholds per project type, and the warning signs |
 | `signals.json` | Notes based on how someone took the quiz (time taken, skipped questions) |
 | `client-result.json` | The wording on the client's result screen |
+| `quiz-form.json` | The welcome and contact screen wording, and `contactRequired` (whether contact details must be filled in before the result) |
 | `sample-submissions.json` | The six made-up people |
 
 Each file starts with a `_meta` section explaining its fields in plain English. Read it before editing.
