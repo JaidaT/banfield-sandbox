@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import QuestionnaireTeamView from "@/components/questionnaire/QuestionnaireTeamView";
-import { HEADING, HINT } from "@/components/questionnaire/styles";
-import WireframePage from "@/components/questionnaire/WireframePage";
+import { HEADING, HINT } from "@/components/form/styles";
+import WireframePage from "@/components/form/WireframePage";
 import { loadQuestionnaire, loadSampleHouseholds } from "@/lib/questionnaire/load";
-import { buildOutput, contactName } from "@/lib/questionnaire/output";
+import { buildOutput, contactName } from "@/lib/form/output";
 
 export function generateStaticParams() {
   return loadSampleHouseholds().map((s) => ({ id: s.id }));

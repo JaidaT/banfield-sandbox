@@ -1,4 +1,4 @@
-import CopyBriefButton from '@/components/CopyBriefButton'
+import CopyBriefButton from '@/components/form/CopyBriefButton'
 import { briefName, briefToText, formatDuration, shownOrNotGiven, siteText } from '@/lib/quiz/briefToText'
 import { shortLabel } from '@/lib/quiz/buildTeamBrief'
 import type { LeadTemperature, TeamBrief } from '@/lib/quiz/types'

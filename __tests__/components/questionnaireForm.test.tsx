@@ -3,10 +3,10 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuestionnairePage from '@/app/questionnaire/page'
 import LongQuestionnaireForm from '@/components/questionnaire/LongQuestionnaireForm'
-import QuestionnaireForm from '@/components/questionnaire/QuestionnaireForm'
+import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
-import { parseQuestionnaire } from '@/lib/questionnaire/parse'
-import type { Answers } from '@/lib/questionnaire/types'
+import { parseQuestionnaire } from '@/lib/form/parse'
+import type { Answers } from '@/lib/form/types'
 
 afterEach(cleanup)
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire } from '@/lib/questionnaire/load'
-import { nextStepId, previousStepId, progress } from '@/lib/questionnaire/navigation'
+import { nextStepId, previousStepId, progress } from '@/lib/form/navigation'
 
 const questionnaire = loadQuestionnaire()
 // No kids, no pets, never hosts: Kids, Pets and Entertaining are skipped.

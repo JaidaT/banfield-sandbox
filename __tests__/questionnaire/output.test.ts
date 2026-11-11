@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
-import { parseQuestionnaire } from '@/lib/questionnaire/parse'
-import { buildOutput, contactName } from '@/lib/questionnaire/output'
-import type { Answers } from '@/lib/questionnaire/types'
-import type { OutputAnswer, QuestionnaireOutput } from '@/lib/questionnaire/output'
+import { parseQuestionnaire } from '@/lib/form/parse'
+import { buildOutput, contactName } from '@/lib/form/output'
+import type { Answers } from '@/lib/form/types'
+import type { OutputAnswer, QuestionnaireOutput } from '@/lib/form/output'
 
 const questionnaire = loadQuestionnaire()
 const samples = Object.fromEntries(loadSampleHouseholds().map((s) => [s.id, s]))

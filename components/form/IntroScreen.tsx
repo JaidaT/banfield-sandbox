@@ -1,6 +1,6 @@
 import type { Ref } from 'react'
 import { BUTTON_MAIN, HEADING } from './styles'
-import type { Step } from '@/lib/questionnaire/types'
+import type { Step } from '@/lib/form/types'
 
 interface Props {
   step: Step

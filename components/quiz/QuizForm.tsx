@@ -3,12 +3,12 @@
 import { createContext, use, useState } from 'react'
 import ClientResultView from '@/components/ClientResultView'
 import TeamBriefView from '@/components/TeamBriefView'
-import QuestionnaireForm from '@/components/questionnaire/QuestionnaireForm'
-import type { DoneScreenProps } from '@/components/questionnaire/QuestionnaireForm'
+import QuestionnaireForm from '@/components/form/QuestionnaireForm'
+import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
 import { buildClientResult } from '@/lib/quiz/buildClientResult'
 import { buildTeamBrief } from '@/lib/quiz/buildTeamBrief'
 import { answersToSubmission } from '@/lib/quiz/toQuestionnaire'
-import type { Answers, Questionnaire } from '@/lib/questionnaire/types'
+import type { Answers, Questionnaire } from '@/lib/form/types'
 import type { ClientCopy, QuizData } from '@/lib/quiz/types'
 
 interface Props {

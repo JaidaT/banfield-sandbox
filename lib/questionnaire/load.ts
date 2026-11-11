@@ -1,8 +1,8 @@
 import questionnaireJson from '@/data/questionnaire/questionnaire.json'
 import sampleAnswersJson from '@/data/questionnaire/sample-answers.json'
-import { checkAnswer, isRecord, nonEmptyString, parseQuestionnaire } from './parse'
+import { checkAnswer, isRecord, nonEmptyString, parseQuestionnaire } from '@/lib/form/parse'
 import type { SampleHousehold } from './sampleTypes'
-import type { Answers, Questionnaire } from './types'
+import type { Answers, Questionnaire } from '@/lib/form/types'
 
 // The real questionnaire from data/questionnaire/questionnaire.json.
 export function loadQuestionnaire(): Questionnaire {

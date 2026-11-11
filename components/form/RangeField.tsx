@@ -2,8 +2,8 @@
 
 import { useId } from 'react'
 import { BUTTON_SMALL, HINT, LABEL, PROBLEM } from './styles'
-import { formatRangeValue } from '@/lib/questionnaire/format'
-import type { AnswerValue, Question } from '@/lib/questionnaire/types'
+import { formatRangeValue } from '@/lib/form/format'
+import type { AnswerValue, Question } from '@/lib/form/types'
 
 interface Props {
   question: Question

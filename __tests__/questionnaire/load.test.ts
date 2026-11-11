@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { parseQuestionnaire } from '@/lib/questionnaire/parse'
+import { parseQuestionnaire } from '@/lib/form/parse'
 
 // A small valid questionnaire; each test changes one thing to break it.
 function base() {

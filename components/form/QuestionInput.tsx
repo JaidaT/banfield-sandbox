@@ -4,7 +4,7 @@ import PickImages from './PickImages'
 import QuestionField from './QuestionField'
 import RangeField from './RangeField'
 import Repeater from './Repeater'
-import type { AnswerValue, ImagePicks, Question, RepeaterEntry } from '@/lib/questionnaire/types'
+import type { AnswerValue, ImagePicks, Question, RepeaterEntry } from '@/lib/form/types'
 
 interface Props {
   question: Question

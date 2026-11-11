@@ -2,7 +2,7 @@
 
 import QuestionField from './QuestionField'
 import { BUTTON_SMALL, HINT, LABEL, PROBLEM } from './styles'
-import type { AnswerValue, Question, RepeaterEntry } from '@/lib/questionnaire/types'
+import type { AnswerValue, Question, RepeaterEntry } from '@/lib/form/types'
 
 interface Props {
   question: Question

@@ -1,5 +1,5 @@
 import { BUTTON_SMALL, HINT } from './styles'
-import type { QuestionnaireOutput } from '@/lib/questionnaire/output'
+import type { QuestionnaireOutput } from '@/lib/form/output'
 
 interface Props {
   output: QuestionnaireOutput

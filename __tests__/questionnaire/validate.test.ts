@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
-import { parseQuestionnaire } from '@/lib/questionnaire/parse'
-import { allProblems, stepProblems } from '@/lib/questionnaire/validate'
-import type { Answers } from '@/lib/questionnaire/types'
+import { parseQuestionnaire } from '@/lib/form/parse'
+import { allProblems, stepProblems } from '@/lib/form/validate'
+import type { Answers } from '@/lib/form/types'
 
 const questionnaire = loadQuestionnaire()
 const ids = (problems: { questionId: string }[]) => problems.map((p) => p.questionId)

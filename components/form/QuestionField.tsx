@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { HINT, INPUT, LABEL, PROBLEM } from './styles'
-import type { AnswerValue, Question } from '@/lib/questionnaire/types'
+import type { AnswerValue, Question } from '@/lib/form/types'
 
 interface Props {
   question: Question

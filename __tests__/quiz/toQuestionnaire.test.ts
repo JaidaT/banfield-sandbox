@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 import { loadQuestions, loadQuizForm, loadSampleSubmissions } from '@/lib/quiz/load'
 import { validateSubmission } from '@/lib/quiz/submission'
 import { CONTACT_FIELDS, answersToSubmission, quizQuestionnaire, submissionToAnswers } from '@/lib/quiz/toQuestionnaire'
-import type { Question as FormQuestion } from '@/lib/questionnaire/types'
+import type { Question as FormQuestion } from '@/lib/form/types'
 
 const questions = loadQuestions()
 const form = loadQuizForm()

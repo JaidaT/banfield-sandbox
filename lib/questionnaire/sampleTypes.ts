@@ -1,4 +1,4 @@
-import type { Answers } from './types'
+import type { Answers } from '@/lib/form/types'
 
 // A made-up household from data/questionnaire/sample-answers.json, used for
 // tests and the team pages. expectedSteps lists the step ids it should see.

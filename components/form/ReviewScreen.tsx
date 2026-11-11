@@ -1,8 +1,8 @@
 import type { Ref } from 'react'
 import AnswersSummary from './AnswersSummary'
 import { BUTTON, BUTTON_MAIN, HEADING, PROBLEM } from './styles'
-import type { QuestionnaireOutput } from '@/lib/questionnaire/output'
-import type { Problem } from '@/lib/questionnaire/validate'
+import type { QuestionnaireOutput } from '@/lib/form/output'
+import type { Problem } from '@/lib/form/validate'
 
 interface Props {
   output: QuestionnaireOutput

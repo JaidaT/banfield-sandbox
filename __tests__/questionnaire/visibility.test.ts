@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
-import { matches, visibleAnswers, visibleSteps } from '@/lib/questionnaire/visibility'
-import type { Answers } from '@/lib/questionnaire/types'
+import { matches, visibleAnswers, visibleSteps } from '@/lib/form/visibility'
+import type { Answers } from '@/lib/form/types'
 
 const questionnaire = loadQuestionnaire()
 const stepIds = (answers: Answers) => visibleSteps(questionnaire, answers).map((s) => s.step.id)

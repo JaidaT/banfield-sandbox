@@ -1,9 +1,9 @@
 import type { Ref } from 'react'
 import QuestionInput from './QuestionInput'
 import { BUTTON, BUTTON_MAIN, HEADING, HINT } from './styles'
-import type { Problem } from '@/lib/questionnaire/validate'
-import type { VisibleStep } from '@/lib/questionnaire/visibility'
-import type { Answers, AnswerValue } from '@/lib/questionnaire/types'
+import type { Problem } from '@/lib/form/validate'
+import type { VisibleStep } from '@/lib/form/visibility'
+import type { Answers, AnswerValue } from '@/lib/form/types'
 
 interface Props {
   // The step with only the questions that show for the current answers.

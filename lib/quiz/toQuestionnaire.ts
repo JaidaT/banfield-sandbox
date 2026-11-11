@@ -1,6 +1,6 @@
-import { parseQuestionnaire } from '@/lib/questionnaire/parse'
-import { isBlank } from '@/lib/questionnaire/validate'
-import type { Answers, AnswerValue, Questionnaire } from '@/lib/questionnaire/types'
+import { parseQuestionnaire } from '@/lib/form/parse'
+import { isBlank } from '@/lib/form/validate'
+import type { Answers, AnswerValue, Questionnaire } from '@/lib/form/types'
 import type { Question, QuizForm, Submission } from './types'
 
 // Turns the Quick Quiz into the shared form's format, so the quiz can use the

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { deriveValues } from '@/lib/questionnaire/derived'
-import type { Answers } from '@/lib/questionnaire/types'
+import { deriveValues } from '@/lib/form/derived'
+import type { Answers } from '@/lib/form/types'
 
 describe('deriveValues', () => {
   test('finds the youngest age and counts adults (18 and over)', () => {

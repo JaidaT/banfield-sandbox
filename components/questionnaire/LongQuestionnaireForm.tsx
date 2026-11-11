@@ -1,8 +1,8 @@
 'use client'
 
 import DoneScreen from './DoneScreen'
-import QuestionnaireForm from './QuestionnaireForm'
-import type { Answers, Questionnaire } from '@/lib/questionnaire/types'
+import QuestionnaireForm from '@/components/form/QuestionnaireForm'
+import type { Answers, Questionnaire } from '@/lib/form/types'
 
 interface Props {
   questionnaire: Questionnaire

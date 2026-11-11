@@ -1,5 +1,5 @@
-import { contactName } from './output'
-import type { OutputAnswer, QuestionnaireOutput } from './output'
+import { contactName } from '@/lib/form/output'
+import type { OutputAnswer, QuestionnaireOutput } from '@/lib/form/output'
 
 // Phones often type curly quotes, long dashes and a one-character "...".
 // These become plain characters. Accented letters (Rene with an accent) are

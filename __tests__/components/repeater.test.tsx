@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from 'vitest'
 import { useState } from 'react'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
-import Repeater from '@/components/questionnaire/Repeater'
-import { parseQuestionnaire } from '@/lib/questionnaire/parse'
-import type { RepeaterEntry } from '@/lib/questionnaire/types'
+import Repeater from '@/components/form/Repeater'
+import { parseQuestionnaire } from '@/lib/form/parse'
+import type { RepeaterEntry } from '@/lib/form/types'
 
 afterEach(cleanup)
 

@@ -1,7 +1,7 @@
-import AnswersSummary from './AnswersSummary'
-import CopyBriefButton from '@/components/CopyBriefButton'
+import AnswersSummary from '@/components/form/AnswersSummary'
+import CopyBriefButton from '@/components/form/CopyBriefButton'
 import { outputToText } from '@/lib/questionnaire/outputToText'
-import type { QuestionnaireOutput } from '@/lib/questionnaire/output'
+import type { QuestionnaireOutput } from '@/lib/form/output'
 
 // What the team sees: skipped steps, every answer, and "Copy as text" for
 // pasting into Claude or JobTread.

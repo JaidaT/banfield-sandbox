@@ -5,7 +5,7 @@ import QuizForm from '@/components/quiz/QuizForm'
 import { buildTeamBrief, shortLabel } from '@/lib/quiz/buildTeamBrief'
 import { loadClientCopy, loadQuizData, loadQuizForm, loadSampleSubmissions } from '@/lib/quiz/load'
 import { CONTACT_FIELDS, quizQuestionnaire, submissionToAnswers } from '@/lib/quiz/toQuestionnaire'
-import type { Answers } from '@/lib/questionnaire/types'
+import type { Answers } from '@/lib/form/types'
 
 afterEach(cleanup)
 

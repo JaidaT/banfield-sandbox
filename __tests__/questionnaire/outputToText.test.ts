@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
-import { buildOutput } from '@/lib/questionnaire/output'
+import { buildOutput } from '@/lib/form/output'
 import { outputToText } from '@/lib/questionnaire/outputToText'
 
 const questionnaire = loadQuestionnaire()

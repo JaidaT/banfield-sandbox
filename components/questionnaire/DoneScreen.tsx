@@ -1,7 +1,7 @@
 import QuestionnaireTeamView from "./QuestionnaireTeamView";
-import type { DoneScreenProps } from "./QuestionnaireForm";
-import { HEADING } from "./styles";
-import { buildOutput } from "@/lib/questionnaire/output";
+import type { DoneScreenProps } from "@/components/form/QuestionnaireForm";
+import { HEADING } from "@/components/form/styles";
+import { buildOutput } from "@/lib/form/output";
 
 // The long questionnaire's thank-you after Submit. Below a divider, the
 // prototype also shows what the team would receive (in the real product this
