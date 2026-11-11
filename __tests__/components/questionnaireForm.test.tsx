@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, test } from 'vitest'
+import type { Ref } from 'react'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuestionnaireForm from '@/components/questionnaire/QuestionnaireForm'
 import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
@@ -120,5 +121,46 @@ describe('QuestionnaireForm: review and submit', () => {
     expect(screen.getByText('Team view (demo only)')).toBeDefined()
     expect(screen.getByText('Steps skipped: none')).toBeDefined()
     expect(screen.getByRole('button', { name: 'Copy as text' })).toBeDefined()
+  })
+})
+
+describe('QuestionnaireForm: a custom final screen (doneScreen)', () => {
+  const family = loadSampleHouseholds().find((s) => s.id === 'growing_family')!.answers
+
+  // A made-up final screen, standing in for the Quick Quiz result.
+  const customDone = vi.fn(({ answers, headingRef }: { answers: Answers; headingRef: Ref<HTMLHeadingElement> }) => (
+    <h2 ref={headingRef} tabIndex={-1}>
+      Results for {String(answers.name)}
+    </h2>
+  ))
+  const lastAnswers = () => customDone.mock.lastCall?.[0].answers
+
+  test('Submit shows the custom screen instead of the thank-you, and gives it the answers', () => {
+    customDone.mockClear()
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} doneScreen={customDone} />)
+    click('Review my answers')
+    expect(customDone).not.toHaveBeenCalled()
+    click('Submit')
+    expect(stepHeading()).toBe('Results for Maya and Sam Example')
+    expect(screen.queryByText('Thank you!')).toBeNull()
+    expect(screen.queryByText('Team view (demo only)')).toBeNull()
+    expect(lastAnswers()).toMatchObject({ name: 'Maya and Sam Example', project_type: 'renovation' })
+  })
+
+  test('the custom screen gets the answers to visible questions only', () => {
+    customDone.mockClear()
+    // A leftover answer to a question that is now hidden: pets were switched to "No".
+    const answers = { ...family, has_pets: 'no' }
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={answers} doneScreen={customDone} />)
+    click('Review my answers')
+    click('Submit')
+    expect(lastAnswers()).not.toHaveProperty('pets')
+  })
+
+  test('the cursor moves to the custom screen heading, like every other screen', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} doneScreen={customDone} />)
+    click('Review my answers')
+    click('Submit')
+    expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Results for Maya and Sam Example' }))
   })
 })

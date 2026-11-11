@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import type { ComponentType, Ref } from 'react'
 import DoneScreen from './DoneScreen'
 import IntroScreen from './IntroScreen'
 import ReviewScreen from './ReviewScreen'
@@ -10,7 +11,7 @@ import WireframePage from './WireframePage'
 import { nextStepId, previousStepId, progress } from '@/lib/questionnaire/navigation'
 import { buildOutput } from '@/lib/questionnaire/output'
 import { allProblems, stepProblems } from '@/lib/questionnaire/validate'
-import { visibleSteps } from '@/lib/questionnaire/visibility'
+import { visibleAnswers, visibleSteps } from '@/lib/questionnaire/visibility'
 import type { Answers, AnswerValue, Questionnaire } from '@/lib/questionnaire/types'
 
 // Screens that are not steps in the data file.
@@ -22,6 +23,16 @@ interface Props {
   // For tests and demo links: open on this step with these answers.
   startAt?: string
   initialAnswers?: Answers
+  // The screen after Submit. Left out: the long questionnaire's thank-you
+  // (DoneScreen). It gets the answers to visible questions only, and a
+  // headingRef to put on its main heading so the cursor moves there like on
+  // every other screen. The Quick Quiz uses this to show its own result.
+  doneScreen?: ComponentType<DoneScreenProps>
+}
+
+export interface DoneScreenProps {
+  answers: Answers
+  headingRef: Ref<HTMLHeadingElement>
 }
 
 // The whole questionnaire. This file holds the answers and decides which
@@ -29,7 +40,7 @@ interface Props {
 // IntroScreen (welcome), StepScreen (a step), ReviewScreen, DoneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: CustomDone }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -117,7 +128,11 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
       />
     )
   } else if (current === DONE) {
-    screen = <DoneScreen output={buildOutput(questionnaire, answers)} headingRef={headingRef} />
+    screen = CustomDone ? (
+      <CustomDone answers={visibleAnswers(questionnaire, answers)} headingRef={headingRef} />
+    ) : (
+      <DoneScreen output={buildOutput(questionnaire, answers)} headingRef={headingRef} />
+    )
   } else if (step && step.step.questions.length === 0) {
     screen = (
       <IntroScreen
