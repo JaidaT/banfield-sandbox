@@ -121,6 +121,7 @@ Compare the quiz's result with the persona card or Jamie's written guess. The qu
 
 - **When it is not a Yes, write down the place and score**, for example "Partly (2nd, 35%)" or "No (3rd, 18%)". "No (3rd, 18%)" means the quiz barely saw that type; "No (3rd, 30%)" means it was close. If the same type keeps landing low, a question is probably not picking it up.
 - **If the scores are nearly tied**, say so, for example "No (3rd, 32%, nearly tied)". Close scores mean the quiz could not tell those types apart.
+- **If the brief shows a "Close call" note** (a bordered box under the headline), write "close call" in the Match? answer, for example "Partly (2nd, 33%, close call)". The quiz adds the note when types are within 5 points of each other. For the past client, also note whether Jamie found the note useful, and whether he agrees the type was unclear. That tells us whether 5 points is the right setting.
 - **Past client:** also compare the hot/warm/cold label with how good a fit Jamie wrote down, and note both, for example "Type: Yes, Label: Partly".
 - **Classmates:** compare the client type only (see method 3).
 - Copy the same answer into the "Match?" column of the Results log below.

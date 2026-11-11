@@ -221,7 +221,7 @@ These are in `data/quick-quiz/`. (The long questionnaire's are in `data/long-que
 | File | What it controls |
 |---|---|
 | `questions.json` | Every question and answer, and which client types each answer points to |
-| `archetypes.json` | The 5 client types and the guidance shown for each |
+| `archetypes.json` | The 5 client types and the guidance shown for each, and `closeCallPoints` (see below) |
 | `lead-rules.json` | Hot, warm and cold: budget thresholds per project type, and the warning signs |
 | `signals.json` | Notes based on how someone took the quiz (time taken, skipped questions) |
 | `client-result.json` | The wording on the client's result screen |
@@ -242,6 +242,7 @@ Each file starts with a `_meta` section explaining its fields in plain English. 
 - Client types and lead labels **never** appear on client screens. Tests check every sample for this.
 - Location never affects the lead label.
 - A client's type never changes the lead label.
+- When client types are within `closeCallPoints` (5 for now) of each other, the team brief shows a **"Close call"** note under the headline, telling Jamie the quiz could not really tell them apart. The scores and headline do not change; ties are still listed in `archetypes.json` order. The sample `out-of-area-hot` (an exact 50 / 50) shows one.
 
 For why things work this way, see `docs/DECISIONS.md`.
 

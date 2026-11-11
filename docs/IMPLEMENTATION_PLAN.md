@@ -385,9 +385,9 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/quizForm.test.tsx`): `out-of-area-hot` put through the quiz screen shows "Close call" in the team view, not in "Your results"
 
 ### Phase 4: Docs and checks
-- [ ] `docs/USER_RESEARCH.md`, "How to fill in Match?": if the brief shows a close-call note, record the result as nearly tied (for example "Partly (2nd, 33%, close call)"), and note whether Jamie found the note useful on the call
-- [ ] `README.md`, section 5 ("Rules the code always follows" or the data files table): `closeCallPoints` and what the note means
-- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass. Then look at `/team/brief/out-of-area-hot` and a tied `/quiz` run on a phone
+- [x] `docs/USER_RESEARCH.md`, "How to fill in Match?": if the brief shows a close-call note, record the result as nearly tied (for example "Partly (2nd, 33%, close call)"), and note whether Jamie found the note useful on the call
+- [x] `README.md`, section 5 ("Rules the code always follows" or the data files table): `closeCallPoints` and what the note means
+- [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (381 tests, 2026-11-11). Checked on the built app that `/team/brief/out-of-area-hot` shows the note and a clear sample does not. Still to do by Jaida: look at `/team/brief/out-of-area-hot` and a tied `/quiz` run on a phone
 
 ### Later (not in this plan)
 - ~~`out-of-area-hot` leans Delegator but scores 50 / 50~~ Decided with Jaida on 2026-11-11 (option B): its answers stay, and its note in `data/quick-quiz/sample-submissions.json` now says it is an exact tie that shows the close-call note. It is the close-call example in the tests
