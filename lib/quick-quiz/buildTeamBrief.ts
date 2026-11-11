@@ -20,6 +20,14 @@ export function shortLabel(label: string): string {
   return label.replace(/^The /, '')
 }
 
+// The client type part of the headline, e.g. "64% Cautious Reassurance Seeker /
+// 36% Hands-On Controller". Also used by the team's sample list.
+export function clientTypeLine(highlights: ArchetypeGuidance[]): string {
+  return highlights.length === 0
+    ? 'Not enough answers to identify a client type'
+    : highlights.map((h) => `${h.percent}% ${shortLabel(h.label)}`).join(' / ')
+}
+
 function readableAnswer(question: Question, submission: Submission): string | null {
   const labels = answerLabels(question, submission.answers[question.id])
   return labels.length > 0 ? labels.join('; ') : null
@@ -52,10 +60,7 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
   })
 
   const leadLabel = `${lead.temperature[0].toUpperCase()}${lead.temperature.slice(1)} lead`
-  const typeLine =
-    highlights.length === 0
-      ? 'Not enough answers to identify a client type'
-      : highlights.map((h) => `${h.percent}% ${shortLabel(h.label)}`).join(' / ')
+  const typeLine = clientTypeLine(highlights)
 
   const answers: AnswerLine[] = data.questions.map((q) => ({
     questionId: q.id,
