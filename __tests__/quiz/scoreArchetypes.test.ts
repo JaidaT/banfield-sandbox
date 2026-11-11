@@ -4,10 +4,10 @@ import {
   loadQuestions,
   loadSampleSubmissions,
   loadSignalRules,
-} from '@/lib/quiz/load'
-import { scoreArchetypes } from '@/lib/quiz/scoreArchetypes'
-import { evaluateSignals } from '@/lib/quiz/signals'
-import type { Archetype, Question, SignalRule, Submission } from '@/lib/quiz/types'
+} from '@/lib/quick-quiz/load'
+import { scoreArchetypes } from '@/lib/quick-quiz/scoreArchetypes'
+import { evaluateSignals } from '@/lib/quick-quiz/signals'
+import type { Archetype, Question, SignalRule, Submission } from '@/lib/quick-quiz/types'
 
 function archetype(id: string): Archetype {
   return {

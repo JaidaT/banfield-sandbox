@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { buildClientResult } from '@/lib/quiz/buildClientResult'
-import { loadClientCopy, loadQuizData, loadSampleSubmissions, loadSegments, parseClientCopy } from '@/lib/quiz/load'
+import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
+import { loadClientCopy, loadQuizData, loadSampleSubmissions, loadSegments, parseClientCopy } from '@/lib/quick-quiz/load'
 
 const data = loadQuizData()
 const copy = loadClientCopy()

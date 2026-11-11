@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import QuizForm from "@/components/quiz/QuizForm";
-import { loadClientCopy, loadQuizData, loadQuizForm } from "@/lib/quiz/load";
-import { quizQuestionnaire } from "@/lib/quiz/toQuestionnaire";
+import QuizForm from "@/components/quick-quiz/QuizForm";
+import { loadClientCopy, loadQuizData, loadQuizForm } from "@/lib/quick-quiz/load";
+import { quizQuestionnaire } from "@/lib/quick-quiz/toQuestionnaire";
 
 export const metadata: Metadata = {
   title: "Quick Quiz (prototype)",

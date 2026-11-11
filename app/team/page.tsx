@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { buildTeamBrief } from "@/lib/quiz/buildTeamBrief";
+import { buildTeamBrief } from "@/lib/quick-quiz/buildTeamBrief";
 import { loadSampleHouseholds } from "@/lib/long-questionnaire/load";
-import { loadQuizData, loadSampleSubmissions } from "@/lib/quiz/load";
+import { loadQuizData, loadSampleSubmissions } from "@/lib/quick-quiz/load";
 
 export default function TeamIndex() {
   const data = loadQuizData();

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadArchetypes, loadQuestions, parseQuestionBank } from '@/lib/quiz/load'
+import { loadArchetypes, loadQuestions, parseQuestionBank } from '@/lib/quick-quiz/load'
 
 const IDS = ['decisive_delegator', 'analytical_validator']
 

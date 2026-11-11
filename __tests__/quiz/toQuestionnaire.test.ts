@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestions, loadQuizForm, loadSampleSubmissions } from '@/lib/quiz/load'
-import { validateSubmission } from '@/lib/quiz/submission'
-import { CONTACT_FIELDS, answersToSubmission, quizQuestionnaire, submissionToAnswers } from '@/lib/quiz/toQuestionnaire'
+import { loadQuestions, loadQuizForm, loadSampleSubmissions } from '@/lib/quick-quiz/load'
+import { validateSubmission } from '@/lib/quick-quiz/submission'
+import { CONTACT_FIELDS, answersToSubmission, quizQuestionnaire, submissionToAnswers } from '@/lib/quick-quiz/toQuestionnaire'
 import type { Question as FormQuestion } from '@/lib/form/types'
 
 const questions = loadQuestions()

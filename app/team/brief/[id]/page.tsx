@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import TeamBriefView from "@/components/TeamBriefView";
-import { sampleBrief, sampleIds } from "@/lib/quiz/demo";
+import TeamBriefView from "@/components/quick-quiz/TeamBriefView";
+import { sampleBrief, sampleIds } from "@/lib/quick-quiz/demo";
 
 export function generateStaticParams() {
   return sampleIds();

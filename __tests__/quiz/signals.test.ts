@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadSignalRules, parseSignalRules } from '@/lib/quiz/load'
+import { loadSignalRules, parseSignalRules } from '@/lib/quick-quiz/load'
 
 const IDS = ['decisive_delegator', 'analytical_validator']
 

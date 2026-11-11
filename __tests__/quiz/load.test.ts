@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadArchetypes, loadQuizForm, parseArchetypes, parseQuizForm } from '@/lib/quiz/load'
+import { loadArchetypes, loadQuizForm, parseArchetypes, parseQuizForm } from '@/lib/quick-quiz/load'
 
 describe('loadArchetypes', () => {
   test('loads every archetype from data/archetypes.json', () => {

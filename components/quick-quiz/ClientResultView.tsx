@@ -1,5 +1,5 @@
 import type { Ref } from 'react'
-import type { ClientResult } from '@/lib/quiz/types'
+import type { ClientResult } from '@/lib/quick-quiz/types'
 
 interface Props {
   result: ClientResult

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import ClientResultView from "@/components/ClientResultView";
-import { sampleIds, sampleResult } from "@/lib/quiz/demo";
+import ClientResultView from "@/components/quick-quiz/ClientResultView";
+import { sampleIds, sampleResult } from "@/lib/quick-quiz/demo";
 
 export function generateStaticParams() {
   return sampleIds();

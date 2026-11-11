@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import ClientResultView from '@/components/ClientResultView'
+import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import CopyBriefButton from '@/components/form/CopyBriefButton'
-import TeamBriefView from '@/components/TeamBriefView'
-import { buildClientResult } from '@/lib/quiz/buildClientResult'
-import { buildTeamBrief } from '@/lib/quiz/buildTeamBrief'
-import { loadClientCopy, loadQuizData, loadSampleSubmissions } from '@/lib/quiz/load'
+import TeamBriefView from '@/components/quick-quiz/TeamBriefView'
+import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
+import { buildTeamBrief } from '@/lib/quick-quiz/buildTeamBrief'
+import { loadClientCopy, loadQuizData, loadSampleSubmissions } from '@/lib/quick-quiz/load'
 
 afterEach(cleanup)
 

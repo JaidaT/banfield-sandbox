@@ -1,7 +1,7 @@
 import CopyBriefButton from '@/components/form/CopyBriefButton'
-import { briefName, briefToText, formatDuration, shownOrNotGiven, siteText } from '@/lib/quiz/briefToText'
-import { shortLabel } from '@/lib/quiz/buildTeamBrief'
-import type { LeadTemperature, TeamBrief } from '@/lib/quiz/types'
+import { briefName, briefToText, formatDuration, shownOrNotGiven, siteText } from '@/lib/quick-quiz/briefToText'
+import { shortLabel } from '@/lib/quick-quiz/buildTeamBrief'
+import type { LeadTemperature, TeamBrief } from '@/lib/quick-quiz/types'
 
 const LEAD_STYLES: Record<LeadTemperature, string> = {
   hot: 'bg-navy text-frost',

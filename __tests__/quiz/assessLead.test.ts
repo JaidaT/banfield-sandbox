@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
-import { assessLead } from '@/lib/quiz/assessLead'
-import { loadLeadRules, loadQuestions, loadSampleSubmissions } from '@/lib/quiz/load'
-import type { LeadRules, Question, Submission } from '@/lib/quiz/types'
+import { assessLead } from '@/lib/quick-quiz/assessLead'
+import { loadLeadRules, loadQuestions, loadSampleSubmissions } from '@/lib/quick-quiz/load'
+import type { LeadRules, Question, Submission } from '@/lib/quick-quiz/types'
 
 const QUESTIONS: Question[] = [
   {

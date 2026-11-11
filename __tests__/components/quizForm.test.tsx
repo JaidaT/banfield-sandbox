@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuizPage, { metadata } from '@/app/quiz/page'
-import QuizForm from '@/components/quiz/QuizForm'
-import { buildTeamBrief, shortLabel } from '@/lib/quiz/buildTeamBrief'
-import { loadClientCopy, loadQuizData, loadQuizForm, loadSampleSubmissions } from '@/lib/quiz/load'
-import { CONTACT_FIELDS, quizQuestionnaire, submissionToAnswers } from '@/lib/quiz/toQuestionnaire'
+import QuizForm from '@/components/quick-quiz/QuizForm'
+import { buildTeamBrief, shortLabel } from '@/lib/quick-quiz/buildTeamBrief'
+import { loadClientCopy, loadQuizData, loadQuizForm, loadSampleSubmissions } from '@/lib/quick-quiz/load'
+import { CONTACT_FIELDS, quizQuestionnaire, submissionToAnswers } from '@/lib/quick-quiz/toQuestionnaire'
 import type { Answers } from '@/lib/form/types'
 
 afterEach(cleanup)

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
-import { briefToText } from '@/lib/quiz/briefToText'
-import { buildTeamBrief } from '@/lib/quiz/buildTeamBrief'
-import { loadQuizData, loadSampleSubmissions } from '@/lib/quiz/load'
+import { briefToText } from '@/lib/quick-quiz/briefToText'
+import { buildTeamBrief } from '@/lib/quick-quiz/buildTeamBrief'
+import { loadQuizData, loadSampleSubmissions } from '@/lib/quick-quiz/load'
 
 const data = loadQuizData()
 const samples = loadSampleSubmissions()
