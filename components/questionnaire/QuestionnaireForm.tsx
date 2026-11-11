@@ -28,6 +28,9 @@ interface Props {
   // headingRef to put on its main heading so the cursor moves there like on
   // every other screen. The Quick Quiz uses this to show its own result.
   doneScreen?: ComponentType<DoneScreenProps>
+  // Leave out the "Check your answers" screen: the last step goes straight to
+  // the final screen. The Quick Quiz uses this; the long questionnaire does not.
+  skipReview?: boolean
 }
 
 export interface DoneScreenProps {
@@ -40,7 +43,7 @@ export interface DoneScreenProps {
 // IntroScreen (welcome), StepScreen (a step), ReviewScreen, DoneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: CustomDone }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: CustomDone, skipReview = false }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -93,7 +96,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   }
 
   function next() {
-    leaveTo(nextStepId(questionnaire, answers, current) ?? REVIEW)
+    leaveTo(nextStepId(questionnaire, answers, current) ?? (skipReview ? DONE : REVIEW))
   }
 
   function edit(stepId: string) {
@@ -151,6 +154,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
         problems={problems}
         place={progress(questionnaire, answers, current)}
         isLast={nextStepId(questionnaire, answers, current) === null}
+        lastLabel={skipReview ? 'See my results' : 'Review my answers'}
         onAnswer={setAnswer}
         onNext={next}
         onBack={back ? () => goTo(back) : undefined}

@@ -13,6 +13,8 @@ interface Props {
   // "Step 4 of 11", or null for a step that is not counted.
   place: { number: number; total: number } | null
   isLast: boolean
+  // The main button on the last step, e.g. "Review my answers" or "See my results".
+  lastLabel: string
   onAnswer: (questionId: string, value: AnswerValue | undefined) => void
   onNext: () => void
   // Left out when there is no step to go back to.
@@ -25,7 +27,7 @@ interface Props {
 // One step of the questionnaire: progress, title, its visible questions, and
 // the Back / Next buttons.
 export default function StepScreen(props: Props) {
-  const { step, answers, problems, place, isLast, onAnswer, onNext, onBack, onBackToReview, headingRef } = props
+  const { step, answers, problems, place, isLast, lastLabel, onAnswer, onNext, onBack, onBackToReview, headingRef } = props
   return (
     <>
       {place ? (
@@ -58,7 +60,7 @@ export default function StepScreen(props: Props) {
           </button>
         ) : null}
         <button type="button" onClick={onNext} className={BUTTON_MAIN}>
-          {isLast ? 'Review my answers' : 'Next'}
+          {isLast ? lastLabel : 'Next'}
         </button>
         {onBackToReview && !isLast ? (
           <button type="button" onClick={onBackToReview} className={BUTTON}>

@@ -2,7 +2,7 @@ import type { Ref } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuestionnaireForm from '@/components/questionnaire/QuestionnaireForm'
-import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
+import { loadQuestionnaire, loadSampleHouseholds, parseQuestionnaire } from '@/lib/questionnaire/load'
 import type { Answers } from '@/lib/questionnaire/types'
 
 afterEach(cleanup)
@@ -162,5 +162,43 @@ describe('QuestionnaireForm: a custom final screen (doneScreen)', () => {
     click('Review my answers')
     click('Submit')
     expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Results for Maya and Sam Example' }))
+  })
+})
+
+describe('QuestionnaireForm: no review screen (skipReview)', () => {
+  const family = loadSampleHouseholds().find((s) => s.id === 'growing_family')!.answers
+
+  test('the last step says "See my results" and goes straight to the final screen', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} skipReview />)
+    expect(screen.queryByRole('button', { name: 'Review my answers' })).toBeNull()
+    click('See my results')
+    expect(stepHeading()).toBe('Thank you!')
+    expect(screen.queryByText('Check your answers')).toBeNull()
+  })
+
+  test('a blank required question on the last step still blocks it', () => {
+    const oneStep = parseQuestionnaire({
+      steps: [
+        {
+          id: 'contact',
+          title: 'Where should Jamie reach you?',
+          questions: [{ id: 'email', kind: 'short_text', prompt: 'Email', required: true }],
+        },
+      ],
+    })
+    render(<QuestionnaireForm questionnaire={oneStep} skipReview />)
+    click('See my results')
+    expect(stepHeading()).toBe('Where should Jamie reach you?')
+    expect(screen.getByRole('alert').textContent).toBe('Please answer "Email"')
+
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'pat@example.com' } })
+    click('See my results')
+    expect(stepHeading()).toBe('Thank you!')
+  })
+
+  test('steps before the last one still say Next', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="household" initialAnswers={family} skipReview />)
+    click('Next')
+    expect(stepHeading()).not.toBe('Thank you!')
   })
 })
