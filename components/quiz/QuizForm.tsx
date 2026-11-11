@@ -36,8 +36,10 @@ const QuizContext = createContext<QuizSetup | null>(null)
 // last, no review screen), ending on the quiz's own result screen.
 export default function QuizForm({ questionnaire, quizData, clientCopy, startAt, initialAnswers }: Props) {
   // When the quiz opened, for the "time taken" note in the brief (a note only,
-  // with no effect on scoring; DECISIONS.md 2026-10-26).
-  const [startedAt] = useState(() => Date.now())
+  // with no effect on scoring; DECISIONS.md 2026-10-26). performance.now() is
+  // the timer for this: Next.js does not allow Date.now() while it prepares the
+  // page ahead of time, and says performance.now() is meant for timing.
+  const [startedAt] = useState(() => performance.now())
   return (
     <QuizContext value={{ quizData, clientCopy, startedAt }}>
       <QuestionnaireForm
@@ -58,7 +60,7 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
   if (!setup) throw new Error('QuizResults must be inside QuizForm')
   const { quizData, clientCopy, startedAt } = setup
   // Worked out once, when the results first show.
-  const [seconds] = useState(() => Math.max(0, Math.round((Date.now() - startedAt) / 1000)))
+  const [seconds] = useState(() => Math.max(0, Math.round((performance.now() - startedAt) / 1000)))
 
   // "quiz-demo": a placeholder id until submissions are saved (Later in the plan).
   const submission = answersToSubmission(answers, seconds, 'quiz-demo')

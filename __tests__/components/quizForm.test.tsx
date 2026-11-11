@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import QuizPage, { metadata } from '@/app/quiz/page'
 import QuizForm from '@/components/quiz/QuizForm'
 import { loadClientCopy, loadQuizData, loadQuizForm } from '@/lib/quiz/load'
 import { CONTACT_FIELDS, quizQuestionnaire } from '@/lib/quiz/toQuestionnaire'
@@ -113,5 +114,14 @@ describe('QuizForm', () => {
     renderQuiz({ startAt: 'contact' })
     click('See my results')
     expect(screen.getAllByRole('main')).toHaveLength(1)
+  })
+})
+
+describe('the /quiz page', () => {
+  test('shows the welcome screen, and is kept out of search engines', () => {
+    render(<QuizPage />)
+    expect(heading()).toBe(form.welcome.title)
+    expect(screen.getByRole('button', { name: "Let's start" })).toBeDefined()
+    expect(metadata.robots).toEqual({ index: false, follow: false })
   })
 })
