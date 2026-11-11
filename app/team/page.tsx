@@ -19,6 +19,9 @@ export default function TeamIndex() {
           Made-up people, each written to represent a type of client. Compare the brief with the
           note to check the quiz reads them the way it should.
         </p>
+        <Link href="/quiz" className="self-start text-sm font-semibold text-navy underline">
+          Try the Quick Quiz
+        </Link>
       </header>
 
       <ul className="flex flex-col gap-4">

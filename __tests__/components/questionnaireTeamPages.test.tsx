@@ -36,4 +36,9 @@ describe('team questionnaire pages', () => {
     )
     expect(screen.getByRole('link', { name: 'Try the full questionnaire' }).getAttribute('href')).toBe('/questionnaire')
   })
+
+  test('the team page links to the Quick Quiz', () => {
+    render(<TeamIndex />)
+    expect(screen.getByRole('link', { name: 'Try the Quick Quiz' }).getAttribute('href')).toBe('/quiz')
+  })
 })

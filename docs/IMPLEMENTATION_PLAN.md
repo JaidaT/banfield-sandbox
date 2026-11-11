@@ -247,7 +247,7 @@ Work test-first: for each step, write the failing test, then change the code. Ea
   - Tests (`__tests__/components/quizForm.test.tsx`): welcome, then "Step 1 of 13" on the first question; Next is not blocked on a skipped question; no review screen; with `contactRequired` off, "See my results" works with the contact screen blank; with it on, it is blocked until all six contact fields are filled in; after "See my results" the client result shows the booking button and no archetype or lead label above the divider, and the team brief shows below it
 - [x] `app/quiz/page.tsx`: loads and checks the data on the server and shows `QuizForm`, with `robots: noindex` like the other prototype pages. (The time taken uses `performance.now()`: with Cache Components, Next.js refuses `Date.now()` while prerendering and its docs name `performance.now()` for timing)
   - Tests (`quizForm.test.tsx`): the page renders the welcome screen
-- [ ] Links: "Try the Quick Quiz" on `app/page.tsx` (and remove "The quiz screen itself is not built yet") and on `app/team/page.tsx`
+- [x] Links: "Try the Quick Quiz" on `app/page.tsx` (and remove "The quiz screen itself is not built yet") and on `app/team/page.tsx`
   - Tests (`__tests__/page.test.tsx`, `questionnaireTeamPages.test.tsx`): both links point to `/quiz`
 
 ### Phase 4: Final checks
