@@ -1,12 +1,16 @@
+import { Suspense } from 'react'
+import type { ReactElement } from 'react'
 import { afterEach, describe, expect, test } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import LongQuestionnaireList from '@/app/team/long-questionnaire/page'
-import HouseholdPage, { generateStaticParams } from '@/app/team/long-questionnaire/[id]/page'
+import HouseholdPage, { HouseholdContent, generateStaticParams } from '@/app/team/long-questionnaire/[id]/page'
 import { longQuestionnaireRows } from '@/lib/long-questionnaire/sampleList'
 
 afterEach(cleanup)
 
-const pageFor = (id: string) => HouseholdPage({ params: Promise.resolve({ id }), searchParams: Promise.resolve({}) })
+const params = (id: string) => Promise.resolve({ id })
+// The part inside the page's Suspense boundary, which reads the address.
+const pageFor = (id: string) => HouseholdContent({ params: params(id) })
 const rows = () => within(screen.getByRole('list', { name: 'Long questionnaire results' })).getAllByRole('listitem')
 const rowFor = (name: string) => within(rows().find((r) => within(r).queryByRole('heading', { name }))!)
 
@@ -69,5 +73,14 @@ describe('one household (/team/long-questionnaire/<id>)', () => {
 
   test('an unknown household is a "not found" page', async () => {
     await expect(pageFor('castle')).rejects.toThrow()
+  })
+
+  test('the page shows "Loading..." while it reads the address, so clicks from the list stay fast', () => {
+    const page = HouseholdPage({ params: params('growing_family'), searchParams: Promise.resolve({}) }) as ReactElement<{
+      fallback: ReactElement
+    }>
+    expect(page.type).toBe(Suspense)
+    render(page.props.fallback)
+    expect(screen.getByText('Loading...')).toBeDefined()
   })
 })

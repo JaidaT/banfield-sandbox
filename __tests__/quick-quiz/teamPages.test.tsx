@@ -1,11 +1,15 @@
+import { Suspense } from 'react'
+import type { ReactElement } from 'react'
 import { afterEach, describe, expect, test } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import QuickQuizList from '@/app/team/quick-quiz/page'
-import BriefPage, { generateStaticParams } from '@/app/team/quick-quiz/[id]/page'
+import BriefPage, { BriefContent, generateStaticParams } from '@/app/team/quick-quiz/[id]/page'
 
 afterEach(cleanup)
 
-const briefFor = (id: string) => BriefPage({ params: Promise.resolve({ id }), searchParams: Promise.resolve({}) })
+const params = (id: string) => Promise.resolve({ id })
+// The part inside the page's Suspense boundary, which reads the address.
+const briefFor = (id: string) => BriefContent({ params: params(id) })
 const rows = () => within(screen.getByRole('list', { name: 'Quick Quiz results' })).getAllByRole('listitem')
 const rowFor = (name: string) => within(rows().find((r) => within(r).queryByRole('heading', { name }))!)
 
@@ -62,5 +66,14 @@ describe('one Quick Quiz brief (/team/quick-quiz/<id>)', () => {
 
   test('an unknown sample is a "not found" page', async () => {
     await expect(briefFor('castle')).rejects.toThrow()
+  })
+
+  test('the page shows "Loading..." while it reads the address, so clicks from the list stay fast', () => {
+    const page = BriefPage({ params: params('skipper'), searchParams: Promise.resolve({}) }) as ReactElement<{
+      fallback: ReactElement
+    }>
+    expect(page.type).toBe(Suspense)
+    render(page.props.fallback)
+    expect(screen.getByText('Loading...')).toBeDefined()
   })
 })
