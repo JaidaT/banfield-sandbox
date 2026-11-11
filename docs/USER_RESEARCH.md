@@ -109,6 +109,22 @@ With so few people, these comments are more valuable than the numbers.
 | Reaction to the client-facing result | "Made me want to book a call" |
 | Other quotes | |
 
+### How to fill in "Match?"
+
+Compare the quiz's result with the persona card or Jamie's written guess. The quiz's result is the **Client type** list in the "Team view (demo only)" section; the top line is its main answer.
+
+| Pick | When | Example (expected: Analytical Validator) |
+|---|---|---|
+| **Yes** | The expected type is the quiz's **top** type | Analytical 55%, Hands-On 30% |
+| **Partly** | The expected type is **second** | Hands-On 50%, Analytical 35% |
+| **No** | The expected type is third or lower | Delegator 60%, Creative 22%, Analytical 18% |
+
+- **When it is not a Yes, write down the place and score**, for example "Partly (2nd, 35%)" or "No (3rd, 18%)". "No (3rd, 18%)" means the quiz barely saw that type; "No (3rd, 30%)" means it was close. If the same type keeps landing low, a question is probably not picking it up.
+- **If the scores are nearly tied**, say so, for example "No (3rd, 32%, nearly tied)". Close scores mean the quiz could not tell those types apart.
+- **Past client:** also compare the hot/warm/cold label with how good a fit Jamie wrote down, and note both, for example "Type: Yes, Label: Partly".
+- **Classmates:** compare the client type only (see method 3).
+- Copy the same answer into the "Match?" column of the Results log below.
+
 ## What counts as a good result
 
 These are starting targets, not pass/fail rules:
