@@ -19,11 +19,14 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 // Team-facing only. Never link to this from client-facing pages.
-export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
+// embedded: inside another page (the quiz screen), a section instead of the
+// page's main area, since a page has only one.
+export default function TeamBriefView({ brief, embedded = false }: { brief: TeamBrief; embedded?: boolean }) {
+  const Outer = embedded ? 'section' : 'main'
   const { contact, lead, behaviour } = brief
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-6">
+    <Outer className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-6">
       <header className="flex flex-col gap-3">
         <p className="text-xs font-semibold uppercase tracking-widest text-charcoal/60">
           Pre-call brief - team only
@@ -169,6 +172,6 @@ export default function TeamBriefView({ brief }: { brief: TeamBrief }) {
           </dl>
         </details>
       </Section>
-    </main>
+    </Outer>
   )
 }

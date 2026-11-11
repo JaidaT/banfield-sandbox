@@ -1,11 +1,22 @@
+import type { Ref } from 'react'
 import type { ClientResult } from '@/lib/quiz/types'
 
+interface Props {
+  result: ClientResult
+  // Inside another page (the quiz screen): a section instead of the page's main
+  // area, since a page has only one.
+  embedded?: boolean
+  // Put on the greeting, so the quiz can move the cursor there.
+  headingRef?: Ref<HTMLHeadingElement>
+}
+
 // Client-facing. Receives only ClientResult, which has no archetype or fit data.
-export default function ClientResultView({ result }: { result: ClientResult }) {
+export default function ClientResultView({ result, embedded = false, headingRef }: Props) {
+  const Outer = embedded ? 'section' : 'main'
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-8 px-4 py-10 sm:px-6">
+    <Outer aria-label={embedded ? 'Your results' : undefined} className="mx-auto flex w-full max-w-xl flex-col gap-8 px-4 py-10 sm:px-6">
       <header className="flex flex-col gap-3">
-        <h1 className="font-heading text-3xl font-bold leading-tight text-navy">{result.greeting}</h1>
+        <h1 ref={headingRef} tabIndex={-1} className="font-heading text-3xl font-bold leading-tight text-navy outline-none">{result.greeting}</h1>
         <p className="text-base leading-7">{result.intro}</p>
       </header>
 
@@ -35,6 +46,6 @@ export default function ClientResultView({ result }: { result: ClientResult }) {
         </a>
         <p className="text-sm text-frost/80">{result.cta.fallback}</p>
       </section>
-    </main>
+    </Outer>
   )
 }
