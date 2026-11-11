@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
+import { loadQuestionnaire, loadSampleHouseholds, parseQuestionnaire } from '@/lib/questionnaire/load'
 import { buildOutput, contactName } from '@/lib/questionnaire/output'
 import type { Answers } from '@/lib/questionnaire/types'
 import type { OutputAnswer, QuestionnaireOutput } from '@/lib/questionnaire/output'
@@ -22,6 +22,38 @@ describe('buildOutput', () => {
     })
     expect(find(output, 'spaces')?.value).toBe('Kitchen, Living room, Bedroom, Basement')
     expect(find(output, 'square_feet')?.value).toBe('2400')
+  })
+
+  test('slider answers are in words: money, "+" at the top, a plain number, or the choice label', () => {
+    // The real questionnaire has no slider yet, so this uses a small one.
+    const sliders = parseQuestionnaire({
+      steps: [
+        {
+          id: 'money',
+          title: 'Money',
+          questions: [
+            {
+              id: 'investment',
+              kind: 'range',
+              prompt: 'Investment?',
+              min: 0,
+              max: 500000,
+              step: 10000,
+              format: 'money',
+              options: [{ id: 'not_sure', label: 'Not sure yet' }],
+            },
+            { id: 'rooms', kind: 'range', prompt: 'Rooms?', min: 1, max: 10, step: 1 },
+          ],
+        },
+      ],
+    })
+    const valueOf = (answers: Answers, id: string) => find(buildOutput(sliders, answers), id)?.value
+    expect(valueOf({ investment: 200000 }, 'investment')).toBe('$200K')
+    expect(valueOf({ investment: 500000 }, 'investment')).toBe('$500K+')
+    expect(valueOf({ investment: 0 }, 'investment')).toBe('$0')
+    expect(valueOf({ investment: 'not_sure' }, 'investment')).toBe('Not sure yet')
+    expect(valueOf({ rooms: 4 }, 'rooms')).toBe('4')
+    expect(find(buildOutput(sliders, {}), 'investment')?.status).toBe('skipped')
   })
 
   test('repeater cards list each field by its prompt', () => {

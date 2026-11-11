@@ -1,3 +1,4 @@
+import { formatRangeValue } from './format'
 import { isBlank } from './validate'
 import { visibleAnswers, visibleSteps } from './visibility'
 import type { AnswerValue, Answers, ImagePicks, Question, Questionnaire, RepeaterEntry } from './types'
@@ -15,7 +16,8 @@ export interface OutputAnswer {
   id: string
   prompt: string
   status: AnswerStatus
-  // Readable answer: choice labels, numbers as text, picture picks in words.
+  // Readable answer: choice labels, numbers as text, slider amounts ("$200K"),
+  // picture picks in words.
   value?: string
   // Repeater answers: one list of lines per card. Empty cards are dropped.
   cards?: CardLine[][]
@@ -58,6 +60,9 @@ function readable(question: Question, value: AnswerValue): string {
       return (value as string[]).map(label).join(', ')
     case 'number':
       return String(value)
+    case 'range':
+      // A number ("$200K" for money), or a choice such as "Not sure yet".
+      return typeof value === 'number' ? formatRangeValue(question, value) : label(value as string)
     case 'pick_images':
       return readablePicks(question, value as ImagePicks)
     default:
