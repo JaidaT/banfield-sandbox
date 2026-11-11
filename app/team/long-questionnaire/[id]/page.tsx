@@ -12,7 +12,7 @@ export function generateStaticParams() {
 
 // The team view of one made-up household's questionnaire answers. Plain
 // wireframe styling, like the questionnaire itself.
-export default async function HouseholdPage({ params }: PageProps<"/team/questionnaire/[id]">) {
+export default async function HouseholdPage({ params }: PageProps<"/team/long-questionnaire/[id]">) {
   const { id } = await params;
   const sample = loadSampleHouseholds().find((s) => s.id === id);
   if (!sample) notFound();
@@ -21,12 +21,12 @@ export default async function HouseholdPage({ params }: PageProps<"/team/questio
 
   return (
     <WireframePage banner="Team only - sample household - not the final design">
-      <Link href="/team" className="text-sm underline">
-        Back to all samples
+      <Link href="/team/long-questionnaire" className="text-sm underline">
+        Back to long questionnaire samples
       </Link>
       <h1 className={HEADING}>Get to know you: {name}</h1>
       <p className={HINT}>
-        {sample.label}. Intended: {sample.note}
+        {sample.label}. Test note (prototype only): {sample.note}
       </p>
       <QuestionnaireTeamView output={output} />
     </WireframePage>
