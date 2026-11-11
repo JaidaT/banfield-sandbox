@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import LongQuestionnaireForm from "@/components/questionnaire/LongQuestionnaireForm";
-import { loadQuestionnaire } from "@/lib/questionnaire/load";
+import LongQuestionnaireForm from "@/components/long-questionnaire/LongQuestionnaireForm";
+import { loadQuestionnaire } from "@/lib/long-questionnaire/load";
 
 export const metadata: Metadata = {
   title: "Let us get to know you (prototype)",

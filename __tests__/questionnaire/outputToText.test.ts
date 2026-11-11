@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
+import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/long-questionnaire/load'
 import { buildOutput } from '@/lib/form/output'
-import { outputToText } from '@/lib/questionnaire/outputToText'
+import { outputToText } from '@/lib/long-questionnaire/outputToText'
 
 const questionnaire = loadQuestionnaire()
 const samples = Object.fromEntries(loadSampleHouseholds().map((s) => [s.id, s]))

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import QuestionnaireTeamView from "@/components/questionnaire/QuestionnaireTeamView";
+import QuestionnaireTeamView from "@/components/long-questionnaire/QuestionnaireTeamView";
 import { HEADING, HINT } from "@/components/form/styles";
 import WireframePage from "@/components/form/WireframePage";
-import { loadQuestionnaire, loadSampleHouseholds } from "@/lib/questionnaire/load";
+import { loadQuestionnaire, loadSampleHouseholds } from "@/lib/long-questionnaire/load";
 import { buildOutput, contactName } from "@/lib/form/output";
 
 export function generateStaticParams() {

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from 'vitest'
 import { useState } from 'react'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import PickImages from '@/components/form/PickImages'
-import { loadQuestionnaire } from '@/lib/questionnaire/load'
+import { loadQuestionnaire } from '@/lib/long-questionnaire/load'
 import type { ImagePicks } from '@/lib/form/types'
 
 afterEach(cleanup)

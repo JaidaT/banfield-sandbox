@@ -1,6 +1,6 @@
 import AnswersSummary from '@/components/form/AnswersSummary'
 import CopyBriefButton from '@/components/form/CopyBriefButton'
-import { outputToText } from '@/lib/questionnaire/outputToText'
+import { outputToText } from '@/lib/long-questionnaire/outputToText'
 import type { QuestionnaireOutput } from '@/lib/form/output'
 
 // What the team sees: skipped steps, every answer, and "Copy as text" for

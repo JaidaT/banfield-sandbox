@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { buildTeamBrief } from "@/lib/quiz/buildTeamBrief";
-import { loadSampleHouseholds } from "@/lib/questionnaire/load";
+import { loadSampleHouseholds } from "@/lib/long-questionnaire/load";
 import { loadQuizData, loadSampleSubmissions } from "@/lib/quiz/load";
 
 export default function TeamIndex() {

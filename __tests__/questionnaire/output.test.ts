@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/questionnaire/load'
+import { loadQuestionnaire, loadSampleHouseholds } from '@/lib/long-questionnaire/load'
 import { parseQuestionnaire } from '@/lib/form/parse'
 import { buildOutput, contactName } from '@/lib/form/output'
 import type { Answers } from '@/lib/form/types'

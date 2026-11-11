@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, test } from 'vitest'
-import { loadQuestionnaire } from '@/lib/questionnaire/load'
+import { loadQuestionnaire } from '@/lib/long-questionnaire/load'
 
 // Checks on the real data/questionnaire/questionnaire.json (the draft wording).
 describe('questionnaire.json', () => {

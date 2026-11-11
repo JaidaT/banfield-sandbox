@@ -1,5 +1,5 @@
-import questionnaireJson from '@/data/questionnaire/questionnaire.json'
-import sampleAnswersJson from '@/data/questionnaire/sample-answers.json'
+import questionnaireJson from '@/data/long-questionnaire/questionnaire.json'
+import sampleAnswersJson from '@/data/long-questionnaire/sample-answers.json'
 import { checkAnswer, isRecord, nonEmptyString, parseQuestionnaire } from '@/lib/form/parse'
 import type { SampleHousehold } from './sampleTypes'
 import type { Answers, Questionnaire } from '@/lib/form/types'

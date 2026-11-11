@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestionnaire } from '@/lib/questionnaire/load'
+import { loadQuestionnaire } from '@/lib/long-questionnaire/load'
 import { nextStepId, previousStepId, progress } from '@/lib/form/navigation'
 
 const questionnaire = loadQuestionnaire()

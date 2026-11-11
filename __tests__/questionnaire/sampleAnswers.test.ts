@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { loadQuestionnaire, loadSampleHouseholds, parseSampleHouseholds } from '@/lib/questionnaire/load'
+import { loadQuestionnaire, loadSampleHouseholds, parseSampleHouseholds } from '@/lib/long-questionnaire/load'
 import { parseQuestionnaire } from '@/lib/form/parse'
 
 const questionnaire = loadQuestionnaire()
