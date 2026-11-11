@@ -331,3 +331,64 @@ Work test-first where something new is built (Phase 1 and the guard). For a pure
 - `lib/form/derived.ts` still knows two long-questionnaire ideas (`household_min_age`, `adult_count`); moving them out would need a way for each product to add its own derived values. Leave it unless it gets in the way
 - A unique code in each long questionnaire link, so the subdomain cannot be opened by anyone who guesses the address (hosting plan, 2026-11-11)
 - Hosting each quiz on its own (the iframe page and the subdomain), decided when the live site is set up
+
+## Close-Call Note for Tied Client Types (2026-11-11)
+
+Goal: when the Quick Quiz cannot really tell two or more client types apart, say so in the team brief instead of quietly picking one. Today the types are sorted by points, and a tie goes to whichever type comes first in `data/quick-quiz/archetypes.json` (Delegator, Analytical, Cautious, Creative, Hands-On). The brief then shows at most two types in the headline and tips, so for example a 20 / 20 / 20 split reads as a confident "20% Decisive Delegator / 20% Analytical Validator", and the third type is dropped only because of list order.
+
+Built on `foyer-v1`. Quick Quiz only (`lib/quick-quiz/`, `components/quick-quiz/`, `data/quick-quiz/`); the shared form and the long questionnaire do not change.
+
+What a close call is (chosen with Jaida on 2026-11-11). Percentages are the whole-number ones shown in the brief; "within 5 points" means the difference is 5 or less:
+1. **Main type unclear:** the second type is within 5 points of the top type. Every type within 5 points of the top type is named.
+   - Example: Delegator 34%, Analytical 31%, Cautious 30% gives "Close call: Decisive Delegator, Analytical Validator and Cautious Reassurance Seeker are within 5 points of each other. Treat the client type as unclear and ask on the call."
+2. **A type left out of the headline is level with one shown:** the headline already shows two types, and a type that is not shown is within 5 points of the second one. Types already named in rule 1 are not named again.
+   - Example: Creative 40%, Delegator 20%, Cautious 20%, Hands-On 20% gives "Close call: Cautious Reassurance Seeker and Hands-On Controller scored within 5 points of Decisive Delegator but are not in the headline."
+   - Not a close call: Delegator 80%, Hands-On 13%. Hands-On is left out because it is under the 20% cutoff, not because of a tie, and only one type is shown.
+
+Constraints:
+- **The scoring does not change.** The percentages, their order, the headline and the tips (still top two, 20% or more) stay exactly as now. The note is added under the headline, in the team brief only.
+- **The 5 is a setting**, `closeCallPoints` in `data/quick-quiz/archetypes.json`, so it can change after user research without touching code. The loader checks it is a whole number from 0 to 100 (0 means exact ties only).
+- **The client never sees it.** The client result is built separately and never mentions client types; the existing tests already check this.
+- **"Not enough answers"** (no points at all) gets no close-call note; it already says the type could not be found.
+- **"Copy as text"** includes the note, right under the headline, so it reaches Jamie when the brief is pasted elsewhere.
+
+Found while planning: the sample client `out-of-area-hot` scores exactly Decisive Delegator 50% / Creative Collaborator 50%, though its note says it "leans Decisive Delegator". It will show the close-call note. Whether to change its answers or its note is listed under Later.
+
+Work test-first: for each step, write the failing test, then change the code.
+
+### Phase 1: The setting
+- [ ] `data/quick-quiz/archetypes.json`: add `"closeCallPoints": 5` and a `_meta` line explaining it in plain words. `lib/quick-quiz/types.ts`: `QuizData` gains `closeCallPoints: number`. `lib/quick-quiz/load.ts`: read and check it, and put it in `loadQuizData()`
+  - Tests (`__tests__/quick-quiz/load.test.ts`): the real file gives 5; a missing value, text, a decimal, a negative number or more than 100 each throw a message naming `closeCallPoints`
+
+### Phase 2: Finding close calls
+- [ ] New `lib/quick-quiz/closeCalls.ts`: `findCloseCalls(scores, shownIds, points)` takes the sorted scores, the ids of the types shown in the headline and the setting, and returns the note's sentences (none, one or two), using the two rules above. Names are the full labels without "The" (as in the examples), joined as "A and B" or "A, B and C"
+  - Tests (`__tests__/quick-quiz/closeCalls.test.ts`), with made-up score lists:
+    - a clear winner (80 / 13 / 7) gives no note
+    - exactly level (50 / 50) gives the "main type unclear" sentence naming both
+    - three level (20 / 20 / 20 / 20 / 20) names all five
+    - a near tie (34 / 31 / 30 / 5) names those three; 34 / 28 names no one (6 points apart)
+    - exactly 5 points apart counts; 6 does not
+    - a type left out but level with the second one (40 / 20 / 20 / 20) gives the "not in the headline" sentence naming the two left out
+    - left out because of the 20% cutoff, not a tie (80 / 13) gives no note
+    - with the setting at 0, only exact ties count
+    - all scores 0 ("not enough answers") gives no note
+- [ ] `lib/quick-quiz/buildTeamBrief.ts`: `TeamBrief` gains `closeCalls: string[]`, from `findCloseCalls` with the shown types and `data.closeCallPoints`. The headline, scores and tips do not change
+  - Tests (`__tests__/quick-quiz/teamBrief.test.ts`): `out-of-area-hot` gets the "main type unclear" sentence naming Decisive Delegator and Creative Collaborator; the other five samples get none; every sample's headline is unchanged
+
+### Phase 3: Showing it
+- [ ] `components/quick-quiz/TeamBriefView.tsx`: each close-call sentence shows under the headline, starting with a bold "Close call:", in a plain bordered box so it stands out in the grey wireframe. Nothing shows when there are none
+  - Tests (`__tests__/quick-quiz/views.test.tsx`): the tied sample's brief shows "Close call" under the headline; a clear sample's does not
+- [ ] `lib/quick-quiz/briefToText.ts`: "Copy as text" puts the close-call sentences on the lines right after the headline
+  - Tests (`__tests__/quick-quiz/teamBrief.test.ts` or wherever `briefToText` is tested): the tied sample's text has the sentence on the line after the headline; a clear sample's text is unchanged
+- [ ] The quiz screen: a quiz answered with a tie shows the note in the "Team view (demo only)" part and nowhere in the client's part
+  - Tests (`__tests__/quick-quiz/quizForm.test.tsx`): `out-of-area-hot` put through the quiz screen shows "Close call" in the team view, not in "Your results"
+
+### Phase 4: Docs and checks
+- [ ] `docs/USER_RESEARCH.md`, "How to fill in Match?": if the brief shows a close-call note, record the result as nearly tied (for example "Partly (2nd, 33%, close call)"), and note whether Jamie found the note useful on the call
+- [ ] `README.md`, section 5 ("Rules the code always follows" or the data files table): `closeCallPoints` and what the note means
+- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass. Then look at `/team/brief/out-of-area-hot` and a tied `/quiz` run on a phone
+
+### Later (not in this plan)
+- `out-of-area-hot` is meant to "lean Decisive Delegator" but scores an exact 50 / 50 with Creative Collaborator. Decide whether to change its answers so it leans as intended, or update its note to say it is a close call (and use it as the close-call example)
+- After user research: check whether 5 points is the right setting (does Jamie agree the flagged briefs were unclear, and that unflagged ones were clear?)
+- Breaking ties by something other than list order (for example the answer to the most telling question). Not needed while the note makes ties visible
