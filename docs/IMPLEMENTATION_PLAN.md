@@ -431,7 +431,7 @@ Constraints:
 Work test-first: for each step, write the failing test, then change the code.
 
 ### Phase 1: Sample dates
-- [ ] `lib/form/format.ts`: `formatDate("2026-11-03")` gives "Nov 3, 2026", and `isDate` checks a `YYYY-MM-DD` text is a real date
+- [x] `lib/form/format.ts`: `formatDate("2026-11-03")` gives "Nov 3, 2026", and `isDate` checks a `YYYY-MM-DD` text is a real date
   - Tests (`__tests__/form/format.test.ts`): "2026-11-03" gives "Nov 3, 2026"; "2026-12-25" gives "Dec 25, 2026"; `isDate` refuses "2026-02-30", "2026-1-3", "Nov 3" and a number
 - [ ] Quick Quiz samples: `submittedAt` added to each sample in `data/quick-quiz/sample-submissions.json` (and explained in its `_meta`); `SampleSubmission` gains `submittedAt: string`; `parseSampleSubmissions` checks it with `isDate`
   - Tests (`__tests__/quick-quiz/submissions.test.ts`): every real sample has a date; a missing or impossible date throws a message naming the sample
