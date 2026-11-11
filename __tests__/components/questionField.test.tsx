@@ -74,6 +74,23 @@ describe('QuestionField', () => {
     expect(screen.getByLabelText('Sophisticated Glam')).toBeDefined()
   })
 
+  test('"pick up to two": once two are ticked the others turn off, and unticking turns them back on', () => {
+    const confidence = question({
+      id: 'confidence',
+      kind: 'multi',
+      prompt: 'What makes you feel confident?',
+      maxSelections: 2,
+      options: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }, { id: 'c', label: 'C' }],
+    })
+    const box = (label: string) => screen.getByLabelText(label) as HTMLInputElement
+    const { rerender } = render(<QuestionField question={confidence} value={['a', 'b']} onChange={() => {}} />)
+    expect(box('C').disabled).toBe(true)
+    expect(box('A').disabled).toBe(false)
+    expect(box('B').disabled).toBe(false)
+    rerender(<QuestionField question={confidence} value={['a']} onChange={() => {}} />)
+    expect(box('C').disabled).toBe(false)
+  })
+
   test('shows a problem message and marks the input', () => {
     render(<QuestionField question={question({ id: 'name', kind: 'short_text', prompt: 'Your name' })} value={undefined} onChange={() => {}} error='Please answer "Your name"' />)
     expect(screen.getByRole('alert').textContent).toBe('Please answer "Your name"')

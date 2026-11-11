@@ -36,6 +36,8 @@ export default function QuestionField({ question, value, onChange, error, inputI
 
   if (question.kind === 'single' || question.kind === 'multi') {
     const ticked = question.kind === 'multi' && Array.isArray(value) ? (value as string[]) : []
+    // "Pick up to two": once the limit is reached, the unticked boxes turn off.
+    const full = question.maxSelections !== undefined && ticked.length >= question.maxSelections
     const toggle = (optionId: string) => {
       const next = ticked.includes(optionId) ? ticked.filter((t) => t !== optionId) : [...ticked, optionId]
       onChange(next.length > 0 ? next : undefined)
@@ -53,6 +55,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
                 value={option.id}
                 checked={question.kind === 'single' ? value === option.id : ticked.includes(option.id)}
                 onChange={() => (question.kind === 'single' ? onChange(option.id) : toggle(option.id))}
+                disabled={full && !ticked.includes(option.id)}
                 className="h-5 w-5 shrink-0"
               />
               {option.image ? (
