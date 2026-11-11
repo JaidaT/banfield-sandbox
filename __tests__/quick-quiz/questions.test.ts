@@ -8,7 +8,7 @@ function bankWith(questions: unknown[]) {
 }
 
 describe('loadQuestions', () => {
-  test('loads the question bank from data/questions.json', () => {
+  test('loads the question bank from data/quick-quiz/questions.json', () => {
     expect(loadQuestions().length).toBeGreaterThan(0)
   })
 

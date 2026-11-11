@@ -321,8 +321,8 @@ Work test-first where something new is built (Phase 1 and the guard). For a pure
 - [x] `docs/DECISIONS.md`: the decision entry for this layout (added with this plan)
 
 ### Phase 5: Final checks
-- [ ] Search for old paths (`lib/quiz/`, `lib/questionnaire/`, `components/quiz/`, `components/questionnaire/`, `data/questions.json` and the other moved data files) in `app/`, `components/`, `lib/`, `__tests__/` and `README.md`: none left. (Older plan sections and decisions keep the old paths, since they describe what was true then)
-- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [x] Search for old paths (`lib/quiz/`, `lib/questionnaire/`, `components/quiz/`, `components/questionnaire/`, `data/questions.json` and the other moved data files) in `app/`, `components/`, `lib/`, `__tests__/` and `README.md`: none left. (Older plan sections and decisions keep the old paths, since they describe what was true then)
+- [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (357 tests, 2026-11-11)
 - [ ] `npm run dev` and click through `/`, `/quiz` (to the result), `/questionnaire` (to the thank-you screen), `/team`, one team brief, one client result and one long questionnaire sample: each looks the same as on `jaida/short-questionnaire`
 - [ ] Push `foyer-v1`
 

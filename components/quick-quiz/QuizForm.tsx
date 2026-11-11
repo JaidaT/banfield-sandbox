@@ -16,7 +16,7 @@ interface Props {
   questionnaire: Questionnaire
   // The question bank, archetypes and lead rules, for scoring.
   quizData: QuizData
-  // The client result wording (data/client-result.json).
+  // The client result wording (data/quick-quiz/client-result.json).
   clientCopy: ClientCopy
   // For tests and demo links: open on this step with these answers.
   startAt?: string

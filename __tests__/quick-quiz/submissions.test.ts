@@ -139,7 +139,7 @@ describe('validateSubmission', () => {
     expect(validateSubmission(noCity, QUESTIONS).join('\n')).toMatch(/city/)
   })
 
-  // The quiz can show the result before contact details (contactRequired: false in data/quiz-form.json).
+  // The quiz can show the result before contact details (contactRequired: false in data/quick-quiz/quiz-form.json).
   test('blank contact details are allowed when contact is not required, and flagged when it is', () => {
     const blank = submission({
       contact: { name: '', email: '', phone: '  ', siteAddress: { street: '', city: '', postalCode: '' } },

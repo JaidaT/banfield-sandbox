@@ -1,5 +1,5 @@
-// Shapes for the long "Let us get to know you" questionnaire.
-// Separate from lib/quiz on purpose (see DECISIONS.md): no scoring here.
+// Shapes for the shared form engine that both questionnaires are built on.
+// It knows nothing about either questionnaire, and has no scoring (DECISIONS.md 2026-11-11).
 
 export const QUESTION_KINDS = [
   'short_text',

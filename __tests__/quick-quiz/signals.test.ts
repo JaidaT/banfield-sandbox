@@ -16,7 +16,7 @@ function rule(overrides: Record<string, unknown> = {}) {
 }
 
 describe('loadSignalRules', () => {
-  test('loads the signal rules from data/signals.json', () => {
+  test('loads the signal rules from data/quick-quiz/signals.json', () => {
     expect(loadSignalRules().length).toBeGreaterThan(0)
   })
 

@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire } from '@/lib/long-questionnaire/load'
 
-// Checks on the real data/questionnaire/questionnaire.json (the draft wording).
+// Checks on the real data/long-questionnaire/questionnaire.json (the draft wording).
 describe('questionnaire.json', () => {
   const questionnaire = loadQuestionnaire()
   const allQuestions = questionnaire.steps.flatMap((s) => s.questions)

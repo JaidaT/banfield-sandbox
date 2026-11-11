@@ -8,7 +8,7 @@ export function formatDuration(seconds: number): string {
 }
 
 // A contact detail, or "Not given" when it was left blank (the quiz can show
-// the result before contact details; see contactRequired in data/quiz-form.json).
+// the result before contact details; see contactRequired in data/quick-quiz/quiz-form.json).
 export function shownOrNotGiven(value: string): string {
   return value.trim() === '' ? 'Not given' : value.trim()
 }

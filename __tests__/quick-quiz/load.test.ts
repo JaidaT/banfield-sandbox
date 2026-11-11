@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 import { loadArchetypes, loadQuizForm, parseArchetypes, parseQuizForm } from '@/lib/quick-quiz/load'
 
 describe('loadArchetypes', () => {
-  test('loads every archetype from data/archetypes.json', () => {
+  test('loads every archetype from data/quick-quiz/archetypes.json', () => {
     const archetypes = loadArchetypes()
     expect(archetypes.map((a) => a.id)).toEqual([
       'decisive_delegator',
@@ -65,7 +65,7 @@ describe('parseArchetypes', () => {
   })
 })
 
-// A small valid copy of data/quiz-form.json; each test changes one thing.
+// A small valid copy of data/quick-quiz/quiz-form.json; each test changes one thing.
 function quizForm(): Record<string, unknown> {
   return {
     contactRequired: false,
@@ -85,7 +85,7 @@ function quizForm(): Record<string, unknown> {
 }
 
 describe('loadQuizForm', () => {
-  test('loads the wording and the contactRequired setting from data/quiz-form.json', () => {
+  test('loads the wording and the contactRequired setting from data/quick-quiz/quiz-form.json', () => {
     const form = loadQuizForm()
     expect(form.contactRequired).toBe(false)
     expect(form.welcome.title).not.toBe('')

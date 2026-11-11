@@ -223,7 +223,7 @@ export interface ClientCopy {
   cta: { label: string; text: string; bookingUrl: string; fallback: string }
 }
 
-// Quiz screen wording that is not in the question bank (data/quiz-form.json).
+// Quiz screen wording that is not in the question bank (data/quick-quiz/quiz-form.json).
 export interface QuizForm {
   // false: the contact fields can be left blank and the result still shows.
   // true: name, email, phone and the full site address are required first.

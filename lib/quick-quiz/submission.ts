@@ -40,7 +40,7 @@ function checkAnswer(question: Question, answer: Answer): string | null {
 // a test can show them all. Unanswered questions are allowed: skipping is a
 // behavioural signal (DISCOVERY P2), not an error.
 // contactRequired (default true): false lets the contact details be blank, for
-// the quiz's contactRequired setting in data/quiz-form.json. A filled-in email
+// the quiz's contactRequired setting in data/quick-quiz/quiz-form.json. A filled-in email
 // is still checked either way.
 export function validateSubmission(
   submission: Submission,

@@ -4,7 +4,7 @@ import { checkAnswer, isRecord, nonEmptyString, parseQuestionnaire } from '@/lib
 import type { SampleHousehold } from './sampleTypes'
 import type { Answers, Questionnaire } from '@/lib/form/types'
 
-// The real questionnaire from data/questionnaire/questionnaire.json.
+// The real questionnaire from data/long-questionnaire/questionnaire.json.
 export function loadQuestionnaire(): Questionnaire {
   return parseQuestionnaire(questionnaireJson as unknown)
 }
@@ -41,7 +41,7 @@ export function parseSampleHouseholds(raw: unknown, questionnaire: Questionnaire
   })
 }
 
-// The made-up households from data/questionnaire/sample-answers.json.
+// The made-up households from data/long-questionnaire/sample-answers.json.
 export function loadSampleHouseholds(): SampleHousehold[] {
   return parseSampleHouseholds(sampleAnswersJson as unknown, loadQuestionnaire())
 }

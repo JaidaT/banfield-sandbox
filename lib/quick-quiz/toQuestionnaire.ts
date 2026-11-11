@@ -8,7 +8,7 @@ import type { Question, QuizForm, Submission } from './types'
 // question bank and its scoring stay as they are; only what the screens need
 // is passed on, so weights and fit markers never reach the form.
 //
-// lib/quiz may use lib/questionnaire; lib/questionnaire never uses lib/quiz.
+// quick-quiz/ may use form/; form/ never uses quick-quiz/ (npm run lint checks this).
 
 // The contact screen's question ids, one per contact detail. Kept apart from
 // the quiz question ids so a contact detail is never scored.

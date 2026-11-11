@@ -24,7 +24,7 @@ const QUESTIONS: Question[] = [
 ]
 
 describe('loadLeadRules', () => {
-  test('loads the lead rules from data/lead-rules.json, with thresholds for every project type', () => {
+  test('loads the lead rules from data/quick-quiz/lead-rules.json, with thresholds for every project type', () => {
     const rules = loadLeadRules()
     const project = loadQuestions().find((q) => q.id === rules.projectQuestion)
     for (const o of project?.options ?? []) {
