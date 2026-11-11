@@ -216,8 +216,9 @@ Constraints:
 Work test-first: for each step, write the failing test, then change the code. Each step lists its own tests, so a step is only ticked when its tests pass.
 
 ### Phase 1: Shared form additions ("Shared:" commits)
-- [ ] `lib/questionnaire/types.ts` and `load.ts`: a `range` question kind (a slider) with `min`, `max`, `step`, optional answer options used as escape choices (for example "Not sure yet"), and an optional `"format": "money"`. Its answer is a number from min to max on a step, or the id of one of its options. The loader checks min below max, step above 0, and numbers only
+- [x] `lib/questionnaire/types.ts` and `load.ts`: a `range` question kind (a slider) with `min`, `max`, `step`, optional answer options used as escape choices (for example "Not sure yet"), and an optional `"format": "money"`. Its answer is a number from min to max on a step, or the id of one of its options. The loader checks min below max, step above 0, and numbers only
   - Tests (`load.test.ts`): a valid range loads; min not below max, a step of 0 or less, and text instead of numbers each throw a message naming the question
+  - Also done: `parseSampleHouseholds` checks a slider answer is a number from min to max on a step, or one of its choices (`sampleAnswers.test.ts`)
 - [ ] `lib/questionnaire/types.ts`, `load.ts` and `validate.ts`: an optional `maxSelections` on `multi` questions ("Pick up to two"). The loader checks it is a whole number of 1 or more; `stepProblems` reports too many ticks
   - Tests (`load.test.ts`, `validate.test.ts`): a bad `maxSelections` throws; three ticks on a "pick up to two" question is a problem, two is not
 - [ ] `components/questionnaire/QuestionField.tsx`: the slider. It starts with no answer and says so, shows the chosen value in words under it (money format: "$200K", and "$500K+" at the top), and shows each escape option as a button that clears the slider. For `maxSelections`, the other tick boxes turn off once the limit is reached
