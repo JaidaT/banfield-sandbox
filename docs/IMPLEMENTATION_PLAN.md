@@ -251,8 +251,8 @@ Work test-first: for each step, write the failing test, then change the code. Ea
   - Tests (`__tests__/page.test.tsx`, `questionnaireTeamPages.test.tsx`): both links point to `/quiz`
 
 ### Phase 4: Final checks
-- [ ] Same result as the samples: each sample submission, put through the form with `initialAnswers` from `submissionToAnswers` and sent from the contact screen, gives the same lead label and client type blend as `buildTeamBrief` on that sample (`quizForm.test.tsx`)
-- [ ] Run `npm run lint`, `npm test` and `npm run build`
+- [x] Same result as the samples (checked that it catches a mistake: dropping the investment answer in the converter made 4 of the 6 samples fail): each sample submission, put through the form with `initialAnswers` from `submissionToAnswers` and sent from the contact screen, gives the same lead label and client type blend as `buildTeamBrief` on that sample (`quizForm.test.tsx`)
+- [x] Run `npm run lint`, `npm test` and `npm run build` (all pass, 349 tests, 2026-11-10)
 - [ ] Click through `/quiz` on a computer and on a phone, and time one run: it should take about 5 minutes
 
 ### Later (not in this plan)

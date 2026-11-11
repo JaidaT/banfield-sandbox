@@ -2,8 +2,9 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuizPage, { metadata } from '@/app/quiz/page'
 import QuizForm from '@/components/quiz/QuizForm'
-import { loadClientCopy, loadQuizData, loadQuizForm } from '@/lib/quiz/load'
-import { CONTACT_FIELDS, quizQuestionnaire } from '@/lib/quiz/toQuestionnaire'
+import { buildTeamBrief, shortLabel } from '@/lib/quiz/buildTeamBrief'
+import { loadClientCopy, loadQuizData, loadQuizForm, loadSampleSubmissions } from '@/lib/quiz/load'
+import { CONTACT_FIELDS, quizQuestionnaire, submissionToAnswers } from '@/lib/quiz/toQuestionnaire'
 import type { Answers } from '@/lib/questionnaire/types'
 
 afterEach(cleanup)
@@ -150,4 +151,23 @@ describe('QuizForm: time taken', () => {
     click('See my results')
     expect(teamPart().getByText('Time to complete: 0 s')).toBeDefined()
   })
+})
+
+// Phase 4 check: the whole route (form answers -> converter -> scoring ->
+// brief on screen) gives each sample client the same result as its sample
+// brief. Time taken is 0 here, which only adds notes and never changes these.
+describe('QuizForm: same results as the sample clients', () => {
+  for (const sample of loadSampleSubmissions()) {
+    test(`${sample.contact.name} gets the same lead label and client type blend`, () => {
+      const expected = buildTeamBrief(sample, quizData)
+      renderQuiz({ startAt: 'contact', initialAnswers: submissionToAnswers(sample) })
+      click('See my results')
+
+      expect(teamPart().getByText(expected.headline)).toBeDefined()
+      expect(teamPart().getByTestId('lead-temperature').textContent).toBe(`${expected.lead.temperature} lead`)
+      const blendSection = teamPart().getByRole('heading', { name: 'Client type' }).parentElement!
+      const rows = within(blendSection).getAllByRole('listitem').map((row) => row.textContent)
+      expect(rows).toEqual(expected.blend.scores.map((s) => `${shortLabel(s.label)}${s.percent}%`))
+    })
+  }
 })
