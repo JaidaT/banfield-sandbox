@@ -85,6 +85,29 @@ describe('buildTeamBrief', () => {
   })
 })
 
+describe('close calls', () => {
+  test('the tied sample (50 / 50) gets the "main type unclear" note naming both types', () => {
+    expect(briefFor('out-of-area-hot').closeCalls).toEqual([
+      'Close call: Decisive Delegator and Creative Collaborator are within 5 points of each other. Treat the client type as unclear and ask on the call.',
+    ])
+  })
+
+  test('the other five samples have a clear type and get no note', () => {
+    for (const s of samples.filter((x) => x.id !== 'out-of-area-hot')) {
+      expect(buildTeamBrief(s, data).closeCalls, s.id).toEqual([])
+    }
+  })
+
+  test('the setting comes from the data: at 0 the tied sample still counts, as an exact tie', () => {
+    const sample = samples.find((s) => s.id === 'out-of-area-hot')!
+    expect(buildTeamBrief(sample, { ...data, closeCallPoints: 0 }).closeCalls[0]).toMatch(/scored the same/)
+  })
+
+  test('the headline does not change with a close call', () => {
+    expect(briefFor('out-of-area-hot').headline).toBe('Hot lead | 50% Decisive Delegator / 50% Creative Collaborator')
+  })
+})
+
 describe('blank contact details (contactRequired: false)', () => {
   const sample = samples.find((s) => s.id === 'cold-explorer')!
   const withContact = (contact: Partial<typeof sample.contact>, site: Partial<typeof sample.contact.siteAddress> = {}) =>

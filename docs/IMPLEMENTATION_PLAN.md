@@ -373,7 +373,7 @@ Work test-first: for each step, write the failing test, then change the code.
     - with the setting at 0, only exact ties count
     - all scores 0 ("not enough answers") gives no note
   - Done: 12 tests, adding: one type left out reads "is", two read "are"; both notes can show without naming a type twice; types with 0% are never named. With the setting at 0 the wording says "scored the same"
-- [ ] `lib/quick-quiz/buildTeamBrief.ts`: `TeamBrief` gains `closeCalls: string[]`, from `findCloseCalls` with the shown types and `data.closeCallPoints`. The headline, scores and tips do not change
+- [x] `lib/quick-quiz/buildTeamBrief.ts`: `TeamBrief` gains `closeCalls: string[]`, from `findCloseCalls` with the shown types and `data.closeCallPoints`. The headline, scores and tips do not change
   - Tests (`__tests__/quick-quiz/teamBrief.test.ts`): `out-of-area-hot` gets the "main type unclear" sentence naming Decisive Delegator and Creative Collaborator; the other five samples get none; every sample's headline is unchanged
 
 ### Phase 3: Showing it
@@ -390,6 +390,6 @@ Work test-first: for each step, write the failing test, then change the code.
 - [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass. Then look at `/team/brief/out-of-area-hot` and a tied `/quiz` run on a phone
 
 ### Later (not in this plan)
-- `out-of-area-hot` is meant to "lean Decisive Delegator" but scores an exact 50 / 50 with Creative Collaborator. Decide whether to change its answers so it leans as intended, or update its note to say it is a close call (and use it as the close-call example)
+- ~~`out-of-area-hot` leans Delegator but scores 50 / 50~~ Decided with Jaida on 2026-11-11 (option B): its answers stay, and its note in `data/quick-quiz/sample-submissions.json` now says it is an exact tie that shows the close-call note. It is the close-call example in the tests
 - After user research: check whether 5 points is the right setting (does Jamie agree the flagged briefs were unclear, and that unflagged ones were clear?)
 - Breaking ties by something other than list order (for example the answer to the most telling question). Not needed while the note makes ties visible

@@ -1,5 +1,6 @@
 import { answerLabels } from './answers'
 import { assessLead } from './assessLead'
+import { findCloseCalls } from './closeCalls'
 import { scoreArchetypes } from './scoreArchetypes'
 import { evaluateSignals, skippedQuestions } from './signals'
 import type {
@@ -65,6 +66,7 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
   return {
     submissionId: submission.id,
     headline: `${leadLabel} | ${typeLine}`,
+    closeCalls: findCloseCalls(blend.scores, top.map((s) => s.id), data.closeCallPoints),
     contact: submission.contact,
     blend,
     highlights,

@@ -259,6 +259,9 @@ export interface ClientResult {
 export interface TeamBrief {
   submissionId: string
   headline: string
+  // "Close call: ..." sentences when the quiz could not really tell client
+  // types apart (findCloseCalls). Empty when the type is clear.
+  closeCalls: string[]
   contact: Contact
   blend: ArchetypeBlend
   highlights: ArchetypeGuidance[]
