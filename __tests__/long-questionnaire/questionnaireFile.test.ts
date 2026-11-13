@@ -45,6 +45,8 @@ describe('questionnaire.json', () => {
     expect(q.kind).toBe('single')
     expect(q.options.map((o) => o.label)).toEqual(['Yes', 'No'])
     expect(q.showIf).toBeUndefined()
+    // Not asked twice: the old tick box under "design around" is gone.
+    expect(question('considerations').options.map((o) => o.id)).not.toContain('day_sleeper')
   })
 
   test('project types match the current form plus furniture and facelift', () => {

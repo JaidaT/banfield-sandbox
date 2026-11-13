@@ -271,7 +271,6 @@
             { "id": "mobility", "label": "Mobility needs" },
             { "id": "aging_parents", "label": "Aging parents" },
             { "id": "young_children", "label": "Young children" },
-            { "id": "day_sleeper", "label": "Someone sleeps during the day" },
             { "id": "none", "label": "None of these" }
           ]
         },
