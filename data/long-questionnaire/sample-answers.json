@@ -81,7 +81,7 @@
         "love": "The big backyard.",
         "dont_love": "The closed-off kitchen.",
         "home_meaning": "Where everyone comes back to at the end of the day.",
-        "style": ["modern_country", "contemporary_rustic"],
+        "preferred_styles": ["modern_country", "contemporary_rustic"],
         "style_sets": {
           "living_rooms": { "favourite": "b", "least": "d" },
           "kitchens": { "favourite": "a", "least": "c" }
@@ -155,7 +155,7 @@
         "word_now": "Dated",
         "word_future": "Elegant",
         "home_meaning": "Peace and quiet.",
-        "style": ["old_world_elegant", "traditional"],
+        "preferred_styles": ["old_world_elegant", "traditional"],
         "style_sets": { "living_rooms": { "favourite": "a", "least": "b" } },
         "mood_words": ["timeless", "elegant"],
         "colours_love": "Navy, cream",
@@ -226,7 +226,7 @@
         "word_now": "Temporary",
         "word_future": "Calm",
         "home_meaning": "A place to recharge between trips.",
-        "style": ["minimalistic_clean"],
+        "preferred_styles": ["minimalistic_clean"],
         "style_sets": {
           "living_rooms": { "favourite": "c", "least": "a" },
           "kitchens": { "favourite": "d", "least": "b" }
@@ -305,7 +305,7 @@
         "love": "The neighbourhood.",
         "dont_love": "Stairs everywhere.",
         "home_meaning": "Three generations under one roof.",
-        "style": ["eclectic_collected"],
+        "preferred_styles": ["eclectic_collected"],
         "style_sets": { "kitchens": { "favourite": "b", "least": "d" } },
         "mood_words": ["warm", "cozy"],
         "colours_love": "Deep reds, gold",

@@ -543,7 +543,7 @@
       "title": "Style by pictures",
       "questions": [
         {
-          "id": "style",
+          "id": "preferred_styles",
           "kind": "multi",
           "prompt": "What do you consider your style? If you don't know, we will figure this out.",
           "help": "Pick all that apply.",

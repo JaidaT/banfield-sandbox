@@ -89,7 +89,9 @@ describe('questionnaire.json', () => {
   })
 
   test('the style question uses the current form list, each with a picture', () => {
-    const options = question('style').options
+    // The question is preferred_styles so it is not confused with the Style step.
+    expect(allQuestions.map((q) => q.id)).not.toContain('style')
+    const options = question('preferred_styles').options
     expect(options.map((o) => o.label)).toEqual([
       'Contemporary Rustic',
       'Old World Elegant',
