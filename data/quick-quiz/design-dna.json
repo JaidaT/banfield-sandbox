@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "draft": true,
+    "purpose": "Design DNA profiles: the result people see after the Quick Quiz, instead of their client type. Each profile belongs to one client type (archetype). The quiz shows the profile of the person's top client type, and the profile name of their second type as a secondary trait when it scores 20% or more.",
+    "teamOnly": "The 'archetype' pairs are team-only. Only name, headline and description are ever shown to the client.",
+    "wording": "The team's wording from 2026-11-13, exactly as written, with straight apostrophes (the project uses plain characters only; the loader rejects curly quotes).",
+    "later": "A sentence for each secondary trait (one per main and secondary pair, as in the mockup) is not written yet. See IMPLEMENTATION_PLAN.md, Later."
+  },
+  "label": "DESIGN DNA",
+  "secondaryLabel": "SECONDARY TRAIT",
+  "profiles": [
+    {
+      "archetype": "hands_on_controller",
+      "name": "The Curator",
+      "headline": "You make a home feel unmistakably yours.",
+      "description": "You notice the details that give a space its character, and you want every choice to feel considered. You enjoy shaping the look and feel yourself, balancing visual harmony with personal touches that make the finished space feel distinctly yours."
+    },
+    {
+      "archetype": "creative_collaborator",
+      "name": "The Explorer",
+      "headline": "You'd rather discover a possibility than settle for the expected.",
+      "description": "You're energized by new ideas, creative detours and seeing what a space could become. You're open to experimenting, mixing influences and considering options you hadn't imagined. The process should feel collaborative and full of discovery, not locked into a plan too early."
+    },
+    {
+      "archetype": "cautious_reassurance_seeker",
+      "name": "The Nest Builder",
+      "headline": "Home is less about how it looks and more about how it makes you feel.",
+      "description": "You approach design through the rhythms of everyday life and the people who make a place meaningful. Comfort, connection and a sense of belonging guide your choices. You want a space that supports real life while holding memories and personal meaning."
+    },
+    {
+      "archetype": "analytical_validator",
+      "name": "The Strategist",
+      "headline": "You feel most confident when every choice has a reason.",
+      "description": "You like to understand the options, weigh the trade-offs and know what comes next. A well-considered plan gives you confidence, especially when it balances function, budget and long-term value. You appreciate clear communication and decisions grounded in purpose rather than guesswork."
+    },
+    {
+      "archetype": "decisive_delegator",
+      "name": "The Visionary",
+      "headline": "You see the potential in a space before anyone else does.",
+      "description": "You're drawn to the big picture and the feeling a space could create. You trust experienced guidance, welcome bold ideas and focus on what the finished result can become. You don't need to manage every detail to stay connected to a vision that feels right."
+    }
+  ]
+}

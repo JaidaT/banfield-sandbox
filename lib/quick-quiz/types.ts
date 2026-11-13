@@ -193,6 +193,22 @@ export interface QuizData {
   // Client types this many percentage points apart or closer get a "Close
   // call" note in the brief (closeCallPoints in archetypes.json).
   closeCallPoints: number
+  designDna: DesignDnaData
+}
+
+// One Design DNA profile (data/quick-quiz/design-dna.json). `archetype` is the
+// client type it belongs to: team-only, never shown to the client.
+export interface DesignDnaProfile {
+  archetype: string
+  name: string
+  headline: string
+  description: string
+}
+
+export interface DesignDnaData {
+  label: string
+  secondaryLabel: string
+  profiles: DesignDnaProfile[]
 }
 
 // Team-facing guidance for one of the client's leading archetypes.

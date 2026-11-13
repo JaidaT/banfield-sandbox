@@ -503,9 +503,9 @@ Constraints:
 Work test-first: for each step, write the failing test, then change the code.
 
 ### Phase 1: The profiles file
-- [ ] New `data/quick-quiz/design-dna.json`: `_meta` (draft, purpose, "pairs are team-only", and where secondary sentences could go later), `label` ("DESIGN DNA"), `secondaryLabel` ("SECONDARY TRAIT") and five `profiles`, each with `archetype` (the client type id), `name`, `headline` and `description`, using the team's exact text with straight apostrophes
-- [ ] `lib/quick-quiz/types.ts`: `DesignDnaProfile` and `DesignDnaData`; `QuizData` gains `designDna`
-- [ ] `lib/quick-quiz/load.ts`: `parseDesignDna(raw, archetypes)` and `loadDesignDna()`; `loadQuizData()` includes it. The parser checks: every client type has exactly one profile, no unknown client type ids, names are unique, no blank text, and only plain characters (no curly quotes)
+- [x] New `data/quick-quiz/design-dna.json`: `_meta` (draft, purpose, "pairs are team-only", and where secondary sentences could go later), `label` ("DESIGN DNA"), `secondaryLabel` ("SECONDARY TRAIT") and five `profiles`, each with `archetype` (the client type id), `name`, `headline` and `description`, using the team's exact text with straight apostrophes
+- [x] `lib/quick-quiz/types.ts`: `DesignDnaProfile` and `DesignDnaData`; `QuizData` gains `designDna`
+- [x] `lib/quick-quiz/load.ts`: `parseDesignDna(raw, archetypes)` and `loadDesignDna()`; `loadQuizData()` includes it. The parser checks: every client type has exactly one profile, no unknown client type ids, names are unique, no blank text, and only plain characters (no curly quotes)
   - Tests (`__tests__/quick-quiz/designDna.test.ts`): the real file loads; the five pairs match the table above; each profile's name, headline and paragraph match the team's text; a missing type, a duplicate, an unknown id, a blank field and a curly apostrophe each throw a message naming the problem
 
 ### Phase 2: Picking the profile

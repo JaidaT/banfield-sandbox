@@ -1,5 +1,6 @@
 import archetypesJson from '@/data/quick-quiz/archetypes.json'
 import clientResultJson from '@/data/quick-quiz/client-result.json'
+import designDnaJson from '@/data/quick-quiz/design-dna.json'
 import leadRulesJson from '@/data/quick-quiz/lead-rules.json'
 import questionsJson from '@/data/quick-quiz/questions.json'
 import quizFormJson from '@/data/quick-quiz/quiz-form.json'
@@ -13,6 +14,8 @@ import type {
   Archetype,
   ArchetypeData,
   ClientCopy,
+  DesignDnaData,
+  DesignDnaProfile,
   Comparison,
   WarningCondition,
   LeadDetailRule,
@@ -475,6 +478,58 @@ export function parseClientCopy(raw: unknown, questions?: Question[]): ClientCop
   return copy
 }
 
+const PROFILE_FIELDS = ['name', 'headline', 'description'] as const
+// Plain printable characters only (CLAUDE.md: no special Unicode), so a curly
+// apostrophe pasted from a document is caught here.
+const PLAIN = /^[\x20-\x7E]*$/
+
+function plainText(value: unknown, where: string): string {
+  if (typeof value !== 'string' || value === '') throw new Error(`design DNA ${where} is missing`)
+  if (!PLAIN.test(value)) {
+    throw new Error(`design DNA ${where} must use plain characters only (straight ' and " quotes)`)
+  }
+  return value
+}
+
+// Checks every client type has exactly one Design DNA profile.
+export function parseDesignDna(raw: unknown, archetypes: Archetype[]): DesignDnaData {
+  if (!isRecord(raw) || !Array.isArray(raw.profiles)) {
+    throw new Error('design DNA data needs a "profiles" list')
+  }
+  const label = plainText(raw.label, '"label"')
+  const secondaryLabel = plainText(raw.secondaryLabel, '"secondaryLabel"')
+  const known = new Set(archetypes.map((a) => a.id))
+  const seenTypes = new Set<string>()
+  const seenNames = new Set<string>()
+
+  const profiles = raw.profiles.map((entry: unknown, index): DesignDnaProfile => {
+    if (!isRecord(entry)) throw new Error(`design DNA profile ${index} is not an object`)
+    const archetype = entry.archetype
+    if (typeof archetype !== 'string' || !known.has(archetype)) {
+      throw new Error(`design DNA profile ${index} has an unknown client type: ${String(archetype)}`)
+    }
+    if (seenTypes.has(archetype)) {
+      throw new Error(`client type ${archetype} has more than one design DNA profile`)
+    }
+    seenTypes.add(archetype)
+    const [name, headline, description] = PROFILE_FIELDS.map((field) =>
+      plainText(entry[field], `profile ${index} "${field}"`),
+    )
+    if (seenNames.has(name)) throw new Error(`design DNA name "${name}" is used more than once`)
+    seenNames.add(name)
+    return { archetype, name, headline, description }
+  })
+
+  for (const id of known) {
+    if (!seenTypes.has(id)) throw new Error(`client type ${id} has no design DNA profile`)
+  }
+  return { label, secondaryLabel, profiles }
+}
+
+export function loadDesignDna(): DesignDnaData {
+  return parseDesignDna(designDnaJson as unknown, loadArchetypes())
+}
+
 export function loadClientCopy(): ClientCopy {
   return parseClientCopy(clientResultJson as unknown, loadQuestions())
 }
@@ -494,6 +549,7 @@ export function loadQuizData(): QuizData {
     ),
     leadRules: parseLeadRules(leadRulesJson as unknown, questions),
     closeCallPoints: parseCloseCallPoints(archetypesJson as unknown),
+    designDna: parseDesignDna(designDnaJson as unknown, archetypes),
   }
 }
 
