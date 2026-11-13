@@ -64,6 +64,13 @@ describe('questionnaire.json', () => {
     expect(question('gathering_types').options.map((o) => o.label)).toContain('Catered events')
   })
 
+  test('favourite travel places replaces favourite thing, and only shows for travellers', () => {
+    expect(allQuestions.map((q) => q.id)).not.toContain('favourite_thing')
+    const q = question('favourite_travel_places')
+    expect(q.prompt).toBe("What are some of your favourite places you've travelled to?")
+    expect(q.showIf).toEqual({ field: 'travels', equals: 'yes' })
+  })
+
   test('project types match the current form plus furniture and facelift', () => {
     expect(question('project_type').options.map((o) => o.label)).toEqual([
       'Furniture and styling',

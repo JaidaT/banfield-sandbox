@@ -518,7 +518,12 @@
           "help": "Art, textiles, ceramics...",
           "showIf": { "field": "travels", "equals": "yes" }
         },
-        { "id": "favourite_thing", "kind": "long_text", "prompt": "What's your favourite thing you own?" },
+        {
+          "id": "favourite_travel_places",
+          "kind": "long_text",
+          "prompt": "What are some of your favourite places you've travelled to?",
+          "showIf": { "field": "travels", "equals": "yes" }
+        },
         { "id": "favourite_place", "kind": "short_text", "prompt": "A public place you love being in?", "help": "A hotel, a restaurant, a library..." }
       ]
     },
