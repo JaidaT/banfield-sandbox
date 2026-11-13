@@ -400,11 +400,17 @@
           "kind": "single",
           "prompt": "Where do meals actually happen?",
           "options": [
-            { "id": "island", "label": "Kitchen island" },
+            { "id": "kitchen_counter", "label": "Kitchen counter" },
             { "id": "dining_table", "label": "Dining table" },
-            { "id": "couch", "label": "The couch" },
-            { "id": "depends", "label": "It depends" }
+            { "id": "family_room", "label": "Family room" },
+            { "id": "other", "label": "Other" }
           ]
+        },
+        {
+          "id": "meals_other",
+          "kind": "short_text",
+          "prompt": "Where else?",
+          "showIf": { "field": "meals", "equals": "other" }
         },
         {
           "id": "enough_storage",

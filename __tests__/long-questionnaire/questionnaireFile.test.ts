@@ -49,6 +49,17 @@ describe('questionnaire.json', () => {
     expect(question('considerations').options.map((o) => o.id)).not.toContain('day_sleeper')
   })
 
+  test('"Where do meals happen?" offers counter, table, family room or Other', () => {
+    expect(question('meals').options.map((o) => [o.id, o.label])).toEqual([
+      ['kitchen_counter', 'Kitchen counter'],
+      ['dining_table', 'Dining table'],
+      ['family_room', 'Family room'],
+      ['other', 'Other'],
+    ])
+    expect(question('meals_other').kind).toBe('short_text')
+    expect(question('meals_other').showIf).toEqual({ field: 'meals', equals: 'other' })
+  })
+
   test('project types match the current form plus furniture and facelift', () => {
     expect(question('project_type').options.map((o) => o.label)).toEqual([
       'Furniture and styling',
