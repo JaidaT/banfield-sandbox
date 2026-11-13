@@ -499,6 +499,16 @@
             { "id": "kids_friends", "label": "Kids' friends everywhere" }
           ]
         },
+        {
+          "id": "hosting_style",
+          "kind": "single",
+          "prompt": "Are you more casual or formal?",
+          "options": [
+            { "id": "casual", "label": "Casual" },
+            { "id": "formal", "label": "Formal" }
+          ]
+        },
+        { "id": "hosting_style_why", "kind": "short_text", "prompt": "And why?" },
         { "id": "guest_count", "kind": "short_text", "prompt": "How many people, usually?" },
         {
           "id": "space_works",

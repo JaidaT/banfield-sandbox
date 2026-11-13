@@ -100,6 +100,19 @@ describe('questionnaire.json', () => {
     expect(q.showIf).toBeUndefined()
   })
 
+  test('Entertaining asks casual or formal, then why, after the get-together question', () => {
+    const ids = questionnaire.steps.find((s) => s.id === 'entertaining')!.questions.map((q) => q.id)
+    expect(ids.slice(0, 3)).toEqual(['gathering_types', 'hosting_style', 'hosting_style_why'])
+    const q = question('hosting_style')
+    expect(q.kind).toBe('single')
+    expect(q.prompt).toBe('Are you more casual or formal?')
+    expect(q.options.map((o) => o.label)).toEqual(['Casual', 'Formal'])
+    const why = question('hosting_style_why')
+    expect(why.kind).toBe('short_text')
+    expect(why.prompt).toBe('And why?')
+    expect(why.showIf).toBeUndefined()
+  })
+
   test('project types match the current form plus furniture and facelift', () => {
     expect(question('project_type').options.map((o) => o.label)).toEqual([
       'Furniture and styling',
