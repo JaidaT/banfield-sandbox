@@ -91,12 +91,12 @@ describe('questionnaire.json', () => {
     expect(question('flooring_other').showIf).toEqual({ field: 'flooring', includes: 'other' })
   })
 
-  test('Wish list asks about a favourite piece, as a short answer after features', () => {
+  test('Wish list asks about a favourite piece, (furniture or art wood), as a short answer after features', () => {
     const ids = questionnaire.steps.find((s) => s.id === 'wish_list')!.questions.map((q) => q.id)
     expect(ids.indexOf('favourite_piece')).toBe(ids.indexOf('features') + 1)
     const q = question('favourite_piece')
     expect(q.kind).toBe('short_text')
-    expect(q.prompt).toBe('Do you have a favourite piece of furniture or artwork you absolutely love? Why do you love it?')
+    expect(q.prompt).toBe('Do you have a favourite piece of furniture or art wood you absolutely love? Why do you love it?')
     expect(q.showIf).toBeUndefined()
   })
 
