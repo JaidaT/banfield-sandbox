@@ -632,6 +632,28 @@
       "title": "Wish list",
       "questions": [
         {
+          "id": "flooring",
+          "kind": "multi",
+          "prompt": "Are there any types of flooring you prefer?",
+          "help": "Pick all that apply.",
+          "options": [
+            { "id": "hardwood", "label": "Hardwood" },
+            { "id": "concrete", "label": "Concrete" },
+            { "id": "tile", "label": "Tile" },
+            { "id": "carpet", "label": "Carpet" },
+            { "id": "natural_stone", "label": "Natural Stone" },
+            { "id": "cork", "label": "Cork" },
+            { "id": "vinyl", "label": "Vinyl" },
+            { "id": "other", "label": "Other" }
+          ]
+        },
+        {
+          "id": "flooring_other",
+          "kind": "short_text",
+          "prompt": "Which other flooring?",
+          "showIf": { "field": "flooring", "includes": "other" }
+        },
+        {
           "id": "design_elements",
           "kind": "long_text",
           "prompt": "What design elements are on your wish list?",

@@ -78,6 +78,19 @@ describe('questionnaire.json', () => {
     ])
   })
 
+  test('Wish list opens with flooring preferences, and Other brings up a text box', () => {
+    const wishList = questionnaire.steps.find((s) => s.id === 'wish_list')!
+    expect(wishList.questions[0].id).toBe('flooring')
+    const q = question('flooring')
+    expect(q.prompt).toBe('Are there any types of flooring you prefer?')
+    expect(q.kind).toBe('multi')
+    expect(q.options.map((o) => o.label)).toEqual([
+      'Hardwood', 'Concrete', 'Tile', 'Carpet', 'Natural Stone', 'Cork', 'Vinyl', 'Other',
+    ])
+    expect(question('flooring_other').kind).toBe('short_text')
+    expect(question('flooring_other').showIf).toEqual({ field: 'flooring', includes: 'other' })
+  })
+
   test('project types match the current form plus furniture and facelift', () => {
     expect(question('project_type').options.map((o) => o.label)).toEqual([
       'Furniture and styling',
