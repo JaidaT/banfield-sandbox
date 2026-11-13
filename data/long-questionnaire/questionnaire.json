@@ -487,7 +487,7 @@
         {
           "id": "space_works",
           "kind": "single",
-          "prompt": "Does your space work for it now?",
+          "prompt": "Does your space work for entertaining right now?",
           "options": [
             { "id": "yes", "label": "Yes" },
             { "id": "mostly", "label": "Mostly" },
