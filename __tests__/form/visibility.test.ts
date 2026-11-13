@@ -101,9 +101,11 @@ describe('visibleSteps on the real questionnaire', () => {
     expect(questionIds({ spaces: ['kitchen', 'other'] }, 'project')).toContain('spaces_other')
   })
 
-  test('shared taste shows only for 2 or more adults', () => {
-    expect(questionIds({ people: [{ age: 34 }] }, 'style')).not.toContain('shared_taste')
-    expect(questionIds({ people: [{ age: 34 }, { age: 36 }] }, 'style')).toContain('shared_taste')
+  test('shared taste always shows; taste differences only when tastes differ', () => {
+    // Now always shows on Working together, even for one adult.
+    expect(questionIds({ people: [{ age: 34 }] }, 'working_together')).toContain('shared_taste')
+    expect(questionIds({ shared_taste: 'yes' }, 'working_together')).not.toContain('taste_differences')
+    expect(questionIds({ shared_taste: 'not_close' }, 'working_together')).toContain('taste_differences')
   })
 
   test('mailing address boxes show unless "same as home" is ticked', () => {
@@ -145,9 +147,9 @@ describe('sample households (QUESTIONNAIRE_DISCOVERY pass criteria)', () => {
       expect(stepIds(sample.answers)).toEqual(sample.expectedSteps)
     })
 
-    test(`${sample.label} sees at most 7 inputs per step (Contact may reach 20, Everyday 8, see DECISIONS.md)`, () => {
+    test(`${sample.label} sees at most 7 inputs per step (Contact may reach 20, Everyday and Working together 8, see DECISIONS.md)`, () => {
       for (const { step, questions } of visibleSteps(questionnaire, sample.answers)) {
-        const limit = step.id === 'contact' ? 20 : step.id === 'everyday' ? 8 : 7
+        const limit = step.id === 'contact' ? 20 : ['everyday', 'working_together'].includes(step.id) ? 8 : 7
         expect(questions.length, step.id).toBeLessThanOrEqual(limit)
       }
     })

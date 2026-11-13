@@ -135,8 +135,11 @@ describe('questionnaire.json', () => {
     })
   })
 
-  test('shared taste only shows for 2 or more adults', () => {
-    expect(question('shared_taste').showIf).toEqual({ field: 'adult_count', atLeast: 2 })
+  test('shared taste always shows, at the end of Working together, with its follow-up after it', () => {
+    const working = questionnaire.steps.find((s) => s.id === 'working_together')!
+    expect(working.questions.slice(-2).map((q) => q.id)).toEqual(['shared_taste', 'taste_differences'])
+    expect(question('shared_taste').showIf).toBeUndefined()
+    expect(question('taste_differences').showIf).toEqual({ field: 'shared_taste', in: ['meet_middle', 'not_close'] })
   })
 
   test('every picture named in the file exists in public/', () => {

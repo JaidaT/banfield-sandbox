@@ -222,6 +222,22 @@
               { "field": "past_professionals", "includes": "architect" }
             ]
           }
+        },
+        {
+          "id": "shared_taste",
+          "kind": "single",
+          "prompt": "Do the adults in the house share the same taste?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "meet_middle", "label": "We meet in the middle" },
+            { "id": "not_close", "label": "Not even close" }
+          ]
+        },
+        {
+          "id": "taste_differences",
+          "kind": "long_text",
+          "prompt": "How do your tastes differ?",
+          "showIf": { "field": "shared_taste", "in": ["meet_middle", "not_close"] }
         }
       ]
     },
@@ -607,24 +623,7 @@
           ]
         },
         { "id": "colours_love", "kind": "short_text", "prompt": "Colours you love" },
-        { "id": "colours_avoid", "kind": "short_text", "prompt": "Colours you'd rather avoid" },
-        {
-          "id": "shared_taste",
-          "kind": "single",
-          "prompt": "Do the adults in the house share the same taste?",
-          "showIf": { "field": "adult_count", "atLeast": 2 },
-          "options": [
-            { "id": "yes", "label": "Yes" },
-            { "id": "meet_middle", "label": "We meet in the middle" },
-            { "id": "not_close", "label": "Not even close" }
-          ]
-        },
-        {
-          "id": "taste_differences",
-          "kind": "long_text",
-          "prompt": "How do your tastes differ?",
-          "showIf": { "field": "shared_taste", "in": ["meet_middle", "not_close"] }
-        }
+        { "id": "colours_avoid", "kind": "short_text", "prompt": "Colours you'd rather avoid" }
       ]
     },
     {
