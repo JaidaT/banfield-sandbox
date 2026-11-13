@@ -524,7 +524,7 @@
           "prompt": "What are some of your favourite places you've travelled to?",
           "showIf": { "field": "travels", "equals": "yes" }
         },
-        { "id": "favourite_place", "kind": "short_text", "prompt": "A public place you love being in?", "help": "A hotel, a restaurant, a library..." }
+        { "id": "favourite_place", "kind": "short_text", "prompt": "A public place you love being in?", "help": "A hotel, a museum, a television show set..." }
       ]
     },
     {
