@@ -95,6 +95,12 @@ describe('visibleSteps on the real questionnaire', () => {
     expect(questionIds({ past_professionals: ['architect'] }, 'working_together')).toContain('past_experience')
   })
 
+  test('ticking "Other" in Which spaces shows a short text box for it', () => {
+    expect(questionIds({}, 'project')).not.toContain('spaces_other')
+    expect(questionIds({ spaces: ['kitchen'] }, 'project')).not.toContain('spaces_other')
+    expect(questionIds({ spaces: ['kitchen', 'other'] }, 'project')).toContain('spaces_other')
+  })
+
   test('shared taste shows only for 2 or more adults', () => {
     expect(questionIds({ people: [{ age: 34 }] }, 'style')).not.toContain('shared_taste')
     expect(questionIds({ people: [{ age: 34 }, { age: 36 }] }, 'style')).toContain('shared_taste')

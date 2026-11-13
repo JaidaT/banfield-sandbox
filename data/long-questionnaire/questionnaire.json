@@ -111,8 +111,15 @@
             { "id": "laundry_mudroom", "label": "Laundry or mudroom" },
             { "id": "basement", "label": "Basement" },
             { "id": "outdoor", "label": "Outdoor spaces" },
-            { "id": "whole_home", "label": "Whole home" }
+            { "id": "whole_home", "label": "Whole home" },
+            { "id": "other", "label": "Other" }
           ]
+        },
+        {
+          "id": "spaces_other",
+          "kind": "short_text",
+          "prompt": "Which other space?",
+          "showIf": { "field": "spaces", "includes": "other" }
         },
         {
           "id": "square_feet",
