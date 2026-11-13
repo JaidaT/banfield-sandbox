@@ -443,7 +443,7 @@
           "id": "work_needs",
           "kind": "long_text",
           "prompt": "What do they need?",
-          "help": "Quiet, video calls, two monitors, a door that closes...",
+          "help": "Quiet, lighting, computers, faxs...",
           "showIf": { "field": "work_from_home", "in": ["full_time", "some_days"] }
         },
         {
