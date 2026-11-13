@@ -480,7 +480,6 @@ export function parseDesignDna(raw: unknown, archetypes: Archetype[]): DesignDna
     throw new Error('design DNA data needs a "profiles" list')
   }
   const label = plainText(raw.label, '"label"')
-  const secondaryLabel = plainText(raw.secondaryLabel, '"secondaryLabel"')
   const known = new Set(archetypes.map((a) => a.id))
   const seenTypes = new Set<string>()
   const seenNames = new Set<string>()
@@ -506,7 +505,7 @@ export function parseDesignDna(raw: unknown, archetypes: Archetype[]): DesignDna
   for (const id of known) {
     if (!seenTypes.has(id)) throw new Error(`client type ${id} has no design DNA profile`)
   }
-  return { label, secondaryLabel, profiles }
+  return { label, profiles }
 }
 
 export function loadDesignDna(): DesignDnaData {

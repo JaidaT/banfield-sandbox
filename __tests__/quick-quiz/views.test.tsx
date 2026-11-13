@@ -32,7 +32,7 @@ describe('TeamBriefView', () => {
     const brief = buildTeamBrief(sample('analytical-validator'), data)
     render(<TeamBriefView brief={brief} />)
     const line = screen.getByText(/Client was shown:/)
-    expect(line.textContent).toBe('Client was shown: The Strategist (secondary trait: The Curator)')
+    expect(line.textContent).toBe('Client was shown: The Strategist')
     expect(screen.getByText(brief.headline).nextElementSibling).toBe(line)
   })
 
@@ -153,19 +153,22 @@ describe('ClientResultView', () => {
     expect(screen.getByText('You may now exit this screen.')).toBeDefined()
   })
 
-  test('the Design DNA card shows the label, headline, paragraph and secondary trait', () => {
+  test('the Design DNA card shows the label, name, headline and paragraph', () => {
     const result = resultOf('analytical-validator')
     render(<ClientResultView result={result} />)
     const card = screen.getByRole('region', { name: 'The Strategist' })
     expect(card.textContent).toContain('DESIGN DNA')
     expect(card.textContent).toContain('You feel most confident when every choice has a reason.')
     expect(card.textContent).toContain(result.designDna!.description)
-    expect(card.textContent).toContain('SECONDARY TRAIT / The Curator')
   })
 
-  test('no secondary trait line when there is none', () => {
-    render(<ClientResultView result={resultOf('decisive-delegator')} />)
-    expect(screen.getByRole('region', { name: 'The Visionary' }).textContent).not.toContain('SECONDARY TRAIT')
+  // The team decided a secondary trait is too much (2026-11-13).
+  test('never shows a secondary trait', () => {
+    for (const s of samples) {
+      const { container, unmount } = render(<ClientResultView result={resultOf(s.id)} />)
+      expect(container.textContent?.toLowerCase(), s.id).not.toContain('secondary')
+      unmount()
+    }
   })
 
   test('no Design DNA card when there were not enough answers; the rest still shows', () => {

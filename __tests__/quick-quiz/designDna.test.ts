@@ -49,7 +49,7 @@ describe('design-dna.json (the real file)', () => {
   test('loads, with the labels from the mockup', () => {
     const data = loadDesignDna()
     expect(data.label).toBe('DESIGN DNA')
-    expect(data.secondaryLabel).toBe('SECONDARY TRAIT')
+    expect(data).not.toHaveProperty('secondaryLabel')
   })
 
   test('has the team profiles, paired with their client types, word for word', () => {
@@ -85,7 +85,6 @@ describe('parseDesignDna', () => {
     const blank = raw.profiles.map((p, i) => (i === 2 ? { ...p, headline: '' } : p))
     expect(() => parseDesignDna(withProfiles(blank), archetypes)).toThrow(/profile 2.*headline/)
     expect(() => parseDesignDna({ ...raw, label: '' }, archetypes)).toThrow(/"label"/)
-    expect(() => parseDesignDna({ ...raw, secondaryLabel: '' }, archetypes)).toThrow(/"secondaryLabel"/)
   })
 
   test('throws on a curly apostrophe or other special character', () => {

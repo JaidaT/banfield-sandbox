@@ -482,7 +482,7 @@ Built on `foyer-v1`. The scoring, the questions and the long questionnaire do no
 Choices (Claude's recommendations, accepted by Jaida on 2026-11-13):
 - **Exact wording:** each profile uses the team's name, one-line headline and paragraph exactly as written, with no edits. The only change is that curly apostrophes become straight ones ('), per the project's "no special Unicode" rule. (Claude's review on 2026-11-13 suggested reworking the Nest Builder; Jaida chose to build the wording as written for now.)
 - **Which profile:** the top-scoring client type's profile, the same type that leads the team brief. Ties go to the type listed first in `archetypes.json`, as the brief already does.
-- **Secondary trait:** the second client type's profile name ("SECONDARY TRAIT / THE CURATOR"), shown only when that type scores 20% or more (the same rule the brief uses for its highlights, `HIGHLIGHT_MIN_PERCENT`). No sentence for now; the mockup's pair sentence ("Your eye for detail helps...") would need 20 written pairs, so the data file leaves room to add them later without code changes.
+- **Secondary trait (removed later on 2026-11-13: the team decided it was too much; see DECISIONS.md):** the second client type's profile name ("SECONDARY TRAIT / THE CURATOR"), shown only when that type scores 20% or more (the same rule the brief uses for its highlights, `HIGHLIGHT_MIN_PERCENT`). No sentence for now; the mockup's pair sentence ("Your eye for detail helps...") would need 20 written pairs, so the data file leaves room to add them later without code changes.
 - **Not enough answers:** when the quiz cannot pick a type (`insufficient`), the Design DNA card is left out and the rest of the screen shows as normal.
 - **Screen layout, following the mockup** (the "Share my results" button is left out):
   1. On the quiz only: "QUESTIONNAIRE COMPLETE" with "100%" and a full progress bar
@@ -533,7 +533,6 @@ Work test-first: for each step, write the failing test, then change the code.
 
 ### Later (not in this plan)
 - The "Share my results" button from the mockup
-- A sentence for each secondary trait (the mockup's "Your eye for detail helps ensure the plan feels cohesive, not just practical."): one per main and secondary pair, written by the team
 - Revisit the Nest Builder wording (Claude's 2026-11-13 review: it matches the Cautious Reassurance Seeker weakly) and the overlaps between Strategist and Nest Builder, and Curator and Strategist
 - In user research, ask each tester "Does this sound like you?" after they read their profile, and note their client type
 - Whether to bring back any of the removed answer sections, or the "Not quite ready to book?" line

@@ -32,7 +32,7 @@ describe('buildClientResult', () => {
   test('carries the Design DNA it is given, and none when given none', () => {
     const strategist = resultFor('analytical-validator').designDna
     expect(strategist?.name).toBe('The Strategist')
-    expect(strategist?.secondary?.name).toBe('The Curator')
+    expect(strategist).not.toHaveProperty('secondary')
     const s = samples[0]
     expect(buildClientResult(s, copy, null).designDna).toBeNull()
   })

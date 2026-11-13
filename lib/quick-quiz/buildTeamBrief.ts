@@ -2,7 +2,6 @@ import { answerLabels } from './answers'
 import { assessLead } from './assessLead'
 import { findCloseCalls } from './closeCalls'
 import { pickDesignDna } from './designDna'
-import { HIGHLIGHT_MAX, HIGHLIGHT_MIN_PERCENT } from './highlights'
 import { scoreArchetypes } from './scoreArchetypes'
 import { evaluateSignals, skippedQuestions } from './signals'
 import type {
@@ -14,6 +13,9 @@ import type {
   TeamBrief,
 } from './types'
 
+// Draft cutoffs: show guidance for types at 20% or more, at most two (Oct 28 meeting).
+const HIGHLIGHT_MIN_PERCENT = 20
+const HIGHLIGHT_MAX = 2
 
 export function shortLabel(label: string): string {
   return label.replace(/^The /, '')
@@ -69,9 +71,7 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
 
   // What the client saw on their result, so Jamie knows what they read.
   const dna = pickDesignDna(blend, data.designDna)
-  const designDnaShown = dna
-    ? `${dna.name}${dna.secondary ? ` (secondary trait: ${dna.secondary.name})` : ''}`
-    : 'no Design DNA (not enough answers)'
+  const designDnaShown = dna ? dna.name : 'no Design DNA (not enough answers)'
 
   return {
     submissionId: submission.id,

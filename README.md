@@ -245,7 +245,7 @@ Each file starts with a `_meta` section explaining its fields in plain English. 
 
 ### Rules the code always follows
 
-- Client types and lead labels **never** appear on client screens. Tests check every sample for this. Instead, the client sees a **Design DNA** profile: the one belonging to their top client type, plus their second type's profile name as a "secondary trait" when it scores 20% or more. The team brief says which profile the client was shown.
+- Client types and lead labels **never** appear on client screens. Tests check every sample for this. Instead, the client sees a **Design DNA** profile: the one belonging to their top client type (no secondary trait; the team decided it was too much). The team brief says which profile the client was shown.
 - Location never affects the lead label.
 - A client's type never changes the lead label.
 - When client types are within `closeCallPoints` (5 for now) of each other, the team brief shows a **"Close call"** note under the headline, telling Jamie the quiz could not really tell them apart. The scores and headline do not change; ties are still listed in `archetypes.json` order. The sample `out-of-area-hot` (an exact 50 / 50) shows one.

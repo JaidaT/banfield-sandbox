@@ -185,17 +185,13 @@ describe('Design DNA the client was shown', () => {
   test('matches the client result for every sample', () => {
     for (const s of samples) {
       const dna = designDnaFor(s, data)
-      const expected = dna
-        ? `${dna.name}${dna.secondary ? ` (secondary trait: ${dna.secondary.name})` : ''}`
-        : 'no Design DNA (not enough answers)'
+      const expected = dna ? dna.name : 'no Design DNA (not enough answers)'
       expect(buildTeamBrief(s, data).designDnaShown, s.id).toBe(expected)
     }
   })
 
-  test('reads as expected for a main type with and without a secondary trait', () => {
-    expect(buildTeamBrief(samples.find((s) => s.id === 'analytical-validator')!, data).designDnaShown).toBe(
-      'The Strategist (secondary trait: The Curator)',
-    )
+  test('names only the main profile, with no secondary trait', () => {
+    expect(buildTeamBrief(samples.find((s) => s.id === 'analytical-validator')!, data).designDnaShown).toBe('The Strategist')
     expect(buildTeamBrief(samples.find((s) => s.id === 'decisive-delegator')!, data).designDnaShown).toBe('The Visionary')
   })
 
@@ -209,6 +205,6 @@ describe('Design DNA the client was shown', () => {
   test('the copied text includes the line under the headline', () => {
     const brief = buildTeamBrief(samples.find((s) => s.id === 'analytical-validator')!, data)
     const lines = briefToText(brief).split('\n')
-    expect(lines).toContain('Client was shown: The Strategist (secondary trait: The Curator)')
+    expect(lines).toContain('Client was shown: The Strategist')
   })
 })

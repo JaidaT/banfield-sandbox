@@ -212,12 +212,10 @@ export interface ClientDesignDna {
   name: string
   headline: string
   description: string
-  secondary: { label: string; name: string } | null
 }
 
 export interface DesignDnaData {
   label: string
-  secondaryLabel: string
   profiles: DesignDnaProfile[]
 }
 
@@ -288,8 +286,8 @@ export interface ClientResult {
 export interface TeamBrief {
   submissionId: string
   headline: string
-  // The Design DNA the client was shown, e.g. "The Strategist (secondary
-  // trait: The Curator)", or "no Design DNA (not enough answers)".
+  // The Design DNA the client was shown, e.g. "The Strategist", or
+  // "no Design DNA (not enough answers)".
   designDnaShown: string
   // "Close call: ..." sentences when the quiz could not really tell client
   // types apart (findCloseCalls). Empty when the type is clear.

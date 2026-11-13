@@ -53,11 +53,6 @@ export default function ClientResultView({ result, embedded = false, complete = 
           </h2>
           <p className="text-xl font-bold leading-snug">{dna.headline}</p>
           <p className="leading-7">{dna.description}</p>
-          {dna.secondary && (
-            <p className={`border-t border-charcoal/30 pt-4 ${LABEL}`}>
-              {dna.secondary.label} / {dna.secondary.name}
-            </p>
-          )}
         </section>
       )}
 

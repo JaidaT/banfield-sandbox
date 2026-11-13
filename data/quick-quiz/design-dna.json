@@ -2,13 +2,11 @@
   "_meta": {
     "version": "0.1.0",
     "draft": true,
-    "purpose": "Design DNA profiles: the result people see after the Quick Quiz, instead of their client type. Each profile belongs to one client type (archetype). The quiz shows the profile of the person's top client type, and the profile name of their second type as a secondary trait when it scores 20% or more.",
+    "purpose": "Design DNA profiles: the result people see after the Quick Quiz, instead of their client type. Each profile belongs to one client type (archetype). The quiz shows the profile of the person's top client type. There is no secondary trait: the team decided it was too much (2026-11-13).",
     "teamOnly": "The 'archetype' pairs are team-only. Only name, headline and description are ever shown to the client.",
-    "wording": "The team's wording from 2026-11-13, exactly as written, with straight apostrophes (the project uses plain characters only; the loader rejects curly quotes).",
-    "later": "A sentence for each secondary trait (one per main and secondary pair, as in the mockup) is not written yet. See IMPLEMENTATION_PLAN.md, Later."
+    "wording": "The team's wording from 2026-11-13, exactly as written, with straight apostrophes (the project uses plain characters only; the loader rejects curly quotes)."
   },
   "label": "DESIGN DNA",
-  "secondaryLabel": "SECONDARY TRAIT",
   "profiles": [
     {
       "archetype": "hands_on_controller",

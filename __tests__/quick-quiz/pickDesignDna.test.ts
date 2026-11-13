@@ -14,7 +14,7 @@ const blendOf = (scores: [string, number][], insufficient = false): ArchetypeBle
 
 describe('pickDesignDna', () => {
   for (const sample of loadSampleSubmissions()) {
-    test(`${sample.id}: the profile matches the brief's client types`, () => {
+    test(`${sample.id}: the profile matches the brief's top client type`, () => {
       const blend = scoreArchetypes(sample, data.questions, data.archetypes, data.signalRules)
       const dna = pickDesignDna(blend, data.designDna)
       const highlights = buildTeamBrief(sample, data).highlights
@@ -23,7 +23,6 @@ describe('pickDesignDna', () => {
         return
       }
       expect(dna?.name).toBe(nameFor(highlights[0].id))
-      expect(dna?.secondary?.name ?? null).toBe(highlights[1] ? nameFor(highlights[1].id) : null)
     })
   }
 
@@ -34,22 +33,19 @@ describe('pickDesignDna', () => {
       name: 'The Strategist',
       headline: 'You feel most confident when every choice has a reason.',
       description: expect.stringContaining('weigh the trade-offs'),
-      secondary: { label: 'SECONDARY TRAIT', name: 'The Curator' },
     })
   })
 
-  test('the secondary trait shows from 20%, not below', () => {
-    const at20 = blendOf([['decisive_delegator', 80], ['creative_collaborator', 20]])
-    const at19 = blendOf([['decisive_delegator', 81], ['creative_collaborator', 19]])
-    expect(pickDesignDna(at20, data.designDna)?.secondary?.name).toBe('The Explorer')
-    expect(pickDesignDna(at19, data.designDna)?.secondary).toBeNull()
+  // The team decided a secondary trait is too much (2026-11-13).
+  test('never gives a secondary trait, even when a second type scores high', () => {
+    const close = blendOf([['decisive_delegator', 55], ['creative_collaborator', 45]])
+    expect(pickDesignDna(close, data.designDna)).not.toHaveProperty('secondary')
   })
 
   test('a tie goes to the type listed first in the scores (archetypes.json order)', () => {
     const tie = blendOf([['cautious_reassurance_seeker', 50], ['hands_on_controller', 50]])
     const dna = pickDesignDna(tie, data.designDna)
     expect(dna?.name).toBe('The Nest Builder')
-    expect(dna?.secondary?.name).toBe('The Curator')
   })
 
   test('not enough answers: no profile', () => {
