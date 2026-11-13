@@ -197,9 +197,10 @@ Answers
   |-- scoreArchetypes  ->  client type blend   (e.g. 64% Cautious / 36% Hands-On)
   |-- assessLead       ->  hot, warm or cold lead, with the reason
   |-- signals          ->  notes like "Finished quickly"
+  |-- pickDesignDna    ->  the client's Design DNA profile (e.g. The Strategist)
   |
   |-- buildTeamBrief     ->  the team brief (team only)
-  `-- buildClientResult  ->  the client's result screen (never shows client types or lead labels)
+  `-- buildClientResult  ->  the client's result screen: their Design DNA, never client types or lead labels
 ```
 
 ### The pages
@@ -214,7 +215,7 @@ Answers
 | `/team/quick-quiz/<id>` | One person's pre-call brief, with a "Copy as text" button | Team only |
 | `/team/long-questionnaire` | The long questionnaire sample households, newest first: name, date, project type, steps skipped | Team only |
 | `/team/long-questionnaire/<id>` | What the team sees for one sample household | Team only |
-| `/result/<id>` | What that person would see after the quiz | Client |
+| `/result/<id>` | What that person would see after the quiz: their Design DNA, laid out like the team's mockup | Client |
 | `/book` | Placeholder for the booking page | Client |
 
 ### The data files
@@ -227,7 +228,8 @@ These are in `data/quick-quiz/`. (The long questionnaire's are in `data/long-que
 | `archetypes.json` | The 5 client types and the guidance shown for each, and `closeCallPoints` (see below) |
 | `lead-rules.json` | Hot, warm and cold: budget thresholds per project type, and the warning signs |
 | `signals.json` | Notes based on how someone took the quiz (time taken, skipped questions) |
-| `client-result.json` | The wording on the client's result screen |
+| `design-dna.json` | The 5 Design DNA profiles (name, headline, paragraph) and which client type each belongs to (team only) |
+| `client-result.json` | The rest of the wording on the client's result screen ("You're all done!", "What happens next", the booking button) |
 | `quiz-form.json` | The welcome and contact screen wording, and `contactRequired` (whether contact details must be filled in before the result) |
 | `sample-submissions.json` | The six made-up people |
 
@@ -238,11 +240,12 @@ Each file starts with a `_meta` section explaining its fields in plain English. 
 - **Change a question's wording:** edit its `prompt` or an answer's `label` in `questions.json`. Don't change any `id`, because other files refer to them.
 - **Change a budget threshold:** edit `hotFrom` or `warmFrom` in `lead-rules.json`.
 - **Add a warning sign:** add an entry to `warningSigns` in `lead-rules.json`.
+- **Change a Design DNA profile's wording:** edit its `name`, `headline` or `description` in `design-dna.json`. Use straight apostrophes ('), not curly ones; the tests catch curly ones.
 - **After any change:** run `npm test`. If you made a mistake in a data file (a typo in an id, a missing threshold), the tests fail with a message saying exactly what and where.
 
 ### Rules the code always follows
 
-- Client types and lead labels **never** appear on client screens. Tests check every sample for this.
+- Client types and lead labels **never** appear on client screens. Tests check every sample for this. Instead, the client sees a **Design DNA** profile: the one belonging to their top client type, plus their second type's profile name as a "secondary trait" when it scores 20% or more. The team brief says which profile the client was shown.
 - Location never affects the lead label.
 - A client's type never changes the lead label.
 - When client types are within `closeCallPoints` (5 for now) of each other, the team brief shows a **"Close call"** note under the headline, telling Jamie the quiz could not really tell them apart. The scores and headline do not change; ties are still listed in `archetypes.json` order. The sample `out-of-area-hot` (an exact 50 / 50) shows one.

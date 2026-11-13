@@ -527,8 +527,8 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests: the brief line matches the client result's profile and secondary trait for every sample; the copied text includes it
 
 ### Phase 5: Docs and checks
-- [ ] `README.md`: mention `design-dna.json` in the Quick Quiz data files list, and that the result follows the mockup
-- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [x] `README.md`: mention `design-dna.json` in the Quick Quiz data files list, and that the result follows the mockup
+- [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (456 tests, 2026-11-13)
 - [ ] Jaida finishes the quiz on a computer and a phone, and opens two or three `/result/<id>` sample pages, comparing them with the mockup and checking the profile text reads exactly as written
 
 ### Later (not in this plan)
