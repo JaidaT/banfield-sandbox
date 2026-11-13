@@ -1,9 +1,13 @@
 import type { Ref } from 'react'
 import QuestionInput from './QuestionInput'
 import { BUTTON, BUTTON_MAIN, HEADING, HINT } from './styles'
+import { percentDone } from '@/lib/form/navigation'
 import type { Problem } from '@/lib/form/validate'
 import type { VisibleStep } from '@/lib/form/visibility'
 import type { Answers, AnswerValue } from '@/lib/form/types'
+
+// How progress reads: "Step 4 of 11" or a percentage done ("31%").
+export type ProgressStyle = 'steps' | 'percent'
 
 interface Props {
   // The step with only the questions that show for the current answers.
@@ -12,6 +16,7 @@ interface Props {
   problems: Problem[]
   // "Step 4 of 11", or null for a step that is not counted.
   place: { number: number; total: number } | null
+  progressAs?: ProgressStyle
   isLast: boolean
   // The main button on the last step, e.g. "Review my answers" or "See my results".
   lastLabel: string
@@ -27,15 +32,24 @@ interface Props {
 // One step of the questionnaire: progress, title, its visible questions, and
 // the Back / Next buttons.
 export default function StepScreen(props: Props) {
-  const { step, answers, problems, place, isLast, lastLabel, onAnswer, onNext, onBack, onBackToReview, headingRef } = props
+  const { step, answers, problems, place, progressAs = 'steps', isLast, lastLabel, onAnswer, onNext, onBack, onBackToReview, headingRef } = props
   return (
     <>
       {place ? (
         <div className="flex flex-col gap-1">
-          <p className={HINT}>
-            Step {place.number} of {place.total}
-          </p>
-          <progress value={place.number} max={place.total} className="h-2 w-full" aria-hidden="true" />
+          {progressAs === 'percent' ? (
+            <>
+              <p className={HINT}>{percentDone(place)}%</p>
+              <progress value={percentDone(place)} max={100} className="h-2 w-full" aria-hidden="true" />
+            </>
+          ) : (
+            <>
+              <p className={HINT}>
+                Step {place.number} of {place.total}
+              </p>
+              <progress value={place.number} max={place.total} className="h-2 w-full" aria-hidden="true" />
+            </>
+          )}
         </div>
       ) : null}
       <h2 ref={headingRef} tabIndex={-1} className={HEADING}>

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { loadQuestionnaire } from '@/lib/long-questionnaire/load'
-import { nextStepId, previousStepId, progress } from '@/lib/form/navigation'
+import { nextStepId, previousStepId, percentDone, progress } from '@/lib/form/navigation'
 
 const questionnaire = loadQuestionnaire()
 // No kids, no pets, never hosts: Kids, Pets and Entertaining are skipped.
@@ -43,5 +43,15 @@ describe('progress', () => {
   test('the total changes when a branch changes', () => {
     const busy = { people: [{ age: 40 }, { age: 9 }], has_pets: 'yes', hosting_frequency: 'monthly' }
     expect(progress(questionnaire, busy, 'everyday')).toEqual({ number: 8, total: 13 })
+  })
+})
+
+describe('percentDone (the Quick Quiz shows progress as a percentage)', () => {
+  test('counts finished steps: 0% on the first step, 100% only once all are done', () => {
+    expect(percentDone({ number: 1, total: 13 })).toBe(0)
+    expect(percentDone({ number: 2, total: 13 })).toBe(8)
+    expect(percentDone({ number: 7, total: 13 })).toBe(46)
+    expect(percentDone({ number: 13, total: 13 })).toBe(92)
+    expect(percentDone({ number: 4, total: 4 })).toBe(75)
   })
 })

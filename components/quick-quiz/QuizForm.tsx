@@ -52,6 +52,7 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
         startAt={startAt}
         initialAnswers={initialAnswers}
         skipReview
+        progressAs="percent"
         onStart={start}
         doneScreen={QuizResults}
       />

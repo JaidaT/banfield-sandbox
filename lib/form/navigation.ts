@@ -29,6 +29,13 @@ export function previousStepId(questionnaire: Questionnaire, answers: Answers, c
 
 // "Step 4 of 11". Steps with no questions (the welcome) are not counted, and
 // get null. The total changes as answers open or skip steps.
+// How much is finished, as a whole-number percentage: the steps before this
+// one out of all of them. 0% on the first step; 100% only once every step is
+// done (the Quick Quiz result screen shows that).
+export function percentDone(place: { number: number; total: number }): number {
+  return Math.round(((place.number - 1) / place.total) * 100)
+}
+
 export function progress(
   questionnaire: Questionnaire,
   answers: Answers,

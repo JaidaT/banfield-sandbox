@@ -33,19 +33,21 @@ const clientPart = () => within(screen.getByRole('region', { name: 'Your results
 const teamPart = () => within(screen.getByRole('region', { name: 'Team view (demo only)' }))
 
 describe('QuizForm', () => {
-  test('starts on the welcome screen, then the first question is "Step 1 of 13"', () => {
+  test('starts on the welcome screen, then the first question shows 0% done', () => {
     renderQuiz()
     expect(heading()).toBe(form.welcome.title)
     expect(screen.getByText(form.welcome.intro)).toBeDefined()
     click("Let's start")
-    expect(screen.getByText('Step 1 of 13')).toBeDefined()
+    expect(screen.getByText('0%')).toBeDefined()
+    // The Quick Quiz shows a percentage, not "Step 1 of 13" (the long questionnaire keeps steps).
+    expect(screen.queryByText(/Step \d+ of/)).toBeNull()
     expect(screen.getByRole('group', { name: quizData.questions[0].prompt })).toBeDefined()
   })
 
   test('Next is not blocked on a skipped question', () => {
     renderQuiz({ startAt: 'decision_style' })
     click('Next')
-    expect(screen.getByText('Step 2 of 13')).toBeDefined()
+    expect(screen.getByText('8%')).toBeDefined()
   })
 
   test('the contact screen is last, with "See my results" and no review screen', () => {
