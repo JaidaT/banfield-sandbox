@@ -28,13 +28,21 @@ describe('TeamBriefView', () => {
     expect(screen.getByRole('button', { name: /copy/i })).toBeDefined()
   })
 
+  test('says which Design DNA the client was shown, under the headline', () => {
+    const brief = buildTeamBrief(sample('analytical-validator'), data)
+    render(<TeamBriefView brief={brief} />)
+    const line = screen.getByText(/Client was shown:/)
+    expect(line.textContent).toBe('Client was shown: The Strategist (secondary trait: The Curator)')
+    expect(screen.getByText(brief.headline).nextElementSibling).toBe(line)
+  })
+
   test('a close call shows as a note under the headline', () => {
     const brief = buildTeamBrief(sample('out-of-area-hot'), data)
     render(<TeamBriefView brief={brief} />)
     const note = screen.getByRole('note', { name: 'Close call' })
     expect(note.textContent).toBe(brief.closeCalls[0])
-    // Right after the headline, before the copy button.
-    expect(screen.getByText(brief.headline).nextElementSibling).toBe(note)
+    // Under the headline and the "Client was shown" line, before the copy button.
+    expect(screen.getByText(/Client was shown:/).nextElementSibling).toBe(note)
   })
 
   test('a clear client type shows no close-call note', () => {

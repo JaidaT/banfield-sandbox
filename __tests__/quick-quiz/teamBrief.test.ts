@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { briefToText } from '@/lib/quick-quiz/briefToText'
 import { buildTeamBrief } from '@/lib/quick-quiz/buildTeamBrief'
+import { designDnaFor } from '@/lib/quick-quiz/designDna'
 import { loadQuizData, loadSampleSubmissions } from '@/lib/quick-quiz/load'
 
 const data = loadQuizData()
@@ -103,17 +104,18 @@ describe('close calls', () => {
     expect(buildTeamBrief(sample, { ...data, closeCallPoints: 0 }).closeCalls[0]).toMatch(/scored the same/)
   })
 
-  test('"Copy as text" puts the close-call note on the line after the headline', () => {
+  test('"Copy as text" puts the close-call note after the headline and the Design DNA line', () => {
     const brief = briefFor('out-of-area-hot')
     const lines = briefToText(brief).split('\n')
     expect(lines[1]).toBe(brief.headline)
-    expect(lines[2]).toBe(brief.closeCalls[0])
-    expect(lines[3]).toBe('')
+    expect(lines[2]).toBe(`Client was shown: ${brief.designDnaShown}`)
+    expect(lines[3]).toBe(brief.closeCalls[0])
+    expect(lines[4]).toBe('')
   })
 
   test('"Copy as text" is unchanged when there is no close call', () => {
     const lines = briefToText(briefFor('cold-explorer')).split('\n')
-    expect(lines[2]).toBe('')
+    expect(lines[3]).toBe('')
     expect(lines.join('\n')).not.toContain('Close call')
   })
 
@@ -176,5 +178,37 @@ describe('briefToText', () => {
     for (const s of samples) {
       expect(briefToText(buildTeamBrief(s, data)), s.id).toMatch(/^[\x20-\x7E\n]*$/)
     }
+  })
+})
+
+describe('Design DNA the client was shown', () => {
+  test('matches the client result for every sample', () => {
+    for (const s of samples) {
+      const dna = designDnaFor(s, data)
+      const expected = dna
+        ? `${dna.name}${dna.secondary ? ` (secondary trait: ${dna.secondary.name})` : ''}`
+        : 'no Design DNA (not enough answers)'
+      expect(buildTeamBrief(s, data).designDnaShown, s.id).toBe(expected)
+    }
+  })
+
+  test('reads as expected for a main type with and without a secondary trait', () => {
+    expect(buildTeamBrief(samples.find((s) => s.id === 'analytical-validator')!, data).designDnaShown).toBe(
+      'The Strategist (secondary trait: The Curator)',
+    )
+    expect(buildTeamBrief(samples.find((s) => s.id === 'decisive-delegator')!, data).designDnaShown).toBe('The Visionary')
+  })
+
+  test('says so when there were not enough answers', () => {
+    // No answers and no behaviour rules: nothing can score.
+    const brief = buildTeamBrief({ ...samples[0], answers: {} }, { ...data, signalRules: [] })
+    expect(brief.highlights).toEqual([])
+    expect(brief.designDnaShown).toBe('no Design DNA (not enough answers)')
+  })
+
+  test('the copied text includes the line under the headline', () => {
+    const brief = buildTeamBrief(samples.find((s) => s.id === 'analytical-validator')!, data)
+    const lines = briefToText(brief).split('\n')
+    expect(lines).toContain('Client was shown: The Strategist (secondary trait: The Curator)')
   })
 })

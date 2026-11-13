@@ -1,6 +1,7 @@
 import { answerLabels } from './answers'
 import { assessLead } from './assessLead'
 import { findCloseCalls } from './closeCalls'
+import { pickDesignDna } from './designDna'
 import { HIGHLIGHT_MAX, HIGHLIGHT_MIN_PERCENT } from './highlights'
 import { scoreArchetypes } from './scoreArchetypes'
 import { evaluateSignals, skippedQuestions } from './signals'
@@ -66,9 +67,16 @@ export function buildTeamBrief(submission: Submission, data: QuizData): TeamBrie
     answer: readableAnswer(q, submission),
   }))
 
+  // What the client saw on their result, so Jamie knows what they read.
+  const dna = pickDesignDna(blend, data.designDna)
+  const designDnaShown = dna
+    ? `${dna.name}${dna.secondary ? ` (secondary trait: ${dna.secondary.name})` : ''}`
+    : 'no Design DNA (not enough answers)'
+
   return {
     submissionId: submission.id,
     headline: `${leadLabel} | ${typeLine}`,
+    designDnaShown,
     closeCalls: findCloseCalls(blend.scores, top.map((s) => s.id), data.closeCallPoints),
     contact: submission.contact,
     blend,

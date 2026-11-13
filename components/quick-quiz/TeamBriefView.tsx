@@ -43,6 +43,7 @@ export default function TeamBriefView({
         </p>
         <h1 className="font-heading text-3xl font-bold text-navy">{briefName(contact)}</h1>
         <p className="text-base font-medium">{brief.headline}</p>
+        <p className="text-sm">{`Client was shown: ${brief.designDnaShown}`}</p>
         {brief.closeCalls.length > 0 && (
           // The quiz could not really tell client types apart (findCloseCalls).
           <div role="note" aria-label="Close call" className="flex flex-col gap-1 rounded-md border-2 border-navy p-3 text-sm">

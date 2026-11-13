@@ -288,6 +288,9 @@ export interface ClientResult {
 export interface TeamBrief {
   submissionId: string
   headline: string
+  // The Design DNA the client was shown, e.g. "The Strategist (secondary
+  // trait: The Curator)", or "no Design DNA (not enough answers)".
+  designDnaShown: string
   // "Close call: ..." sentences when the quiz could not really tell client
   // types apart (findCloseCalls). Empty when the type is clear.
   closeCalls: string[]

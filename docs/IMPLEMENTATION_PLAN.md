@@ -523,7 +523,7 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests: finishing the quiz on screen shows the complete bar and a Design DNA card; `/result/<id>` shows each sample's profile (`__tests__/quick-quiz/resultPage.test.tsx`)
 
 ### Phase 4: Team brief
-- [ ] `TeamBrief` gains `designDnaShown: string`, set in `buildTeamBrief`; `TeamBriefView` shows "Client was shown: ..." near the headline; `briefToText` includes the same line
+- [x] `TeamBrief` gains `designDnaShown: string`, set in `buildTeamBrief`; `TeamBriefView` shows "Client was shown: ..." near the headline; `briefToText` includes the same line
   - Tests: the brief line matches the client result's profile and secondary trait for every sample; the copied text includes it
 
 ### Phase 5: Docs and checks
