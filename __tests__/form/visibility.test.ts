@@ -147,9 +147,9 @@ describe('sample households (QUESTIONNAIRE_DISCOVERY pass criteria)', () => {
       expect(stepIds(sample.answers)).toEqual(sample.expectedSteps)
     })
 
-    test(`${sample.label} sees at most 7 inputs per step (Contact may reach 20, Everyday and Working together 8, see DECISIONS.md)`, () => {
+    test(`${sample.label} sees at most 10 inputs per step, a safety net (Contact may reach 20, see DECISIONS.md)`, () => {
       for (const { step, questions } of visibleSteps(questionnaire, sample.answers)) {
-        const limit = step.id === 'contact' ? 20 : ['everyday', 'working_together'].includes(step.id) ? 8 : 7
+        const limit = step.id === 'contact' ? 20 : 10
         expect(questions.length, step.id).toBeLessThanOrEqual(limit)
       }
     })

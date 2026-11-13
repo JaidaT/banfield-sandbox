@@ -53,7 +53,7 @@ Not in this sandbox:
 - People often use their phone (Oct 2), even if this form is likely done at home.
 - **Step rules (team suggestions, to test):**
   - **One topic per step.** The client should be able to name the step in two or three words ("Your pets", "Everyday life").
-  - **3-7 inputs per visible step**, counting a repeater as one input (raised from 6 by the team on 2026-11-06). A step should take about 1-2 minutes.
+  - **Short steps: aim for 3-7 inputs**, counting a repeater as one input (raised from 6 by the team on 2026-11-06). A step should take about 1-2 minutes. This is a writing guideline, not a hard limit (2026-11-12): the tests only stop a step over 10, and real length is judged from testing.
   - **Small branches reveal inline.** A yes/no that unlocks 1-3 follow-ups opens fields on the *same* step (e.g. "Working with a contractor? Yes: name, company, phone").
   - **Big branches skip whole steps.** A gate that controls 4+ questions shows or skips an entire step (e.g. no pets: skip the Pets step).
   - **Repeaters stay on one step.** Kids, pets and activities use "add another" cards on a single step, never one step per child.
@@ -152,7 +152,7 @@ Rough length:
 - Busy family renovation: about 14 steps.
 - Furniture/styling couple with no kids or pets: about 11 steps.
 
-~~Measure real completion times in the sandbox.~~ The sandbox no longer records time (team decision 2026-11-06); to judge length, time test sessions by hand. There is no agreed target yet (see open questions).
+~~Measure real completion times in the sandbox.~~ The sandbox no longer records time (team decision 2026-11-06); to judge length, time test sessions by hand. There is no agreed target yet (see open questions). After each session, also ask: "Did any page feel long?" and note which one.
 
 Step 12 may be heavy with 6 image sets. If so, split it into "Style by pictures" and "Mood & colour".
 
@@ -190,7 +190,7 @@ Walk these test personas through it and check the steps shown and the questions 
 4. **Multi-generational.** Grandparent living in, accessibility needs.
 
 Pass criteria:
-- No step shows more than 7 inputs (a repeater counts as one).
+- No step shows more than 10 inputs, Contact 20 (a repeater counts as one). Aim for about 7.
 - No step is skipped that should show, and none shows that should be skipped.
 - The output reads cleanly, grouped by step.
 

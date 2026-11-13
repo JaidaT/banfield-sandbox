@@ -9,7 +9,7 @@
     "derived": "household_min_age and adult_count are worked out from the 'age' field of the 'people' repeater (adults are 18 and over). They can be used in rules like a question id.",
     "images": "All pictures in public/questionnaire/ are grey placeholders. Real photos should come from Banfield's own portfolio.",
     "review": "The last step (review and thank you) is built by the screens, so it is not in this file.",
-    "stepSize": "Steps should have at most 7 inputs when every question shows (a repeater counts as one). Breaking this gives a warning, not an error."
+    "stepSize": "Keep steps short, one topic each; aim for about 7 inputs or fewer (a repeater counts as one). The tests only stop a step over 10 (Contact over 20). Judge real length from testing."
   },
   "steps": [
     {
