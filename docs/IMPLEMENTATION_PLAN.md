@@ -509,7 +509,7 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/designDna.test.ts`): the real file loads; the five pairs match the table above; each profile's name, headline and paragraph match the team's text; a missing type, a duplicate, an unknown id, a blank field and a curly apostrophe each throw a message naming the problem
 
 ### Phase 2: Picking the profile
-- [ ] New `lib/quick-quiz/designDna.ts`: `pickDesignDna(blend, data)` returns `{ label, name, headline, description, secondary: { label, name } | null }` (no client type id), or `null` when the blend is `insufficient`. The secondary is the second-scoring type when it has 20% or more
+- [x] New `lib/quick-quiz/designDna.ts`: `pickDesignDna(blend, data)` returns `{ label, name, headline, description, secondary: { label, name } | null }` (no client type id), or `null` when the blend is `insufficient`. The secondary is the second-scoring type when it has 20% or more
   - Tests: each of the six sample submissions gets the profile of its brief's top client type, and a secondary exactly when its brief has a second highlight; the tied `out-of-area-hot` sample gets the type listed first; an all-skipped submission gets `null`; the returned object has no `archetype`, `id`, `percent` or `label` of a client type
 
 ### Phase 3: The new client result

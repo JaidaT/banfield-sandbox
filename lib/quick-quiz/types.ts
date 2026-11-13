@@ -205,6 +205,16 @@ export interface DesignDnaProfile {
   description: string
 }
 
+// The Design DNA a client sees: profile words and labels only. Deliberately has
+// no client type id, label or score, so it cannot leak them.
+export interface ClientDesignDna {
+  label: string
+  name: string
+  headline: string
+  description: string
+  secondary: { label: string; name: string } | null
+}
+
 export interface DesignDnaData {
   label: string
   secondaryLabel: string

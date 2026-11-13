@@ -1,6 +1,7 @@
 import { answerLabels } from './answers'
 import { assessLead } from './assessLead'
 import { findCloseCalls } from './closeCalls'
+import { HIGHLIGHT_MAX, HIGHLIGHT_MIN_PERCENT } from './highlights'
 import { scoreArchetypes } from './scoreArchetypes'
 import { evaluateSignals, skippedQuestions } from './signals'
 import type {
@@ -12,9 +13,6 @@ import type {
   TeamBrief,
 } from './types'
 
-// Draft cutoffs: show guidance for types at 20% or more, at most two (Oct 28 meeting).
-const HIGHLIGHT_MIN_PERCENT = 20
-const HIGHLIGHT_MAX = 2
 
 export function shortLabel(label: string): string {
   return label.replace(/^The /, '')
