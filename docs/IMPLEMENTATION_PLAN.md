@@ -467,7 +467,7 @@ Work test-first: for each step, write the failing test, then change the code.
 
 ## Design DNA Profiles on the Quick Quiz Result (2026-11-13)
 
-Goal: give each person a "Design DNA" profile on their Quick Quiz result, so they get a real result without ever seeing their client type. The team wrote five profiles, each matched to one client type. The quiz picks the profile from the person's top-scoring client type.
+Goal: give each person a "Design DNA" profile on their Quick Quiz result, so they get a real result without ever seeing their client type. The team wrote five profiles, each matched to one client type. The quiz picks the profile from the person's top-scoring client type. The result screen is redesigned to follow the team's mockup (2026-11-13).
 
 | Design DNA profile | Client type (team only) |
 |---|---|
@@ -481,45 +481,59 @@ Built on `foyer-v1`. The scoring, the questions and the long questionnaire do no
 
 Choices (Claude's recommendations, accepted by Jaida on 2026-11-13):
 - **Exact wording:** each profile uses the team's name, one-line headline and paragraph exactly as written, with no edits. The only change is that curly apostrophes become straight ones ('), per the project's "no special Unicode" rule. (Claude's review on 2026-11-13 suggested reworking the Nest Builder; Jaida chose to build the wording as written for now.)
-- **Placement:** a "Your Design DNA" section right after the intro, before "Your project".
 - **Which profile:** the top-scoring client type's profile, the same type that leads the team brief. Ties go to the type listed first in `archetypes.json`, as the brief already does.
-- **Not enough answers:** when the quiz cannot pick a type (`insufficient`), the result leaves the Design DNA section out and shows everything else as normal.
-- **Team brief:** one line, "Client was shown: The Curator" (or "Client was shown: no Design DNA (not enough answers)"), so Jamie knows what the person read.
+- **Secondary trait:** the second client type's profile name ("SECONDARY TRAIT / THE CURATOR"), shown only when that type scores 20% or more (the same rule the brief uses for its highlights, `HIGHLIGHT_MIN_PERCENT`). No sentence for now; the mockup's pair sentence ("Your eye for detail helps...") would need 20 written pairs, so the data file leaves room to add them later without code changes.
+- **Not enough answers:** when the quiz cannot pick a type (`insufficient`), the Design DNA card is left out and the rest of the screen shows as normal.
+- **Screen layout, following the mockup** (the "Share my results" button is left out):
+  1. On the quiz only: "QUESTIONNAIRE COMPLETE" with "100%" and a full progress bar
+  2. "You're all done!" and "Here's what your answers reveal about your design approach."
+  3. A yellow (brand accent `#FFCB49`) rounded card: "DESIGN DNA", the profile name, the headline in bold, the paragraph, then a divider and the secondary trait when there is one
+  4. "WHAT HAPPENS NEXT" and "Jamie can use your results to prepare for a first conversation about your project."
+  5. The "Book your Meet + Inspire with Jamie" button (kept, since booking is the quiz's main goal; it still opens outside the Squarespace iframe and pre-fills name and email)
+  6. "Thank you!" and "You may now exit this screen."
+- **Removed from the result:** the greeting with the first name, the intro, "Your project", "What helps you feel confident", "What home means to you", the closing line, the booking paragraph and the "Not quite ready to book?" line. The team brief still shows every answer.
+- **Wording:** the mockup's words, exactly as shown.
+- **Team brief:** one line, "Client was shown: The Strategist (secondary trait: The Curator)", or "Client was shown: no Design DNA (not enough answers)".
 
 Constraints:
-- The client result still never shows a client type name, tagline, segment, percentage or fit. The existing leak test keeps checking this, now with the profile included.
-- The profile-to-type pairs live in a new data file, so the team can change wording or pairs without touching code.
-- The client result builder only receives the chosen profile's client-facing words (name, headline, paragraph), never a client type id or score.
+- The client result still never shows a client type name, tagline, segment, percentage or fit. The existing leak test keeps checking this, now with the profiles included.
+- The profile-to-type pairs live in a new data file, and all screen wording stays in `client-result.json`, so the team can change words without touching code.
+- The client result builder only receives the chosen profile's client-facing words, never a client type id or score.
 
 Work test-first: for each step, write the failing test, then change the code.
 
 ### Phase 1: The profiles file
-- [ ] New `data/quick-quiz/design-dna.json`: `_meta` (draft, purpose, "pairs are team-only"), `title` ("Your Design DNA") and five `profiles`, each with `archetype` (the client type id), `name`, `headline` and `description`, using the team's exact text with straight apostrophes
-- [ ] `lib/quick-quiz/types.ts`: `DesignDnaProfile` (`archetype`, `name`, `headline`, `description`) and `DesignDnaData` (`title`, `profiles`); `QuizData` gains `designDna`
+- [ ] New `data/quick-quiz/design-dna.json`: `_meta` (draft, purpose, "pairs are team-only", and where secondary sentences could go later), `label` ("DESIGN DNA"), `secondaryLabel` ("SECONDARY TRAIT") and five `profiles`, each with `archetype` (the client type id), `name`, `headline` and `description`, using the team's exact text with straight apostrophes
+- [ ] `lib/quick-quiz/types.ts`: `DesignDnaProfile` and `DesignDnaData`; `QuizData` gains `designDna`
 - [ ] `lib/quick-quiz/load.ts`: `parseDesignDna(raw, archetypes)` and `loadDesignDna()`; `loadQuizData()` includes it. The parser checks: every client type has exactly one profile, no unknown client type ids, names are unique, no blank text, and only plain characters (no curly quotes)
   - Tests (`__tests__/quick-quiz/designDna.test.ts`): the real file loads; the five pairs match the table above; each profile's name, headline and paragraph match the team's text; a missing type, a duplicate, an unknown id, a blank field and a curly apostrophe each throw a message naming the problem
 
 ### Phase 2: Picking the profile
-- [ ] New `lib/quick-quiz/designDna.ts`: `pickDesignDna(blend, data)` returns the top-scoring type's profile words (`title`, `name`, `headline`, `description`, no client type id), or `null` when the blend is `insufficient`
-  - Tests: each of the six sample submissions gets the profile of its brief's top client type; the tied `out-of-area-hot` sample gets the type listed first; an all-skipped submission gets `null`; the returned object has no `archetype`, `id`, `percent` or `label` field
-- [ ] `lib/quick-quiz/buildClientResult.ts`: takes the picked profile (or `null`) as a new argument; `ClientResult` gains `designDna: { title, name, headline, description } | null`
-  - Tests (`__tests__/quick-quiz/clientResult.test.ts`): the result carries the picked profile; `null` stays `null`; the existing "never includes archetype, segment or fit information" test still passes for every sample with its profile included
+- [ ] New `lib/quick-quiz/designDna.ts`: `pickDesignDna(blend, data)` returns `{ label, name, headline, description, secondary: { label, name } | null }` (no client type id), or `null` when the blend is `insufficient`. The secondary is the second-scoring type when it has 20% or more
+  - Tests: each of the six sample submissions gets the profile of its brief's top client type, and a secondary exactly when its brief has a second highlight; the tied `out-of-area-hot` sample gets the type listed first; an all-skipped submission gets `null`; the returned object has no `archetype`, `id`, `percent` or `label` of a client type
 
-### Phase 3: Showing it
-- [ ] `components/quick-quiz/ClientResultView.tsx`: a "Your Design DNA" section after the intro: the title as a heading, the profile name, the headline in bold, then the paragraph. Nothing is shown when `designDna` is `null`
-  - Tests (`__tests__/quick-quiz/views.test.tsx`): the section shows the right name, headline and paragraph and comes before "Your project"; with `null` there is no "Your Design DNA" heading and the rest still shows
-- [ ] Callers pass the profile: `components/quick-quiz/QuizForm.tsx` (`QuizResults`) and `lib/quick-quiz/demo.ts` (`sampleResult`) score the submission, call `pickDesignDna` and pass the result to `buildClientResult`
-  - Tests: finishing the quiz on screen shows a Design DNA section; `/result/<id>` shows each sample's profile (`__tests__/quick-quiz/resultPage.test.tsx`)
-- [ ] Team brief: `TeamBrief` gains `designDnaShown: string` ("The Curator", or "no Design DNA (not enough answers)"), set in `buildTeamBrief`; `TeamBriefView` shows "Client was shown: ..." near the headline; `briefToText` includes the same line
-  - Tests: the brief line matches the client result's profile for every sample; the copied text includes it
+### Phase 3: The new client result
+- [ ] `data/quick-quiz/client-result.json` and its parser (`parseClientCopy`): replace `greeting`, `intro`, `projectTitle`, `projectLines`, `confidenceTitle`, `confidenceQuestion`, `homeTitle`, `homeQuestion`, `closing`, `cta.text` and `cta.fallback` with the mockup's words: `heading`, `intro`, `nextTitle`, `nextText`, `thanksTitle`, `thanksText`, `completeLabel`; keep `cta.label` and `cta.bookingUrl`
+  - Tests (`__tests__/quick-quiz/clientResult.test.ts`): the parser throws when a new piece is missing; old tests about the first name, project lines and the fallback line are replaced
+- [ ] `lib/quick-quiz/buildClientResult.ts`: builds `{ heading, intro, designDna, next: { title, text }, cta: { label, href }, thanks: { title, text } }` from the copy and the picked profile (or `null`)
+  - Tests: the result carries the picked profile; `null` stays `null`; the booking link still pre-fills name and email; the existing "never includes archetype, segment or fit information" and "never uses words Banfield avoids" tests still pass for every sample
+- [ ] `components/quick-quiz/ClientResultView.tsx`: the mockup layout (steps 2 to 6 above) in brand colours; an optional `complete` prop adds the "QUESTIONNAIRE COMPLETE 100%" bar on top
+  - Tests (`__tests__/quick-quiz/views.test.tsx`): headings in order (You're all done!, profile name, What happens next, Thank you!); the card shows name, headline, paragraph and the secondary trait when present; no Design DNA card when `null`; the booking link opens with `target="_top"`; no "Share" button; the complete bar shows only with `complete`
+- [ ] Callers: `components/quick-quiz/QuizForm.tsx` (`QuizResults`, with `complete`) and `lib/quick-quiz/demo.ts` (`sampleResult`, without it) score the submission, call `pickDesignDna` and pass the result to `buildClientResult`
+  - Tests: finishing the quiz on screen shows the complete bar and a Design DNA card; `/result/<id>` shows each sample's profile (`__tests__/quick-quiz/resultPage.test.tsx`)
 
-### Phase 4: Docs and checks
-- [ ] `README.md`: mention `design-dna.json` in the Quick Quiz data files list
+### Phase 4: Team brief
+- [ ] `TeamBrief` gains `designDnaShown: string`, set in `buildTeamBrief`; `TeamBriefView` shows "Client was shown: ..." near the headline; `briefToText` includes the same line
+  - Tests: the brief line matches the client result's profile and secondary trait for every sample; the copied text includes it
+
+### Phase 5: Docs and checks
+- [ ] `README.md`: mention `design-dna.json` in the Quick Quiz data files list, and that the result follows the mockup
 - [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
-- [ ] Jaida finishes the quiz on a computer and a phone, and opens two or three `/result/<id>` sample pages, checking the profile text reads exactly as written
+- [ ] Jaida finishes the quiz on a computer and a phone, and opens two or three `/result/<id>` sample pages, comparing them with the mockup and checking the profile text reads exactly as written
 
 ### Later (not in this plan)
+- The "Share my results" button from the mockup
+- A sentence for each secondary trait (the mockup's "Your eye for detail helps ensure the plan feels cohesive, not just practical."): one per main and secondary pair, written by the team
 - Revisit the Nest Builder wording (Claude's 2026-11-13 review: it matches the Cautious Reassurance Seeker weakly) and the overlaps between Strategist and Nest Builder, and Curator and Strategist
 - In user research, ask each tester "Does this sound like you?" after they read their profile, and note their client type
-- Whether a close call should show something different on the client result (for now the top type's profile shows)
-- Images or icons per profile, once the real design comes from Figma
+- Whether to bring back any of the removed answer sections, or the "Not quite ready to book?" line
