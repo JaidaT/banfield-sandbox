@@ -448,7 +448,7 @@
             { "id": "gardening", "label": "Gardening" }
           ]
         },
-        { "id": "drink_order", "kind": "short_text", "prompt": "How do you actually take your coffee or tea?", "help": "The real order. We'll have it ready." }
+        { "id": "drink_order", "kind": "short_text", "prompt": "How do you actually take your coffee or tea?", "help": "This is an essential question, trust us." }
       ]
     },
     {
