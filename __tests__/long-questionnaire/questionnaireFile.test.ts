@@ -37,6 +37,16 @@ describe('questionnaire.json', () => {
     expect(required).toEqual(['name', 'email', 'phone', 'project_type'])
   })
 
+  test('Household asks a simple Yes/No about daytime sleepers', () => {
+    const household = questionnaire.steps.find((s) => s.id === 'household')!
+    const q = question('has_day_sleepers')
+    expect(household.questions).toContain(q)
+    expect(q.prompt).toBe('Any daytime sleepers living here?')
+    expect(q.kind).toBe('single')
+    expect(q.options.map((o) => o.label)).toEqual(['Yes', 'No'])
+    expect(q.showIf).toBeUndefined()
+  })
+
   test('project types match the current form plus furniture and facelift', () => {
     expect(question('project_type').options.map((o) => o.label)).toEqual([
       'Furniture and styling',

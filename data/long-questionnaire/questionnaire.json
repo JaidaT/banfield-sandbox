@@ -252,6 +252,15 @@
             { "id": "no", "label": "No" }
           ]
         },
+        {
+          "id": "has_day_sleepers",
+          "kind": "single",
+          "prompt": "Any daytime sleepers living here?",
+          "options": [
+            { "id": "yes", "label": "Yes" },
+            { "id": "no", "label": "No" }
+          ]
+        },
 
         {
           "id": "considerations",
