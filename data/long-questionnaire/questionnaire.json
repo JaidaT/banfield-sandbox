@@ -590,14 +590,20 @@
           "prompt": "Pick your mood words",
           "help": "Pick all that apply.",
           "options": [
-            { "id": "calm", "label": "Calm" },
-            { "id": "cozy", "label": "Cozy" },
-            { "id": "bright", "label": "Bright" },
-            { "id": "moody", "label": "Moody" },
-            { "id": "playful", "label": "Playful" },
             { "id": "elegant", "label": "Elegant" },
-            { "id": "earthy", "label": "Earthy" },
-            { "id": "fresh", "label": "Fresh" }
+            { "id": "formal", "label": "Formal" },
+            { "id": "casual", "label": "Casual" },
+            { "id": "relaxed", "label": "Relaxed" },
+            { "id": "contemporary", "label": "Contemporary" },
+            { "id": "sophisticated", "label": "Sophisticated" },
+            { "id": "bright", "label": "Bright" },
+            { "id": "welcoming", "label": "Welcoming" },
+            { "id": "warm", "label": "Warm" },
+            { "id": "cozy", "label": "Cozy" },
+            { "id": "cool", "label": "Cool" },
+            { "id": "romantic", "label": "Romantic" },
+            { "id": "timeless", "label": "Timeless" },
+            { "id": "clean", "label": "Clean" }
           ]
         },
         { "id": "colours_love", "kind": "short_text", "prompt": "Colours you love" },

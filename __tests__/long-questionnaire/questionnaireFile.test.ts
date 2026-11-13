@@ -71,6 +71,13 @@ describe('questionnaire.json', () => {
     expect(q.showIf).toEqual({ field: 'travels', equals: 'yes' })
   })
 
+  test('mood words are the 14 from Banfield, in order', () => {
+    expect(question('mood_words').options.map((o) => o.label)).toEqual([
+      'Elegant', 'Formal', 'Casual', 'Relaxed', 'Contemporary', 'Sophisticated', 'Bright',
+      'Welcoming', 'Warm', 'Cozy', 'Cool', 'Romantic', 'Timeless', 'Clean',
+    ])
+  })
+
   test('project types match the current form plus furniture and facelift', () => {
     expect(question('project_type').options.map((o) => o.label)).toEqual([
       'Furniture and styling',
