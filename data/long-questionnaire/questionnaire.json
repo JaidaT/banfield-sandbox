@@ -443,7 +443,7 @@
           "id": "work_needs",
           "kind": "long_text",
           "prompt": "What do they need?",
-          "help": "Quiet, lighting, computers, faxs...",
+          "help": "Quiet, lighting, computers, fax...",
           "showIf": { "field": "work_from_home", "in": ["full_time", "some_days"] }
         },
         {
@@ -479,6 +479,7 @@
             { "id": "casual", "label": "Casual drop-ins" },
             { "id": "dinner_parties", "label": "Dinner parties" },
             { "id": "holidays", "label": "Big holiday gatherings" },
+            { "id": "catered", "label": "Catered events" },
             { "id": "kids_friends", "label": "Kids' friends everywhere" }
           ]
         },

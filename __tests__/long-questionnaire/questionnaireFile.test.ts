@@ -60,6 +60,10 @@ describe('questionnaire.json', () => {
     expect(question('meals_other').showIf).toEqual({ field: 'meals', equals: 'other' })
   })
 
+  test('get-together types include Catered events', () => {
+    expect(question('gathering_types').options.map((o) => o.label)).toContain('Catered events')
+  })
+
   test('project types match the current form plus furniture and facelift', () => {
     expect(question('project_type').options.map((o) => o.label)).toEqual([
       'Furniture and styling',
