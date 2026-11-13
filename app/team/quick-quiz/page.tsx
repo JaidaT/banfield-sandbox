@@ -38,9 +38,6 @@ export default function QuickQuizList() {
                 {row.temperature[0].toUpperCase() + row.temperature.slice(1)} lead
               </span>
               <span>{row.typeLine}</span>
-              {row.closeCall && (
-                <span className="rounded-full border-2 border-navy px-3 py-0.5 text-xs font-semibold">Close call</span>
-              )}
             </div>
             <div className="flex flex-wrap gap-4 text-sm font-semibold">
               <Link href={`/team/quick-quiz/${row.id}`} aria-label={`Brief: ${row.name}`} className="text-navy underline">

@@ -29,8 +29,9 @@ describe('quickQuizRows', () => {
     }
   })
 
-  test('only the tied sample is marked as a close call', () => {
-    expect(rows.filter((r) => r.closeCall).map((r) => r.id)).toEqual(['out-of-area-hot'])
+  // Close calls show only inside the brief, not on the list (Jaida, 2026-11-13).
+  test('rows carry no close-call marker', () => {
+    for (const row of rows) expect(row, row.id).not.toHaveProperty('closeCall')
   })
 
   test('each row keeps its test note', () => {

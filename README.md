@@ -211,7 +211,7 @@ Answers
 | `/questionnaire` | The long questionnaire, with its team view after the thank-you | Client |
 | `/` | The prototype home page: a box for each questionnaire, with "Try" and "View sample briefs" | Team |
 | `/team` | Links to the two sample lists below | Team only |
-| `/team/quick-quiz` | The Quick Quiz sample results, newest first: name, date, lead label, client type, close call | Team only |
+| `/team/quick-quiz` | The Quick Quiz sample results, newest first: name, date, lead label, client type (a close call shows only inside the brief) | Team only |
 | `/team/quick-quiz/<id>` | One person's pre-call brief, with a "Copy as text" button | Team only |
 | `/team/long-questionnaire` | The long questionnaire sample households, newest first: name, date, project type, steps skipped | Team only |
 | `/team/long-questionnaire/<id>` | What the team sees for one sample household | Team only |

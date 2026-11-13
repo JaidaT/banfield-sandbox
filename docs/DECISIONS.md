@@ -169,3 +169,8 @@
 **Context:** The Design DNA result showed the second client type's profile name as a "secondary trait" when it scored 20% or more (2026-11-13 - Quick Quiz result follows the team's mockup, with a secondary trait). The team decided this was too much for the client.
 **Decision:** Supersedes the secondary trait part of 2026-11-13 - Quick Quiz result follows the team's mockup, with a secondary trait. The client sees only their top client type's Design DNA profile. The card ends with the paragraph; `secondaryLabel` is removed from `design-dna.json`; the brief's line reads "Client was shown: The Strategist". The 20% rule goes back inside `buildTeamBrief`, which still shows the team up to two client types. Decided by the team, 2026-11-13.
 **Alternatives considered:** Keep the name only (rejected by the team as too much); add the secondary sentences from the mockup (no longer needed).
+
+## 2026-11-13 - Close calls show only inside the brief
+**Context:** The Quick Quiz sample list showed a "Close call" pill on rows whose brief has a close-call note (2026-11-11 - Team pages split by product, with lists shaped like real submissions). Jaida did not like the pill on the list.
+**Decision:** Supersedes the close-call marker part of 2026-11-11 - Team pages split by product, with lists shaped like real submissions. The list no longer marks close calls, and its rows no longer carry a close-call flag. The close-call note stays under the headline inside the brief and in "Copy as text", unchanged. Chosen by Jaida on 2026-11-13.
+**Alternatives considered:** Keep the pill (rejected by Jaida); a quieter marker such as an icon (not needed, since the brief already explains it).

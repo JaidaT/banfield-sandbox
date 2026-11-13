@@ -14,7 +14,6 @@ export interface QuickQuizRow {
   temperature: LeadTemperature
   // As in the brief's headline, e.g. "80% Decisive Delegator".
   typeLine: string
-  closeCall: boolean
   // The sample's testing note (prototype only).
   note: string
 }
@@ -34,7 +33,6 @@ export function quickQuizRows(
         date: formatDate(sample.submittedAt),
         temperature: brief.lead.temperature,
         typeLine: clientTypeLine(brief.highlights),
-        closeCall: brief.closeCalls.length > 0,
         note: sample.note,
       }
     })

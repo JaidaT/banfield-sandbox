@@ -34,10 +34,10 @@ describe('the Quick Quiz sample list (/team/quick-quiz)', () => {
     expect(row.getByText('80% Decisive Delegator')).toBeDefined()
   })
 
-  test('only the tied sample shows a close-call marker', () => {
+  // Close calls show only inside the brief, not on the list (Jaida, 2026-11-13).
+  test('the list shows no close-call marker, even for the tied sample', () => {
     render(<QuickQuizList />)
-    expect(rowFor('Sam Patel').getByText('Close call')).toBeDefined()
-    expect(rowFor('Alex Morgan').queryByText('Close call')).toBeNull()
+    expect(rowFor('Sam Patel').queryByText('Close call')).toBeNull()
   })
 
   test('each row links to its brief and its client result', () => {
