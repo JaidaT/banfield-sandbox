@@ -529,7 +529,7 @@
     },
     {
       "id": "home_words",
-      "title": "Your home, in words",
+      "title": "Your home right now, in words",
       "questions": [
         { "id": "word_now", "kind": "short_text", "prompt": "One word for your home right now" },
         { "id": "word_future", "kind": "short_text", "prompt": "One word for how you want it to feel" },
