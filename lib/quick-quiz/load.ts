@@ -433,49 +433,32 @@ export function parseSampleSubmissions(raw: unknown, questions: Question[]): Sam
   })
 }
 
-const COPY_FIELDS = [
-  'greeting',
-  'intro',
-  'projectTitle',
-  'confidenceTitle',
-  'confidenceQuestion',
-  'homeTitle',
-  'homeQuestion',
-  'closing',
-] as const
-const CTA_FIELDS = ['label', 'text', 'bookingUrl', 'fallback'] as const
+// Each piece of wording the result screen needs: top-level fields, and the
+// fields inside each group (next, cta, thanks).
+const COPY_FIELDS = ['completeLabel', 'heading', 'intro'] as const
+const COPY_GROUPS = {
+  next: ['title', 'text'],
+  cta: ['label', 'bookingUrl'],
+  thanks: ['title', 'text'],
+} as const
 
-// When `questions` is given, also checks that every referenced question exists.
-export function parseClientCopy(raw: unknown, questions?: Question[]): ClientCopy {
+export function parseClientCopy(raw: unknown): ClientCopy {
   if (!isRecord(raw)) throw new Error('client result copy must be an object')
   for (const field of COPY_FIELDS) {
     if (typeof raw[field] !== 'string' || raw[field] === '') {
       throw new Error(`client result copy is missing "${field}"`)
     }
   }
-  if (!isRecord(raw.cta)) throw new Error('client result copy is missing "cta"')
-  const cta = raw.cta
-  for (const field of CTA_FIELDS) {
-    if (typeof cta[field] !== 'string' || cta[field] === '') {
-      throw new Error(`client result copy is missing "cta.${field}"`)
+  for (const [group, fields] of Object.entries(COPY_GROUPS)) {
+    const value = raw[group]
+    if (!isRecord(value)) throw new Error(`client result copy is missing "${group}"`)
+    for (const field of fields) {
+      if (typeof value[field] !== 'string' || value[field] === '') {
+        throw new Error(`client result copy is missing "${group}.${field}"`)
+      }
     }
   }
-  if (!Array.isArray(raw.projectLines)) {
-    throw new Error('client result copy is missing "projectLines"')
-  }
-  const copy = raw as unknown as ClientCopy
-  if (questions) {
-    const ids = new Set(questions.map((q) => q.id))
-    const referenced = [
-      ...copy.projectLines.map((l) => l.question),
-      copy.confidenceQuestion,
-      copy.homeQuestion,
-    ]
-    for (const id of referenced) {
-      if (!ids.has(id)) throw new Error(`client result copy refers to unknown question: ${id}`)
-    }
-  }
-  return copy
+  return raw as unknown as ClientCopy
 }
 
 const PROFILE_FIELDS = ['name', 'headline', 'description'] as const
@@ -531,7 +514,7 @@ export function loadDesignDna(): DesignDnaData {
 }
 
 export function loadClientCopy(): ClientCopy {
-  return parseClientCopy(clientResultJson as unknown, loadQuestions())
+  return parseClientCopy(clientResultJson as unknown)
 }
 
 export function loadQuizData(): QuizData {

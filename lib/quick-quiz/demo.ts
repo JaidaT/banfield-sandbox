@@ -1,5 +1,6 @@
 import { buildClientResult } from './buildClientResult'
 import { buildTeamBrief } from './buildTeamBrief'
+import { designDnaFor } from './designDna'
 import { loadClientCopy, loadQuizData, loadSampleSubmissions } from './load'
 import type { ClientResult, SampleSubmission, TeamBrief } from './types'
 
@@ -21,5 +22,5 @@ export function sampleBrief(id: string): TeamBrief | undefined {
 
 export function sampleResult(id: string): ClientResult | undefined {
   const sample = findSample(id)
-  return sample && buildClientResult(sample, loadQuizData().questions, loadClientCopy())
+  return sample && buildClientResult(sample, loadClientCopy(), designDnaFor(sample, loadQuizData()))
 }

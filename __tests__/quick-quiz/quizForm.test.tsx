@@ -59,7 +59,9 @@ describe('QuizForm', () => {
     renderQuiz({ startAt: 'contact' })
     expect(screen.getByText(form.contact.introWhenOptional)).toBeDefined()
     click('See my results')
-    expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("Thanks. Here's what we heard.")
+    expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("You're all done!")
+    // Nothing answered, so no Design DNA card.
+    expect(clientPart().queryByText('DESIGN DNA')).toBeNull()
     expect(teamPart().getByRole('heading', { level: 1 }).textContent).toBe('Name not given')
   })
 
@@ -78,7 +80,7 @@ describe('QuizForm', () => {
     fill(form.contact.city, 'Burnaby')
     fill(form.contact.postalCode, 'V5A 0A1')
     click('See my results')
-    expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("Thanks, Pat. Here's what we heard.")
+    expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("You're all done!")
   })
 
   test('the client result has the booking button and no client type or lead label; the team brief has them', () => {
@@ -93,6 +95,8 @@ describe('QuizForm', () => {
     renderQuiz({ startAt: 'contact', initialAnswers: answers })
     click('See my results')
 
+    expect(clientPart().getByText('Questionnaire complete')).toBeDefined()
+    expect(clientPart().getByRole('heading', { level: 2, name: 'The Visionary' })).toBeDefined()
     const booking = clientPart().getByRole('link', { name: clientCopy.cta.label })
     expect(booking.getAttribute('href')).toContain('email=pat%40example.com')
     const clientText = screen.getByRole('region', { name: 'Your results' }).textContent ?? ''

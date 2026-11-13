@@ -513,13 +513,13 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests: each of the six sample submissions gets the profile of its brief's top client type, and a secondary exactly when its brief has a second highlight; the tied `out-of-area-hot` sample gets the type listed first; an all-skipped submission gets `null`; the returned object has no `archetype`, `id`, `percent` or `label` of a client type
 
 ### Phase 3: The new client result
-- [ ] `data/quick-quiz/client-result.json` and its parser (`parseClientCopy`): replace `greeting`, `intro`, `projectTitle`, `projectLines`, `confidenceTitle`, `confidenceQuestion`, `homeTitle`, `homeQuestion`, `closing`, `cta.text` and `cta.fallback` with the mockup's words: `heading`, `intro`, `nextTitle`, `nextText`, `thanksTitle`, `thanksText`, `completeLabel`; keep `cta.label` and `cta.bookingUrl`
+- [x] `data/quick-quiz/client-result.json` and its parser (`parseClientCopy`): replace `greeting`, `intro`, `projectTitle`, `projectLines`, `confidenceTitle`, `confidenceQuestion`, `homeTitle`, `homeQuestion`, `closing`, `cta.text` and `cta.fallback` with the mockup's words: `heading`, `intro`, `nextTitle`, `nextText`, `thanksTitle`, `thanksText`, `completeLabel`; keep `cta.label` and `cta.bookingUrl`
   - Tests (`__tests__/quick-quiz/clientResult.test.ts`): the parser throws when a new piece is missing; old tests about the first name, project lines and the fallback line are replaced
-- [ ] `lib/quick-quiz/buildClientResult.ts`: builds `{ heading, intro, designDna, next: { title, text }, cta: { label, href }, thanks: { title, text } }` from the copy and the picked profile (or `null`)
+- [x] `lib/quick-quiz/buildClientResult.ts`: builds `{ heading, intro, designDna, next: { title, text }, cta: { label, href }, thanks: { title, text } }` from the copy and the picked profile (or `null`)
   - Tests: the result carries the picked profile; `null` stays `null`; the booking link still pre-fills name and email; the existing "never includes archetype, segment or fit information" and "never uses words Banfield avoids" tests still pass for every sample
-- [ ] `components/quick-quiz/ClientResultView.tsx`: the mockup layout (steps 2 to 6 above) in brand colours; an optional `complete` prop adds the "QUESTIONNAIRE COMPLETE 100%" bar on top
+- [x] `components/quick-quiz/ClientResultView.tsx`: the mockup layout (steps 2 to 6 above) in brand colours; an optional `complete` prop adds the "QUESTIONNAIRE COMPLETE 100%" bar on top
   - Tests (`__tests__/quick-quiz/views.test.tsx`): headings in order (You're all done!, profile name, What happens next, Thank you!); the card shows name, headline, paragraph and the secondary trait when present; no Design DNA card when `null`; the booking link opens with `target="_top"`; no "Share" button; the complete bar shows only with `complete`
-- [ ] Callers: `components/quick-quiz/QuizForm.tsx` (`QuizResults`, with `complete`) and `lib/quick-quiz/demo.ts` (`sampleResult`, without it) score the submission, call `pickDesignDna` and pass the result to `buildClientResult`
+- [x] Callers: `components/quick-quiz/QuizForm.tsx` (`QuizResults`, with `complete`) and `lib/quick-quiz/demo.ts` (`sampleResult`, without it) score the submission, call `pickDesignDna` and pass the result to `buildClientResult`
   - Tests: finishing the quiz on screen shows the complete bar and a Design DNA card; `/result/<id>` shows each sample's profile (`__tests__/quick-quiz/resultPage.test.tsx`)
 
 ### Phase 4: Team brief

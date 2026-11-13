@@ -241,17 +241,14 @@ export interface AnswerLine {
   answer: string | null
 }
 
+// Result screen wording (data/quick-quiz/client-result.json), from the team's mockup.
 export interface ClientCopy {
-  greeting: string
+  completeLabel: string
+  heading: string
   intro: string
-  projectTitle: string
-  projectLines: { question: string; prefix: string }[]
-  confidenceTitle: string
-  confidenceQuestion: string
-  homeTitle: string
-  homeQuestion: string
-  closing: string
-  cta: { label: string; text: string; bookingUrl: string; fallback: string }
+  next: { title: string; text: string }
+  cta: { label: string; bookingUrl: string }
+  thanks: { title: string; text: string }
 }
 
 // Quiz screen wording that is not in the question bank (data/quick-quiz/quiz-form.json).
@@ -274,13 +271,17 @@ export interface QuizForm {
   }
 }
 
-// Client-facing. Deliberately has no archetype, blend or fit fields.
+// Client-facing. Deliberately has no archetype, blend or fit fields: the
+// Design DNA is profile words only (ClientDesignDna).
 export interface ClientResult {
-  greeting: string
+  completeLabel: string
+  heading: string
   intro: string
-  sections: { title: string; lines: string[] }[]
-  closing: string
-  cta: { label: string; text: string; href: string; fallback: string }
+  // null when there were not enough answers to pick a profile.
+  designDna: ClientDesignDna | null
+  next: { title: string; text: string }
+  cta: { label: string; href: string }
+  thanks: { title: string; text: string }
 }
 
 // Team-facing only. Never render any part of this to the client.

@@ -6,6 +6,7 @@ import TeamBriefView from '@/components/quick-quiz/TeamBriefView'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
+import { designDnaFor } from '@/lib/quick-quiz/designDna'
 import { buildTeamBrief } from '@/lib/quick-quiz/buildTeamBrief'
 import { answersToSubmission } from '@/lib/quick-quiz/toQuestionnaire'
 import type { Answers, Questionnaire } from '@/lib/form/types'
@@ -72,12 +73,12 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
 
   // "quiz-demo": a placeholder id until submissions are saved (Later in the plan).
   const submission = answersToSubmission(answers, seconds, 'quiz-demo')
-  const result = buildClientResult(submission, quizData.questions, clientCopy)
+  const result = buildClientResult(submission, clientCopy, designDnaFor(submission, quizData))
   const brief = buildTeamBrief(submission, quizData)
 
   return (
     <>
-      <ClientResultView result={result} embedded headingRef={headingRef} />
+      <ClientResultView result={result} embedded complete headingRef={headingRef} />
       <section aria-label="Team view (demo only)" className="mt-6 border-t-4 border-double border-neutral-400 pt-4">
         <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-600">Team view (demo only)</p>
         <TeamBriefView brief={brief} embedded />

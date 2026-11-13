@@ -13,9 +13,11 @@ describe('one client result (/result/<id>)', () => {
     expect(generateStaticParams()).toHaveLength(6)
   })
 
-  test("shows that sample's result, greeting them by name", async () => {
+  test("shows that sample's Design DNA, without the quiz's complete bar", async () => {
     render(await ResultContent({ params: params('decisive-delegator') }))
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('Alex')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe("You're all done!")
+    expect(screen.getByRole('heading', { level: 2, name: 'The Visionary' })).toBeDefined()
+    expect(screen.queryByText('Questionnaire complete')).toBeNull()
   })
 
   test('an unknown sample is a "not found" page', async () => {

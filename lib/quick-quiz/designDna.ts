@@ -1,5 +1,13 @@
 import { HIGHLIGHT_MIN_PERCENT } from './highlights'
-import type { ArchetypeBlend, ClientDesignDna, DesignDnaData } from './types'
+import { scoreArchetypes } from './scoreArchetypes'
+import type { ArchetypeBlend, ClientDesignDna, DesignDnaData, QuizData, Submission } from './types'
+
+// Scores a submission and picks its Design DNA. Used by the quiz screen, the
+// sample result pages and the team brief, so they always agree.
+export function designDnaFor(submission: Submission, data: QuizData): ClientDesignDna | null {
+  const blend = scoreArchetypes(submission, data.questions, data.archetypes, data.signalRules)
+  return pickDesignDna(blend, data.designDna)
+}
 
 // The Design DNA for a scored quiz: the top client type's profile, plus the
 // second type's profile name as a secondary trait when it scores 20% or more
