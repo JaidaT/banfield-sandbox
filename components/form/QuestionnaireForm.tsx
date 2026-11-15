@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import type { ComponentType, Ref } from 'react'
 import IntroScreen from './IntroScreen'
 import ReviewScreen from './ReviewScreen'
@@ -39,6 +39,10 @@ interface Props {
   progressAs?: ProgressStyle
   // "quick-quiz" gives the Quick Quiz its own touches (italic navy hints).
   look?: 'quick-quiz'
+  // Called after the form moves to a new screen (Next, Back, Edit, Submit),
+  // not when the page opens or Next is blocked. The Quick Quiz uses it to tell
+  // the website around its iframe to scroll to the top of the quiz.
+  onScreenChange?: () => void
 }
 
 export interface DoneScreenProps {
@@ -53,7 +57,7 @@ export interface DoneScreenProps {
 // screen passed in as doneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -69,10 +73,16 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   const hasMoved = useRef(false)
   const headingRef = useRef<HTMLHeadingElement>(null)
 
+  // Reads the latest onScreenChange without re-running the effect below when
+  // the parent passes a new function.
+  const screenChanged = useEffectEvent(() => onScreenChange?.())
+
   // After moving, put focus on the new heading. This also scrolls to the top
   // on a phone and tells screen readers the screen changed.
   useEffect(() => {
-    if (hasMoved.current) headingRef.current?.focus()
+    if (!hasMoved.current) return
+    headingRef.current?.focus()
+    screenChanged()
   }, [current])
 
   // After a blocked Next, put the cursor in the first box with a problem
