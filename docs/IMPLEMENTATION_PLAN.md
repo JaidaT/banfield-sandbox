@@ -578,8 +578,8 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/embedScript.test.ts`, loading the script into the test browser): a height message from the iframe resizes it; a message from another window or another web address is ignored; a new-screen message scrolls to the iframe top minus the header gap; no scroll when the quiz top is already in view; a malformed message does nothing and throws nothing
 
 ### Phase 4: The test page
-- [ ] New `app/embed-test/page.tsx`: a stand-in website page with a sticky header (site name and a few menu words), a short intro, the quiz in an iframe (`src="/quiz"`, `data-quick-quiz`, a `title` for screen readers), and more page content and a footer below, so scrolling matters. A visible banner says it is a test page. noindex, not linked from the home page
-- [ ] The on/off switch: `/embed-test` has fixes on (loads `/quick-quiz-embed.js`); `/embed-test?fixes=off` shows a fixed 600px iframe with its own scroll box and no script. Two links at the top switch between them and say which one is showing
+- [x] New `app/embed-test/page.tsx`: a stand-in website page with a sticky header (site name and a few menu words), a short intro, the quiz in an iframe (`src="/quiz"`, `data-quick-quiz`, a `title` for screen readers), and more page content and a footer below, so scrolling matters. A visible banner says it is a test page. noindex, not linked from the home page
+- [x] The on/off switch: `/embed-test` has fixes on (loads `/quick-quiz-embed.js`); `/embed-test?fixes=off` shows a fixed 600px iframe with its own scroll box and no script. Two links at the top switch between them and say which one is showing
   - Tests (`__tests__/embedTest.test.tsx`): the page shows the banner, the sticky header and an iframe pointing at `/quiz` with a title; fixes on includes the script and no fixed height; fixes off has the fixed height and no script; the switch links point at each other; the home page has no link to `/embed-test`
 
 ### Phase 5: Docs, checks and a phone test
