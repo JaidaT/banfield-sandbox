@@ -1,8 +1,9 @@
 'use client'
 
-import { createContext, use, useState } from 'react'
+import { createContext, use, useRef, useState } from 'react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import TeamBriefView from '@/components/quick-quiz/TeamBriefView'
+import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
@@ -45,17 +46,25 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
   const [startedAt, setStartedAt] = useState<number | null>(null)
   // Only the first press counts, even if they go Back to the welcome screen.
   const start = () => setStartedAt((first) => first ?? performance.now())
+  // Inside an iframe on a website: tells the page the quiz's height and when a
+  // new screen shows (DECISIONS.md 2026-11-15). On its own page it does nothing.
+  const wrapper = useRef<HTMLDivElement>(null)
+  const notifyNewScreen = useEmbedBridge(wrapper)
   return (
     <QuizContext value={{ quizData, clientCopy, startedAt }}>
-      <QuestionnaireForm
-        questionnaire={questionnaire}
-        startAt={startAt}
-        initialAnswers={initialAnswers}
-        skipReview
-        progressAs="percent"
-        onStart={start}
-        doneScreen={QuizResults}
-      />
+      {/* flex-1 keeps the white page filling the window, as before. */}
+      <div ref={wrapper} className="flex flex-1 flex-col">
+        <QuestionnaireForm
+          questionnaire={questionnaire}
+          startAt={startAt}
+          initialAnswers={initialAnswers}
+          skipReview
+          progressAs="percent"
+          onStart={start}
+          onScreenChange={notifyNewScreen}
+          doneScreen={QuizResults}
+        />
+      </div>
     </QuizContext>
   )
 }
