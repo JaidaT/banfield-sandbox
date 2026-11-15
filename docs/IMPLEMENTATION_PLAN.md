@@ -536,3 +536,60 @@ Work test-first: for each step, write the failing test, then change the code.
 - Revisit the Nest Builder wording (Claude's 2026-11-13 review: it matches the Cautious Reassurance Seeker weakly) and the overlaps between Strategist and Nest Builder, and Curator and Strategist
 - In user research, ask each tester "Does this sound like you?" after they read their profile, and note their client type
 - Whether to bring back any of the removed answer sections, or the "Not quite ready to book?" line
+
+## Quick Quiz in an iframe: Test Page, Auto-Resize and Scroll-to-Top (2026-11-15)
+
+Goal: find out how the mobile-first Quick Quiz feels inside an iframe on Banfield's Squarespace site, and fix the two known iframe problems on phones:
+1. **Scroll-in-scroll:** Banfield sets the iframe's height. When the quiz is taller, a scroll box appears inside the scrolling page. Fix: the quiz tells the page how tall it is, and a small script on the page resizes the iframe to match.
+2. **Next lands mid-page:** after "Next" at the bottom of a long screen, the new screen starts out of view. Fix: the quiz tells the page a new screen showed, and the script scrolls the page to the top of the quiz, just under the header.
+
+Built on the test branch `foyer-v1-iframe-test` (made from `foyer-v1` on 2026-11-15). Jaida brings the version they are happy with back into `foyer-v1` (a merge, or a cherry-pick of chosen commits). Never into `main`.
+
+Background: the quiz cannot go truly fullscreen in an iframe (iPhones only allow fullscreen for video), and does not need to: inside an iframe the layout follows the iframe's width, so the phone layout shows on phones. Banfield's Squarespace plan (Core) allows code injection, so the resize script can run there (DISCOVERY.md, Oct 28).
+
+Choices (Jaida, 2026-11-15):
+- **Sticky header** on the test page, like many Squarespace sites, so scroll-to-top is tested in the harder case (it must stop below the header, not under it).
+- **An on/off switch** on the test page: "fixes on" (auto-resize and scroll-to-top) or "fixes off" (a plain fixed-height iframe), to show the problem next to the fix.
+- **Hidden address only:** the test page lives at `/embed-test` and is not linked from the home page.
+
+Constraints:
+- Messages from the quiz to the page carry only a height number or "new screen". Never answers, contact details or results.
+- The page's script ignores any message that does not come from the quiz's own iframe and web address.
+- The test page is clearly a stand-in ("Test page: imitates a website like Banfield's"), with no Banfield logo or copied site content. It is noindex.
+- The quiz works exactly as before when it is not in an iframe (the `/quiz` page on its own).
+- Folder rule: the message format and the bridge are Quick Quiz code (`lib/quick-quiz/`, `components/quick-quiz/`). The shared form only gains a generic "a new screen showed" callback.
+
+Work test-first: for each step, write the failing test, then change the code.
+
+### Phase 1: The message format
+- [ ] New `lib/quick-quiz/embed.ts`: the two messages, `heightMessage(px)` (`{ source: 'banfield-quick-quiz', type: 'height', height }`) and `newScreenMessage()` (`{ source: 'banfield-quick-quiz', type: 'new-screen' }`), plus `readEmbedMessage(data)` that returns one of them or `null` for anything else
+  - Tests (`__tests__/quick-quiz/embed.test.ts`): each builder makes the expected object; `readEmbedMessage` accepts both, and returns `null` for other sources, unknown types, a missing or negative or non-number height, strings and `null`; heights are rounded to whole pixels
+
+### Phase 2: The quiz side
+- [ ] `components/form/QuestionnaireForm.tsx`: optional `onScreenChange?: () => void` prop, called after the form moves to a new screen (Next, Back, Edit, Submit), not on first load and not after a blocked Next
+  - Tests (`__tests__/form/questionnaireForm.test.tsx`): called once per move; not called on load; not called when Next is blocked; the long questionnaire still works without it
+- [ ] New `components/quick-quiz/EmbedBridge.tsx` (or a `useEmbedBridge` hook): only when the quiz is inside an iframe, it watches the quiz's own content box (not the page body, which is at least the iframe's height and so could never shrink) and sends `heightMessage` to the page when the height changes. It returns a `notifyNewScreen` function that sends `newScreenMessage`. Outside an iframe it does nothing
+  - Tests (`__tests__/quick-quiz/embedBridge.test.tsx`): inside a pretend iframe (a stand-in `window.parent`), a height change sends one height message and a new screen sends one new-screen message; outside an iframe, nothing is sent; no message ever contains answer text
+- [ ] `components/quick-quiz/QuizForm.tsx`: wraps the form in the bridge and passes `onScreenChange`
+  - Tests (`__tests__/quick-quiz/quizForm.test.tsx`): in a pretend iframe, pressing "Let's start" and Next sends new-screen messages; on its own the quiz sends none
+
+### Phase 3: The page side (the script Banfield would paste into Squarespace)
+- [ ] New `public/quick-quiz-embed.js` (plain JavaScript, no build step, so it can be pasted or linked from Squarespace's code injection): finds the iframe marked `data-quick-quiz`, turns off its inner scrolling, and listens for messages. It only accepts messages whose sender is that iframe and whose origin matches the iframe's address. On a height message it sets the iframe's height; on a new-screen message it scrolls the page so the top of the iframe sits just below the sticky header (the gap comes from `data-header-offset`, or the height of a `data-sticky-header` element if there is one), but only when the top of the quiz is out of view
+  - Tests (`__tests__/quick-quiz/embedScript.test.ts`, loading the script into the test browser): a height message from the iframe resizes it; a message from another window or another web address is ignored; a new-screen message scrolls to the iframe top minus the header gap; no scroll when the quiz top is already in view; a malformed message does nothing and throws nothing
+
+### Phase 4: The test page
+- [ ] New `app/embed-test/page.tsx`: a stand-in website page with a sticky header (site name and a few menu words), a short intro, the quiz in an iframe (`src="/quiz"`, `data-quick-quiz`, a `title` for screen readers), and more page content and a footer below, so scrolling matters. A visible banner says it is a test page. noindex, not linked from the home page
+- [ ] The on/off switch: `/embed-test` has fixes on (loads `/quick-quiz-embed.js`); `/embed-test?fixes=off` shows a fixed 600px iframe with its own scroll box and no script. Two links at the top switch between them and say which one is showing
+  - Tests (`__tests__/embedTest.test.tsx`): the page shows the banner, the sticky header and an iframe pointing at `/quiz` with a title; fixes on includes the script and no fixed height; fixes off has the fixed height and no script; the switch links point at each other; the home page has no link to `/embed-test`
+
+### Phase 5: Docs, checks and a phone test
+- [ ] `README.md`: the `/embed-test` address, what the switch does, and how to open it on a phone on the same Wi-Fi
+- [ ] `npx tsc --noEmit -p .`, `npm run lint`, `npx vitest run` and `npm run build` all pass; commit and push to `foyer-v1-iframe-test`
+- [ ] Jaida opens `/embed-test` on a phone (iPhone if possible) with fixes off, then on: no inner scroll box, each Next starts at the top of the quiz under the header, typing in boxes works, the result screen fits, and the booking button opens in the full tab
+- [ ] Jaida decides what to bring back into `foyer-v1` (merge or cherry-pick)
+
+### Later (not in this plan)
+- At launch, only allow Banfield's own website to show the quiz in an iframe (a `frame-ancestors` security header with Banfield's web address), and have the quiz send its messages only to that address instead of to any page
+- Check whether Banfield's real Squarespace header is sticky, and its height, for `data-header-offset`
+- The exact Squarespace steps (code injection, the embed block) for Banfield, written as a short how-to
+- Falling back to opening the quiz on its own page on phones, if the iframe still feels wrong after testing
