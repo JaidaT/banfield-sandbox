@@ -562,7 +562,7 @@ Constraints:
 Work test-first: for each step, write the failing test, then change the code.
 
 ### Phase 1: The message format
-- [ ] New `lib/quick-quiz/embed.ts`: the two messages, `heightMessage(px)` (`{ source: 'banfield-quick-quiz', type: 'height', height }`) and `newScreenMessage()` (`{ source: 'banfield-quick-quiz', type: 'new-screen' }`), plus `readEmbedMessage(data)` that returns one of them or `null` for anything else
+- [x] New `lib/quick-quiz/embed.ts`: the two messages, `heightMessage(px)` (`{ source: 'banfield-quick-quiz', type: 'height', height }`) and `newScreenMessage()` (`{ source: 'banfield-quick-quiz', type: 'new-screen' }`), plus `readEmbedMessage(data)` that returns one of them or `null` for anything else
   - Tests (`__tests__/quick-quiz/embed.test.ts`): each builder makes the expected object; `readEmbedMessage` accepts both, and returns `null` for other sources, unknown types, a missing or negative or non-number height, strings and `null`; heights are rounded to whole pixels
 
 ### Phase 2: The quiz side
