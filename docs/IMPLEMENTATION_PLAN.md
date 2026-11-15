@@ -583,9 +583,9 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/embedTest.test.tsx`): the page shows the banner, the sticky header and an iframe pointing at `/quiz` with a title; fixes on includes the script and no fixed height; fixes off has the fixed height and no script; the switch links point at each other; the home page has no link to `/embed-test`
 
 ### Phase 5: Docs, checks and a phone test
-- [ ] `README.md`: the `/embed-test` address, what the switch does, and how to open it on a phone on the same Wi-Fi
-- [ ] `npx tsc --noEmit -p .`, `npm run lint`, `npx vitest run` and `npm run build` all pass; commit and push to `foyer-v1-iframe-test`
-- [ ] Jaida opens `/embed-test` on a phone (iPhone if possible) with fixes off, then on: no inner scroll box, each Next starts at the top of the quiz under the header, typing in boxes works, the result screen fits, and the booking button opens in the full tab
+- [x] (Skipped by Jaida on 2026-11-15: no README change) `README.md`: the `/embed-test` address, what the switch does, and how to open it on a phone on the same Wi-Fi
+- [x] `npx tsc --noEmit -p .`, `npm run lint`, `npx vitest run` and `npm run build` all pass; commit and push to `foyer-v1-iframe-test`
+- [x] (Done 2026-11-15 on an iPhone: looks good and makes sense) Jaida opens `/embed-test` on a phone (iPhone if possible) with fixes off, then on: no inner scroll box, each Next starts at the top of the quiz under the header, typing in boxes works, the result screen fits, and the booking button opens in the full tab
 - [ ] Jaida decides what to bring back into `foyer-v1` (merge or cherry-pick)
 
 ### Later (not in this plan)
