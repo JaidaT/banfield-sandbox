@@ -566,7 +566,7 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/embed.test.ts`): each builder makes the expected object; `readEmbedMessage` accepts both, and returns `null` for other sources, unknown types, a missing or negative or non-number height, strings and `null`; heights are rounded to whole pixels
 
 ### Phase 2: The quiz side
-- [ ] `components/form/QuestionnaireForm.tsx`: optional `onScreenChange?: () => void` prop, called after the form moves to a new screen (Next, Back, Edit, Submit), not on first load and not after a blocked Next
+- [x] `components/form/QuestionnaireForm.tsx`: optional `onScreenChange?: () => void` prop, called after the form moves to a new screen (Next, Back, Edit, Submit), not on first load and not after a blocked Next
   - Tests (`__tests__/form/questionnaireForm.test.tsx`): called once per move; not called on load; not called when Next is blocked; the long questionnaire still works without it
 - [ ] New `components/quick-quiz/EmbedBridge.tsx` (or a `useEmbedBridge` hook): only when the quiz is inside an iframe, it watches the quiz's own content box (not the page body, which is at least the iframe's height and so could never shrink) and sends `heightMessage` to the page when the height changes. It returns a `notifyNewScreen` function that sends `newScreenMessage`. Outside an iframe it does nothing
   - Tests (`__tests__/quick-quiz/embedBridge.test.tsx`): inside a pretend iframe (a stand-in `window.parent`), a height change sends one height message and a new screen sends one new-screen message; outside an iframe, nothing is sent; no message ever contains answer text

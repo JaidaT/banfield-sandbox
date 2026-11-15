@@ -117,3 +117,45 @@ describe('QuestionnaireForm: onStart', () => {
     expect(onStart).toHaveBeenCalledTimes(1)
   })
 })
+
+// The Quick Quiz uses this to tell the website around its iframe to scroll to
+// the top of the quiz (DECISIONS.md 2026-11-15).
+describe('QuestionnaireForm: onScreenChange', () => {
+  const family = loadSampleHouseholds().find((s) => s.id === 'growing_family')!.answers
+
+  test('is not called when the page opens', () => {
+    const onScreenChange = vi.fn()
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} onScreenChange={onScreenChange} />)
+    expect(onScreenChange).not.toHaveBeenCalled()
+  })
+
+  test('is called once for each move: Next, Back, Review, Edit and Submit', () => {
+    const onScreenChange = vi.fn()
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} onScreenChange={onScreenChange} />)
+    click("Let's start")
+    expect(onScreenChange).toHaveBeenCalledTimes(1)
+    click('Back')
+    expect(onScreenChange).toHaveBeenCalledTimes(2)
+    cleanup()
+
+    onScreenChange.mockClear()
+    render(<QuestionnaireForm questionnaire={questionnaire} startAt="wish_list" initialAnswers={family} doneScreen={StandIn} onScreenChange={onScreenChange} />)
+    click('Review my answers')
+    expect(onScreenChange).toHaveBeenCalledTimes(1)
+    fireEvent.click(screen.getAllByRole('button', { name: /^Edit/ })[0])
+    expect(onScreenChange).toHaveBeenCalledTimes(2)
+    click('Back to review')
+    expect(onScreenChange).toHaveBeenCalledTimes(3)
+    click('Submit')
+    expect(onScreenChange).toHaveBeenCalledTimes(4)
+    expect(stepHeading()).toBe('Final screen')
+  })
+
+  test('is not called when Next is blocked by a problem', () => {
+    const onScreenChange = vi.fn()
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} startAt="contact" onScreenChange={onScreenChange} />)
+    click('Next')
+    expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
+    expect(onScreenChange).not.toHaveBeenCalled()
+  })
+})
