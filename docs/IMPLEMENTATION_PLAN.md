@@ -586,7 +586,7 @@ Work test-first: for each step, write the failing test, then change the code.
 - [x] (Skipped by Jaida on 2026-11-15: no README change) `README.md`: the `/embed-test` address, what the switch does, and how to open it on a phone on the same Wi-Fi
 - [x] `npx tsc --noEmit -p .`, `npm run lint`, `npx vitest run` and `npm run build` all pass; commit and push to `foyer-v1-iframe-test`
 - [x] (Done 2026-11-15 on an iPhone: looks good and makes sense) Jaida opens `/embed-test` on a phone (iPhone if possible) with fixes off, then on: no inner scroll box, each Next starts at the top of the quiz under the header, typing in boxes works, the result screen fits, and the booking button opens in the full tab
-- [ ] Jaida decides what to bring back into `foyer-v1` (merge or cherry-pick)
+- [x] Jaida decides what to bring back into `foyer-v1` (merge or cherry-pick). Decided 2026-11-15: no merge. The iframe work stays on `foyer-v1-iframe-test` only
 
 ### Later (not in this plan)
 - At launch, only allow Banfield's own website to show the quiz in an iframe (a `frame-ancestors` security header with Banfield's web address), and have the quiz send its messages only to that address instead of to any page
