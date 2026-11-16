@@ -64,6 +64,7 @@ describe('QuizForm', () => {
     expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("You're all done!")
     // Nothing answered, so no Design DNA card.
     expect(clientPart().queryByText('DESIGN DNA')).toBeNull()
+    expect(clientPart().queryByText('How we can help')).toBeNull()
     expect(teamPart().getByRole('heading', { level: 1 }).textContent).toBe('Name not given')
   })
 
@@ -99,6 +100,8 @@ describe('QuizForm', () => {
 
     expect(clientPart().getByText('Questionnaire complete')).toBeDefined()
     expect(clientPart().getByRole('heading', { level: 2, name: 'The Visionary' })).toBeDefined()
+    expect(clientPart().getByRole('heading', { level: 2, name: 'How we can help' })).toBeDefined()
+    expect(clientPart().getByText('We take the lead.')).toBeDefined()
     const booking = clientPart().getByRole('link', { name: clientCopy.cta.label })
     expect(booking.getAttribute('href')).toContain('email=pat%40example.com')
     const clientText = screen.getByRole('region', { name: 'Your results' }).textContent ?? ''

@@ -569,11 +569,11 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/clientResult.test.ts`): the existing "never includes archetype, segment or fit information" and "never uses words Banfield avoids" tests pass for every sample with the new words included
 
 ### Phase 3: The screen
-- [ ] `components/quick-quiz/ClientResultView.tsx`: a "How we can help" section after the Design DNA card: the label as a heading, then the points as a list (bold title, sentence under it), in the same brand colours and spacing as the rest of the result; left out when there is no Design DNA
+- [x] `components/quick-quiz/ClientResultView.tsx`: a "How we can help" section after the Design DNA card: the label as a heading, then the points as a list (bold title, sentence under it), in the same brand colours and spacing as the rest of the result; left out when there is no Design DNA
   - Tests (`__tests__/quick-quiz/views.test.tsx`): headings in order (You're all done!, profile name, How we can help, What happens next, Thank you!); the list shows 3 points with the profile's titles; no section when `designDna` is `null`; finishing the quiz on screen shows it
 
 ### Phase 4: Checks
-- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass (466 tests, 2026-11-15)
 - [ ] Jaida finishes the quiz on a phone and opens two or three `/result/<id>` sample pages, checking the section sits under the card and reads well for each profile
 
 ### Later (not in this plan)

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import CopyBriefButton from '@/components/form/CopyBriefButton'
 import TeamBriefView from '@/components/quick-quiz/TeamBriefView'
@@ -146,9 +146,9 @@ describe('ClientResultView', () => {
   const resultOf = (id: string) => buildClientResult(sample(id), copy, designDnaFor(sample(id), data))
   const headings = () => screen.getAllByRole('heading').map((h) => h.textContent)
 
-  test('follows the mockup: done, Design DNA, what happens next, thank you', () => {
+  test('follows the mockup: done, Design DNA, how we can help, what happens next, thank you', () => {
     render(<ClientResultView result={resultOf('analytical-validator')} />)
-    expect(headings()).toEqual(["You're all done!", 'The Strategist', 'What happens next', 'Thank you!'])
+    expect(headings()).toEqual(["You're all done!", 'The Strategist', 'How we can help', 'What happens next', 'Thank you!'])
     expect(screen.getByText("Here's what your answers reveal about your design approach.")).toBeDefined()
     expect(screen.getByText('You may now exit this screen.')).toBeDefined()
   })
@@ -160,6 +160,32 @@ describe('ClientResultView', () => {
     expect(card.textContent).toContain('DESIGN DNA')
     expect(card.textContent).toContain('You feel most confident when every choice has a reason.')
     expect(card.textContent).toContain(result.designDna!.description)
+  })
+
+  test('"How we can help" lists the profile points under the card, each with a bold title and a sentence', () => {
+    const result = resultOf('analytical-validator')
+    render(<ClientResultView result={result} />)
+    const section = screen.getByRole('region', { name: 'How we can help' })
+    const items = within(section).getAllByRole('listitem')
+    expect(items).toHaveLength(3)
+    result.designDna!.help.points.forEach((point, i) => {
+      expect(within(items[i]).getByText(point.title).tagName).toBe('STRONG')
+      expect(items[i].textContent).toContain(point.text)
+    })
+    // Straight after the Design DNA card.
+    const card = screen.getByRole('region', { name: 'The Strategist' })
+    expect(card.nextElementSibling).toBe(section)
+  })
+
+  test('each profile shows its own points', () => {
+    for (const s of samples) {
+      const result = resultOf(s.id)
+      if (!result.designDna) continue
+      const { unmount } = render(<ClientResultView result={result} />)
+      const section = screen.getByRole('region', { name: 'How we can help' })
+      for (const point of result.designDna.help.points) expect(section.textContent, s.id).toContain(point.title)
+      unmount()
+    }
   })
 
   // The team decided a secondary trait is too much (2026-11-13).
@@ -174,6 +200,7 @@ describe('ClientResultView', () => {
   test('no Design DNA card when there were not enough answers; the rest still shows', () => {
     render(<ClientResultView result={{ ...resultOf('decisive-delegator'), designDna: null }} />)
     expect(screen.queryByText('DESIGN DNA')).toBeNull()
+    expect(screen.queryByText('How we can help')).toBeNull()
     expect(headings()).toEqual(["You're all done!", 'What happens next', 'Thank you!'])
   })
 

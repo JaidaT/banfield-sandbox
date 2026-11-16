@@ -22,6 +22,7 @@ const LABEL = 'text-xs font-semibold uppercase tracking-widest'
 export default function ClientResultView({ result, embedded = false, complete = false, headingRef }: Props) {
   const Outer = embedded ? 'section' : 'main'
   const dnaHeadingId = useId()
+  const helpHeadingId = useId()
   const dna = result.designDna
   return (
     <Outer
@@ -46,14 +47,31 @@ export default function ClientResultView({ result, embedded = false, complete = 
       </header>
 
       {dna && (
-        <section aria-labelledby={dnaHeadingId} className="flex flex-col gap-4 rounded-2xl bg-accent p-6">
-          <p className={LABEL}>{dna.label}</p>
-          <h2 id={dnaHeadingId} className="text-4xl font-bold leading-tight">
-            {dna.name}
-          </h2>
-          <p className="text-xl font-bold leading-snug">{dna.headline}</p>
-          <p className="leading-7">{dna.description}</p>
-        </section>
+        <>
+          <section aria-labelledby={dnaHeadingId} className="flex flex-col gap-4 rounded-2xl bg-accent p-6">
+            <p className={LABEL}>{dna.label}</p>
+            <h2 id={dnaHeadingId} className="text-4xl font-bold leading-tight">
+              {dna.name}
+            </h2>
+            <p className="text-xl font-bold leading-snug">{dna.headline}</p>
+            <p className="leading-7">{dna.description}</p>
+          </section>
+
+          {/* "How we can help": written for this profile (design-dna.json). */}
+          <section aria-labelledby={helpHeadingId} className="flex flex-col gap-3">
+            <h2 id={helpHeadingId} className={LABEL}>
+              {dna.help.label}
+            </h2>
+            <ul className="flex flex-col gap-4">
+              {dna.help.points.map((point) => (
+                <li key={point.title} className="flex flex-col gap-1 border-l-4 border-accent pl-4">
+                  <strong className="font-semibold">{point.title}</strong>
+                  <span className="leading-7">{point.text}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
       )}
 
       <section className="flex flex-col gap-3">
