@@ -158,6 +158,7 @@ Note: Banfield's Brand Standards (pp. 24-28) list Performance-Minded Planner as 
 - **Analytics wanted:** aggregate stats across all quiz-takers, e.g. "X% of visitors are type Y." These would complement Squarespace demographics.
 - **Ownership:** Banfield gets the full code and wants to be able to edit questions later.
 - **Out of scope for now:** client portal app, DesignBox, JobTread integration, mid-project and testimonial surveys.
+- **Fees (from Banfield's public FAQ, https://www.banfielddesign.co/faq, read 2026-11-15):** a fixed design fee is the standard model, set up front from a defined scope and phased steps. Hourly "a la carte" billing is the alternative for projects without a clear scope, priced higher. Work outside the agreed scope, changes after design documents are issued, construction support, renderings and project management are billed on top. So client-facing words may say costs are explained up front, but must not suggest the whole project has one fixed price, or that only some clients get the fixed fee.
 
 ## Oct 28 meeting with Banfield
 Attended by Jamie, Rachael, Jaida, Sarah, Jinwon and Sofiia. The team demoed the prototype using the sample briefs and the client result. Banfield loved the questions. The notes below update the sections above; where they differ, these win.
