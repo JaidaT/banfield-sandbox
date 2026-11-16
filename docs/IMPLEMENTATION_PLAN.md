@@ -536,3 +536,47 @@ Work test-first: for each step, write the failing test, then change the code.
 - Revisit the Nest Builder wording (Claude's 2026-11-13 review: it matches the Cautious Reassurance Seeker weakly) and the overlaps between Strategist and Nest Builder, and Curator and Strategist
 - In user research, ask each tester "Does this sound like you?" after they read their profile, and note their client type
 - Whether to bring back any of the removed answer sections, or the "Not quite ready to book?" line
+
+## "How We Can Help" on the Quick Quiz Result (2026-11-15)
+
+Goal: under the Design DNA card on the Quick Quiz result, show a "How we can help" section written for that person's Design DNA profile, so the result ends with what Banfield will do for someone like them, not only a description of them. Built on `foyer-v1`. The scoring, the questions, the team brief and the long questionnaire do not change.
+
+Choices (Claude's recommendations, accepted by Jaida on 2026-11-15):
+- **One version per profile:** five versions, one for each Design DNA profile (Curator, Explorer, Nest Builder, Strategist, Visionary).
+- **Shape:** a small capital label "HOW WE CAN HELP", then 3 short points, each a bold line and one sentence. Easy to scan on a phone.
+- **Where:** straight after the Design DNA card, before "What happens next". It shows on the quiz's result and on the team's `/result/<id>` sample pages, since both use the same result view.
+- **No profile:** when the quiz cannot pick a Design DNA (too many questions skipped), the section is left out, like the card.
+- **Wording:** the team has not written it yet. Claude drafts it, based on what each client type needs from Banfield (the team-only `pitch`, `pacing` and `communication` notes in `archetypes.json`) and Banfield's voice (BRAND_NOTES.md: warm, plain, "Warmth leads, proof follows"). The draft is marked as a draft in the data file, and Jaida (and the team) approve it before testers see it.
+
+Constraints:
+- The section must never reveal the client type. The words must not use client type names or taglines, or the word "fit"; the existing leak test checks all client-facing text and will cover the new words automatically.
+- No words Banfield avoids ("luxury", "guaranteed", "risk-free"), no promises of certainty, no jargon. Plain characters only (straight apostrophes).
+- The words live in `data/quick-quiz/design-dna.json`, next to each profile, so the team can change them without touching code. The result builder still receives only the chosen profile's words, never a client type id or score.
+
+Work test-first: for each step, write the failing test, then change the code.
+
+### Phase 1: The words
+- [ ] Draft 3 points for each of the five profiles and show them to Jaida in the chat. Change them until Jaida approves; nothing is built until then
+- [ ] `data/quick-quiz/design-dna.json`: add `helpLabel` ("How we can help", shown in capitals by the styling) and a `help` list on each profile, each point with `title` and `text`; `_meta` notes the help wording is a Claude draft approved by Jaida on <date>, for the team to review
+- [ ] `lib/quick-quiz/types.ts`: a `HelpPoint` type (`title`, `text`); `DesignDnaProfile` gains `help`; `DesignDnaData` gains `helpLabel`
+- [ ] `lib/quick-quiz/load.ts` (`parseDesignDna`): checks `helpLabel` is not blank, each profile has 2 to 3 points, no blank title or text, and only plain characters
+  - Tests (`__tests__/quick-quiz/designDna.test.ts`): the real file loads with 3 points per profile; a missing `helpLabel`, a profile with no points, 4 points, a blank title and a curly apostrophe each throw a message naming the problem
+
+### Phase 2: Passing the words to the result
+- [ ] `lib/quick-quiz/designDna.ts` (`pickDesignDna`) and the `ClientDesignDna` type: the chosen profile also carries `help: { label, points }`
+  - Tests: each sample submission gets its profile's points; an all-skipped submission still gets `null`; the returned object still has no client type id, label or percent
+- [ ] `lib/quick-quiz/buildClientResult.ts`: the help points come through on `result.designDna` unchanged
+  - Tests (`__tests__/quick-quiz/clientResult.test.ts`): the existing "never includes archetype, segment or fit information" and "never uses words Banfield avoids" tests pass for every sample with the new words included
+
+### Phase 3: The screen
+- [ ] `components/quick-quiz/ClientResultView.tsx`: a "How we can help" section after the Design DNA card: the label as a heading, then the points as a list (bold title, sentence under it), in the same brand colours and spacing as the rest of the result; left out when there is no Design DNA
+  - Tests (`__tests__/quick-quiz/views.test.tsx`): headings in order (You're all done!, profile name, How we can help, What happens next, Thank you!); the list shows 3 points with the profile's titles; no section when `designDna` is `null`; finishing the quiz on screen shows it
+
+### Phase 4: Checks
+- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [ ] Jaida finishes the quiz on a phone and opens two or three `/result/<id>` sample pages, checking the section sits under the card and reads well for each profile
+
+### Later (not in this plan)
+- The team rewrites or approves the help wording; Banfield checks it describes their services accurately
+- In user research, ask "Does 'How we can help' sound like what you'd want?" alongside "Does this sound like you?"
+- Whether the team brief should show which help points the client saw
