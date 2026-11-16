@@ -23,6 +23,8 @@ describe('pickDesignDna', () => {
         return
       }
       expect(dna?.name).toBe(nameFor(highlights[0].id))
+      const profile = data.designDna.profiles.find((p) => p.archetype === highlights[0].id)!
+      expect(dna?.help).toEqual({ label: 'How we can help', points: profile.help })
     })
   }
 
@@ -33,7 +35,17 @@ describe('pickDesignDna', () => {
       name: 'The Strategist',
       headline: 'You feel most confident when every choice has a reason.',
       description: expect.stringContaining('weigh the trade-offs'),
+      help: {
+        label: 'How we can help',
+        points: [
+          expect.objectContaining({ title: 'Options side by side.' }),
+          expect.objectContaining({ title: 'Time to review.' }),
+          expect.objectContaining({ title: 'A plan with clear decision points.' }),
+        ],
+      },
     })
+    expect(dna).not.toHaveProperty('archetype')
+    expect(JSON.stringify(dna)).not.toMatch(/analytical_validator|percent/)
   })
 
   // The team decided a secondary trait is too much (2026-11-13).

@@ -220,6 +220,8 @@ export interface ClientDesignDna {
   name: string
   headline: string
   description: string
+  // "How we can help": the heading and this profile's points.
+  help: { label: string; points: HelpPoint[] }
 }
 
 export interface DesignDnaData {

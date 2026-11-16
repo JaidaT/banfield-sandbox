@@ -563,9 +563,9 @@ Work test-first: for each step, write the failing test, then change the code.
   - Tests (`__tests__/quick-quiz/designDna.test.ts`): the real file loads with 3 points per profile; a missing `helpLabel`, a profile with no points, 4 points, a blank title and a curly apostrophe each throw a message naming the problem
 
 ### Phase 2: Passing the words to the result
-- [ ] `lib/quick-quiz/designDna.ts` (`pickDesignDna`) and the `ClientDesignDna` type: the chosen profile also carries `help: { label, points }`
+- [x] `lib/quick-quiz/designDna.ts` (`pickDesignDna`) and the `ClientDesignDna` type: the chosen profile also carries `help: { label, points }`
   - Tests: each sample submission gets its profile's points; an all-skipped submission still gets `null`; the returned object still has no client type id, label or percent
-- [ ] `lib/quick-quiz/buildClientResult.ts`: the help points come through on `result.designDna` unchanged
+- [x] `lib/quick-quiz/buildClientResult.ts`: the help points come through on `result.designDna` unchanged (no code change needed: it already passes the picked profile through)
   - Tests (`__tests__/quick-quiz/clientResult.test.ts`): the existing "never includes archetype, segment or fit information" and "never uses words Banfield avoids" tests pass for every sample with the new words included
 
 ### Phase 3: The screen

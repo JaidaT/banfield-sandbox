@@ -23,5 +23,6 @@ export function pickDesignDna(blend: ArchetypeBlend, data: DesignDnaData): Clien
     name: main.name,
     headline: main.headline,
     description: main.description,
+    help: { label: data.helpLabel, points: main.help },
   }
 }

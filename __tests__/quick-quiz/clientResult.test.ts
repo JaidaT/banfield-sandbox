@@ -37,6 +37,17 @@ describe('buildClientResult', () => {
     expect(buildClientResult(s, copy, null).designDna).toBeNull()
   })
 
+  // So the leak and avoided-words tests below also check the help points.
+  test('carries the "How we can help" points of the picked profile', () => {
+    const help = resultFor('analytical-validator').designDna?.help
+    expect(help?.label).toBe('How we can help')
+    expect(help?.points.map((p) => p.title)).toEqual(['Options side by side.', 'Time to review.', 'A plan with clear decision points.'])
+    for (const s of samples) {
+      const dna = build(s).designDna
+      if (dna) expect(dna.help.points.length, s.id).toBeGreaterThanOrEqual(2)
+    }
+  })
+
   test('no longer shows the old greeting or answer sections', () => {
     const result = resultFor('mixed-cautious-controller') as unknown as Record<string, unknown>
     for (const gone of ['greeting', 'sections', 'closing']) expect(result).not.toHaveProperty(gone)
