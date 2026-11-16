@@ -556,10 +556,10 @@ Constraints:
 Work test-first: for each step, write the failing test, then change the code.
 
 ### Phase 1: The words
-- [ ] Draft 3 points for each of the five profiles and show them to Jaida in the chat. Change them until Jaida approves; nothing is built until then
-- [ ] `data/quick-quiz/design-dna.json`: add `helpLabel` ("How we can help", shown in capitals by the styling) and a `help` list on each profile, each point with `title` and `text`; `_meta` notes the help wording is a Claude draft approved by Jaida on <date>, for the team to review
-- [ ] `lib/quick-quiz/types.ts`: a `HelpPoint` type (`title`, `text`); `DesignDnaProfile` gains `help`; `DesignDnaData` gains `helpLabel`
-- [ ] `lib/quick-quiz/load.ts` (`parseDesignDna`): checks `helpLabel` is not blank, each profile has 2 to 3 points, no blank title or text, and only plain characters
+- [x] Draft 3 points for each of the five profiles and show them to Jaida in the chat. Change them until Jaida approves; nothing is built until then
+- [x] `data/quick-quiz/design-dna.json`: add `helpLabel` ("How we can help", shown in capitals by the styling) and a `help` list on each profile, each point with `title` and `text`; `_meta` notes the help wording is a Claude draft approved by Jaida on 2026-11-15 (after changing two points for Banfield's fixed-fee model), for the team to review
+- [x] `lib/quick-quiz/types.ts`: a `HelpPoint` type (`title`, `text`); `DesignDnaProfile` gains `help`; `DesignDnaData` gains `helpLabel`
+- [x] `lib/quick-quiz/load.ts` (`parseDesignDna`): checks `helpLabel` is not blank, each profile has 2 to 3 points, no blank title or text, and only plain characters
   - Tests (`__tests__/quick-quiz/designDna.test.ts`): the real file loads with 3 points per profile; a missing `helpLabel`, a profile with no points, 4 points, a blank title and a curly apostrophe each throw a message naming the problem
 
 ### Phase 2: Passing the words to the result

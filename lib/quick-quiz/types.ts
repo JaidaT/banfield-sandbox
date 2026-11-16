@@ -203,6 +203,14 @@ export interface DesignDnaProfile {
   name: string
   headline: string
   description: string
+  // "How we can help": 2 to 3 short points written for this profile.
+  help: HelpPoint[]
+}
+
+// One "How we can help" point: a bold line and one sentence.
+export interface HelpPoint {
+  title: string
+  text: string
 }
 
 // The Design DNA a client sees: profile words and labels only. Deliberately has
@@ -216,6 +224,8 @@ export interface ClientDesignDna {
 
 export interface DesignDnaData {
   label: string
+  // The heading over the help points ("How we can help").
+  helpLabel: string
   profiles: DesignDnaProfile[]
 }
 

@@ -16,6 +16,7 @@ import type {
   ClientCopy,
   DesignDnaData,
   DesignDnaProfile,
+  HelpPoint,
   Comparison,
   WarningCondition,
   LeadDetailRule,
@@ -480,6 +481,7 @@ export function parseDesignDna(raw: unknown, archetypes: Archetype[]): DesignDna
     throw new Error('design DNA data needs a "profiles" list')
   }
   const label = plainText(raw.label, '"label"')
+  const helpLabel = plainText(raw.helpLabel, '"helpLabel"')
   const known = new Set(archetypes.map((a) => a.id))
   const seenTypes = new Set<string>()
   const seenNames = new Set<string>()
@@ -499,13 +501,25 @@ export function parseDesignDna(raw: unknown, archetypes: Archetype[]): DesignDna
     )
     if (seenNames.has(name)) throw new Error(`design DNA name "${name}" is used more than once`)
     seenNames.add(name)
-    return { archetype, name, headline, description }
+    return { archetype, name, headline, description, help: parseHelp(entry.help, index) }
   })
 
   for (const id of known) {
     if (!seenTypes.has(id)) throw new Error(`client type ${id} has no design DNA profile`)
   }
-  return { label, profiles }
+  return { label, helpLabel, profiles }
+}
+
+// "How we can help": 2 to 3 points, each with a title and a sentence.
+function parseHelp(raw: unknown, profileIndex: number): HelpPoint[] {
+  if (!Array.isArray(raw) || raw.length < 2 || raw.length > 3) {
+    throw new Error(`design DNA profile ${profileIndex} needs 2 to 3 "help" points`)
+  }
+  return raw.map((entry: unknown, i) => {
+    const where = (field: string) => `profile ${profileIndex} help ${i} "${field}"`
+    const point = isRecord(entry) ? entry : {}
+    return { title: plainText(point.title, where('title')), text: plainText(point.text, where('text')) }
+  })
 }
 
 export function loadDesignDna(): DesignDnaData {

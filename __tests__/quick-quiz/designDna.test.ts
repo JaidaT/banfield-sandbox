@@ -41,6 +41,35 @@ const TEAM_PROFILES = [
   },
 ]
 
+// "How we can help": Claude's draft, approved by Jaida on 2026-11-15.
+const APPROVED_HELP: Record<string, { title: string; text: string }[]> = {
+  'The Curator': [
+    { title: 'You stay in the loop.', text: 'Regular updates on your project budget, timeline and open decisions, so you always know where things stand.' },
+    { title: 'Clear places to weigh in.', text: 'We agree up front on the decisions you want to make yourself, and plan check-ins around them.' },
+    { title: 'The reasons behind each choice.', text: 'We explain why we recommend a material, layout or trade, so your ideas and ours work together.' },
+  ],
+  'The Explorer': [
+    { title: 'See it before you commit.', text: 'Mood boards and renderings help you picture ideas in your space before anything is decided.' },
+    { title: 'Design sessions together.', text: 'We build working sessions into the key moments, so your ideas shape the design as it grows.' },
+    { title: 'Room to explore, with a clear frame.', text: 'We set the scope and budget early, so new ideas can be explored without losing track of the plan.' },
+  ],
+  'The Nest Builder': [
+    { title: 'A guided, step-by-step process.', text: 'We walk you through each stage and always tell you what comes next.' },
+    { title: 'Clear costs, explained early.', text: 'We talk through costs openly from the start, so you know what to expect at each stage.' },
+    { title: 'Decisions at a comfortable pace.', text: 'We bring a few well-chosen options at a time, and make room for the people whose opinions matter to you.' },
+  ],
+  'The Strategist': [
+    { title: 'Options side by side.', text: 'We lay out the choices with the costs, trade-offs and reasoning behind each one.' },
+    { title: 'Time to review.', text: 'We send materials before each meeting, so you can come ready with questions.' },
+    { title: 'A plan with clear decision points.', text: "Each step is documented, so you can see how today's choices support long-term value, comfort and energy performance." },
+  ],
+  'The Visionary': [
+    { title: 'We take the lead.', text: 'Our team manages the process from first sketch to finished space, so you can focus on the result.' },
+    { title: 'Two strong options, not ten.', text: 'We bring focused recommendations, so decisions feel quick and confident.' },
+    { title: 'Your time, respected.', text: 'Fewer, well-planned meetings and short updates, each with a clear next step.' },
+  ],
+}
+
 const archetypes = loadArchetypes()
 const raw = designDnaJson as unknown as { profiles: Record<string, unknown>[] } & Record<string, unknown>
 const withProfiles = (profiles: unknown[]) => ({ ...raw, profiles })
@@ -50,10 +79,18 @@ describe('design-dna.json (the real file)', () => {
     const data = loadDesignDna()
     expect(data.label).toBe('DESIGN DNA')
     expect(data).not.toHaveProperty('secondaryLabel')
+    expect(data.helpLabel).toBe('How we can help')
   })
 
   test('has the team profiles, paired with their client types, word for word', () => {
-    expect(loadDesignDna().profiles).toEqual(TEAM_PROFILES)
+    const words = loadDesignDna().profiles.map(({ archetype, name, headline, description }) => ({ archetype, name, headline, description }))
+    expect(words).toEqual(TEAM_PROFILES)
+  })
+
+  test('each profile has its approved "How we can help" points, word for word', () => {
+    for (const profile of loadDesignDna().profiles) {
+      expect(profile.help, profile.name).toEqual(APPROVED_HELP[profile.name])
+    }
   })
 
   test('is part of the quiz data', () => {
@@ -90,5 +127,38 @@ describe('parseDesignDna', () => {
   test('throws on a curly apostrophe or other special character', () => {
     const curly = raw.profiles.map((p, i) => (i === 1 ? { ...p, headline: 'You’d rather discover' } : p))
     expect(() => parseDesignDna(withProfiles(curly), archetypes)).toThrow(/profile 1.*headline.*plain characters/)
+  })
+
+  describe('"How we can help" points', () => {
+    const withHelp = (help: unknown) => withProfiles(raw.profiles.map((p, i) => (i === 3 ? { ...p, help } : p)))
+    const point = { title: 'A title.', text: 'A sentence.' }
+
+    test('throws when the help label is blank or missing', () => {
+      expect(() => parseDesignDna({ ...raw, helpLabel: '' }, archetypes)).toThrow(/"helpLabel"/)
+      const { helpLabel: _unused, ...noLabel } = raw
+      void _unused
+      expect(() => parseDesignDna(noLabel, archetypes)).toThrow(/"helpLabel"/)
+    })
+
+    test('throws when a profile has no points, or more than 3', () => {
+      expect(() => parseDesignDna(withHelp(undefined), archetypes)).toThrow(/profile 3.*2 to 3 "help" points/)
+      expect(() => parseDesignDna(withHelp([point]), archetypes)).toThrow(/profile 3.*2 to 3 "help" points/)
+      expect(() => parseDesignDna(withHelp([point, point, point, point]), archetypes)).toThrow(/profile 3.*2 to 3 "help" points/)
+    })
+
+    test('accepts 2 points', () => {
+      expect(parseDesignDna(withHelp([point, point]), archetypes).profiles[3].help).toHaveLength(2)
+    })
+
+    test('throws on a blank title or text', () => {
+      expect(() => parseDesignDna(withHelp([point, { ...point, title: '' }]), archetypes)).toThrow(/profile 3 help 1 "title"/)
+      expect(() => parseDesignDna(withHelp([{ ...point, text: '' }, point]), archetypes)).toThrow(/profile 3 help 0 "text"/)
+    })
+
+    test('throws on a curly apostrophe', () => {
+      expect(() => parseDesignDna(withHelp([point, { ...point, text: 'We’ll help.' }]), archetypes)).toThrow(
+        /profile 3 help 1 "text".*plain characters/,
+      )
+    })
   })
 })
