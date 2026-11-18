@@ -56,6 +56,16 @@ describe('useEmbedBridge in an iframe', () => {
     expect(JSON.stringify(sent())).not.toContain('Secret')
   })
 
+  // Demo styling (2026-11-17): the quiz stretches to fill its own page, which
+  // would stop the iframe from ever shrinking. Inside an iframe the page is
+  // marked, so the quiz is only as tall as its content.
+  test('marks the page as embedded, and unmarks it when the quiz closes', () => {
+    render(<Demo />)
+    expect(document.documentElement.hasAttribute('data-embedded')).toBe(true)
+    cleanup()
+    expect(document.documentElement.hasAttribute('data-embedded')).toBe(false)
+  })
+
   test('stops watching when the quiz closes', () => {
     render(<Demo />)
     cleanup()
@@ -66,6 +76,11 @@ describe('useEmbedBridge in an iframe', () => {
 })
 
 describe('useEmbedBridge on its own page', () => {
+  test('does not mark the page as embedded', () => {
+    render(<Demo />)
+    expect(document.documentElement.hasAttribute('data-embedded')).toBe(false)
+  })
+
   test('sends nothing', () => {
     setContentBottom(640)
     render(<Demo />)

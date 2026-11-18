@@ -39,10 +39,18 @@ export function useEmbedBridge(wrapper: RefObject<HTMLElement | null>): () => vo
       tellPage(height)
     }
 
+    // Demo styling (2026-11-17): marks the page as embedded, so the quiz is only
+    // as tall as its content (see the "in-[[data-embedded]]" style on <main>).
+    // Stretched to fill the iframe, it could grow but never shrink.
+    document.documentElement.setAttribute('data-embedded', '')
+
     sendHeight()
     const observer = new ResizeObserver(sendHeight)
     observer.observe(box)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      document.documentElement.removeAttribute('data-embedded')
+    }
   }, [wrapper])
 
   return useCallback(() => {

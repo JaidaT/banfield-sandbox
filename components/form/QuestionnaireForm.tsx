@@ -195,7 +195,9 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   // column fills the screen so the Back and Next row sits at the bottom.
   return (
     <div className={`flex flex-1 flex-col bg-frost font-sans text-charcoal ${look ?? ''}`}>
-      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6">{screen}</main>
+      {/* Inside an iframe (data-embedded, set by the Quick Quiz), the column is
+          only as tall as its content, so the iframe can shrink as well as grow. */}
+      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 in-[[data-embedded]]:flex-none">{screen}</main>
     </div>
   )
 }

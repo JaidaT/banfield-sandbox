@@ -661,6 +661,14 @@ Work test-first for anything that changes what shows (hidden parts, fields, tabs
 - [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
 - [ ] Jaida checks each screenshot's screen on a phone against the screenshot, and on a computer
 
+### Phase 7: The demo quiz on the stand-in website (added 2026-11-17)
+Jaida asked to show the demo-styled Quick Quiz on the iframe test's stand-in website. Chosen: copy the iframe work into this branch; `foyer-v1-iframe-test` and `foyer-v1` stay unchanged.
+- [x] Copy the six iframe code commits from `foyer-v1-iframe-test` (embed messages, the shared form's `onScreenChange`, the bridge, the page script `public/quick-quiz-embed.js`, and `/embed-test`); their plan ticks are left out, since that plan lives on the iframe branch
+- [x] Keep both new form settings (`look` and `onScreenChange`) where the two branches met
+- [x] Inside an iframe, the quiz is only as tall as its content: the bridge marks the page (`data-embedded`) and `<main>` stops stretching. Without this the iframe could grow but never shrink, because the demo stretches the quiz to keep Back and Next at the bottom of the screen
+  - Tests: the page is marked in an iframe and unmarked when the quiz closes; not marked on its own page
+- [ ] Jaida checks `/embed-test` on a phone: the quiz fits with no scroll box, and each Next scrolls to the top of the quiz
+
 ### Later (not in this plan)
 - Bringing any of this look into `foyer-v1` (only if Jaida asks)
 - Real meeting times from bookings, and real inspiration images from clients
