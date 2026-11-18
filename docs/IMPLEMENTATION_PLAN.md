@@ -648,17 +648,17 @@ Work test-first for anything that changes what shows (hidden parts, fields, tabs
   - Tests: a renovation sample shows its amounts; a skipped project type shows none
 
 ### Phase 5: Team brief screen
-- [ ] `components/quick-quiz/TeamBriefView.tsx`: the header (back link, name, "N% Type", meeting line, copy icon button with an accessible name)
-- [ ] Analysis and Documentation tabs (keyboard-usable; Analysis shows first)
+- [x] `components/quick-quiz/TeamBriefView.tsx`: the header (back link, name, "N% Type", meeting line, copy icon button with an accessible name)
+- [x] Analysis and Documentation tabs (keyboard-usable; Analysis shows first)
   - Tests: Analysis shows first; clicking Documentation shows Contact, All answers and Inspiration
-- [ ] Analysis tab: Project Fit (Overall pill, reasons, 3 tiles with their colours), Client Type (primary card, second type, close call, "Client was shown", yellow bars for every type), How to work with them, Tip, Behaviour
+- [x] Analysis tab: Project Fit (Overall pill, reasons, 3 tiles with their colours), Client Type (primary card, second type, close call, "Client was shown", yellow bars for every type), How to work with them, Tip, Behaviour
   - Tests: the tiles show the right colour for a hot, a warm and a cold sample; a raised warning sign shows on the Warning signs tile; every client type has a bar with its percent; the close call and "Client was shown" lines still show
-- [ ] Documentation tab: Contact, All answers (four sections that open and close; Project open first), Inspiration photos and the "+" tile
+- [x] Documentation tab: Contact, All answers (four sections that open and close; Project open first), Inspiration photos and the "+" tile
   - Tests: each section lists its questions with the short labels and answers; skipped answers say so
-- [ ] "Copy as text" still copies the whole brief (unchanged text)
+- [x] "Copy as text" still copies the whole brief (unchanged text)
 
 ### Phase 6: Checks
-- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [x] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
 - [ ] Jaida checks each screenshot's screen on a phone against the screenshot, and on a computer
 
 ### Later (not in this plan)

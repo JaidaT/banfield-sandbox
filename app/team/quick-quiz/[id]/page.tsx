@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import TeamBriefView from "@/components/quick-quiz/TeamBriefView";
 import { sampleBrief, sampleIds } from "@/lib/quick-quiz/demo";
+import { loadDemoBrief } from "@/lib/quick-quiz/demoBrief";
 
 type Params = PageProps<"/team/quick-quiz/[id]">["params"];
 
@@ -24,5 +25,14 @@ export async function BriefContent({ params }: { params: Params }) {
   const { id } = await params;
   const brief = sampleBrief(id);
   if (!brief) notFound();
-  return <TeamBriefView brief={brief} back={{ href: "/team/quick-quiz", label: "Back to Quick Quiz samples" }} />;
+  // Demo styling (2026-11-17): made-up meeting line, inspiration photos and
+  // answer sections from data/quick-quiz/demo-brief.json.
+  const demo = loadDemoBrief();
+  return (
+    <TeamBriefView
+      brief={brief}
+      back={{ href: "/team/quick-quiz", label: "All briefs" }}
+      demo={{ meeting: demo.meetings[id], inspiration: demo.inspiration, sections: demo.sections }}
+    />
+  );
 }

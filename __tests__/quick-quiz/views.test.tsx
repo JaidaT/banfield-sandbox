@@ -6,6 +6,8 @@ import TeamBriefView from '@/components/quick-quiz/TeamBriefView'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
 import { buildTeamBrief } from '@/lib/quick-quiz/buildTeamBrief'
 import { designDnaFor } from '@/lib/quick-quiz/designDna'
+import { loadDemoBrief } from '@/lib/quick-quiz/demoBrief'
+import { shortLabel } from '@/lib/quick-quiz/buildTeamBrief'
 import { loadClientCopy, loadQuizData, loadSampleSubmissions } from '@/lib/quick-quiz/load'
 
 afterEach(cleanup)
@@ -18,67 +20,165 @@ const sample = (id: string) => {
   return s
 }
 
+// Demo styling (2026-11-17): the brief follows the team's screenshots, with
+// Analysis and Documentation tabs.
 describe('TeamBriefView', () => {
-  test('shows the headline, contact details and a copy button', () => {
-    const brief = buildTeamBrief(sample('cold-explorer'), data)
-    render(<TeamBriefView brief={brief} />)
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('Riley Thompson')
-    expect(screen.getByText(brief.headline)).toBeDefined()
-    expect(screen.getByText('riley.thompson@example.com')).toBeDefined()
+  const demo = loadDemoBrief()
+  const demoFor = (id: string) => ({ meeting: demo.meetings[id], inspiration: demo.inspiration, sections: demo.sections })
+  const showBrief = (id: string, s = sample(id)) => render(<TeamBriefView brief={buildTeamBrief(s, data)} demo={demoFor(id)} />)
+  const tile = (name: string) => screen.getByRole('group', { name })
+  const openDocumentation = () => fireEvent.click(screen.getByRole('tab', { name: 'Documentation' }))
+
+  test('the header shows the name, the client type line, the meeting line and a copy button', () => {
+    showBrief('decisive-delegator')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Alex Morgan')
+    expect(screen.getByText('80% Decisive Delegator')).toBeDefined()
+    expect(screen.getByText('Tue 10:30am - Renovation, Burnaby')).toBeDefined()
     expect(screen.getByRole('button', { name: /copy/i })).toBeDefined()
   })
 
-  test('says which Design DNA the client was shown, under the headline', () => {
+  test('a second client type shows in the header line', () => {
+    showBrief('analytical-validator')
+    expect(screen.getByText('67% Analytical Validator / 28% Hands-On Controller')).toBeDefined()
+  })
+
+  test('Analysis shows first; Documentation shows contact, all answers and inspiration', () => {
+    showBrief('cold-explorer')
+    expect(screen.getByRole('tab', { name: 'Analysis' }).getAttribute('aria-selected')).toBe('true')
+    expect(screen.getByRole('heading', { name: 'Project Fit' })).toBeDefined()
+    expect(screen.queryByRole('heading', { name: 'Contact' })).toBeNull()
+
+    openDocumentation()
+    expect(screen.getByRole('tab', { name: 'Documentation' }).getAttribute('aria-selected')).toBe('true')
+    expect(screen.queryByRole('heading', { name: 'Project Fit' })).toBeNull()
+    expect(screen.getByRole('heading', { name: 'Contact' })).toBeDefined()
+    expect(screen.getByText('riley.thompson@example.com')).toBeDefined()
+    expect(screen.getByRole('heading', { name: 'All answers' })).toBeDefined()
+    expect(screen.getByRole('heading', { name: 'Inspiration' })).toBeDefined()
+    expect(screen.getAllByRole('img').map((img) => img.getAttribute('alt'))).toEqual(demo.inspiration.map((p) => p.alt))
+  })
+
+  test('the arrow keys move between the tabs', () => {
+    showBrief('cold-explorer')
+    fireEvent.keyDown(screen.getByRole('tab', { name: 'Analysis' }), { key: 'ArrowRight' })
+    expect(screen.getByRole('tab', { name: 'Documentation' }).getAttribute('aria-selected')).toBe('true')
+    expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'Documentation' }))
+  })
+
+  test('Project Fit: the overall label, the reasons line and three tiles', () => {
+    const brief = buildTeamBrief(sample('decisive-delegator'), data)
+    showBrief('decisive-delegator')
+    expect(screen.getByTestId('lead-temperature').textContent).toBe('Hot')
+    expect(screen.getByText(brief.lead.reasons[0])).toBeDefined()
+    expect(tile('Project type').textContent).toContain('A renovation')
+    expect(tile('Project type').textContent).toContain('Hot from $150K, warm from $50K')
+    expect(tile('Investment').getAttribute('data-status')).toBe('hot')
+    expect(tile('Warning signs').getAttribute('data-status')).toBe('none')
+    expect(tile('Warning signs').textContent).toContain('None')
+  })
+
+  test('the Investment tile is yellow for warm and red for cold', () => {
+    showBrief('mixed-cautious-controller')
+    expect(tile('Investment').getAttribute('data-status')).toBe('warm')
+    cleanup()
+    const low = sample('decisive-delegator')
+    showBrief('decisive-delegator', { ...low, answers: { ...low.answers, investment: 10000 } })
+    expect(tile('Investment').getAttribute('data-status')).toBe('cold')
+  })
+
+  test('a raised warning sign shows on the Warning signs tile, which says it lowers the label', () => {
+    const brief = buildTeamBrief(sample('skipper'), data)
+    showBrief('skipper')
+    expect(tile('Warning signs').getAttribute('data-status')).toBe('raised')
+    expect(tile('Warning signs').textContent).toContain(brief.lead.warningSigns[0].note)
+    expect(tile('Warning signs').textContent).toContain('Lowers the label one step')
+    expect(screen.getByTestId('lead-temperature').textContent).toBe('Warm')
+  })
+
+  test('Client Type: the primary and second types, and a bar for every type with its percent', () => {
     const brief = buildTeamBrief(sample('analytical-validator'), data)
-    render(<TeamBriefView brief={brief} />)
-    const line = screen.getByText(/Client was shown:/)
-    expect(line.textContent).toBe('Client was shown: The Strategist')
-    expect(screen.getByText(brief.headline).nextElementSibling).toBe(line)
+    showBrief('analytical-validator')
+    expect(screen.getByText('Primary client type')).toBeDefined()
+    expect(screen.getByText('Secondary client type')).toBeDefined()
+    const bars = within(screen.getByRole('list', { name: 'Client type breakdown' })).getAllByRole('listitem')
+    expect(bars.map((b) => b.textContent)).toEqual(brief.blend.scores.map((sc) => `${shortLabel(sc.label)}${sc.percent}%`))
   })
 
-  test('a close call shows as a note under the headline', () => {
+  test('Fit sits above Client Type', () => {
+    showBrief('skipper')
+    const fit = screen.getByRole('heading', { name: 'Project Fit' })
+    const type = screen.getByRole('heading', { name: 'Client Type' })
+    expect(fit.compareDocumentPosition(type) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  test('says which Design DNA the client was shown', () => {
+    showBrief('analytical-validator')
+    expect(screen.getByText(/Client was shown:/).textContent).toBe('Client was shown: The Strategist')
+  })
+
+  test('a close call shows as a note; a clear client type shows none', () => {
     const brief = buildTeamBrief(sample('out-of-area-hot'), data)
-    render(<TeamBriefView brief={brief} />)
-    const note = screen.getByRole('note', { name: 'Close call' })
-    expect(note.textContent).toBe(brief.closeCalls[0])
-    // Under the headline and the "Client was shown" line, before the copy button.
-    expect(screen.getByText(/Client was shown:/).nextElementSibling).toBe(note)
+    showBrief('out-of-area-hot')
+    expect(screen.getByRole('note', { name: 'Close call' }).textContent).toBe(brief.closeCalls[0])
+    cleanup()
+    showBrief('cold-explorer')
+    expect(screen.queryByRole('note', { name: 'Close call' })).toBeNull()
   })
 
-  test('a clear client type shows no close-call note', () => {
-    render(<TeamBriefView brief={buildTeamBrief(sample('cold-explorer'), data)} />)
-    expect(screen.queryByRole('note', { name: 'Close call' })).toBeNull()
+  test('How to work with them: communication, pacing, pitch, watch for and the tip, for each highlighted type', () => {
+    const brief = buildTeamBrief(sample('mixed-cautious-controller'), data)
+    showBrief('mixed-cautious-controller')
+    for (const h of brief.highlights) {
+      expect(screen.getByText(h.communication)).toBeDefined()
+      expect(screen.getByText(h.pitch)).toBeDefined()
+      expect(screen.getByText(h.risks[0])).toBeDefined()
+      expect(screen.getByText(h.tip)).toBeDefined()
+    }
+  })
+
+  test('Behaviour: time to complete, skipped and the notes', () => {
+    const brief = buildTeamBrief(sample('skipper'), data)
+    showBrief('skipper')
+    const behaviour = within(screen.getByRole('heading', { name: 'Behaviour' }).parentElement!)
+    expect(behaviour.getByText('Time to complete')).toBeDefined()
+    for (const note of brief.behaviour.notes) expect(behaviour.getByText(note)).toBeDefined()
+  })
+
+  test('All answers: four sections that open and close, Project open first, with short labels', () => {
+    showBrief('skipper')
+    openDocumentation()
+    const sections = screen.getAllByRole('group').filter((el) => el.tagName === 'DETAILS')
+    expect(sections.map((d) => d.querySelector('summary')?.textContent)).toEqual(['Project', 'Investment + readiness', 'Confidence + home', 'Decision making'])
+    expect(sections.map((d) => (d as HTMLDetailsElement).open)).toEqual([true, false, false, false])
+    expect(within(sections[0]).getByText('Dreaming up')).toBeDefined()
+    expect(within(sections[0]).getByText('A renovation')).toBeDefined()
+  })
+
+  test('a skipped answer says Skipped', () => {
+    const brief = buildTeamBrief(sample('skipper'), data)
+    const skipped = brief.answers.find((a) => a.answer === null)!
+    const label = demo.sections.flatMap((sec) => sec.rows).find((r) => r.question === skipped.questionId)!.label
+    showBrief('skipper')
+    openDocumentation()
+    const row = screen.getByText(label).parentElement!
+    expect(row.textContent).toContain('Skipped')
   })
 
   test('says "Not given" for blank contact details', () => {
     const s = sample('cold-explorer')
-    const blank = { ...s, contact: { name: '', email: '', phone: '', siteAddress: { street: '', city: '', postalCode: '' } } }
-    render(<TeamBriefView brief={buildTeamBrief(blank, data)} />)
+    showBrief('cold-explorer', { ...s, contact: { name: '', email: '', phone: '', siteAddress: { street: '', city: '', postalCode: '' } } })
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Name not given')
+    openDocumentation()
     expect(screen.getAllByText('Not given')).toHaveLength(3)
   })
 
-  test('shows guidance for each highlighted type and the lead label', () => {
-    const brief = buildTeamBrief(sample('mixed-cautious-controller'), data)
+  test('without demo data, it still shows the brief and lists all answers', () => {
+    const brief = buildTeamBrief(sample('cold-explorer'), data)
     render(<TeamBriefView brief={brief} />)
-    for (const h of brief.highlights) {
-      expect(screen.getByText(h.communication)).toBeDefined()
-    }
-    expect(screen.getByTestId('lead-temperature').textContent).toMatch(/warm lead/i)
-  })
-
-  // Oct 28 meeting: fit sits above the client type in the brief.
-  test('the lead section comes before the client type section', () => {
-    render(<TeamBriefView brief={buildTeamBrief(sample('skipper'), data)} />)
-    const leadLabel = screen.getByTestId('lead-temperature')
-    const clientType = screen.getByRole('heading', { name: 'Client type' })
-    expect(leadLabel.compareDocumentPosition(clientType) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-  })
-
-  test('shows warning sign notes', () => {
-    const brief = buildTeamBrief(sample('skipper'), data)
-    render(<TeamBriefView brief={brief} />)
-    expect(screen.getByText(brief.lead.warningSigns[0].note)).toBeDefined()
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Riley Thompson')
+    openDocumentation()
+    expect(screen.getByText(brief.answers[0].prompt)).toBeDefined()
+    expect(screen.queryByRole('heading', { name: 'Inspiration' })).toBeNull()
   })
 })
 

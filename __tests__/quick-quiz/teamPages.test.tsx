@@ -61,7 +61,7 @@ describe('one Quick Quiz brief (/team/quick-quiz/<id>)', () => {
   test('shows the brief, with a link back to the list', async () => {
     render(await briefFor('decisive-delegator'))
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Alex Morgan')
-    expect(screen.getByRole('link', { name: 'Back to Quick Quiz samples' }).getAttribute('href')).toBe('/team/quick-quiz')
+    expect(screen.getByRole('link', { name: 'All briefs' }).getAttribute('href')).toBe('/team/quick-quiz')
   })
 
   test('an unknown sample is a "not found" page', async () => {
