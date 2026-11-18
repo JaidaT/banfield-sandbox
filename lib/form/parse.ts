@@ -193,6 +193,7 @@ function parseQuestion(raw: unknown, where: string, ctx: RuleContext, parent?: s
 
   const question: Question = { id, kind, prompt: raw.prompt, required: raw.required === true, options: [] }
   if (typeof raw.help === 'string') question.help = raw.help
+  if (typeof raw.placeholder === 'string') question.placeholder = raw.placeholder
   if (raw.showIf !== undefined) {
     if (parent) throw new Error(`${name}: rules inside a repeater card are not supported yet`)
     question.showIf = parseCondition(raw.showIf, name, ctx)

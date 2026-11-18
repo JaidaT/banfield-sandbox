@@ -124,6 +124,15 @@ describe('parseQuestionnaire: valid files', () => {
     expect(options[1].image).toBeUndefined()
   })
 
+  test('keeps optional placeholder text on a question, and leaves it out when not given', () => {
+    const raw = withChange((r) => {
+      ;(firstQuestion(r) as Record<string, unknown>).placeholder = 'Share whatever comes to mind...'
+    })
+    const questions = parseQuestionnaire(raw).steps[0].questions
+    expect(questions[0].placeholder).toBe('Share whatever comes to mind...')
+    expect(questions[1].placeholder).toBeUndefined()
+  })
+
   test('accepts atLeast on a number or derived value', () => {
     const raw = withChange((r) => {
       ;(r.steps[2] as Record<string, unknown>).showIf = { field: 'adult_count', atLeast: 2 }

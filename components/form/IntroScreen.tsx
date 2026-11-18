@@ -1,5 +1,5 @@
 import type { Ref } from 'react'
-import { BUTTON_MAIN, HEADING } from './styles'
+import { BUTTON_MAIN, BUTTON_ROW, HEADING } from './styles'
 import type { Step } from '@/lib/form/types'
 
 interface Props {
@@ -17,7 +17,7 @@ export default function IntroScreen({ step, buttonLabel, onNext, headingRef }: P
         {step.title}
       </h2>
       {step.intro ? <p className="leading-7">{step.intro}</p> : null}
-      <div>
+      <div className={BUTTON_ROW}>
         <button type="button" onClick={onNext} className={BUTTON_MAIN}>
           {buttonLabel}
         </button>

@@ -250,12 +250,12 @@
           "kind": "repeater",
           "prompt": "Who lives here?",
           "help": "Add everyone who lives in the home, including you.",
-          "addLabel": "Add a person",
+          "addLabel": "Add member",
           "max": 12,
           "fields": [
-            { "id": "name", "kind": "short_text", "prompt": "Name" },
-            { "id": "age", "kind": "number", "prompt": "Age" },
-            { "id": "occupation", "kind": "short_text", "prompt": "What they do", "help": "Optional: job, school, retired..." }
+            { "id": "name", "kind": "short_text", "prompt": "Name", "placeholder": "Name" },
+            { "id": "age", "kind": "number", "prompt": "Age", "placeholder": "Age" },
+            { "id": "occupation", "kind": "short_text", "prompt": "What they do", "help": "Optional: job, school, retired...", "placeholder": "What they do" }
           ]
         },
 

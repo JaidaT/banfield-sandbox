@@ -1,7 +1,8 @@
 'use client'
 
 import { useId } from 'react'
-import { BUTTON_SMALL, HINT, LABEL, PROBLEM } from './styles'
+import type { CSSProperties } from 'react'
+import { HINT, LABEL, PROBLEM } from './styles'
 import { formatRangeValue } from '@/lib/form/format'
 import type { AnswerValue, Question } from '@/lib/form/types'
 
@@ -37,7 +38,7 @@ export default function RangeField({ question, value, onChange, error }: Props) 
           {question.help}
         </p>
       ) : null}
-      <p id={shownId} className="text-lg font-semibold" aria-live="polite">
+      <p id={shownId} className="text-center text-lg font-bold" aria-live="polite">
         {shown}
       </p>
       <input
@@ -54,9 +55,11 @@ export default function RangeField({ question, value, onChange, error }: Props) 
         onChange={(e) => onChange(Number(e.target.value))}
         // A tap on the slider without moving it still counts as choosing that amount.
         onClick={(e) => onChange(Number(e.currentTarget.value))}
-        className="w-full"
+        // Yellow up to the handle (see .form-range in globals.css).
+        className="form-range"
+        style={{ '--fill': `${max > min ? (((amount ?? min) - min) / (max - min)) * 100 : 0}%` } as CSSProperties}
       />
-      <div className="flex justify-between text-sm text-neutral-600" aria-hidden="true">
+      <div className="flex justify-between text-sm font-bold text-charcoal" aria-hidden="true">
         <span>{formatRangeValue(question, min)}</span>
         <span>{formatRangeValue(question, max)}</span>
       </div>
@@ -68,8 +71,13 @@ export default function RangeField({ question, value, onChange, error }: Props) 
               type="button"
               aria-pressed={value === option.id}
               onClick={() => onChange(value === option.id ? undefined : option.id)}
-              className={`${BUTTON_SMALL} aria-pressed:bg-neutral-800 aria-pressed:text-white`}
+              // Demo styling (2026-11-17): a rounded pill with a radio circle.
+              className="group flex items-center gap-2 rounded-xl border-2 border-[var(--line)] bg-white px-3 py-2 text-sm transition-colors hover:border-accent focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy aria-pressed:border-accent aria-pressed:bg-accent"
             >
+              <span
+                aria-hidden="true"
+                className="h-5 w-5 shrink-0 rounded-full border-2 border-accent bg-white group-aria-pressed:border-navy group-aria-pressed:bg-navy group-aria-pressed:shadow-[inset_0_0_0_3px_white]"
+              />
               {option.label}
             </button>
           ))}

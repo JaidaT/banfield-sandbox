@@ -20,6 +20,14 @@ const yesNo = question({
 })
 
 describe('QuestionField', () => {
+  test('text boxes show their placeholder text', () => {
+    render(<QuestionField question={question({ id: 'home', kind: 'long_text', prompt: 'Home', placeholder: 'Share whatever comes to mind...' })} value={undefined} onChange={vi.fn()} />)
+    expect(screen.getByLabelText('Home').getAttribute('placeholder')).toBe('Share whatever comes to mind...')
+    cleanup()
+    render(<QuestionField question={question({ id: 'age', kind: 'number', prompt: 'Age', placeholder: 'Age' })} value={undefined} onChange={vi.fn()} />)
+    expect(screen.getByLabelText('Age').getAttribute('placeholder')).toBe('Age')
+  })
+
   test('text: a labelled box that reports what is typed, and the hint', () => {
     const onChange = vi.fn()
     render(<QuestionField question={question({ id: 'name', kind: 'short_text', prompt: 'Your name', help: 'First and last.' })} value={undefined} onChange={onChange} />)

@@ -14,11 +14,87 @@
   --color-navy: var(--navy);
   --color-accent: var(--accent);
   --font-sans: var(--font-poppins);
-  /* Brand headline font is Glacial Indifference; Quicksand stands in until it is licensed. */
-  --font-heading: var(--font-quicksand);
+  /* Demo styling (2026-11-17): Poppins for headings too, as in the team's screenshots. */
+  --font-heading: var(--font-poppins);
 }
 
 body {
   background: var(--frost);
   color: var(--charcoal);
+}
+
+/* Demo styling (2026-11-17): the questionnaire's tick boxes, radio circles and
+   slider, drawn to match the team's screenshots. Plain CSS because browsers
+   need special selectors for these. */
+:root {
+  --line: #e4ddca;
+  --track: #e2ded3;
+}
+
+.form-radio,
+.form-check {
+  appearance: none;
+  flex-shrink: 0;
+  width: 1.375rem;
+  height: 1.375rem;
+  margin: 0;
+  border: 2px solid var(--accent);
+  background: #fff;
+  cursor: pointer;
+}
+.form-radio {
+  border-radius: 9999px;
+}
+.form-radio:checked {
+  border-color: var(--navy);
+  background: var(--navy);
+  box-shadow: inset 0 0 0 3px #fff;
+}
+.form-check {
+  border-radius: 0.25rem;
+}
+.form-check:checked {
+  border-color: var(--navy);
+  background: var(--navy)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 80% no-repeat;
+}
+.form-radio:disabled,
+.form-check:disabled {
+  cursor: not-allowed;
+  border-color: var(--line);
+}
+.form-radio:focus-visible,
+.form-check:focus-visible {
+  outline: 3px solid var(--navy);
+  outline-offset: 2px;
+}
+
+/* The slider: yellow up to the handle (--fill, set on the element), grey after. */
+.form-range {
+  appearance: none;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--accent) var(--fill, 0%), var(--track) var(--fill, 0%));
+  cursor: pointer;
+}
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background: var(--navy);
+  border: 3px solid var(--accent);
+}
+.form-range::-moz-range-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background: var(--navy);
+  border: 3px solid var(--accent);
+}
+.form-range:focus-visible {
+  outline: 3px solid var(--navy);
+  outline-offset: 4px;
 }

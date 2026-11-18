@@ -7,7 +7,6 @@ import ReviewScreen from './ReviewScreen'
 import StepScreen from './StepScreen'
 import type { ProgressStyle } from './StepScreen'
 import { BUTTON } from './styles'
-import WireframePage from './WireframePage'
 import { nextStepId, previousStepId, progress } from '@/lib/form/navigation'
 import { buildOutput } from '@/lib/form/output'
 import { allProblems, stepProblems } from '@/lib/form/validate'
@@ -38,6 +37,8 @@ interface Props {
   // How the progress above each step reads: "Step 4 of 11" (the long
   // questionnaire, the default) or "31%" done (the Quick Quiz).
   progressAs?: ProgressStyle
+  // "quick-quiz" gives the Quick Quiz its own touches (italic navy hints).
+  look?: 'quick-quiz'
 }
 
 export interface DoneScreenProps {
@@ -52,7 +53,7 @@ export interface DoneScreenProps {
 // screen passed in as doneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps' }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -180,5 +181,11 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
     )
   }
 
-  return <WireframePage banner="Prototype - not the final design">{screen}</WireframePage>
+  // Demo styling (2026-11-17): the frost page with no prototype banner. The
+  // column fills the screen so the Back and Next row sits at the bottom.
+  return (
+    <div className={`flex flex-1 flex-col bg-frost font-sans text-charcoal ${look ?? ''}`}>
+      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6">{screen}</main>
+    </div>
+  )
 }

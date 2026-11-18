@@ -17,7 +17,8 @@ const group = (name: string) => within(screen.getByRole('group', { name }))
 describe('LongQuestionnaireForm: steps, checks and show/hide rules', () => {
   test('starts on the welcome screen, then shows the first step with progress', () => {
     render(<LongQuestionnaireForm questionnaire={questionnaire} />)
-    expect(screen.getByText('Prototype - not the final design')).toBeDefined()
+    // Demo styling (2026-11-17): no prototype banner.
+    expect(screen.queryByText('Prototype - not the final design')).toBeNull()
     expect(screen.getByText(/glass of wine/)).toBeDefined()
     click("Let's start")
     expect(stepHeading()).toBe('Contact and site')

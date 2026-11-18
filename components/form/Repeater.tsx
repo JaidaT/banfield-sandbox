@@ -1,7 +1,7 @@
 'use client'
 
 import QuestionField from './QuestionField'
-import { BUTTON_SMALL, HINT, LABEL, PROBLEM } from './styles'
+import { BUTTON_ADD, BUTTON_SMALL, CARD, HINT, LABEL, PROBLEM } from './styles'
 import type { AnswerValue, Question, RepeaterEntry } from '@/lib/form/types'
 
 interface Props {
@@ -36,8 +36,9 @@ export default function Repeater({ question, value, onChange, error }: Props) {
       {question.help ? <p className={HINT}>{question.help}</p> : null}
 
       {cards.map((card, index) => (
-        <fieldset key={index} className="flex flex-col gap-3 rounded border border-neutral-400 bg-neutral-50 p-3">
-          <legend className="px-1 text-sm text-neutral-600">Card {index + 1}</legend>
+        <fieldset key={index} className={CARD}>
+          {/* Demo styling (2026-11-17): the screenshots show no card number, so it is for screen readers only. */}
+          <legend className="sr-only">Card {index + 1}</legend>
           {fields.map((field) => (
             <QuestionField
               key={field.id}
@@ -64,7 +65,7 @@ export default function Repeater({ question, value, onChange, error }: Props) {
         type="button"
         onClick={() => onChange([...cards, {}])}
         disabled={atLimit}
-        className={`${BUTTON_SMALL} self-start`}
+        className={`${BUTTON_ADD} self-start`}
       >
         {question.addLabel ?? 'Add another'}
       </button>

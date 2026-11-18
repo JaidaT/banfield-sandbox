@@ -48,7 +48,11 @@ export default function QuestionField({ question, value, onChange, error, inputI
         {help}
         <div className="flex flex-col gap-2">
           {question.options.map((option) => (
-            <label key={option.id} className="flex items-center gap-3 rounded border border-neutral-300 bg-white p-2">
+            // Demo styling (2026-11-17): white rows that turn yellow when chosen.
+            <label
+              key={option.id}
+              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border-2 border-[var(--line)] bg-white px-3 py-2.5 transition-colors hover:border-accent has-checked:border-accent has-checked:bg-accent has-disabled:cursor-not-allowed has-disabled:opacity-50 has-disabled:hover:border-[var(--line)]"
+            >
               <input
                 type={question.kind === 'single' ? 'radio' : 'checkbox'}
                 name={id}
@@ -56,12 +60,12 @@ export default function QuestionField({ question, value, onChange, error, inputI
                 checked={question.kind === 'single' ? value === option.id : ticked.includes(option.id)}
                 onChange={() => (question.kind === 'single' ? onChange(option.id) : toggle(option.id))}
                 disabled={full && !ticked.includes(option.id)}
-                className="h-5 w-5 shrink-0"
+                className={question.kind === 'single' ? 'form-radio' : 'form-check'}
               />
               {option.image ? (
-                <Image src={option.image} alt="" width={120} height={90} unoptimized className="rounded border border-neutral-300" />
+                <Image src={option.image} alt="" width={120} height={90} unoptimized className="h-16 w-20 shrink-0 rounded-md object-cover" />
               ) : null}
-              <span>{option.label}</span>
+              <span className="text-sm leading-snug">{option.label}</span>
             </label>
           ))}
         </div>
@@ -78,6 +82,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
         rows={3}
         value={typeof value === 'string' ? value : ''}
         onChange={(e) => onChange(e.target.value)}
+        placeholder={question.placeholder}
         className={INPUT}
         {...shared}
       />
@@ -90,6 +95,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
         inputMode="numeric"
         value={typeof value === 'number' ? value : ''}
         onChange={(e) => onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+        placeholder={question.placeholder}
         className={INPUT}
         {...shared}
       />
@@ -101,6 +107,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
         type="text"
         value={typeof value === 'string' ? value : ''}
         onChange={(e) => onChange(e.target.value)}
+        placeholder={question.placeholder}
         className={INPUT}
         {...shared}
       />

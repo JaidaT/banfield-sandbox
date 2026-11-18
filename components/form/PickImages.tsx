@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { HINT, LABEL, PROBLEM } from './styles'
+import { BUTTON_SMALL, CARD, HINT, LABEL, PROBLEM } from './styles'
 import type { ImagePicks, Question } from '@/lib/form/types'
 
 interface Props {
@@ -13,6 +13,11 @@ interface Props {
 }
 
 type Role = 'favourite' | 'least'
+
+const setName = (id: string) => {
+  const words = id.replace(/_/g, ' ')
+  return words.charAt(0).toUpperCase() + words.slice(1)
+}
 const ROLE_LABEL: Record<Role, string> = { favourite: 'Favourite', least: 'Least favourite' }
 
 // Pick a favourite and a least favourite in each picture set. Big buttons
@@ -40,12 +45,14 @@ export default function PickImages({ question, value, onChange, error }: Props) 
       {question.help ? <p className={HINT}>{question.help}</p> : null}
 
       {(question.imageSets ?? []).map((set, setIndex) => (
-        <fieldset key={set.id} className="flex flex-col gap-2 rounded border border-neutral-400 p-3">
-          <legend className="px-1 text-sm text-neutral-600">Picture set {setIndex + 1}</legend>
+        <fieldset key={set.id} className={CARD}>
+          <legend className="sr-only">Picture set {setIndex + 1}</legend>
+          {/* The set's name from its id ("living_rooms" -> "Living rooms"), as in the screenshots. */}
+          <p className="text-sm text-neutral-500">{setName(set.id)}</p>
           <div className="grid grid-cols-2 gap-3">
             {set.images.map((image) => (
               <div key={image.id} className="flex flex-col gap-2">
-                <Image src={image.src} alt={image.label} width={400} height={300} unoptimized className="h-auto w-full rounded border border-neutral-300" />
+                <Image src={image.src} alt={image.label} width={400} height={300} unoptimized className="aspect-[4/3] h-auto w-full rounded-lg object-cover" />
                 {(['favourite', 'least'] as const).map((role) => {
                   const isPicked = picks[set.id]?.[role] === image.id
                   return (
@@ -55,9 +62,7 @@ export default function PickImages({ question, value, onChange, error }: Props) 
                       aria-pressed={isPicked}
                       aria-label={`${ROLE_LABEL[role]}: ${image.label}`}
                       onClick={() => choose(set.id, role, image.id)}
-                      className={`rounded border px-2 py-2 text-sm font-semibold ${
-                        isPicked ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-500 bg-white'
-                      }`}
+                      className={BUTTON_SMALL}
                     >
                       {ROLE_LABEL[role]}
                     </button>

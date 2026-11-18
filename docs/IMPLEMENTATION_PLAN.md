@@ -617,15 +617,15 @@ Made-up demo data (meeting lines, inspiration photos) lives in its own file, so 
 Work test-first for anything that changes what shows (hidden parts, fields, tabs, tiles, sections). Pure looks (colours, corners, spacing) are checked by eye on a phone.
 
 ### Phase 1: Shared form look (both quizzes)
-- [ ] `app/layout.tsx` / `app/globals.css`: Poppins for all text, headings included
-- [ ] `components/form/WireframePage.tsx`: no prototype banner
+- [x] `app/layout.tsx` / `app/globals.css`: Poppins for all text, headings included
+- [x] `components/form/WireframePage.tsx`: no prototype banner
   - Test: no "Prototype - not the final design" text on a quiz screen
-- [ ] `components/form/StepScreen.tsx`: centred progress text over a yellow bar on a grey track, drawn with two divs (no `<progress>`); "Step N of M" or "N%" as now
+- [x] `components/form/StepScreen.tsx`: centred progress text over a yellow bar on a grey track, drawn with two divs (no `<progress>`); "Step N of M" or "N%" as now
   - Test: the Quick Quiz still shows "N%", the long questionnaire "Step N of M"
-- [ ] `components/form/styles.ts` and the screens that use it: Next filled yellow, Back outlined yellow, the corner shape; Back and Next in one row pinned to the bottom of the screen; small buttons (Edit, Remove, Favourite) outlined yellow, Add member filled yellow
-- [ ] `components/form/QuestionField.tsx`: option rows (white, light border; filled yellow when chosen), yellow radio circles and tick boxes (navy dot or tick when chosen), text boxes and the long-text box as in the screenshots; made-up looks for hover, focus, error and disabled
-- [ ] `components/form/RangeField.tsx`: yellow filled track, navy handle, bold amount above, bold min and max under; "Not sure yet" as a rounded pill with a radio circle
-- [ ] `components/form/Repeater.tsx`, `PickImages.tsx`, `AnswersSummary.tsx`, `ReviewScreen.tsx`: white rounded cards, outlined small buttons, review labels grey with answers bold
+- [x] `components/form/styles.ts` and the screens that use it: Next filled yellow, Back outlined yellow, the corner shape; Back and Next in one row pinned to the bottom of the screen; small buttons (Edit, Remove, Favourite) outlined yellow, Add member filled yellow
+- [x] `components/form/QuestionField.tsx`: option rows (white, light border; filled yellow when chosen), yellow radio circles and tick boxes (navy dot or tick when chosen), text boxes and the long-text box as in the screenshots; made-up looks for hover, focus, error and disabled
+- [x] `components/form/RangeField.tsx`: yellow filled track, navy handle, bold amount above, bold min and max under; "Not sure yet" as a rounded pill with a radio circle
+- [x] `components/form/Repeater.tsx`, `PickImages.tsx`, `AnswersSummary.tsx`, `ReviewScreen.tsx`: white rounded cards, outlined small buttons, review labels grey with answers bold
 - [ ] Hints: italic navy on the Quick Quiz, small grey on the long questionnaire (as in the screenshots)
 
 ### Phase 2: Quick Quiz screens

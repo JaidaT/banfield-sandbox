@@ -1,6 +1,6 @@
 import type { Ref } from 'react'
 import QuestionInput from './QuestionInput'
-import { BUTTON, BUTTON_MAIN, HEADING, HINT } from './styles'
+import { BUTTON, BUTTON_MAIN, BUTTON_ROW, BUTTON_SMALL, HEADING } from './styles'
 import { percentDone } from '@/lib/form/navigation'
 import type { Problem } from '@/lib/form/validate'
 import type { VisibleStep } from '@/lib/form/visibility'
@@ -36,20 +36,17 @@ export default function StepScreen(props: Props) {
   return (
     <>
       {place ? (
-        <div className="flex flex-col gap-1">
-          {progressAs === 'percent' ? (
-            <>
-              <p className={HINT}>{percentDone(place)}%</p>
-              <progress value={percentDone(place)} max={100} className="h-2 w-full" aria-hidden="true" />
-            </>
-          ) : (
-            <>
-              <p className={HINT}>
-                Step {place.number} of {place.total}
-              </p>
-              <progress value={place.number} max={place.total} className="h-2 w-full" aria-hidden="true" />
-            </>
-          )}
+        // Demo styling (2026-11-17): centred text over a yellow bar on a grey track.
+        <div className="flex flex-col gap-2">
+          <p className="text-center text-xs font-semibold text-charcoal">
+            {progressAs === 'percent' ? `${percentDone(place)}%` : `Step ${place.number} of ${place.total}`}
+          </p>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--track)]" aria-hidden="true">
+            <div
+              className="h-full rounded-full bg-accent transition-[width]"
+              style={{ width: `${progressAs === 'percent' ? percentDone(place) : Math.round((place.number / place.total) * 100)}%` }}
+            />
+          </div>
         </div>
       ) : null}
       <h2 ref={headingRef} tabIndex={-1} className={HEADING}>
@@ -67,7 +64,12 @@ export default function StepScreen(props: Props) {
         />
       ))}
 
-      <div className="flex gap-3 border-t border-neutral-300 pt-4">
+      {onBackToReview && !isLast ? (
+        <button type="button" onClick={onBackToReview} className={`${BUTTON_SMALL} self-start`}>
+          Back to review
+        </button>
+      ) : null}
+      <div className={BUTTON_ROW}>
         {onBack ? (
           <button type="button" onClick={onBack} className={BUTTON}>
             Back
@@ -76,11 +78,6 @@ export default function StepScreen(props: Props) {
         <button type="button" onClick={onNext} className={BUTTON_MAIN}>
           {isLast ? lastLabel : 'Next'}
         </button>
-        {onBackToReview && !isLast ? (
-          <button type="button" onClick={onBackToReview} className={BUTTON}>
-            Back to review
-          </button>
-        ) : null}
       </div>
     </>
   )

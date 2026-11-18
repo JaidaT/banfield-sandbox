@@ -1,4 +1,4 @@
-import { BUTTON_SMALL, HINT } from './styles'
+import { BUTTON_SMALL, CARD } from './styles'
 import type { QuestionnaireOutput } from '@/lib/form/output'
 
 interface Props {
@@ -14,7 +14,7 @@ export default function AnswersSummary({ output, onEdit }: Props) {
   return (
     <div className="flex flex-col gap-5">
       {output.steps.map((step) => (
-        <section key={step.id} className="flex flex-col gap-2 rounded border border-neutral-300 p-3">
+        <section key={step.id} className={CARD}>
           <div className="flex items-center justify-between gap-3">
             <h3 className="text-lg font-bold">{step.title}</h3>
             {onEdit ? (
@@ -33,8 +33,8 @@ export default function AnswersSummary({ output, onEdit }: Props) {
               .filter((a) => a.status !== 'hidden')
               .map((answer) => (
                 <div key={answer.id}>
-                  <dt className={HINT}>{answer.prompt}</dt>
-                  <dd>
+                  <dt className="text-sm text-neutral-500">{answer.prompt}</dt>
+                  <dd className="font-semibold">
                     {answer.cards ? (
                       <ul className="flex flex-col gap-1">
                         {answer.cards.map((card, i) => (
@@ -42,7 +42,7 @@ export default function AnswersSummary({ output, onEdit }: Props) {
                         ))}
                       </ul>
                     ) : answer.status === 'skipped' ? (
-                      <span className="text-neutral-500">(skipped)</span>
+                      <span className="font-normal text-neutral-500">(skipped)</span>
                     ) : (
                       answer.value
                     )}

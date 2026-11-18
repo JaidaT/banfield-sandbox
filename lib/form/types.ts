@@ -65,6 +65,8 @@ export interface Question {
   kind: QuestionKind
   prompt: string
   help?: string
+  // Grey example text inside a text, number or long-text box.
+  placeholder?: string
   // Only contact and project type are required (QUESTIONNAIRE_DISCOVERY P3).
   required: boolean
   // Field rule: shown inline on its step only when this matches.
