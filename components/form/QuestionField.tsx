@@ -12,11 +12,13 @@ interface Props {
   error?: string
   // Unique id for the input. Repeater cards pass their own, e.g. "people-0-age".
   inputId?: string
+  // Keep the label for screen readers only (it is already the screen heading).
+  labelHidden?: boolean
 }
 
 // One question with its label, hint and problem message. Handles every kind
 // except "add another" cards (Repeater) and picture picks (PickImages).
-export default function QuestionField({ question, value, onChange, error, inputId }: Props) {
+export default function QuestionField({ question, value, onChange, error, inputId, labelHidden }: Props) {
   const id = inputId ?? `q-${question.id}`
   const helpId = `${id}-help`
   const errorId = `${id}-error`
@@ -44,7 +46,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
     }
     return (
       <fieldset className="flex flex-col gap-2" {...shared}>
-        <legend className={`${LABEL} mb-1`}>{question.prompt}</legend>
+        <legend className={labelHidden ? 'sr-only' : `${LABEL} mb-1`}>{question.prompt}</legend>
         {help}
         <div className="flex flex-col gap-2">
           {question.options.map((option) => (
@@ -79,7 +81,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
     input = (
       <textarea
         id={id}
-        rows={3}
+        rows={5}
         value={typeof value === 'string' ? value : ''}
         onChange={(e) => onChange(e.target.value)}
         placeholder={question.placeholder}
@@ -116,7 +118,7 @@ export default function QuestionField({ question, value, onChange, error, inputI
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className={LABEL}>
+      <label htmlFor={id} className={labelHidden ? 'sr-only' : LABEL}>
         {question.prompt}
       </label>
       {help}

@@ -626,12 +626,12 @@ Work test-first for anything that changes what shows (hidden parts, fields, tabs
 - [x] `components/form/QuestionField.tsx`: option rows (white, light border; filled yellow when chosen), yellow radio circles and tick boxes (navy dot or tick when chosen), text boxes and the long-text box as in the screenshots; made-up looks for hover, focus, error and disabled
 - [x] `components/form/RangeField.tsx`: yellow filled track, navy handle, bold amount above, bold min and max under; "Not sure yet" as a rounded pill with a radio circle
 - [x] `components/form/Repeater.tsx`, `PickImages.tsx`, `AnswersSummary.tsx`, `ReviewScreen.tsx`: white rounded cards, outlined small buttons, review labels grey with answers bold
-- [ ] Hints: italic navy on the Quick Quiz, small grey on the long questionnaire (as in the screenshots)
+- [x] Hints: italic navy on the Quick Quiz, small grey on the long questionnaire (as in the screenshots)
 
 ### Phase 2: Quick Quiz screens
-- [ ] `data/quick-quiz/quiz-form.json` (and `lib/quick-quiz/toQuestionnaire.ts` if needed): the contact screen shows only name and email, with the new heading
+- [x] `data/quick-quiz/quiz-form.json` (and `lib/quick-quiz/toQuestionnaire.ts` if needed): the contact screen shows only name and email, with the new heading
   - Test: the contact screen has exactly "Your Name" and "Email Address"; leaving them blank still shows the result
-- [ ] `components/quick-quiz/QuizForm.tsx`: no "Team view (demo only)" under the result
+- [x] `components/quick-quiz/QuizForm.tsx`: no "Team view (demo only)" under the result
   - Test: finishing the quiz shows the result and no team view
 
 ### Phase 3: Stock photos

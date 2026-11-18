@@ -61,6 +61,7 @@ export default function StepScreen(props: Props) {
           value={answers[question.id]}
           onChange={(value) => onAnswer(question.id, value)}
           error={problems.find((p) => p.questionId === question.id)?.message}
+          labelHidden={step.questions.length === 1 && question.prompt === step.step.title}
         />
       ))}
 

@@ -26,6 +26,7 @@ export const CONTACT_FIELDS = {
 function formQuestion(question: Question): Record<string, unknown> {
   const shared: Record<string, unknown> = { id: question.id, prompt: question.prompt }
   if (question.help) shared.help = question.help
+  if (question.placeholder) shared.placeholder = question.placeholder
   const options = question.options.map((o) => ({ id: o.id, label: o.label }))
 
   switch (question.kind) {
@@ -49,7 +50,7 @@ function formQuestion(question: Question): Record<string, unknown> {
 }
 
 // The whole quiz as a shared-form questionnaire: a welcome screen, one screen
-// per question (headed with the welcome title, the question as its label),
+// per question (headed with the question, which is also its label),
 // then the contact screen. Checked by the shared loader, like the long one.
 export function quizQuestionnaire(questions: Question[], form: QuizForm): Questionnaire {
   const { contact, contactRequired } = form
@@ -63,12 +64,13 @@ export function quizQuestionnaire(questions: Question[], form: QuizForm): Questi
   const raw = {
     steps: [
       { id: 'welcome', title: form.welcome.title, intro: form.welcome.intro, questions: [] },
-      ...questions.map((q) => ({ id: q.id, title: form.welcome.title, questions: [formQuestion(q)] })),
+      // Demo styling (2026-11-17): the question itself heads its screen.
+      ...questions.map((q) => ({ id: q.id, title: q.prompt, questions: [formQuestion(q)] })),
       {
         id: 'contact',
         title: contact.title,
-        intro: contactRequired ? contact.introWhenRequired : contact.introWhenOptional,
-        questions: (Object.keys(CONTACT_FIELDS) as (keyof typeof CONTACT_FIELDS)[]).map(contactQuestion),
+        intro: form.contactIntroShown === false ? undefined : contactRequired ? contact.introWhenRequired : contact.introWhenOptional,
+        questions: (form.contactShown ?? (Object.keys(CONTACT_FIELDS) as (keyof typeof CONTACT_FIELDS)[])).map(contactQuestion),
       },
     ],
   }

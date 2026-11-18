@@ -36,6 +36,8 @@ export interface Question {
   kind: QuestionKind
   prompt: string
   help?: string
+  // Grey example text inside a text box (demo styling, 2026-11-17).
+  placeholder?: string
   optional: boolean
   // Left out of the skipped count when unanswered (e.g. "Anything else we missed?").
   ignoreIfSkipped?: boolean
@@ -261,11 +263,18 @@ export interface ClientCopy {
   thanks: { title: string; text: string }
 }
 
+// The contact details the quiz can ask for.
+export type ContactField = 'name' | 'email' | 'phone' | 'street' | 'city' | 'postalCode'
+
 // Quiz screen wording that is not in the question bank (data/quick-quiz/quiz-form.json).
 export interface QuizForm {
   // false: the contact fields can be left blank and the result still shows.
   // true: name, email, phone and the full site address are required first.
   contactRequired: boolean
+  // Demo styling (2026-11-17): which contact fields the screen shows (all six
+  // when left out), and whether it shows its intro (yes when left out).
+  contactShown?: ContactField[]
+  contactIntroShown?: boolean
   welcome: { title: string; intro: string }
   // Prompts for the contact screen, which comes last.
   contact: {

@@ -79,6 +79,7 @@
       "kind": "text",
       "prompt": "What does home mean to you?",
       "help": "A word, a sentence, a whole paragraph. Whatever comes to mind.",
+      "placeholder": "Share whatever comes to mind...",
       "optional": true
     },
     {

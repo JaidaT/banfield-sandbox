@@ -12,12 +12,14 @@ interface Props {
   value: AnswerValue | undefined
   onChange: (value: AnswerValue | undefined) => void
   error?: string
+  // Keep the label for screen readers only (it is already the screen heading).
+  labelHidden?: boolean
 }
 
 // A slider question ("range"), with its extra choices such as "Not sure yet"
 // as buttons under it. It starts with no answer until the slider is moved or
 // a choice is tapped. Tapping the chosen choice again clears the answer.
-export default function RangeField({ question, value, onChange, error }: Props) {
+export default function RangeField({ question, value, onChange, error, labelHidden }: Props) {
   const id = `q-${question.id}`
   const helpId = `${id}-help`
   const errorId = `${id}-error`
@@ -32,7 +34,7 @@ export default function RangeField({ question, value, onChange, error }: Props) 
 
   return (
     <fieldset className="flex flex-col gap-2" aria-invalid={error ? true : undefined}>
-      <legend className={`${LABEL} mb-1`}>{question.prompt}</legend>
+      <legend className={labelHidden ? 'sr-only' : `${LABEL} mb-1`}>{question.prompt}</legend>
       {question.help ? (
         <p id={helpId} className={HINT}>
           {question.help}

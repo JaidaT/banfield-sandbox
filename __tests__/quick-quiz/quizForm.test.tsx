@@ -1,10 +1,9 @@
-import { afterEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, describe, expect, test } from 'vitest'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuizPage, { metadata } from '@/app/quiz/page'
 import QuizForm from '@/components/quick-quiz/QuizForm'
-import { buildTeamBrief, shortLabel } from '@/lib/quick-quiz/buildTeamBrief'
-import { loadClientCopy, loadQuizData, loadQuizForm, loadSampleSubmissions } from '@/lib/quick-quiz/load'
-import { CONTACT_FIELDS, quizQuestionnaire, submissionToAnswers } from '@/lib/quick-quiz/toQuestionnaire'
+import { loadClientCopy, loadQuizData, loadQuizForm } from '@/lib/quick-quiz/load'
+import { CONTACT_FIELDS, quizQuestionnaire } from '@/lib/quick-quiz/toQuestionnaire'
 import type { Answers } from '@/lib/form/types'
 
 afterEach(cleanup)
@@ -14,8 +13,8 @@ const clientCopy = loadClientCopy()
 const form = loadQuizForm()
 
 // The quiz as the /quiz page shows it, with contactRequired switched as needed.
-function renderQuiz({ contactRequired = false, startAt, initialAnswers }: { contactRequired?: boolean; startAt?: string; initialAnswers?: Answers } = {}) {
-  const setting = { ...form, contactRequired }
+function renderQuiz({ contactRequired = false, startAt, initialAnswers, allContactFields = false }: { contactRequired?: boolean; startAt?: string; initialAnswers?: Answers; allContactFields?: boolean } = {}) {
+  const setting = allContactFields ? { ...form, contactRequired, contactShown: undefined, contactIntroShown: undefined } : { ...form, contactRequired }
   render(
     <QuizForm
       questionnaire={quizQuestionnaire(quizData.questions, setting)}
@@ -30,7 +29,6 @@ function renderQuiz({ contactRequired = false, startAt, initialAnswers }: { cont
 const heading = () => screen.getByRole('heading', { level: 2 }).textContent
 const click = (name: string | RegExp) => fireEvent.click(screen.getByRole('button', { name }))
 const clientPart = () => within(screen.getByRole('region', { name: 'Your results' }))
-const teamPart = () => within(screen.getByRole('region', { name: 'Team view (demo only)' }))
 
 describe('QuizForm', () => {
   test('starts on the welcome screen, then the first question shows 0% done', () => {
@@ -39,6 +37,8 @@ describe('QuizForm', () => {
     expect(screen.getByText(form.welcome.intro)).toBeDefined()
     click("Let's start")
     expect(screen.getByText('0%')).toBeDefined()
+    // Demo styling (2026-11-17): the question is the heading.
+    expect(heading()).toBe(quizData.questions[0].prompt)
     // The Quick Quiz shows a percentage, not "Step 1 of 13" (the long questionnaire keeps steps).
     expect(screen.queryByText(/Step \d+ of/)).toBeNull()
     expect(screen.getByRole('group', { name: quizData.questions[0].prompt })).toBeDefined()
@@ -57,19 +57,33 @@ describe('QuizForm', () => {
     expect(screen.getByRole('button', { name: 'See my results' })).toBeDefined()
   })
 
+  test('the demo contact screen asks only for name and email', () => {
+    renderQuiz({ startAt: 'contact' })
+    expect(screen.getAllByRole('textbox').map((box) => box.getAttribute('id'))).toEqual([`q-${CONTACT_FIELDS.name}`, `q-${CONTACT_FIELDS.email}`])
+    expect(screen.getByLabelText('Your Name')).toBeDefined()
+    expect(screen.getByLabelText('Email Address')).toBeDefined()
+    expect(screen.queryByText(form.contact.introWhenOptional)).toBeNull()
+  })
+
   test('contactRequired off: the result shows with the contact screen left blank', () => {
     renderQuiz({ startAt: 'contact' })
-    expect(screen.getByText(form.contact.introWhenOptional)).toBeDefined()
     click('See my results')
     expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("You're all done!")
     // Nothing answered, so no Design DNA card.
     expect(clientPart().queryByText('DESIGN DNA')).toBeNull()
     expect(clientPart().queryByText('How we can help')).toBeNull()
-    expect(teamPart().getByRole('heading', { level: 1 }).textContent).toBe('Name not given')
+  })
+
+  // Demo styling (2026-11-17): the team view is hidden; the brief opens from the sample list.
+  test('no team view under the result', () => {
+    renderQuiz({ startAt: 'contact' })
+    click('See my results')
+    expect(screen.queryByRole('region', { name: 'Team view (demo only)' })).toBeNull()
+    expect(screen.queryByText(/(Hot|Warm|Cold) lead/)).toBeNull()
   })
 
   test('contactRequired on: "See my results" is blocked until all six contact fields are filled in', () => {
-    renderQuiz({ contactRequired: true, startAt: 'contact' })
+    renderQuiz({ contactRequired: true, startAt: 'contact', allContactFields: true })
     expect(screen.getByText(form.contact.introWhenRequired)).toBeDefined()
     click('See my results')
     expect(heading()).toBe(form.contact.title)
@@ -86,7 +100,7 @@ describe('QuizForm', () => {
     expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("You're all done!")
   })
 
-  test('the client result has the booking button and no client type or lead label; the team brief has them', () => {
+  test('the client result has the booking button and no client type or lead label', () => {
     const answers: Answers = {
       decision_style: 'trust_expert',
       involvement: 'show_me_the_result',
@@ -107,11 +121,6 @@ describe('QuizForm', () => {
     const clientText = screen.getByRole('region', { name: 'Your results' }).textContent ?? ''
     for (const archetype of quizData.archetypes) expect(clientText).not.toContain(archetype.label)
     expect(clientText).not.toMatch(/(hot|warm|cold) lead/i)
-
-    const teamText = screen.getByRole('region', { name: 'Team view (demo only)' }).textContent ?? ''
-    expect(teamText).toMatch(/(Hot|Warm|Cold) lead/)
-    expect(teamText).toContain('Decisive Delegator')
-    expect(teamPart().getByRole('button', { name: /copy/i })).toBeDefined()
   })
 
   test('the cursor moves to the result greeting', () => {
@@ -136,57 +145,7 @@ describe('the /quiz page', () => {
   })
 })
 
-describe('QuizForm: time taken', () => {
-  afterEach(() => vi.restoreAllMocks())
-
-  test('the clock starts when "Let\'s start" is pressed, not when the page opens', () => {
-    // A pretend timer, in milliseconds, so the result is exact.
-    let now = 1_000
-    vi.spyOn(performance, 'now').mockImplementation(() => now)
-    renderQuiz()
-
-    now = 10_000 // spent 9 seconds reading the welcome screen
-    click("Let's start")
-    for (let i = 0; i < quizData.questions.length; i++) click('Next')
-    now = 100_000
-    click('See my results')
-
-    // 100 - 10 = 90 seconds. Timing from when the page opened would say 1 min 39 s.
-    expect(teamPart().getByText('Time to complete: 1 min 30 s')).toBeDefined()
-  })
-
-  test('opened past the welcome screen (tests and demo links), the time counts as 0', () => {
-    renderQuiz({ startAt: 'contact' })
-    click('See my results')
-    expect(teamPart().getByText('Time to complete: 0 s')).toBeDefined()
-  })
-})
-
-describe('QuizForm: close call', () => {
-  test('a tied quiz shows the close-call note in the team view, never in the client part', () => {
-    const tied = loadSampleSubmissions().find((s) => s.id === 'out-of-area-hot')!
-    renderQuiz({ startAt: 'contact', initialAnswers: submissionToAnswers(tied) })
-    click('See my results')
-    expect(teamPart().getByRole('note', { name: 'Close call' }).textContent).toMatch(/^Close call: Decisive Delegator and Creative Collaborator/)
-    expect(screen.getByRole('region', { name: 'Your results' }).textContent).not.toMatch(/close call/i)
-  })
-})
-
-// Phase 4 check: the whole route (form answers -> converter -> scoring ->
-// brief on screen) gives each sample client the same result as its sample
-// brief. Time taken is 0 here, which only adds notes and never changes these.
-describe('QuizForm: same results as the sample clients', () => {
-  for (const sample of loadSampleSubmissions()) {
-    test(`${sample.contact.name} gets the same lead label and client type blend`, () => {
-      const expected = buildTeamBrief(sample, quizData)
-      renderQuiz({ startAt: 'contact', initialAnswers: submissionToAnswers(sample) })
-      click('See my results')
-
-      expect(teamPart().getByText(expected.headline)).toBeDefined()
-      expect(teamPart().getByTestId('lead-temperature').textContent).toBe(`${expected.lead.temperature} lead`)
-      const blendSection = teamPart().getByRole('heading', { name: 'Client type' }).parentElement!
-      const rows = within(blendSection).getAllByRole('listitem').map((row) => row.textContent)
-      expect(rows).toEqual(expected.blend.scores.map((s) => `${shortLabel(s.label)}${s.percent}%`))
-    })
-  }
-})
+// Demo styling (2026-11-17): the "time taken", close-call and "same results as
+// the sample clients" checks read the team view under the result, which is
+// hidden on this branch. The same scoring is checked on the brief itself in
+// teamBrief.test.ts and teamPages.test.tsx; foyer-v1 keeps these tests.

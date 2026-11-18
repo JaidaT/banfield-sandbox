@@ -188,6 +188,7 @@ export function parseQuestionBank(raw: unknown, archetypeIds: readonly string[])
       options,
     }
     if (typeof entry.help === 'string') question.help = entry.help
+    if (typeof entry.placeholder === 'string') question.placeholder = entry.placeholder
     if (trueOrFalse(entry, 'ignoreIfSkipped', id)) question.ignoreIfSkipped = true
     if (kind === 'range') Object.assign(question, parseRange(entry, id))
     if (trueOrFalse(entry, 'fitQuestion', id)) {
@@ -582,11 +583,23 @@ export function parseQuizForm(raw: unknown): QuizForm {
       }
     }
   }
-  return {
+  const form: QuizForm = {
     contactRequired: raw.contactRequired,
     welcome: raw.welcome as QuizForm['welcome'],
     contact: raw.contact as QuizForm['contact'],
   }
+  if (raw.contactShown !== undefined) {
+    const shown = raw.contactShown
+    if (!Array.isArray(shown) || shown.length === 0 || !shown.every((f) => (CONTACT_FIELDS as readonly unknown[]).includes(f))) {
+      throw new Error(`quiz form "contactShown" must list contact fields from: ${CONTACT_FIELDS.join(', ')}`)
+    }
+    form.contactShown = shown as QuizForm['contactShown']
+  }
+  if (raw.contactIntroShown !== undefined) {
+    if (typeof raw.contactIntroShown !== 'boolean') throw new Error('quiz form "contactIntroShown" must be true or false')
+    form.contactIntroShown = raw.contactIntroShown
+  }
+  return form
 }
 
 export function loadQuizForm(): QuizForm {

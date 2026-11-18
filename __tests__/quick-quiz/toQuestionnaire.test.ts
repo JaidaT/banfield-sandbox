@@ -29,9 +29,10 @@ describe('quizQuestionnaire', () => {
     expect(built.steps).toHaveLength(questions.length + 2)
   })
 
-  test('each question screen is headed with the welcome title, and the question is its label', () => {
+  // Demo styling (2026-11-17): the question itself is the screen's heading, as in the team's screenshots.
+  test('each question screen is headed with its question, which is also its label', () => {
     for (const step of built.steps.slice(1, -1)) {
-      expect(step.title, step.id).toBe(form.welcome.title)
+      expect(step.title, step.id).toBe(step.questions[0].prompt)
     }
     expect(find('decision_style').prompt).toBe(questions.find((q) => q.id === 'decision_style')?.prompt)
   })
@@ -39,6 +40,7 @@ describe('quizQuestionnaire', () => {
   test('question kinds carry over: text becomes long text, and choices keep their labels', () => {
     expect(find('home_meaning').kind).toBe('long_text')
     expect(find('home_meaning').help).toBe(questions.find((q) => q.id === 'home_meaning')?.help)
+    expect(find('home_meaning').placeholder).toBe('Share whatever comes to mind...')
     expect(find('decision_style').kind).toBe('single')
     expect(find('decision_style').options[0]).toEqual({ id: 'trust_expert', label: 'Find someone who knows their stuff and go with their call' })
   })
@@ -65,9 +67,22 @@ describe('quizQuestionnaire', () => {
     expect(text).not.toContain('fitQuestion')
   })
 
-  test('the contact screen has the six fields, required only when contactRequired is true', () => {
+  // Demo styling (2026-11-17): the real file shows only name and email, with the
+  // screenshot's heading and no intro.
+  test('the demo contact screen shows only name and email, with no intro', () => {
+    const contact = built.steps.at(-1)!
+    expect(contact.title).toBe('Please leave your contact information, so we can discuss things further with you.')
+    expect(contact.questions.map((q) => q.prompt)).toEqual(['Your Name', 'Email Address'])
+    expect(contact.questions.map((q) => q.id)).toEqual([CONTACT_FIELDS.name, CONTACT_FIELDS.email])
+    expect(contact.intro).toBeUndefined()
+  })
+
+  test('without the demo settings, the contact screen has the six fields, required only when contactRequired is true', () => {
+    const { contactShown: _shown, contactIntroShown: _intro, ...full } = form
+    void _shown
+    void _intro
     const contactStep = (required: boolean) =>
-      quizQuestionnaire(questions, { ...form, contactRequired: required }).steps.at(-1)!
+      quizQuestionnaire(questions, { ...full, contactRequired: required }).steps.at(-1)!
     const optional = contactStep(false)
     expect(optional.title).toBe(form.contact.title)
     expect(optional.questions.map((q) => q.id)).toEqual(Object.values(CONTACT_FIELDS))

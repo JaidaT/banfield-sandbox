@@ -27,7 +27,8 @@ export default function ClientResultView({ result, embedded = false, complete = 
   return (
     <Outer
       aria-label={embedded ? 'Your results' : undefined}
-      className="mx-auto flex w-full max-w-xl flex-col gap-8 px-4 py-10 text-charcoal sm:px-6"
+      // Inside the quiz, the quiz page already gives the side margins.
+      className={`mx-auto flex w-full max-w-xl flex-col gap-8 text-charcoal ${embedded ? 'py-2' : 'px-4 py-10 sm:px-6'}`}
     >
       {complete && (
         <div className="flex flex-col gap-2">

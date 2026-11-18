@@ -2,12 +2,10 @@
 
 import { createContext, use, useState } from 'react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
-import TeamBriefView from '@/components/quick-quiz/TeamBriefView'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
 import { designDnaFor } from '@/lib/quick-quiz/designDna'
-import { buildTeamBrief } from '@/lib/quick-quiz/buildTeamBrief'
 import { answersToSubmission } from '@/lib/quick-quiz/toQuestionnaire'
 import type { Answers, Questionnaire } from '@/lib/form/types'
 import type { ClientCopy, QuizData } from '@/lib/quick-quiz/types'
@@ -53,6 +51,7 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
         initialAnswers={initialAnswers}
         skipReview
         progressAs="percent"
+        look="quick-quiz"
         onStart={start}
         doneScreen={QuizResults}
       />
@@ -60,8 +59,8 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
   )
 }
 
-// The final screen: the client result, then (prototype only) the team brief
-// under a divider. In the real product the brief is sent to the team, not shown.
+// The final screen: the client result. Demo styling (2026-11-17): the team
+// brief is not shown under it; the brief opens from the sample list instead.
 function QuizResults({ answers, headingRef }: DoneScreenProps) {
   const setup = use(QuizContext)
   if (!setup) throw new Error('QuizResults must be inside QuizForm')
@@ -75,15 +74,6 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
   // "quiz-demo": a placeholder id until submissions are saved (Later in the plan).
   const submission = answersToSubmission(answers, seconds, 'quiz-demo')
   const result = buildClientResult(submission, clientCopy, designDnaFor(submission, quizData))
-  const brief = buildTeamBrief(submission, quizData)
 
-  return (
-    <>
-      <ClientResultView result={result} embedded complete headingRef={headingRef} />
-      <section aria-label="Team view (demo only)" className="mt-6 border-t-4 border-double border-neutral-400 pt-4">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-600">Team view (demo only)</p>
-        <TeamBriefView brief={brief} embedded />
-      </section>
-    </>
-  )
+  return <ClientResultView result={result} embedded complete headingRef={headingRef} />
 }

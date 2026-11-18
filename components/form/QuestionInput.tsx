@@ -11,6 +11,9 @@ interface Props {
   value: AnswerValue | undefined
   onChange: (value: AnswerValue | undefined) => void
   error?: string
+  // The label is already the screen's heading, so it is kept for screen
+  // readers only (the Quick Quiz: one question per screen).
+  labelHidden?: boolean
 }
 
 // Picks the right input for a question's kind:
@@ -18,9 +21,9 @@ interface Props {
 // - "pick_images" -> favourite and least favourite pictures (PickImages)
 // - "range" -> a slider, with buttons for choices such as "Not sure yet" (RangeField)
 // - everything else -> a text box, number box, radio buttons or tick boxes (QuestionField)
-export default function QuestionInput({ question, value, onChange, error }: Props) {
+export default function QuestionInput({ question, value, onChange, error, labelHidden }: Props) {
   if (question.kind === 'range') {
-    return <RangeField question={question} value={value} onChange={onChange} error={error} />
+    return <RangeField question={question} value={value} onChange={onChange} error={error} labelHidden={labelHidden} />
   }
   if (question.kind === 'repeater') {
     return <Repeater question={question} value={value as RepeaterEntry[] | undefined} onChange={onChange} error={error} />
@@ -28,5 +31,5 @@ export default function QuestionInput({ question, value, onChange, error }: Prop
   if (question.kind === 'pick_images') {
     return <PickImages question={question} value={value as ImagePicks | undefined} onChange={onChange} error={error} />
   }
-  return <QuestionField question={question} value={value} onChange={onChange} error={error} />
+  return <QuestionField question={question} value={value} onChange={onChange} error={error} labelHidden={labelHidden} />
 }

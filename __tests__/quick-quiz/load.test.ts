@@ -101,12 +101,29 @@ function quizForm(): Record<string, unknown> {
   }
 }
 
+describe('parseQuizForm: demo contact settings', () => {
+  test('accepts a list of contact fields to show, and an intro switch', () => {
+    const form = parseQuizForm({ ...quizForm(), contactShown: ['name', 'email'], contactIntroShown: false })
+    expect(form.contactShown).toEqual(['name', 'email'])
+    expect(form.contactIntroShown).toBe(false)
+  })
+
+  test('throws on an unknown contact field, an empty list, or a non true/false intro switch', () => {
+    expect(() => parseQuizForm({ ...quizForm(), contactShown: ['name', 'fax'] })).toThrow(/contactShown/)
+    expect(() => parseQuizForm({ ...quizForm(), contactShown: [] })).toThrow(/contactShown/)
+    expect(() => parseQuizForm({ ...quizForm(), contactIntroShown: 'no' })).toThrow(/contactIntroShown/)
+  })
+})
+
 describe('loadQuizForm', () => {
   test('loads the wording and the contactRequired setting from data/quick-quiz/quiz-form.json', () => {
     const form = loadQuizForm()
     expect(form.contactRequired).toBe(false)
     expect(form.welcome.title).not.toBe('')
-    expect(form.contact.title).toBe('Where should Jamie reach you?')
+    // Demo styling (2026-11-17): the screenshot's heading, name and email only, no intro.
+    expect(form.contact.title).toBe('Please leave your contact information, so we can discuss things further with you.')
+    expect(form.contactShown).toEqual(['name', 'email'])
+    expect(form.contactIntroShown).toBe(false)
     expect(Object.keys(form.contact).sort()).toEqual(
       ['city', 'email', 'introWhenOptional', 'introWhenRequired', 'name', 'phone', 'postalCode', 'street', 'title'].sort(),
     )
