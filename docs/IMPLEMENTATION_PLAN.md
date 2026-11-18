@@ -580,3 +580,87 @@ Work test-first: for each step, write the failing test, then change the code.
 - The team rewrites or approves the help wording; Banfield checks it describes their services accurately
 - In user research, ask "Does 'How we can help' sound like what you'd want?" alongside "Does this sound like you?"
 - Whether the team brief should show which help points the client saw
+
+## Demo Styling from the Team's Screenshots (2026-11-17)
+
+Goal: for the presentation recordings, restyle both quizzes and the Quick Quiz team brief to match Jaida's 13 screenshots (shared in chat on 2026-11-17; not stored in the repo). Built on `foyer-v1-demo-styling` only, made from `foyer-v1`; it is never merged back. Scoring, lead rules, questions and the client result's words do not change.
+
+Rule for this work (Jaida, 2026-11-17): build only what the screenshots show or Jaida has answered. Anything else is asked first, except where Jaida said to make it up (hover, focus, error and disabled looks).
+
+Answers from Jaida (2026-11-17):
+- **Look:** Poppins for all text (headings too); brand yellow `#FFCB49` and navy `#04355D` on the frost background. Same responsive layout as now (narrow column on a computer).
+- **Progress:** the long questionnaire's bar style for both: centred text over a yellow bar on a grey track. The long questionnaire says "Step 3 of 13"; the Quick Quiz keeps its percentage ("15%"), centred. No arrow at the top. No progress bar on the review page.
+- **Buttons:** one row with Back and Next on both quizzes, pinned to the bottom of the screen. Next is filled yellow; Back is outlined yellow. Corners: sharp top-left and bottom-right, round top-right and bottom-left.
+- **Quick Quiz contact screen:** only Your Name and Email Address, with the heading "Please leave your contact information, so we can discuss things further with you."
+- **Hidden for the demo:** the "Prototype - not the final design" banner and the "Team view (demo only)" part under the quiz result. The brief is opened from the sample list (home page, "View Quick Quiz sample briefs", a client).
+- **Photos:** free stock photos (Unsplash licence, each source listed) for the long questionnaire's style and room pictures, and for the brief's Inspiration row.
+- **Not changed:** welcome screens, the long questionnaire's thank-you and team brief, the home page, the sample lists, `/book`.
+
+Team brief (Quick Quiz), from the two screenshots:
+- **Header:** "< All briefs", the name, "90% Decisive Delegator" (top type and percent), a made-up meeting line such as "Tue 10:30am - Renovation, Burnaby", and the copy button as an icon at the top right.
+- **Two tabs:** Analysis and Documentation.
+- **Analysis:**
+  - **Project Fit:** the Overall pill (Hot, Warm or Cold) and the reasons line (e.g. "Renovation at $200K: hot"), then 3 tiles for the current lead logic (replacing the screenshot's Location, Budget, Timeline and Scope, which match an older version):
+    - Project type: the answer, with that type's amounts ("Hot from $150K, warm from $50K"); no colour.
+    - Investment: the answer; green if hot, yellow if warm, red if cold (the label before warning signs).
+    - Warning signs: "None" (green), or each sign raised (red) with "Lowers the label one step".
+  - **Client Type:** the primary type card with its percent, the second type when it has 20% or more, the close-call note, "Client was shown: ...", and a bar for every client type with its percent (Jaida's screenshot, in yellow instead of blue).
+  - **How to work with them:** Communication, Pacing, Pitch and Watch for (the risks), then the Tip box.
+  - **Behaviour:** time to complete, skipped questions, and the pace note.
+- **Documentation:**
+  - **Contact:** email, phone and site address.
+  - **All answers:** four sections that open and close, with short row labels (Claude writes them, Jaida approves): Project (project type, timeframe, type of help, anything else), Investment + readiness (investment, project stage), Confidence + home (confidence, home meaning, coffee), Decision making (decision style, involvement, different concept).
+  - **Inspiration:** a row of photos, then a "+" tile that does nothing.
+
+Made-up demo data (meeting lines, inspiration photos) lives in its own file, so it is easy to find and never mixed with real answers. The client result must still never show client types, scores or fit; the existing leak tests keep checking.
+
+Work test-first for anything that changes what shows (hidden parts, fields, tabs, tiles, sections). Pure looks (colours, corners, spacing) are checked by eye on a phone.
+
+### Phase 1: Shared form look (both quizzes)
+- [ ] `app/layout.tsx` / `app/globals.css`: Poppins for all text, headings included
+- [ ] `components/form/WireframePage.tsx`: no prototype banner
+  - Test: no "Prototype - not the final design" text on a quiz screen
+- [ ] `components/form/StepScreen.tsx`: centred progress text over a yellow bar on a grey track, drawn with two divs (no `<progress>`); "Step N of M" or "N%" as now
+  - Test: the Quick Quiz still shows "N%", the long questionnaire "Step N of M"
+- [ ] `components/form/styles.ts` and the screens that use it: Next filled yellow, Back outlined yellow, the corner shape; Back and Next in one row pinned to the bottom of the screen; small buttons (Edit, Remove, Favourite) outlined yellow, Add member filled yellow
+- [ ] `components/form/QuestionField.tsx`: option rows (white, light border; filled yellow when chosen), yellow radio circles and tick boxes (navy dot or tick when chosen), text boxes and the long-text box as in the screenshots; made-up looks for hover, focus, error and disabled
+- [ ] `components/form/RangeField.tsx`: yellow filled track, navy handle, bold amount above, bold min and max under; "Not sure yet" as a rounded pill with a radio circle
+- [ ] `components/form/Repeater.tsx`, `PickImages.tsx`, `AnswersSummary.tsx`, `ReviewScreen.tsx`: white rounded cards, outlined small buttons, review labels grey with answers bold
+- [ ] Hints: italic navy on the Quick Quiz, small grey on the long questionnaire (as in the screenshots)
+
+### Phase 2: Quick Quiz screens
+- [ ] `data/quick-quiz/quiz-form.json` (and `lib/quick-quiz/toQuestionnaire.ts` if needed): the contact screen shows only name and email, with the new heading
+  - Test: the contact screen has exactly "Your Name" and "Email Address"; leaving them blank still shows the result
+- [ ] `components/quick-quiz/QuizForm.tsx`: no "Team view (demo only)" under the result
+  - Test: finishing the quiz shows the result and no team view
+
+### Phase 3: Stock photos
+- [ ] Find free Unsplash photos for the 9 styles, 8 room pictures and 3 inspiration tiles; save them in `public/` (e.g. `public/questionnaire/photos/`, `public/demo/inspiration/`)
+- [ ] `docs/PHOTO_CREDITS.md`: each photo's file, photographer and Unsplash link
+- [ ] `data/long-questionnaire/*.json`: point the style and room pictures at the photos
+  - Test: every picture path in the long questionnaire's data exists in `public/`
+
+### Phase 4: Team brief data
+- [ ] Draft the 12 short row labels for "All answers" and show them to Jaida; nothing is built until approved
+- [ ] New `data/quick-quiz/demo-brief.json`: per sample, the made-up meeting line; the inspiration photo list; the four answer sections with their questions and approved short labels. The loader checks every quiz question is in exactly one section
+  - Tests: the file loads; every sample has a meeting line; a missing or repeated question throws
+- [ ] `lib/quick-quiz/buildTeamBrief.ts`: the lead part also carries the project type's hot and warm amounts (for the Project type tile)
+  - Tests: a renovation sample shows its amounts; a skipped project type shows none
+
+### Phase 5: Team brief screen
+- [ ] `components/quick-quiz/TeamBriefView.tsx`: the header (back link, name, "N% Type", meeting line, copy icon button with an accessible name)
+- [ ] Analysis and Documentation tabs (keyboard-usable; Analysis shows first)
+  - Tests: Analysis shows first; clicking Documentation shows Contact, All answers and Inspiration
+- [ ] Analysis tab: Project Fit (Overall pill, reasons, 3 tiles with their colours), Client Type (primary card, second type, close call, "Client was shown", yellow bars for every type), How to work with them, Tip, Behaviour
+  - Tests: the tiles show the right colour for a hot, a warm and a cold sample; a raised warning sign shows on the Warning signs tile; every client type has a bar with its percent; the close call and "Client was shown" lines still show
+- [ ] Documentation tab: Contact, All answers (four sections that open and close; Project open first), Inspiration photos and the "+" tile
+  - Tests: each section lists its questions with the short labels and answers; skipped answers say so
+- [ ] "Copy as text" still copies the whole brief (unchanged text)
+
+### Phase 6: Checks
+- [ ] Run `npx tsc --noEmit -p .`, `npm run lint`, `npm test` and `npm run build`: all pass
+- [ ] Jaida checks each screenshot's screen on a phone against the screenshot, and on a computer
+
+### Later (not in this plan)
+- Bringing any of this look into `foyer-v1` (only if Jaida asks)
+- Real meeting times from bookings, and real inspiration images from clients
