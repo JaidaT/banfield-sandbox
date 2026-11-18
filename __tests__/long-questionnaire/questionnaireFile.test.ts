@@ -138,7 +138,8 @@ describe('questionnaire.json', () => {
       'Traditional',
       'French / Parisian',
     ])
-    for (const o of options) expect(o.image, o.id).toMatch(/^\/questionnaire\/.+\.svg$/)
+    // Demo styling (2026-11-17): free stock photos (docs/PHOTO_CREDITS.md) instead of drawn placeholders.
+    for (const o of options) expect(o.image, o.id).toMatch(/^\/demo-photos\/style-.+\.jpg$/)
   })
 
   test('the big branches skip whole steps', () => {
@@ -170,6 +171,7 @@ describe('questionnaire.json', () => {
       ...(q.imageSets ?? []).flatMap((set) => set.images.map((img) => img.src)),
     ])
     expect(paths.length).toBe(17)
+    for (const p of paths) expect(p, p).toMatch(/^\/demo-photos\/.+\.jpg$/)
     for (const p of paths) expect(existsSync(join(process.cwd(), 'public', p)), p).toBe(true)
   })
 

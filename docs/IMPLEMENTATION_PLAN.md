@@ -635,9 +635,9 @@ Work test-first for anything that changes what shows (hidden parts, fields, tabs
   - Test: finishing the quiz shows the result and no team view
 
 ### Phase 3: Stock photos
-- [ ] Find free Unsplash photos for the 9 styles, 8 room pictures and 3 inspiration tiles; save them in `public/` (e.g. `public/questionnaire/photos/`, `public/demo/inspiration/`)
-- [ ] `docs/PHOTO_CREDITS.md`: each photo's file, photographer and Unsplash link
-- [ ] `data/long-questionnaire/*.json`: point the style and room pictures at the photos
+- [x] Find free Unsplash photos for the 9 styles, 8 room pictures and 3 inspiration tiles; save them in `public/` (e.g. `public/questionnaire/photos/`, `public/demo/inspiration/`)
+- [x] `docs/PHOTO_CREDITS.md`: each photo's file, photographer and Unsplash link
+- [x] `data/long-questionnaire/*.json`: point the style and room pictures at the photos
   - Test: every picture path in the long questionnaire's data exists in `public/`
 
 ### Phase 4: Team brief data

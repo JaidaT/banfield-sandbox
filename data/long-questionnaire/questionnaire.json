@@ -7,7 +7,7 @@
     "required": "Only name, email, phone and project type are required. Everything else can be skipped.",
     "rules": "showIf on a step skips the whole step. showIf on a question shows it on the same step only when it matches. showIf on an option only offers that answer when it matches. Rules may only point at questions that come earlier in this file.",
     "derived": "household_min_age and adult_count are worked out from the 'age' field of the 'people' repeater (adults are 18 and over). They can be used in rules like a question id.",
-    "images": "All pictures in public/questionnaire/ are grey placeholders. Real photos should come from Banfield's own portfolio.",
+    "images": "Demo styling (2026-11-17, foyer-v1-demo-styling only): the style and room pictures are free Unsplash stock photos in public/demo-photos/, credited in docs/PHOTO_CREDITS.md. The grey placeholders stay in public/questionnaire/. Real photos should come from Banfield's own portfolio.",
     "review": "The last step (review and thank you) is built by the screens, so it is not in this file.",
     "stepSize": "Keep steps short, one topic each; aim for about 7 inputs or fewer (a repeater counts as one). The tests only stop a step over 10 (Contact over 20). Judge real length from testing."
   },
@@ -574,15 +574,15 @@
           "prompt": "What do you consider your style? If you don't know, we will figure this out.",
           "help": "Pick all that apply.",
           "options": [
-            { "id": "contemporary_rustic", "label": "Contemporary Rustic", "image": "/questionnaire/style-contemporary-rustic.svg" },
-            { "id": "old_world_elegant", "label": "Old World Elegant", "image": "/questionnaire/style-old-world-elegant.svg" },
-            { "id": "tuscan_traditional", "label": "Tuscan Traditional", "image": "/questionnaire/style-tuscan-traditional.svg" },
-            { "id": "minimalistic_clean", "label": "Minimalistic / Clean", "image": "/questionnaire/style-minimalistic-clean.svg" },
-            { "id": "modern_country", "label": "Modern Country", "image": "/questionnaire/style-modern-country.svg" },
-            { "id": "sophisticated_glam", "label": "Sophisticated Glam", "image": "/questionnaire/style-sophisticated-glam.svg" },
-            { "id": "eclectic_collected", "label": "Eclectic / Collected", "image": "/questionnaire/style-eclectic-collected.svg" },
-            { "id": "traditional", "label": "Traditional", "image": "/questionnaire/style-traditional.svg" },
-            { "id": "french_parisian", "label": "French / Parisian", "image": "/questionnaire/style-french-parisian.svg" }
+            { "id": "contemporary_rustic", "label": "Contemporary Rustic", "image": "/demo-photos/style-contemporary-rustic.jpg" },
+            { "id": "old_world_elegant", "label": "Old World Elegant", "image": "/demo-photos/style-old-world-elegant.jpg" },
+            { "id": "tuscan_traditional", "label": "Tuscan Traditional", "image": "/demo-photos/style-tuscan-traditional.jpg" },
+            { "id": "minimalistic_clean", "label": "Minimalistic / Clean", "image": "/demo-photos/style-minimalistic-clean.jpg" },
+            { "id": "modern_country", "label": "Modern Country", "image": "/demo-photos/style-modern-country.jpg" },
+            { "id": "sophisticated_glam", "label": "Sophisticated Glam", "image": "/demo-photos/style-sophisticated-glam.jpg" },
+            { "id": "eclectic_collected", "label": "Eclectic / Collected", "image": "/demo-photos/style-eclectic-collected.jpg" },
+            { "id": "traditional", "label": "Traditional", "image": "/demo-photos/style-traditional.jpg" },
+            { "id": "french_parisian", "label": "French / Parisian", "image": "/demo-photos/style-french-parisian.jpg" }
           ]
         },
         {
@@ -593,19 +593,19 @@
             {
               "id": "living_rooms",
               "images": [
-                { "id": "a", "label": "Living room A", "src": "/questionnaire/living-a.svg" },
-                { "id": "b", "label": "Living room B", "src": "/questionnaire/living-b.svg" },
-                { "id": "c", "label": "Living room C", "src": "/questionnaire/living-c.svg" },
-                { "id": "d", "label": "Living room D", "src": "/questionnaire/living-d.svg" }
+                { "id": "a", "label": "Living room A", "src": "/demo-photos/living-a.jpg" },
+                { "id": "b", "label": "Living room B", "src": "/demo-photos/living-b.jpg" },
+                { "id": "c", "label": "Living room C", "src": "/demo-photos/living-c.jpg" },
+                { "id": "d", "label": "Living room D", "src": "/demo-photos/living-d.jpg" }
               ]
             },
             {
               "id": "kitchens",
               "images": [
-                { "id": "a", "label": "Kitchen A", "src": "/questionnaire/kitchen-a.svg" },
-                { "id": "b", "label": "Kitchen B", "src": "/questionnaire/kitchen-b.svg" },
-                { "id": "c", "label": "Kitchen C", "src": "/questionnaire/kitchen-c.svg" },
-                { "id": "d", "label": "Kitchen D", "src": "/questionnaire/kitchen-d.svg" }
+                { "id": "a", "label": "Kitchen A", "src": "/demo-photos/kitchen-a.jpg" },
+                { "id": "b", "label": "Kitchen B", "src": "/demo-photos/kitchen-b.jpg" },
+                { "id": "c", "label": "Kitchen C", "src": "/demo-photos/kitchen-c.jpg" },
+                { "id": "d", "label": "Kitchen D", "src": "/demo-photos/kitchen-d.jpg" }
               ]
             }
           ]
