@@ -73,5 +73,9 @@ export function assessLead(
       : { id: d.id, label: d.label }
   })
 
-  return { temperature, startingTemperature: start.temperature, lowered, reasons, details, warningSigns }
+  const result: LeadAssessment = { temperature, startingTemperature: start.temperature, lowered, reasons, details, warningSigns }
+  const project = submission.answers[rules.projectQuestion]
+  const bar = typeof project === 'string' ? rules.thresholds[project] : undefined
+  if (bar) result.projectBar = `Hot from ${formatAmount(bar.hotFrom)}, warm from ${formatAmount(bar.warmFrom)}`
+  return result
 }

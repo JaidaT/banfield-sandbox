@@ -93,6 +93,18 @@ function submission(answers: Submission['answers'], city = 'Burnaby'): Submissio
 
 const lead = (answers: Submission['answers']) => assessLead(submission(answers), QUESTIONS, RULES)
 
+// Demo styling (2026-11-17): the brief's Project type tile shows that type's amounts.
+describe('assessLead: the project type amounts', () => {
+  test('a chosen project type carries its hot and warm amounts as text', () => {
+    expect(lead({ project: 'reno', money: 200000 }).projectBar).toBe('Hot from $150K, warm from $50K')
+    expect(lead({ project: 'styling' }).projectBar).toBe('Hot from $50K, warm from $20K')
+  })
+
+  test('a skipped project type has no amounts', () => {
+    expect(lead({ money: 200000 }).projectBar).toBeUndefined()
+  })
+})
+
 describe('assessLead: starting label from project type + investment', () => {
   test('hot at or above "hot from", with a plain-language reason', () => {
     expect(lead({ project: 'reno', money: 150000 }).temperature).toBe('hot')

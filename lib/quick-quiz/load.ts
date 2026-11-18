@@ -37,7 +37,7 @@ import type {
 const STRING_FIELDS = ['id', 'label', 'communication', 'pacing', 'pitch'] as const
 const ARRAY_FIELDS = ['segments', 'signals', 'risks'] as const
 
-function isRecord(value: unknown): value is Record<string, unknown> {
+export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 

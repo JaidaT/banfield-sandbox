@@ -177,6 +177,9 @@ export interface LeadAssessment {
   lowered: boolean
   // Plain-language explanation, e.g. "Renovation at $200K: hot".
   reasons: string[]
+  // The chosen project type's amounts, e.g. "Hot from $150K, warm from $50K".
+  // Absent when the project type is skipped (demo styling, 2026-11-17).
+  projectBar?: string
   details: LeadDetail[]
   warningSigns: WarningSign[]
 }

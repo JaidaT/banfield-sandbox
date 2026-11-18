@@ -1,0 +1,100 @@
+{
+  "_meta": {
+    "purpose": "Demo styling (2026-11-17, foyer-v1-demo-styling only): made-up data for the Quick Quiz team brief in the presentation recordings. Kept apart from real answers. Nothing here comes from the quiz.",
+    "meetings": "A made-up meeting line per sample submission id, shown under the name. There are no bookings in the prototype yet.",
+    "inspiration": "Stock photos from public/demo-photos/ (credits in docs/PHOTO_CREDITS.md). The Quick Quiz does not collect images.",
+    "sections": "How the brief's 'All answers' list groups the quiz questions, with short row labels (approved by Jaida on 2026-11-17). Every quiz question must be in exactly one section."
+  },
+  "meetings": {
+    "decisive-delegator": "Tue 10:30am - Renovation, Burnaby",
+    "analytical-validator": "Wed 2:00pm - New build, Vancouver",
+    "mixed-cautious-controller": "Thu 9:00am - Renovation, Coquitlam",
+    "cold-explorer": "Fri 1:30pm - Furniture and styling, Kelowna",
+    "skipper": "Mon 11:00am - Renovation, Surrey",
+    "out-of-area-hot": "Tue 3:30pm - Renovation, Edmonton"
+  },
+  "inspiration": [
+    {
+      "src": "/demo-photos/inspiration-1.jpg",
+      "alt": "Green velvet sofa"
+    },
+    {
+      "src": "/demo-photos/inspiration-2.jpg",
+      "alt": "Bright room with an orange sofa"
+    },
+    {
+      "src": "/demo-photos/inspiration-3.jpg",
+      "alt": "Pale room with a tree and city view"
+    }
+  ],
+  "sections": [
+    {
+      "title": "Project",
+      "rows": [
+        {
+          "question": "project_scope",
+          "label": "Dreaming up"
+        },
+        {
+          "question": "timeframe",
+          "label": "Timing"
+        },
+        {
+          "question": "service",
+          "label": "Type of help"
+        },
+        {
+          "question": "anything_else",
+          "label": "Anything else"
+        }
+      ]
+    },
+    {
+      "title": "Investment + readiness",
+      "rows": [
+        {
+          "question": "investment",
+          "label": "Investment"
+        },
+        {
+          "question": "readiness",
+          "label": "Project stage"
+        }
+      ]
+    },
+    {
+      "title": "Confidence + home",
+      "rows": [
+        {
+          "question": "confidence",
+          "label": "Feels confident"
+        },
+        {
+          "question": "home_meaning",
+          "label": "Home means"
+        },
+        {
+          "question": "coffee",
+          "label": "Coffee"
+        }
+      ]
+    },
+    {
+      "title": "Decision making",
+      "rows": [
+        {
+          "question": "decision_style",
+          "label": "Big decisions"
+        },
+        {
+          "question": "involvement",
+          "label": "Involvement"
+        },
+        {
+          "question": "different_concept",
+          "label": "New concept"
+        }
+      ]
+    }
+  ]
+}

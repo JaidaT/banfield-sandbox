@@ -641,10 +641,10 @@ Work test-first for anything that changes what shows (hidden parts, fields, tabs
   - Test: every picture path in the long questionnaire's data exists in `public/`
 
 ### Phase 4: Team brief data
-- [ ] Draft the 12 short row labels for "All answers" and show them to Jaida; nothing is built until approved
-- [ ] New `data/quick-quiz/demo-brief.json`: per sample, the made-up meeting line; the inspiration photo list; the four answer sections with their questions and approved short labels. The loader checks every quiz question is in exactly one section
+- [x] Draft the 12 short row labels for "All answers" and show them to Jaida; nothing is built until approved
+- [x] New `data/quick-quiz/demo-brief.json`: per sample, the made-up meeting line; the inspiration photo list; the four answer sections with their questions and approved short labels. The loader checks every quiz question is in exactly one section
   - Tests: the file loads; every sample has a meeting line; a missing or repeated question throws
-- [ ] `lib/quick-quiz/buildTeamBrief.ts`: the lead part also carries the project type's hot and warm amounts (for the Project type tile)
+- [x] `lib/quick-quiz/buildTeamBrief.ts`: the lead part also carries the project type's hot and warm amounts (for the Project type tile)
   - Tests: a renovation sample shows its amounts; a skipped project type shows none
 
 ### Phase 5: Team brief screen
