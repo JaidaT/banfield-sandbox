@@ -2,7 +2,7 @@
 
 **For:** the development team building the Quick Quiz in any codebase. This file stands on its own: it describes what to build and how it should behave, not where the code lives. Planned on the `foyer-v1-room-progress` branch of the Banfield sandbox, as a fourth version of the room progress bar, and written to be copied into another repo.
 
-**Status:** being built in the Banfield sandbox (ticked steps). In another repo, start from unticked.
+**Status:** built in the Banfield sandbox on 2026-11-21 (ticked steps); trying it on a phone is still open. In another repo, start from unticked.
 
 ## Why
 
@@ -95,24 +95,24 @@ Work test-first: for each step that changes what shows, write the failing test, 
   - Tests: the real file loads in the order above; every file exists and has the base's size; a missing piece, a repeat or a centre outside the room stops the app with a message naming the problem
 
 ### Phase 2: The layout
-- [ ] A "build-up" version alongside the others: the bar about 60% wide on the left, the room about 40% on the right, lined up at the bottom, the same split on phones and computers
-- [ ] The room shows the base plus one piece per finished screen (none on question 1, 12 on the contact screen)
-- [ ] "Question N of M" for screen readers; the room hidden from them
+- [x] A "build-up" version alongside the others: the bar about 60% wide on the left, the room about 40% on the right, lined up at the bottom, the same split on phones and computers
+- [x] The room shows the base plus one piece per finished screen (none on question 1, 12 on the contact screen)
+- [x] "Question N of M" for screen readers; the room hidden from them
   - Tests: question 1 shows only the base; question 5 shows the base and four pieces; the contact screen shows 12 pieces; the room is hidden from screen readers; the long questionnaire is unchanged
 
 ### Phase 3: Motion
-- [ ] All pieces on the page from the start, hidden until earned
-- [ ] A new piece grows from its own centre with a slight bounce; on Back the last piece shrinks into its own centre
-- [ ] Reduced motion: a quick fade, no growing
+- [x] All pieces on the page from the start, hidden until earned
+- [x] A new piece grows from its own centre with a slight bounce; on Back the last piece shrinks into its own centre
+- [x] Reduced motion: a quick fade, no growing
   - Tests: every piece is on the page from the first screen; Next adds exactly one shown piece, Back removes exactly one; the same pictures stay on the page (nothing is re-added)
 
 ### Phase 4: The result
-- [ ] The result's 100% bar keeps the 60/40 layout, with the complete room; the last piece pops in
+- [x] The result's 100% bar keeps the 60/40 layout, with the complete room; the last piece pops in
   - Tests: the result shows all 13 pieces; the room is hidden from screen readers
 
 ### Phase 5: Checks
-- [ ] Every existing quiz test still passes
-- [ ] Run the project's type check, lint, tests and build: all pass
+- [x] Every existing quiz test still passes
+- [x] Run the project's type check, lint, tests and build: all pass
 - [ ] Try it on a phone and a computer: the room building up, Back, the result
 - [ ] Try it with reduced motion turned on
 - [ ] Try it inside the website iframe, if the quiz is embedded

@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import type { Ref } from 'react'
+import type { ReactNode, Ref } from 'react'
 import RoomImage from '@/components/quick-quiz/RoomImage'
 import type { Room } from '@/lib/quick-quiz/progressRooms'
 import type { ClientResult } from '@/lib/quick-quiz/types'
@@ -15,6 +15,9 @@ interface Props {
   // Rooms side by side above the complete bar: a "finished home"
   // (docs/ROOM_PROGRESS_PLAN.md). Left out: a plain bar.
   finishedHome?: Room[]
+  // The room that builds, complete (docs/ROOM_BUILD_PLAN.md): shown beside a
+  // shorter complete bar instead of the finished home.
+  buildUpRoom?: ReactNode
   // Put on the main heading, so the quiz can move the cursor there.
   headingRef?: Ref<HTMLHeadingElement>
 }
@@ -24,7 +27,7 @@ const LABEL = 'text-xs font-semibold uppercase tracking-widest'
 
 // Client-facing, laid out like the team's mockup (2026-11-13). Receives only
 // ClientResult, which has no client type or fit data.
-export default function ClientResultView({ result, embedded = false, complete = false, finishedHome, headingRef }: Props) {
+export default function ClientResultView({ result, embedded = false, complete = false, finishedHome, buildUpRoom, headingRef }: Props) {
   const Outer = embedded ? 'section' : 'main'
   const dnaHeadingId = useId()
   const helpHeadingId = useId()
@@ -41,6 +44,14 @@ export default function ClientResultView({ result, embedded = false, complete = 
             <p>{result.completeLabel}</p>
             <p>100%</p>
           </div>
+          {buildUpRoom ? (
+            <div aria-hidden="true" className="flex items-end gap-3">
+              <div className="flex-[3] pb-1">
+                <div className="h-3.5 w-full rounded-full border-2 border-accent bg-accent" />
+              </div>
+              <div className="flex-[2]">{buildUpRoom}</div>
+            </div>
+          ) : (
           <div aria-hidden="true" className="flex flex-col gap-1">
             {finishedHome && finishedHome.length > 0 && (
               <div data-testid="finished-home" className="flex h-14 items-end justify-around sm:h-[72px]">
@@ -51,6 +62,7 @@ export default function ClientResultView({ result, embedded = false, complete = 
             )}
             <div className="h-3.5 w-full rounded-full border-2 border-accent bg-accent" />
           </div>
+          )}
         </div>
       )}
 

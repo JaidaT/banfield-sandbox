@@ -98,3 +98,12 @@ body {
   outline: 3px solid var(--navy);
   outline-offset: 4px;
 }
+
+/* The room that builds (docs/ROOM_BUILD_PLAN.md): on the result, the last
+   piece pops in from its own centre with a slight bounce. */
+@keyframes piece-pop { from { scale: 0; opacity: 0; } to { scale: 1; opacity: 1; } }
+.piece-pop { animation: piece-pop 350ms cubic-bezier(0.34, 1.56, 0.64, 1) 300ms both; }
+@media (prefers-reduced-motion: reduce) {
+  .piece-pop { animation: room-piece-fade 150ms ease-out both; }
+}
+@keyframes room-piece-fade { from { opacity: 0; } to { opacity: 1; } }

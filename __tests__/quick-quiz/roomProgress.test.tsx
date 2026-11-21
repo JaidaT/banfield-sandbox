@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import QuizForm from '@/components/quick-quiz/QuizForm'
@@ -9,7 +9,13 @@ import { loadClientCopy, loadQuizData, loadQuizForm, loadSampleSubmissions } fro
 import { loadProgressRooms } from '@/lib/quick-quiz/progressRooms'
 import { quizQuestionnaire } from '@/lib/quick-quiz/toQuestionnaire'
 
-// Room progress bar (docs/ROOM_PROGRESS_PLAN.md, 2026-11-21).
+// Room progress bar (docs/ROOM_PROGRESS_PLAN.md, 2026-11-21): the versions
+// with one room on the bar. The data file may have another version switched on
+// (the room that builds has its own tests), so these tests use "middle".
+vi.mock('@/lib/quick-quiz/progressRooms', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/quick-quiz/progressRooms')>()
+  return { ...real, loadProgressRooms: () => ({ ...real.loadProgressRooms(), placement: 'middle' as const }) }
+})
 
 const quizData = loadQuizData()
 const clientCopy = loadClientCopy()
@@ -58,7 +64,7 @@ describe('room progress bar on the question screens', () => {
     expect(screen.getByText(`Question ${index + 1} of 13`)).toBeDefined()
   })
 
-  test('the middle version (on now): the room sits in the middle of the bar on every screen', () => {
+  test('the middle version: the room sits in the middle of the bar on every screen', () => {
     for (const id of [questions[0].id, 'contact']) {
       renderQuiz(id)
       const box = screen.getByTestId('progress-room')

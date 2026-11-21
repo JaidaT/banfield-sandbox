@@ -4,6 +4,8 @@ import { createContext, use, useRef, useState } from 'react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
 import RoomProgressBar from '@/components/quick-quiz/RoomProgressBar'
+import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
+import { loadRoomBuild } from '@/lib/quick-quiz/roomBuild'
 import { loadProgressRooms } from '@/lib/quick-quiz/progressRooms'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
@@ -37,6 +39,10 @@ const QuizContext = createContext<QuizSetup | null>(null)
 
 // The rooms on the result's 100% bar (docs/ROOM_PROGRESS_PLAN.md).
 const FINISHED_HOME = loadProgressRooms().finishedHome
+// With the room that builds on, the result shows that room complete instead,
+// its last piece popping in (docs/ROOM_BUILD_PLAN.md).
+const BUILD_UP = loadProgressRooms().placement === 'build-up'
+const BUILD_PIECES = loadRoomBuild().pieces.length
 
 // The Quick Quiz: the shared form's screens (one question per screen, contact
 // last, no review screen), ending on the quiz's own result screen.
@@ -90,5 +96,9 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
   const submission = answersToSubmission(answers, seconds, 'quiz-demo')
   const result = buildClientResult(submission, clientCopy, designDnaFor(submission, quizData))
 
-  return <ClientResultView result={result} embedded complete finishedHome={FINISHED_HOME} headingRef={headingRef} />
+  return <ClientResultView result={result} embedded complete
+      finishedHome={BUILD_UP ? undefined : FINISHED_HOME}
+      buildUpRoom={BUILD_UP ? <BuildUpRoom shownCount={BUILD_PIECES} popLast /> : undefined}
+      headingRef={headingRef}
+    />
 }
