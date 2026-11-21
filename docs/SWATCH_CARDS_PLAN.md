@@ -33,6 +33,7 @@ Every quiz question, and the contact screen at the end, is one card.
 - **Yellow strip at the top** (the brand yellow, `#FFCB49`) holds the question, written across (not sideways). It is the card's main heading. Dark text on the yellow, for contrast.
 - **The question's help line** (e.g. "Pick up to two.") sits in the yellow strip, under the question, and is not repeated in the swatch area (Jaida, 2026-11-20).
 - **On a computer** the card has more padding and more space between options than on a phone (Jaida, 2026-11-20).
+- **On a phone it is compact**, so the progress bar, the card and the buttons fit on one screen where possible: tighter padding, a slightly smaller question, options at least 44px tall (still easy to tap), and the next card peeking about 32px instead of 40px. Found in testing: at computer sizes the card was too tall for a phone inside a website.
 - **Swatch area** below it holds the answers, whatever the question type: choices, the slider and "Not sure yet", the long-text box, or the contact fields.
 - **No fabric texture or colour for now.** The swatch area is plain. Texture is a later idea.
 - Rounded corners and a thin light-grey border, like the mockup.
