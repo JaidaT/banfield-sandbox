@@ -672,3 +672,9 @@ Jaida asked to show the demo-styled Quick Quiz on the iframe test's stand-in web
 ### Later (not in this plan)
 - Bringing any of this look into `foyer-v1` (only if Jaida asks)
 - Real meeting times from bookings, and real inspiration images from clients
+
+## Quick Quiz Room Progress Bar (2026-11-21)
+
+The full plan is in its own file, `docs/ROOM_PROGRESS_PLAN.md`, written to stand on its own so it can be copied into a different development repo (Jaida's requirement, 2026-11-21). Track progress there, not here.
+
+Built on `foyer-v1-room-progress`, made from `foyer-v1-demo-styling` on 2026-11-21, separate from the swatch cards idea (`foyer-v1-swatch-cards`). The 13 room graphics are in `public/rooms/`.
