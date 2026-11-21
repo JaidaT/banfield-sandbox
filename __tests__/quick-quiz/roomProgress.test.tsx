@@ -2,6 +2,7 @@ import { afterEach, describe, expect, test } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import QuizForm from '@/components/quick-quiz/QuizForm'
+import RoomProgressBar from '@/components/quick-quiz/RoomProgressBar'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
 import { designDnaFor } from '@/lib/quick-quiz/designDna'
 import { loadClientCopy, loadQuizData, loadQuizForm, loadSampleSubmissions } from '@/lib/quick-quiz/load'
@@ -28,6 +29,13 @@ const shownRoom = () => roomImages().filter((img) => img.dataset.current === 'tr
 
 afterEach(cleanup)
 
+// The bar with the first version's placement, whatever the data file says.
+function renderFollowFill(startAt: string) {
+  render(<RoomProgressBar place={placeOf(startAt)} stepId={startAt} placement="follow-fill" />)
+}
+const screenIds = [...questions.map((q) => q.id), 'contact']
+const placeOf = (id: string) => ({ number: screenIds.indexOf(id) + 1, total: screenIds.length })
+
 describe('room progress bar on the question screens', () => {
   test('each screen shows its own room', () => {
     for (const id of [...questions.map((q) => q.id), 'contact']) {
@@ -50,12 +58,22 @@ describe('room progress bar on the question screens', () => {
     expect(screen.getByText(`Question ${index + 1} of 13`)).toBeDefined()
   })
 
-  test("the room's right edge follows the end of the fill, and starts at the far left", () => {
-    renderQuiz(questions[0].id)
+  test('the far-right version: the room sits at the right end of the bar on every screen', () => {
+    for (const id of [questions[0].id, 'contact']) {
+      renderQuiz(id)
+      const box = screen.getByTestId('progress-room')
+      expect(box.dataset.placement, id).toBe('far-right')
+      expect(box.style.width, id).toBe('')
+      cleanup()
+    }
+  })
+
+  test("the follow-fill version: the room's right edge follows the end of the fill, and starts at the far left", () => {
+    renderFollowFill(questions[0].id)
     expect(screen.getByTestId('progress-fill').style.width).toBe('0%')
     expect(screen.getByTestId('progress-room').style.width).toBe('0%')
     cleanup()
-    renderQuiz('contact')
+    renderFollowFill('contact')
     // The contact screen is 12 of 13 done: about 92%.
     expect(screen.getByTestId('progress-fill').style.width).toBe('92%')
     expect(screen.getByTestId('progress-room').style.width).toBe('92%')

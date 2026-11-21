@@ -3,36 +3,54 @@ import type { CSSProperties } from 'react'
 import type { ProgressBarProps } from '@/components/form/ProgressBar'
 import { percentDone } from '@/lib/form/navigation'
 import { loadProgressRooms } from '@/lib/quick-quiz/progressRooms'
+import type { Placement } from '@/lib/quick-quiz/progressRooms'
 
-// Which room goes with which screen (data/quick-quiz/progress-rooms.json).
+// Which room goes with which screen, and where it sits
+// (data/quick-quiz/progress-rooms.json).
 const ROOMS = loadProgressRooms()
 // Each room once, in screen order.
 const ALL_ROOMS = Object.entries(ROOMS.screens)
 
-// The current room fades in after a short pause; the others fade out quickly,
-// so the two barely overlap (Jaida, 2026-11-21). With reduced motion there is
-// no pause.
-const SHOWN = 'opacity-100 transition-opacity duration-250 delay-100 ease-out motion-reduce:delay-0'
-const HIDDEN = 'opacity-0 transition-opacity duration-150 ease-in'
+// How the rooms change, for each placement. The old room goes quickly and
+// the new one comes a moment later, so the two barely overlap.
+// - follow-fill (version 1): a fade, while the room slides with the fill.
+// - far-right (version 2): the old room shrinks into the bar and the new one
+//   grows up from it with a slight bounce (Jaida, 2026-11-21).
+// With reduced motion, both are a quick fade with no pause.
+const CHANGES: Record<Placement, { shown: string; hidden: string }> = {
+  'follow-fill': {
+    shown: 'opacity-100 transition-opacity duration-250 delay-100 ease-out motion-reduce:delay-0',
+    hidden: 'opacity-0 transition-opacity duration-150 ease-in',
+  },
+  'far-right': {
+    shown:
+      'origin-bottom scale-100 opacity-100 transition-[scale,opacity] duration-300 delay-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:delay-0 motion-reduce:duration-150',
+    hidden:
+      'origin-bottom scale-0 opacity-0 transition-[scale,opacity] duration-200 ease-in motion-reduce:scale-100 motion-reduce:duration-150',
+  },
+}
 
 // The Quick Quiz's progress bar (docs/ROOM_PROGRESS_PLAN.md): a white track
 // with a yellow outline and fill, and a room graphic on top. No percentage
 // text; screen readers hear "Question N of M".
 //
 // All the rooms are on the page from the first screen, loaded straight away,
-// with only the current one visible. Changing screens only fades between
-// them, so nothing has to load mid-change (which made rooms pop in and out).
-// The rooms sit at the right end of a box as wide as the fill (but never
-// narrower than the current room), so the room's right edge follows the end
-// of the fill, starts at the far left, and slides as the fill grows.
-export default function RoomProgressBar({ place, stepId }: ProgressBarProps) {
+// with only the current one visible, so nothing has to load mid-change.
+// follow-fill: the rooms sit at the right end of a box as wide as the fill
+// (but never narrower than the current room), so the room's right edge
+// follows the end of the fill and slides as it grows.
+// far-right: the rooms sit at the right end of the bar on every screen.
+// placement: for tests and comparisons; left out, the data file decides.
+export default function RoomProgressBar({ place, stepId, placement = ROOMS.placement }: ProgressBarProps & { placement?: Placement }) {
   const percent = percentDone(place)
   const current = ROOMS.screens[stepId]
+  const followFill = placement === 'follow-fill'
   const box = {
-    width: `${percent}%`,
+    width: followFill ? `${percent}%` : undefined,
     // The current room's width at the bar's room height (--room-h).
     minWidth: current ? `calc(var(--room-h) * ${current.width / current.height})` : undefined,
   } as CSSProperties
+  const change = CHANGES[placement]
 
   return (
     <div className="flex flex-col">
@@ -41,8 +59,9 @@ export default function RoomProgressBar({ place, stepId }: ProgressBarProps) {
         <div className="relative h-[var(--room-h)]">
           <div
             data-testid="progress-room"
+            data-placement={placement}
             style={box}
-            className="absolute inset-y-0 left-0 transition-[width,min-width] duration-400 ease-out motion-reduce:transition-none"
+            className={`absolute inset-y-0 transition-[width,min-width] duration-400 ease-out motion-reduce:transition-none ${followFill ? 'left-0' : 'right-0'}`}
           >
             {ALL_ROOMS.map(([screenId, room]) => (
               <Image
@@ -54,7 +73,7 @@ export default function RoomProgressBar({ place, stepId }: ProgressBarProps) {
                 unoptimized
                 loading="eager"
                 data-current={screenId === stepId}
-                className={`absolute right-0 bottom-0 h-full w-auto max-w-none ${screenId === stepId ? SHOWN : HIDDEN}`}
+                className={`absolute right-0 bottom-0 h-full w-auto max-w-none ${screenId === stepId ? change.shown : change.hidden}`}
               />
             ))}
           </div>

@@ -12,7 +12,13 @@ export interface Room {
   height: number
 }
 
+// Where the room sits on the bar: its right edge following the end of the
+// fill (the first version), or always at the far right end (the second).
+export type Placement = 'follow-fill' | 'far-right'
+const PLACEMENTS: Placement[] = ['follow-fill', 'far-right']
+
 export interface ProgressRooms {
+  placement: Placement
   // Keyed by screen id: each quiz question id, then "contact".
   screens: Record<string, Room>
   // The rooms on the result's 100% bar.
@@ -54,8 +60,13 @@ export function parseProgressRooms(raw: unknown, screenIds: string[]): ProgressR
     screens[id] = roomFor(name, `screen ${id}`)
   }
 
+  const placement = raw.placement ?? 'follow-fill'
+  if (!PLACEMENTS.includes(placement as Placement)) {
+    throw new Error(`progress rooms "placement" must be one of ${PLACEMENTS.join(', ')}, not ${String(placement)}`)
+  }
+
   const finishedHome = (Array.isArray(raw.finishedHome) ? raw.finishedHome : []).map((name) => roomFor(name, 'the finished home'))
-  return { screens, finishedHome }
+  return { placement: placement as Placement, screens, finishedHome }
 }
 
 export function loadProgressRooms(): ProgressRooms {

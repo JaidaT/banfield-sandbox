@@ -43,6 +43,23 @@ describe('progress-rooms.json (the real file)', () => {
   })
 })
 
+describe('placement: where the room sits (2026-11-21)', () => {
+  test('the real file uses the far-right version', () => {
+    expect(loadProgressRooms().placement).toBe('far-right')
+  })
+
+  test('accepts "follow-fill" and "far-right", and defaults to "follow-fill"', () => {
+    expect(parseProgressRooms({ ...raw, placement: 'follow-fill' }, screenIds).placement).toBe('follow-fill')
+    const { placement: _unused, ...noPlacement } = raw
+    void _unused
+    expect(parseProgressRooms(noPlacement, screenIds).placement).toBe('follow-fill')
+  })
+
+  test('throws on any other placement', () => {
+    expect(() => parseProgressRooms({ ...raw, placement: 'middle' }, screenIds)).toThrow(/placement.*middle/)
+  })
+})
+
 describe('parseProgressRooms', () => {
   const parse = (change: Record<string, unknown>) => () => parseProgressRooms({ ...raw, ...change }, screenIds)
 

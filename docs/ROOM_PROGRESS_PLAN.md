@@ -38,6 +38,12 @@ The Quick Quiz should feel less like a form (team feedback: "the quiz itself is 
 ### Size
 The graphics come in different shapes and sizes. Show them all at **one height** (their width follows their own shape), small enough to sit neatly on the bar and not crowd the question: about **56px tall on a phone and 72px on a computer** as a starting point. Tune by eye.
 
+### Version 2: the room at the far right (2026-11-21)
+Jaida asked to try a second version. Both are kept, chosen by one setting in the data file ("placement"), so the team can compare them.
+- **Version 1, "follow-fill":** as above. The room's right edge follows the end of the fill and slides along; rooms fade between screens.
+- **Version 2, "far-right"** (on now): the room always sits at the **right end of the bar**, and the yellow fill grows towards it. Between screens the old room **shrinks down into the bar** (about 200 ms) and the new one **grows up from the bar** with a slight bounce (about 300 ms, starting about 150 ms later). Both scale from the bottom, so they seem to rise out of the bar.
+- **Reduced motion:** no shrinking or growing; a quick fade.
+
 ## Which room, when
 
 Thirteen graphics, one for each of the 13 screens (12 questions, then the contact screen). The order was left to the team ("whatever fits best"); this pairs rooms with questions where there is a natural link.
@@ -108,6 +114,12 @@ Work test-first: for each step that changes what shows, write the failing test, 
 ### Phase 4: The result
 - [x] The result's 100% bar shows the "finished home" rooms side by side (to judge on screen; easy to remove)
   - Tests: the result's bar shows the finished-home rooms; they are hidden from screen readers
+
+### Version 2 steps
+- [x] A "placement" setting in the data file ("follow-fill" or "far-right", default "follow-fill"); any other value stops the app with a message
+- [x] Far-right: the room at the right end of the bar on every screen; the old room shrinks away and the new one grows in with a slight bounce; a fade with reduced motion
+  - Tests: the real file uses far-right; both values load; another value throws; with far-right the room sits at the right end on every screen; with follow-fill it still follows the fill
+- [ ] Jaida compares the two versions and picks one
 
 ### Phase 5: Checks
 - [x] Every existing quiz test still passes
