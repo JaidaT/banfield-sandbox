@@ -42,7 +42,8 @@ The graphics come in different shapes and sizes. Show them all at **one height**
 Jaida asked to try more versions. All are kept, chosen by one setting in the data file ("placement"), so the team can compare them.
 - **Version 1, "follow-fill":** as above. The room's right edge follows the end of the fill and slides along; rooms fade between screens.
 - **Version 2, "far-right": the room always sits at the **right end of the bar**, and the yellow fill grows towards it. Between screens the old room **shrinks down into the bar** (about 200 ms) and the new one **grows up from the bar** with a slight bounce (about 300 ms, starting about 150 ms later). Both scale from the bottom, so they seem to rise out of the bar.
-- **Version 3, "middle"** (on now; Jaida, 2026-11-21): the room always sits in the **middle of the bar**, with the same shrink-and-grow change as version 2. Rooms of different widths share one centre.
+- **Version 3, "middle"** (Jaida, 2026-11-21): the room always sits in the **middle of the bar**, with the same shrink-and-grow change as version 2. Rooms of different widths share one centre.
+- **Version 4, "build-up"** (on now; Jaida, 2026-11-21): a shorter bar beside one room that gains a piece per finished screen. It has its own plan: `ROOM_BUILD_PLAN.md`.
 - **Reduced motion:** no shrinking or growing; a quick fade.
 
 ## Which room, when
