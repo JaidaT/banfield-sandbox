@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 202.11 176.4">
+  <defs>
+    <style>
+      .cls-1 {
+        mask: url(#mask-1);
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        mask: url(#mask);
+      }
+
+      .cls-4 {
+        fill: #f0d087;
+      }
+
+      .cls-5 {
+        fill: url(#linear-gradient-4);
+      }
+
+      .cls-6 {
+        fill: #262b47;
+      }
+
+      .cls-7 {
+        mask: url(#mask-2);
+      }
+
+      .cls-8 {
+        fill: #e2ccc5;
+      }
+
+      .cls-9 {
+        filter: url(#luminosity-noclip-3);
+      }
+
+      .cls-10 {
+        fill: url(#linear-gradient-2);
+        opacity: .47;
+      }
+
+      .cls-11 {
+        fill: #d85345;
+      }
+
+      .cls-12 {
+        fill: #f1795e;
+      }
+
+      .cls-13 {
+        fill: #e56551;
+      }
+
+      .cls-14 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-14, .cls-15 {
+        mix-blend-mode: multiply;
+      }
+
+      .cls-16 {
+        fill: #d9a87e;
+      }
+
+      .cls-17 {
+        fill: #ce8b57;
+      }
+
+      .cls-15 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-18 {
+        mask: url(#mask-3);
+      }
+
+      .cls-19 {
+        filter: url(#luminosity-noclip);
+      }
+    </style>
+    <filter id="luminosity-noclip" x="37.04" y="48.3" width="82.34" height="91.26" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-color="#fff" result="bg"/>
+      <feBlend in="SourceGraphic" in2="bg"/>
+    </filter>
+    <filter id="luminosity-noclip-2" x="37.04" y="-8037.46" width="82.34" height="32766" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-color="#fff" result="bg"/>
+      <feBlend in="SourceGraphic" in2="bg"/>
+    </filter>
+    <mask id="mask-1" x="37.04" y="-8037.46" width="82.34" height="32766" maskUnits="userSpaceOnUse"/>
+    <linearGradient id="linear-gradient" x1="78.21" y1="139.56" x2="78.21" y2="48.3" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+    <mask id="mask" x="37.04" y="48.3" width="82.34" height="91.26" maskUnits="userSpaceOnUse">
+      <g class="cls-19">
+        <g class="cls-1">
+          <polygon class="cls-15" points="65.35 48.3 37.04 139.56 119.37 139.56 92.62 48.3 65.35 48.3"/>
+        </g>
+      </g>
+    </mask>
+    <linearGradient id="linear-gradient-2" x1="78.21" y1="139.56" x2="78.21" y2="48.3" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#fdfaee"/>
+    </linearGradient>
+    <filter id="luminosity-noclip-3" x="77.45" y="0" width="2.6" height="36.07" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-color="#fff" result="bg"/>
+      <feBlend in="SourceGraphic" in2="bg"/>
+    </filter>
+    <filter id="luminosity-noclip-4" x="77.45" y="-8037.46" width="2.6" height="32766" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-color="#fff" result="bg"/>
+      <feBlend in="SourceGraphic" in2="bg"/>
+    </filter>
+    <mask id="mask-3" x="77.45" y="-8037.46" width="2.6" height="32766" maskUnits="userSpaceOnUse"/>
+    <linearGradient id="linear-gradient-3" x1="78.75" y1="36.07" x2="78.75" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <mask id="mask-2" x="77.45" y="0" width="2.6" height="36.07" maskUnits="userSpaceOnUse">
+      <g class="cls-9">
+        <g class="cls-18">
+          <rect class="cls-14" x="77.45" width="2.6" height="36.07"/>
+        </g>
+      </g>
+    </mask>
+    <linearGradient id="linear-gradient-4" x1="78.75" y1="36.07" x2="78.75" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e6ab75"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+  </defs>
+  <g id="layer_1" data-name="layer 1">
+    <g>
+      <g>
+        <path class="cls-16" d="M78.96,67.11c-11.72,0-21.26-9.54-21.26-21.26h1c0,11.17,9.09,20.26,20.26,20.26s20.26-9.09,20.26-20.26h1c0,11.72-9.54,21.26-21.26,21.26Z"/>
+        <polygon class="cls-16" points="78.68 29.23 51.87 51.44 110.98 51.44 78.68 29.23"/>
+        <g class="cls-3">
+          <polygon class="cls-10" points="65.35 48.3 37.04 139.56 119.37 139.56 92.62 48.3 65.35 48.3"/>
+        </g>
+        <g class="cls-7">
+          <rect class="cls-5" x="77.45" width="2.6" height="36.07"/>
+        </g>
+        <path class="cls-17" d="M77.47,32.17h2.56c1.7,0,3.08,1.38,3.08,3.08v6.37h-8.72v-6.37c0-1.7,1.38-3.08,3.08-3.08Z"/>
+        <path class="cls-4" d="M83.71,52.19c0-2.8-2.27-5.08-5.08-5.08s-5.08,2.27-5.08,5.08,2.27,5.08,5.08,5.08,5.08-2.27,5.08-5.08Z"/>
+        <path class="cls-2" d="M78.7,55.37c-1.2-.22-2.86-1.16-3.17-2.43-.11-.45-.81-.26-.7.19.37,1.52,2.22,2.68,3.67,2.94.46.08.65-.62.19-.7Z"/>
+        <polygon class="cls-8" points="78.68 29.23 49.12 51.44 108.23 51.44 78.68 29.23"/>
+        <path class="cls-16" d="M77.46,26.48h2.44c.84,0,1.53.68,1.53,1.53v2.43c0,.84-.68,1.53-1.53,1.53h-2.43c-.84,0-1.53-.69-1.53-1.53v-2.43c0-.84.68-1.53,1.53-1.53Z"/>
+      </g>
+      <g>
+        <polygon class="cls-6" points="34.02 176.4 29.92 176.4 35.81 132.46 44.49 132.46 34.02 176.4"/>
+        <polygon class="cls-6" points="51.6 176.4 47.51 176.4 53.4 132.46 62.08 132.46 51.6 176.4"/>
+        <polygon class="cls-6" points="162.31 176.4 166.41 176.4 160.52 132.46 151.84 132.46 162.31 176.4"/>
+        <polygon class="cls-6" points="144.73 176.4 148.82 176.4 142.93 132.46 134.25 132.46 144.73 176.4"/>
+        <g>
+          <g>
+            <path class="cls-12" d="M155.29,120.78c-5.63,0-10.19,5.33-10.19,11.91s4.56,11.91,10.19,11.91h37.05v-23.82h-37.05Z"/>
+            <path class="cls-11" d="M202.11,132.69c0,6.58-4.56,11.91-10.19,11.91s-10.19-5.33-10.19-11.91,4.56-11.91,10.19-11.91,10.19,5.33,10.19,11.91Z"/>
+          </g>
+          <path class="cls-11" d="M23.43,98.13h102.52c9.13,0,16.54,7.41,16.54,16.54v28.77H6.9v-28.77c0-9.13,7.41-16.54,16.54-16.54Z"/>
+          <path class="cls-13" d="M35.62,98.13h102.52c9.13,0,16.54,7.41,16.54,16.54v28.77H19.08v-28.77c0-9.13,7.41-16.54,16.54-16.54Z"/>
+          <g>
+            <path class="cls-13" d="M167.32,165.58H30.79c-9.48,0-17.16-7.68-17.16-17.16h170.85c0,9.48-7.68,17.16-17.16,17.16Z"/>
+            <path class="cls-11" d="M182.18,152.43H15.93c-3.83,0-6.93-3.1-6.93-6.93h0c0-3.83,3.1-6.93,6.93-6.93h166.25c3.83,0,6.93,3.11,6.93,6.93h0c0,3.83-3.1,6.93-6.93,6.93Z"/>
+          </g>
+          <path class="cls-2" d="M70.41,120.78c0-1.69-1.37-3.05-3.05-3.05s-3.05,1.37-3.05,3.05,1.37,3.05,3.05,3.05,3.05-1.37,3.05-3.05Z"/>
+          <path class="cls-2" d="M105.4,120.78c0-1.69-1.37-3.05-3.05-3.05s-3.05,1.37-3.05,3.05,1.37,3.05,3.05,3.05,3.05-1.37,3.05-3.05Z"/>
+          <path class="cls-2" d="M127.38,120.78c0-1.69-1.37-3.05-3.05-3.05s-3.05,1.37-3.05,3.05,1.37,3.05,3.05,3.05,3.05-1.37,3.05-3.05Z"/>
+        </g>
+        <g>
+          <path class="cls-12" d="M10.19,120.78c-5.63,0-10.19,5.33-10.19,11.91s4.56,11.91,10.19,11.91h37.05v-23.82H10.19Z"/>
+          <path class="cls-11" d="M57.02,132.69c0,6.58-4.56,11.91-10.19,11.91s-10.19-5.33-10.19-11.91,4.56-11.91,10.19-11.91,10.19,5.33,10.19,11.91Z"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
