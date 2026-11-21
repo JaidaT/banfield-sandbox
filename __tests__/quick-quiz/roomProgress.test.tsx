@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, test, vi } from 'vitest'
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, test } from 'vitest'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import QuizForm from '@/components/quick-quiz/QuizForm'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
@@ -20,15 +20,13 @@ function renderQuiz(startAt?: string) {
   render(<QuizForm questionnaire={quizQuestionnaire(questions, form)} quizData={quizData} clientCopy={clientCopy} startAt={startAt} />)
 }
 
-// The room graphics are decorative, so they are found by their file.
+// The room graphics are decorative, so they are found by their file. All
+// rooms are on the page from the start (so none has to load mid-change); only
+// the current one is visible.
 const roomImages = () => Array.from(document.querySelectorAll<HTMLImageElement>('[data-testid="progress-room"] img'))
-const shownRoom = () => roomImages().map((img) => img.getAttribute('src'))
+const shownRoom = () => roomImages().filter((img) => img.dataset.current === 'true').map((img) => img.getAttribute('src'))
 
-afterEach(() => {
-  cleanup()
-  vi.unstubAllGlobals()
-  vi.useRealTimers()
-})
+afterEach(cleanup)
 
 describe('room progress bar on the question screens', () => {
   test('each screen shows its own room', () => {
@@ -71,14 +69,23 @@ describe('room progress bar on the question screens', () => {
     expect(shownRoom()).toEqual([rooms.screens[questions[0].id].file])
   })
 
-  test('while moving, the old room fades out next to the new one, then goes', () => {
-    vi.useFakeTimers()
-    vi.stubGlobal('matchMedia', (query: string) => ({ matches: false, media: query, addEventListener() {}, removeEventListener() {} }))
+  // Jaida, 2026-11-21: rooms popped in and out, and overlapped. All rooms now
+  // load once and stay on the page; changing screens only fades between them.
+  test('every room is on the page from the start, loaded straight away, with only the current one visible', () => {
     renderQuiz(questions[0].id)
+    const files = roomImages().map((img) => img.getAttribute('src'))
+    expect(new Set(files)).toEqual(new Set(Object.values(rooms.screens).map((r) => r.file)))
+    for (const img of roomImages()) expect(img.getAttribute('loading'), img.src).toBe('eager')
+    expect(shownRoom()).toEqual([rooms.screens[questions[0].id].file])
+  })
+
+  test('changing screens keeps the same room pictures on the page (nothing is re-added)', () => {
+    renderQuiz(questions[0].id)
+    const before = roomImages()
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
-    expect(screen.getByTestId('leaving-room').querySelector('img')!.getAttribute('src')).toBe(rooms.screens[questions[0].id].file)
-    act(() => vi.advanceTimersByTime(500))
-    expect(screen.queryByTestId('leaving-room')).toBeNull()
+    const after = roomImages()
+    expect(after).toHaveLength(before.length)
+    after.forEach((img, i) => expect(img).toBe(before[i]))
   })
 })
 

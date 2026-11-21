@@ -27,7 +27,8 @@ The Quick Quiz should feel less like a form (team feedback: "the quiz itself is 
 - **Only the Quick Quiz.** The long questionnaire keeps its own progress bar.
 
 ### Moving to the next or previous screen
-- The old room **fades out** while the new room **fades in and slides** along the bar to its new spot, at the same time as the yellow fill grows (or shrinks, on Back).
+- The old room **fades out quickly** (about 150 ms), and the new room **fades in a moment later** (after about 100 ms, over about 250 ms) as it slides along the bar with the yellow fill (which grows, or shrinks on Back). The two should barely overlap (Jaida, 2026-11-21).
+- **Load every room once, when the quiz opens, and keep them all on the page**, showing only the current one. Found in testing: adding and removing the room pictures on each screen made them pop in and out (each had to load and draw before its fade could show) and overlap for most of the change.
 - **Reduced motion** (`prefers-reduced-motion`): a quick fade only, with no sliding.
 
 ### The result screen
@@ -77,7 +78,8 @@ The graphics are flat illustrations (SVG), provided by Jaida as "Asset 11" to "A
 |---|---|
 | Fill growing or shrinking | about 400 ms |
 | Room sliding to its new spot | about 400 ms, with the fill |
-| Old room fading out, new room fading in | about 250 ms |
+| Old room fading out | about 150 ms |
+| New room fading in | about 250 ms, starting about 100 ms after the old one starts fading |
 | Reduced-motion fade | about 150 ms |
 
 ## Phases
@@ -98,6 +100,8 @@ Work test-first: for each step that changes what shows, write the failing test, 
 
 ### Phase 3: Moving between screens
 - [x] On Next and Back, the fill grows or shrinks, the old room fades out, and the new room fades in and slides to its new spot
+- [x] All rooms load once and stay on the page, with only the current one visible; the old room fades out fast and the new one fades in a moment later (fix after Jaida's test, 2026-11-21)
+  - Tests: every room is on the page from the start and loads straight away; changing screens keeps the same pictures (nothing is re-added); only the current room is visible
 - [x] Reduced motion: a quick fade, no sliding
   - Tests: after Next, the new room shows and the old one is gone once the move ends; Back shows the previous screen's room
 
