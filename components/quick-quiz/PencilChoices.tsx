@@ -54,7 +54,7 @@ export default function PencilChoices({ question, value, onChange, error }: Prop
         {question.options.map((option, index) => (
           <label
             key={option.id}
-            className="group relative flex min-h-12 cursor-pointer items-center gap-3 rounded-xl px-5 py-3 has-disabled:cursor-not-allowed has-disabled:opacity-40 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-navy"
+            className="group relative flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-4 py-2 sm:min-h-12 sm:px-5 sm:py-3 has-disabled:cursor-not-allowed has-disabled:opacity-40 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-navy"
           >
             <input
               type={single ? 'radio' : 'checkbox'}

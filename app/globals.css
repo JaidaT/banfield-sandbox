@@ -106,23 +106,27 @@ body {
   --pencil-light: #b9b6ae;
 }
 
+/* How much of the next card peeks out: less on a phone, to save room. */
+.swatch-stack { --peek: 32px; }
+@media (min-width: 640px) { .swatch-stack { --peek: 40px; } }
+
 /* Next: the active card swings up and round to the back, ending behind the
    peeking card (z-index 1, under the peeking card's 5)... */
 @keyframes card-out-forward {
   0% { transform: none; z-index: 30; opacity: 1; }
   45% { transform: translateY(-60%) rotate(-4deg); z-index: 30; opacity: 1; }
   55% { z-index: 1; }
-  100% { transform: translateY(-40px) scale(0.94); z-index: 1; opacity: 0; }
+  100% { transform: translateY(calc(var(--peek, 40px) * -1)) scale(0.94); z-index: 1; opacity: 0; }
 }
 /* ...while the peeking card slides down and forward. */
 @keyframes card-in-forward {
-  from { transform: translateY(-40px) scale(0.94); }
+  from { transform: translateY(calc(var(--peek, 40px) * -1)) scale(0.94); }
   to { transform: none; }
 }
 /* Back: the active card slides back to the peeking place... */
 @keyframes card-out-back {
   from { transform: none; z-index: 30; opacity: 1; }
-  to { transform: translateY(-40px) scale(0.94); z-index: 1; opacity: 0; }
+  to { transform: translateY(calc(var(--peek, 40px) * -1)) scale(0.94); z-index: 1; opacity: 0; }
 }
 /* ...while the card at the back comes up, round and forward. */
 @keyframes card-in-back {

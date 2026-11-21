@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import ProgressBar from '@/components/form/ProgressBar'
 import QuestionInput from '@/components/form/QuestionInput'
 import type { StepScreenProps } from '@/components/form/StepScreen'
-import { BUTTON, BUTTON_MAIN, BUTTON_ROW } from '@/components/form/styles'
+import { BUTTON, BUTTON_MAIN } from '@/components/form/styles'
 import PencilChoices from '@/components/quick-quiz/PencilChoices'
 import { REDUCED_FADE_MS, moveLength } from '@/components/quick-quiz/motion'
 
@@ -19,6 +19,13 @@ interface Leaving {
   // How long the move lasts in this browser (moveLength).
   length: number
 }
+
+// Compact on a phone so the progress bar, card and buttons fit on one screen;
+// roomier on a computer (Jaida, 2026-11-20). --peek is how much of the next
+// card shows; the card moves in app/globals.css use it too.
+
+// The Back and Next row, a little closer to the card on a phone.
+const CARD_BUTTON_ROW = 'mt-auto flex gap-3 pt-4 sm:pt-6 [&>button]:flex-1'
 
 // The card's shape: rounded, a thin light-grey border, white.
 const CARD = 'overflow-hidden rounded-2xl border-2 border-[var(--line)] bg-white'
@@ -79,7 +86,7 @@ export default function SwatchCardScreen(props: StepScreenProps) {
     <>
       {place ? <ProgressBar place={place} progressAs={progressAs} /> : null}
 
-      <div className="relative pt-10">
+      <div className="swatch-stack relative pt-[var(--peek)]">
         {!isLast && (
           // The next card, peeking about 40px above: tapping it is Next. It sits
           // above where a leaving card ends up, so that card goes behind it.
@@ -98,10 +105,10 @@ export default function SwatchCardScreen(props: StepScreenProps) {
             aria-hidden="true"
             inert
             style={timing}
-            className={`pointer-events-none absolute inset-x-0 top-10 bottom-0 z-30 ${CARD} ${exit}`}
+            className={`pointer-events-none absolute inset-x-0 top-[var(--peek)] bottom-0 z-30 ${CARD} ${exit}`}
           >
-            <div className="bg-accent px-5 py-4 sm:px-8 sm:py-6">
-              <p className="text-xl font-bold leading-snug text-charcoal">{leaving.title}</p>
+            <div className="bg-accent px-4 py-3 sm:px-8 sm:py-6">
+              <p className="text-lg sm:text-xl font-bold leading-snug text-charcoal">{leaving.title}</p>
             </div>
           </div>
         )}
@@ -114,8 +121,8 @@ export default function SwatchCardScreen(props: StepScreenProps) {
           style={timing}
           className={`relative z-10 ${CARD} ${enter}`}
         >
-          <div data-testid="card-strip" className="flex flex-col gap-1 bg-accent px-5 py-4 sm:px-8 sm:py-6">
-            <h2 ref={headingRef} id={headingId} tabIndex={-1} className="text-xl font-bold leading-snug text-charcoal outline-none">
+          <div data-testid="card-strip" className="flex flex-col gap-1 bg-accent px-4 py-3 sm:px-8 sm:py-6">
+            <h2 ref={headingRef} id={headingId} tabIndex={-1} className="text-lg font-bold leading-snug text-charcoal outline-none sm:text-xl">
               {step.step.title}
             </h2>
             {stripHelp ? (
@@ -124,7 +131,7 @@ export default function SwatchCardScreen(props: StepScreenProps) {
               </p>
             ) : null}
           </div>
-          <div className="swatch-area flex flex-col gap-5 p-5 sm:p-8">
+          <div className="swatch-area flex flex-col gap-4 p-3 sm:gap-5 sm:p-8">
             {step.step.intro ? <p className="leading-7">{step.step.intro}</p> : null}
             {step.questions.map((shownQuestion) => {
               // The strip already shows this question's help line.
@@ -149,7 +156,7 @@ export default function SwatchCardScreen(props: StepScreenProps) {
         </section>
       </div>
 
-      <div className={BUTTON_ROW}>
+      <div className={CARD_BUTTON_ROW}>
         {goBack ? (
           <button type="button" onClick={goBack} className={BUTTON}>
             Back

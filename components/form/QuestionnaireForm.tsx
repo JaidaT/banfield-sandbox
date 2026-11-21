@@ -200,7 +200,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
     <div className={`flex flex-1 flex-col bg-frost font-sans text-charcoal ${look ?? ''}`}>
       {/* Inside an iframe (data-embedded, set by the Quick Quiz), the column is
           only as tall as its content, so the iframe can shrink as well as grow. */}
-      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 in-[[data-embedded]]:flex-none">{screen}</main>
+      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 in-[[data-embedded]]:flex-none max-sm:in-[.quick-quiz]:gap-4 max-sm:in-[.quick-quiz]:py-4">{screen}</main>
     </div>
   )
 }
