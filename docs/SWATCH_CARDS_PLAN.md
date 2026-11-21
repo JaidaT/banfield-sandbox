@@ -2,7 +2,7 @@
 
 **For:** the development team building the Quick Quiz in any codebase. This file stands on its own: it describes what to build and how it should behave, not where the code lives. Planned on the `foyer-v1-swatch-cards` branch of the Banfield sandbox and written to be copied into another repo.
 
-**Status:** built in the Banfield sandbox on 2026-11-20 (ticked steps below); the steps that need a person to try it on a phone are still open. In another repo, start from unticked.
+**Status:** built and tried in the Banfield sandbox on 2026-11-20 (Jaida checked it on a phone and a computer, with reduced motion, and inside the stand-in website). In another repo, start from unticked.
 
 ## Why
 
@@ -160,9 +160,9 @@ Work test-first: for each step that changes what shows or what happens, write th
 ### Phase 5: Checks
 - [x] Every existing quiz test still passes (answers, scoring, result, contact rules)
 - [x] Run the project's type check, lint, tests and build: all pass
-- [ ] Try it on a phone and a computer: forward, back, tapping the peeking card, a fast double-tap, the fall, the calculating screen, the result
-- [ ] Try it with reduced motion turned on (phone accessibility settings, or the browser's developer tools)
-- [ ] Try it inside the website iframe, if the quiz is embedded
+- [x] Try it on a phone and a computer: forward, back, tapping the peeking card, a fast double-tap, the fall, the calculating screen, the result
+- [x] Try it with reduced motion turned on (phone accessibility settings, or the browser's developer tools)
+- [x] Try it inside the website iframe, if the quiz is embedded
 
 ## Decisions (2026-11-20)
 
