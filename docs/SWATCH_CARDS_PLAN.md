@@ -42,13 +42,15 @@ For one-choice and pick-several questions (Jaida, 2026-11-20). The look should b
 - **Chosen**: the same circle at **full opacity**.
 - **Pick several:** each chosen option gets its own circle. When the "pick up to" limit is reached, the other options fade and can't be chosen until one is un-circled, the same rule as today.
 - **Pick one:** choosing another option moves the circle to it.
-- **The circle is a drawn shape, slightly uneven, like real pencil.** Proposed (Claude, to approve): it draws itself in a quick stroke (about 300 ms) when chosen; with reduced motion it simply appears. A few slightly different circle shapes, so the options don't all look stamped.
+- **The circle's look (from Jaida's mockup):** a loose, wide oval around the whole option line, in dark grey pencil (about `#5a5a5a`), slightly uneven. The stroke overshoots where it starts and ends (at the top left), like a real hand-drawn loop.
+- **The chosen option's text turns bold.**
+- **Options are plain text** in a list with generous space between them (enough room for the oval, and an easy tap target of at least 44px).
+- **The circle draws itself** in a quick stroke (about 300 ms) when chosen; with reduced motion it simply appears. A few slightly different oval shapes, so the options don't all look stamped. (Claude's proposal; Jaida: "let's try it out", 2026-11-20.)
 - **Underneath, the options are still real radio buttons and tick boxes**, hidden from view but used by keyboards and screen readers, so the quiz works exactly as before.
 - **Keyboard focus** shows the faint circle plus a clear focus outline, so keyboard users can always see where they are.
-- *The exact look follows Jaida's screenshot (still to be shared again: it did not come through on 2026-11-20).*
 
 ### The other inputs: the same pencil feel
-Claude's proposals, matching the hand-drawn pencil look (Jaida asked to match the vibe; to approve):
+Claude's proposals, matching the hand-drawn pencil look (Jaida asked to match the vibe, then said "let's try it out", 2026-11-20; judge them once they're on screen):
 - **"Not sure yet"** (with the slider): circled in pencil when chosen, like the options.
 - **The slider:** a hand-drawn pencil line for the track and a hand-drawn dot for the handle; the amount above it in the same writing style as today.
 - **Text boxes** (long text, contact name and email): no box, just a pencil underline to write on, like a form on paper. The underline darkens when the box is in use. A box with a problem gets a red pencil underline and its message.
@@ -126,9 +128,9 @@ Work test-first: for each step that changes what shows or what happens, write th
 ### Phase 2: The card and the stack (no motion yet)
 - [ ] The card: yellow strip with the question as the heading, plain swatch area with the answers, rounded corners and a thin border
 - [ ] Every question type fits in the swatch area: one choice, several choices (with "pick up to"), the slider with "Not sure yet", long text, and the contact fields
-- [ ] Choices as plain text with the pencil circle: faint on hover and keyboard focus, full when chosen, one circle per chosen option on pick-several, the others faded at the "pick up to" limit; real radio buttons and tick boxes underneath
+- [ ] Choices as plain text with the pencil oval: faint on hover and keyboard focus, full and with bold text when chosen, one oval per chosen option on pick-several, the others faded at the "pick up to" limit; real radio buttons and tick boxes underneath
   - Tests: choosing an option still records the same answer as today; on pick-several, the limit still stops a third choice; each option can be chosen with the keyboard alone
-- [ ] The pencil feel for the other inputs: circled "Not sure yet", the hand-drawn slider, and underlined text boxes (once approved)
+- [ ] The pencil feel for the other inputs: circled "Not sure yet", the hand-drawn slider, and underlined text boxes (to try, then judge on screen)
 - [ ] The stack: the active card in front, the next card peeking about 40px above and slightly narrower; no peeking card on the last card
 - [ ] Progress above the stack; Back and Next below it
 - [ ] The welcome screen stays a normal screen
@@ -139,7 +141,7 @@ Work test-first: for each step that changes what shows or what happens, write th
 - [ ] Next and the peeking card: the active card swings up and around to the back while the next card slides down and forward
 - [ ] Back: the reverse
 - [ ] Reduced motion: a short fade instead
-- [ ] The pencil circle draws itself when an option is chosen (if approved); with reduced motion it simply appears
+- [ ] The pencil oval draws itself when an option is chosen; with reduced motion it simply appears
 - [ ] The cursor moves to the new card's question once the move ends
 - [ ] In an iframe that sizes to the quiz, the height stays steady during a move
   - Tests: after a move, the new question has the cursor; with reduced motion turned on, moves still work (and finish straight away in tests)
@@ -163,7 +165,7 @@ Work test-first: for each step that changes what shows or what happens, write th
 - **Only the next card peeks** (Jaida chose one, unless there was reason for more; one keeps the phone screen calm and the motion easy to follow).
 - **The welcome screen is not a card; the contact screen is** (Jaida).
 - **The question sits across a strip at the top**, not sideways as on a real swatch card, so long questions stay readable on a phone (Jaida). **The strip is the brand yellow** (Jaida, changed from white on 2026-11-20).
-- **Choices are circled in pencil**: a faint circle on hover, a full one when chosen (Jaida). The other inputs follow the same hand-drawn feel (Claude's proposals, to approve).
+- **Choices are circled in pencil**: a faint oval on hover, a full one and bold text when chosen, as in Jaida's mockup (Jaida). The other inputs follow the same hand-drawn feel, and the oval draws itself (Claude's proposals; Jaida: "let's try it out").
 - **No fabric texture yet** (Jaida).
 - **"See my results" stays** as the last button's words; no "Submit" (Jaida).
 - **"Calculating your Design DNA" shows for 2 seconds with animated dots** (Jaida). It is a pause for effect: the result is already worked out.
@@ -172,8 +174,8 @@ Work test-first: for each step that changes what shows or what happens, write th
 
 ## Open questions (not blocking)
 
-- Jaida's screenshot of the pencil circle (did not come through; needed for the circle's exact look).
-- Claude's pencil proposals for the other inputs, and whether the circle draws itself.
+- The active card in Jaida's mockup has a blue outline. The plan reads it as the design tool's selection highlight and keeps the thin light-grey border; confirm.
+- Whether Claude's pencil-style slider, underlined text boxes and self-drawing oval work once tried on screen.
 
 - What the swatch area looks like without texture (plain white, the background colour, or a soft tint).
 - Whether the peeking card should show a hint of the next question in its 40px, or stay blank like the mockup (the plan follows the mockup: blank).
