@@ -2,7 +2,7 @@
 
 **For:** the development team building the Quick Quiz in any codebase. This file stands on its own: it describes what to build and how it should behave, not where the code lives. Planned on the `foyer-v1-room-progress` branch of the Banfield sandbox, as a fourth version of the room progress bar, and written to be copied into another repo.
 
-**Status:** plan only. Nothing is built yet.
+**Status:** being built in the Banfield sandbox (ticked steps). In another repo, start from unticked.
 
 ## Why
 
@@ -89,9 +89,9 @@ All files are 600 x 450 (4:3), the same artboard, each piece drawn in its final 
 Work test-first: for each step that changes what shows, write the failing test, then the code. Motion and looks are checked by eye.
 
 ### Phase 1: The pieces
-- [ ] Add the base, the 13 pieces and the full picture
-- [ ] Work out each piece's centre point from its drawing, and store it with the piece list in a data file (order, file, short name, centre)
-- [ ] Load it with checks: 13 pieces for 13 screens plus the result, no piece listed twice, centres inside the room
+- [x] Add the base, the 13 pieces and the full picture
+- [x] Work out each piece's centre point from its drawing, and store it with the piece list in a data file (order, file, short name, centre)
+- [x] Load it with checks: 13 pieces for 13 screens plus the result, no piece listed twice, centres inside the room
   - Tests: the real file loads in the order above; every file exists and has the base's size; a missing piece, a repeat or a centre outside the room stops the app with a message naming the problem
 
 ### Phase 2: The layout
