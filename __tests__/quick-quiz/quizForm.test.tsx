@@ -31,15 +31,17 @@ const click = (name: string | RegExp) => fireEvent.click(screen.getByRole('butto
 const clientPart = () => within(screen.getByRole('region', { name: 'Your results' }))
 
 describe('QuizForm', () => {
-  test('starts on the welcome screen, then the first question shows 0% done', () => {
+  test('starts on the welcome screen, then the first question shows its progress', () => {
     renderQuiz()
     expect(heading()).toBe(form.welcome.title)
     expect(screen.getByText(form.welcome.intro)).toBeDefined()
     click("Let's start")
-    expect(screen.getByText('0%')).toBeDefined()
+    // Room progress bar (2026-11-21): no percentage text; screen readers hear "Question N of M".
+    expect(screen.getByText('Question 1 of 13')).toBeDefined()
+    expect(screen.queryByText('0%')).toBeNull()
     // Demo styling (2026-11-17): the question is the heading.
     expect(heading()).toBe(quizData.questions[0].prompt)
-    // The Quick Quiz shows a percentage, not "Step 1 of 13" (the long questionnaire keeps steps).
+    // The long questionnaire keeps its own "Step N of M" bar.
     expect(screen.queryByText(/Step \d+ of/)).toBeNull()
     expect(screen.getByRole('group', { name: quizData.questions[0].prompt })).toBeDefined()
   })
@@ -47,7 +49,7 @@ describe('QuizForm', () => {
   test('Next is not blocked on a skipped question', () => {
     renderQuiz({ startAt: 'decision_style' })
     click('Next')
-    expect(screen.getByText('8%')).toBeDefined()
+    expect(screen.getByText('Question 2 of 13')).toBeDefined()
   })
 
   test('the contact screen is last, with "See my results" and no review screen', () => {

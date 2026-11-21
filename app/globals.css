@@ -98,3 +98,12 @@ body {
   outline: 3px solid var(--navy);
   outline-offset: 4px;
 }
+
+/* Room progress bar (docs/ROOM_PROGRESS_PLAN.md, 2026-11-21): the old room
+   fades out where it was while the new one fades in and slides with the fill. */
+@keyframes room-fade { from { opacity: 0; } to { opacity: 1; } }
+.room-in { animation: room-fade 250ms ease-out; }
+.room-out { animation: room-fade 250ms ease-in reverse forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .room-in, .room-out { animation-duration: 150ms; }
+}

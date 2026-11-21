@@ -2,7 +2,7 @@
 
 **For:** the development team building the Quick Quiz in any codebase. This file stands on its own: it describes what to build and how it should behave, not where the code lives. Planned on the `foyer-v1-room-progress` branch of the Banfield sandbox (separate from the swatch cards idea) and written to be copied into another repo.
 
-**Status:** being built in the Banfield sandbox (ticked steps). In another repo, start from unticked.
+**Status:** built in the Banfield sandbox on 2026-11-21 (ticked steps); trying it on a phone is still open. In another repo, start from unticked.
 
 ## Why
 
@@ -91,23 +91,23 @@ Work test-first: for each step that changes what shows, write the failing test, 
   - Tests: the real file loads; the 13 pairs match the table above; a missing question, an unknown id, a missing file or a repeated room each stop the app with a message naming the problem
 
 ### Phase 2: The bar
-- [ ] The Quick Quiz's bar: white track, yellow outline, yellow fill, rounded ends; no percentage text; a visually hidden "Question N of M" for screen readers
-- [ ] The room graphic above the bar: one height for all, right edge at the end of the fill, never past either end (far left at 0%); decorative
-- [ ] Only the Quick Quiz gets this bar; the long questionnaire keeps its own
+- [x] The Quick Quiz's bar: white track, yellow outline, yellow fill, rounded ends; no percentage text; a visually hidden "Question N of M" for screen readers
+- [x] The room graphic above the bar: one height for all, right edge at the end of the fill, never past either end (far left at 0%); decorative
+- [x] Only the Quick Quiz gets this bar; the long questionnaire keeps its own
   - Tests: each question screen shows its own room; no percentage text shows; "Question N of M" is there for screen readers; the graphic is hidden from screen readers; the long questionnaire still shows "Step N of M"
 
 ### Phase 3: Moving between screens
-- [ ] On Next and Back, the fill grows or shrinks, the old room fades out, and the new room fades in and slides to its new spot
-- [ ] Reduced motion: a quick fade, no sliding
+- [x] On Next and Back, the fill grows or shrinks, the old room fades out, and the new room fades in and slides to its new spot
+- [x] Reduced motion: a quick fade, no sliding
   - Tests: after Next, the new room shows and the old one is gone once the move ends; Back shows the previous screen's room
 
 ### Phase 4: The result
-- [ ] The result's 100% bar shows the "finished home" rooms side by side (to judge on screen; easy to remove)
+- [x] The result's 100% bar shows the "finished home" rooms side by side (to judge on screen; easy to remove)
   - Tests: the result's bar shows the finished-home rooms; they are hidden from screen readers
 
 ### Phase 5: Checks
-- [ ] Every existing quiz test still passes
-- [ ] Run the project's type check, lint, tests and build: all pass
+- [x] Every existing quiz test still passes
+- [x] Run the project's type check, lint, tests and build: all pass
 - [ ] Try it on a phone and a computer: every screen's room, forward and back, the result
 - [ ] Try it with reduced motion turned on
 - [ ] Try it inside the website iframe, if the quiz is embedded

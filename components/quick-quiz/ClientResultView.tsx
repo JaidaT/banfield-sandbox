@@ -1,5 +1,7 @@
 import { useId } from 'react'
 import type { Ref } from 'react'
+import RoomImage from '@/components/quick-quiz/RoomImage'
+import type { Room } from '@/lib/quick-quiz/progressRooms'
 import type { ClientResult } from '@/lib/quick-quiz/types'
 
 interface Props {
@@ -10,6 +12,9 @@ interface Props {
   // Shows "Questionnaire complete 100%" on top: on the quiz, not on the team's
   // sample result pages.
   complete?: boolean
+  // Rooms side by side above the complete bar: a "finished home"
+  // (docs/ROOM_PROGRESS_PLAN.md). Left out: a plain bar.
+  finishedHome?: Room[]
   // Put on the main heading, so the quiz can move the cursor there.
   headingRef?: Ref<HTMLHeadingElement>
 }
@@ -19,7 +24,7 @@ const LABEL = 'text-xs font-semibold uppercase tracking-widest'
 
 // Client-facing, laid out like the team's mockup (2026-11-13). Receives only
 // ClientResult, which has no client type or fit data.
-export default function ClientResultView({ result, embedded = false, complete = false, headingRef }: Props) {
+export default function ClientResultView({ result, embedded = false, complete = false, finishedHome, headingRef }: Props) {
   const Outer = embedded ? 'section' : 'main'
   const dnaHeadingId = useId()
   const helpHeadingId = useId()
@@ -36,7 +41,16 @@ export default function ClientResultView({ result, embedded = false, complete = 
             <p>{result.completeLabel}</p>
             <p>100%</p>
           </div>
-          <div className="h-2 w-full rounded-full bg-accent" aria-hidden="true" />
+          <div aria-hidden="true" className="flex flex-col gap-1">
+            {finishedHome && finishedHome.length > 0 && (
+              <div data-testid="finished-home" className="flex h-14 items-end justify-around sm:h-[72px]">
+                {finishedHome.map((room) => (
+                  <RoomImage key={room.file} room={room} />
+                ))}
+              </div>
+            )}
+            <div className="h-3.5 w-full rounded-full border-2 border-accent bg-accent" />
+          </div>
         </div>
       )}
 

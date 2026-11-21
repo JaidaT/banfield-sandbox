@@ -3,6 +3,8 @@
 import { createContext, use, useRef, useState } from 'react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
+import RoomProgressBar from '@/components/quick-quiz/RoomProgressBar'
+import { loadProgressRooms } from '@/lib/quick-quiz/progressRooms'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
@@ -33,6 +35,9 @@ interface QuizSetup {
 }
 const QuizContext = createContext<QuizSetup | null>(null)
 
+// The rooms on the result's 100% bar (docs/ROOM_PROGRESS_PLAN.md).
+const FINISHED_HOME = loadProgressRooms().finishedHome
+
 // The Quick Quiz: the shared form's screens (one question per screen, contact
 // last, no review screen), ending on the quiz's own result screen.
 export default function QuizForm({ questionnaire, quizData, clientCopy, startAt, initialAnswers }: Props) {
@@ -59,6 +64,7 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
           skipReview
           progressAs="percent"
           look="quick-quiz"
+          progressBar={RoomProgressBar}
           onStart={start}
           onScreenChange={notifyNewScreen}
           doneScreen={QuizResults}
@@ -84,5 +90,5 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
   const submission = answersToSubmission(answers, seconds, 'quiz-demo')
   const result = buildClientResult(submission, clientCopy, designDnaFor(submission, quizData))
 
-  return <ClientResultView result={result} embedded complete headingRef={headingRef} />
+  return <ClientResultView result={result} embedded complete finishedHome={FINISHED_HOME} headingRef={headingRef} />
 }
