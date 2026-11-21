@@ -1,15 +1,17 @@
 import type { Ref } from 'react'
 import QuestionInput from './QuestionInput'
 import { BUTTON, BUTTON_MAIN, BUTTON_ROW, BUTTON_SMALL, HEADING } from './styles'
-import { percentDone } from '@/lib/form/navigation'
+import ProgressBar from './ProgressBar'
+import type { ProgressStyle } from './ProgressBar'
 import type { Problem } from '@/lib/form/validate'
 import type { VisibleStep } from '@/lib/form/visibility'
 import type { Answers, AnswerValue } from '@/lib/form/types'
 
-// How progress reads: "Step 4 of 11" or a percentage done ("31%").
-export type ProgressStyle = 'steps' | 'percent'
+export type { ProgressStyle }
 
-interface Props {
+// What every question screen gets from the form. Exported so a product can
+// bring its own question screen (the Quick Quiz's swatch cards).
+export interface StepScreenProps {
   // The step with only the questions that show for the current answers.
   step: VisibleStep
   answers: Answers
@@ -31,24 +33,11 @@ interface Props {
 
 // One step of the questionnaire: progress, title, its visible questions, and
 // the Back / Next buttons.
-export default function StepScreen(props: Props) {
+export default function StepScreen(props: StepScreenProps) {
   const { step, answers, problems, place, progressAs = 'steps', isLast, lastLabel, onAnswer, onNext, onBack, onBackToReview, headingRef } = props
   return (
     <>
-      {place ? (
-        // Demo styling (2026-11-17): centred text over a yellow bar on a grey track.
-        <div className="flex flex-col gap-2">
-          <p className="text-center text-xs font-semibold text-charcoal">
-            {progressAs === 'percent' ? `${percentDone(place)}%` : `Step ${place.number} of ${place.total}`}
-          </p>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--track)]" aria-hidden="true">
-            <div
-              className="h-full rounded-full bg-accent transition-[width]"
-              style={{ width: `${progressAs === 'percent' ? percentDone(place) : Math.round((place.number / place.total) * 100)}%` }}
-            />
-          </div>
-        </div>
-      ) : null}
+      {place ? <ProgressBar place={place} progressAs={progressAs} /> : null}
       <h2 ref={headingRef} tabIndex={-1} className={HEADING}>
         {step.step.title}
       </h2>

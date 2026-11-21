@@ -2,6 +2,7 @@ import type { Ref } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
+import type { StepScreenProps } from '@/components/form/StepScreen'
 import { parseQuestionnaire } from '@/lib/form/parse'
 import type { Answers } from '@/lib/form/types'
 // The long questionnaire's file is a handy, realistic example to test the form with.
@@ -100,6 +101,31 @@ describe('QuestionnaireForm: no review screen (skipReview)', () => {
     render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} startAt="household" initialAnswers={family} skipReview />)
     click('Next')
     expect(stepHeading()).not.toBe('Final screen')
+  })
+})
+
+// Swatch cards (2026-11-20): a product can bring its own screen for steps
+// with questions, as it brings its own final screen.
+describe('QuestionnaireForm: a custom question screen (stepScreen)', () => {
+  function CustomStep({ step, onNext, headingRef }: StepScreenProps) {
+    return (
+      <>
+        <h2 ref={headingRef} tabIndex={-1}>
+          Custom: {step.step.title}
+        </h2>
+        <button type="button" onClick={onNext}>
+          Onward
+        </button>
+      </>
+    )
+  }
+
+  test('steps with questions use the custom screen; the welcome screen does not', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} stepScreen={CustomStep} />)
+    expect(stepHeading()).not.toMatch(/^Custom/)
+    click("Let's start")
+    expect(stepHeading()).toBe(`Custom: ${questionnaire.steps[1].title}`)
+    expect(document.activeElement).toBe(screen.getByRole('heading', { level: 2 }))
   })
 })
 

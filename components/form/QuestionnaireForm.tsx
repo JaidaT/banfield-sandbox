@@ -5,7 +5,7 @@ import type { ComponentType, Ref } from 'react'
 import IntroScreen from './IntroScreen'
 import ReviewScreen from './ReviewScreen'
 import StepScreen from './StepScreen'
-import type { ProgressStyle } from './StepScreen'
+import type { ProgressStyle, StepScreenProps } from './StepScreen'
 import { BUTTON } from './styles'
 import { nextStepId, previousStepId, progress } from '@/lib/form/navigation'
 import { buildOutput } from '@/lib/form/output'
@@ -39,6 +39,9 @@ interface Props {
   progressAs?: ProgressStyle
   // "quick-quiz" gives the Quick Quiz its own touches (italic navy hints).
   look?: 'quick-quiz'
+  // The screen for steps with questions. Left out: the shared StepScreen. The
+  // Quick Quiz brings its swatch cards (docs/SWATCH_CARDS_PLAN.md).
+  stepScreen?: ComponentType<StepScreenProps>
   // Called after the form moves to a new screen (Next, Back, Edit, Submit),
   // not when the page opens or Next is blocked. The Quick Quiz uses it to tell
   // the website around its iframe to scroll to the top of the quiz.
@@ -57,7 +60,7 @@ export interface DoneScreenProps {
 // screen passed in as doneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange, stepScreen: Step = StepScreen }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -167,7 +170,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   } else if (step) {
     const back = previousStepId(questionnaire, answers, current)
     screen = (
-      <StepScreen
+      <Step
         step={step}
         answers={answers}
         problems={problems}
