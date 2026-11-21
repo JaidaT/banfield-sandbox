@@ -58,14 +58,33 @@ describe('room progress bar on the question screens', () => {
     expect(screen.getByText(`Question ${index + 1} of 13`)).toBeDefined()
   })
 
-  test('the far-right version: the room sits at the right end of the bar on every screen', () => {
+  test('the middle version (on now): the room sits in the middle of the bar on every screen', () => {
     for (const id of [questions[0].id, 'contact']) {
       renderQuiz(id)
       const box = screen.getByTestId('progress-room')
-      expect(box.dataset.placement, id).toBe('far-right')
+      expect(box.dataset.placement, id).toBe('middle')
       expect(box.style.width, id).toBe('')
       cleanup()
     }
+  })
+
+  test('the far-right version: the room sits at the right end of the bar', () => {
+    render(<RoomProgressBar place={placeOf('contact')} stepId="contact" placement="far-right" />)
+    const box = screen.getByTestId('progress-room')
+    expect(box.dataset.placement).toBe('far-right')
+    expect(box.style.width).toBe('')
+  })
+
+  test('middle and far-right change rooms the same way (shrink and grow); follow-fill fades', () => {
+    const currentClass = (placement: 'follow-fill' | 'far-right' | 'middle') => {
+      render(<RoomProgressBar place={placeOf('coffee')} stepId="coffee" placement={placement} />)
+      const img = roomImages().find((i) => i.dataset.current === 'true')!
+      const shown = img.className.split(' ').filter((c) => /scale|opacity|duration|delay|ease/.test(c))
+      cleanup()
+      return shown
+    }
+    expect(currentClass('middle')).toEqual(currentClass('far-right'))
+    expect(currentClass('follow-fill').some((c) => c.includes('scale'))).toBe(false)
   })
 
   test("the follow-fill version: the room's right edge follows the end of the fill, and starts at the far left", () => {

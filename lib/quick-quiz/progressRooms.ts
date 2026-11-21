@@ -13,9 +13,10 @@ export interface Room {
 }
 
 // Where the room sits on the bar: its right edge following the end of the
-// fill (the first version), or always at the far right end (the second).
-export type Placement = 'follow-fill' | 'far-right'
-const PLACEMENTS: Placement[] = ['follow-fill', 'far-right']
+// fill (version 1), always at the far right end (version 2), or always in the
+// middle of the bar (version 3).
+export type Placement = 'follow-fill' | 'far-right' | 'middle'
+const PLACEMENTS: Placement[] = ['follow-fill', 'far-right', 'middle']
 
 export interface ProgressRooms {
   placement: Placement

@@ -14,20 +14,30 @@ const ALL_ROOMS = Object.entries(ROOMS.screens)
 // How the rooms change, for each placement. The old room goes quickly and
 // the new one comes a moment later, so the two barely overlap.
 // - follow-fill (version 1): a fade, while the room slides with the fill.
-// - far-right (version 2): the old room shrinks into the bar and the new one
-//   grows up from it with a slight bounce (Jaida, 2026-11-21).
+// - far-right (version 2) and middle (version 3): the old room shrinks into
+//   the bar and the new one grows up from it with a slight bounce (Jaida,
+//   2026-11-21).
 // With reduced motion, both are a quick fade with no pause.
+const SHRINK_AND_GROW = {
+  shown:
+    'origin-bottom scale-100 opacity-100 transition-[scale,opacity] duration-300 delay-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:delay-0 motion-reduce:duration-150',
+  hidden: 'origin-bottom scale-0 opacity-0 transition-[scale,opacity] duration-200 ease-in motion-reduce:scale-100 motion-reduce:duration-150',
+}
 const CHANGES: Record<Placement, { shown: string; hidden: string }> = {
   'follow-fill': {
     shown: 'opacity-100 transition-opacity duration-250 delay-100 ease-out motion-reduce:delay-0',
     hidden: 'opacity-0 transition-opacity duration-150 ease-in',
   },
-  'far-right': {
-    shown:
-      'origin-bottom scale-100 opacity-100 transition-[scale,opacity] duration-300 delay-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:delay-0 motion-reduce:duration-150',
-    hidden:
-      'origin-bottom scale-0 opacity-0 transition-[scale,opacity] duration-200 ease-in motion-reduce:scale-100 motion-reduce:duration-150',
-  },
+  'far-right': SHRINK_AND_GROW,
+  middle: SHRINK_AND_GROW,
+}
+
+// Where the rooms' box sits on the bar. In the middle, each room is also
+// centred in the box, so rooms of different widths share one centre.
+const BOX_PLACE: Record<Placement, string> = {
+  'follow-fill': 'left-0',
+  'far-right': 'right-0',
+  middle: 'left-1/2 -translate-x-1/2',
 }
 
 // The Quick Quiz's progress bar (docs/ROOM_PROGRESS_PLAN.md): a white track
@@ -40,6 +50,7 @@ const CHANGES: Record<Placement, { shown: string; hidden: string }> = {
 // (but never narrower than the current room), so the room's right edge
 // follows the end of the fill and slides as it grows.
 // far-right: the rooms sit at the right end of the bar on every screen.
+// middle: the rooms sit in the middle of the bar on every screen.
 // placement: for tests and comparisons; left out, the data file decides.
 export default function RoomProgressBar({ place, stepId, placement = ROOMS.placement }: ProgressBarProps & { placement?: Placement }) {
   const percent = percentDone(place)
@@ -61,7 +72,7 @@ export default function RoomProgressBar({ place, stepId, placement = ROOMS.place
             data-testid="progress-room"
             data-placement={placement}
             style={box}
-            className={`absolute inset-y-0 transition-[width,min-width] duration-400 ease-out motion-reduce:transition-none ${followFill ? 'left-0' : 'right-0'}`}
+            className={`absolute inset-y-0 transition-[width,min-width] duration-400 ease-out motion-reduce:transition-none ${BOX_PLACE[placement]}`}
           >
             {ALL_ROOMS.map(([screenId, room]) => (
               <Image
@@ -73,7 +84,7 @@ export default function RoomProgressBar({ place, stepId, placement = ROOMS.place
                 unoptimized
                 loading="eager"
                 data-current={screenId === stepId}
-                className={`absolute right-0 bottom-0 h-full w-auto max-w-none ${screenId === stepId ? change.shown : change.hidden}`}
+                className={`absolute bottom-0 h-full w-auto max-w-none ${placement === 'middle' ? 'left-1/2 -translate-x-1/2' : 'right-0'} ${screenId === stepId ? change.shown : change.hidden}`}
               />
             ))}
           </div>

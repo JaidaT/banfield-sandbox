@@ -2,7 +2,7 @@
 
 **For:** the development team building the Quick Quiz in any codebase. This file stands on its own: it describes what to build and how it should behave, not where the code lives. Planned on the `foyer-v1-room-progress` branch of the Banfield sandbox (separate from the swatch cards idea) and written to be copied into another repo.
 
-**Status:** built and tried in the Banfield sandbox on 2026-11-21 (Jaida checked a phone and a computer, reduced motion and the stand-in website: no issues). Still open: choosing between version 1 and version 2. In another repo, start from unticked.
+**Status:** built and tried in the Banfield sandbox on 2026-11-21 (Jaida checked a phone and a computer, reduced motion and the stand-in website: no issues). Still open: choosing between versions 1, 2 and 3. In another repo, start from unticked.
 
 ## Why
 
@@ -38,10 +38,11 @@ The Quick Quiz should feel less like a form (team feedback: "the quiz itself is 
 ### Size
 The graphics come in different shapes and sizes. Show them all at **one height** (their width follows their own shape), small enough to sit neatly on the bar and not crowd the question: about **56px tall on a phone and 72px on a computer** as a starting point. Tune by eye.
 
-### Version 2: the room at the far right (2026-11-21)
-Jaida asked to try a second version. Both are kept, chosen by one setting in the data file ("placement"), so the team can compare them.
+### Versions 2 and 3: the room at the far right, or in the middle (2026-11-21)
+Jaida asked to try more versions. All are kept, chosen by one setting in the data file ("placement"), so the team can compare them.
 - **Version 1, "follow-fill":** as above. The room's right edge follows the end of the fill and slides along; rooms fade between screens.
-- **Version 2, "far-right"** (on now): the room always sits at the **right end of the bar**, and the yellow fill grows towards it. Between screens the old room **shrinks down into the bar** (about 200 ms) and the new one **grows up from the bar** with a slight bounce (about 300 ms, starting about 150 ms later). Both scale from the bottom, so they seem to rise out of the bar.
+- **Version 2, "far-right": the room always sits at the **right end of the bar**, and the yellow fill grows towards it. Between screens the old room **shrinks down into the bar** (about 200 ms) and the new one **grows up from the bar** with a slight bounce (about 300 ms, starting about 150 ms later). Both scale from the bottom, so they seem to rise out of the bar.
+- **Version 3, "middle"** (on now; Jaida, 2026-11-21): the room always sits in the **middle of the bar**, with the same shrink-and-grow change as version 2. Rooms of different widths share one centre.
 - **Reduced motion:** no shrinking or growing; a quick fade.
 
 ## Which room, when
@@ -119,7 +120,9 @@ Work test-first: for each step that changes what shows, write the failing test, 
 - [x] A "placement" setting in the data file ("follow-fill" or "far-right", default "follow-fill"); any other value stops the app with a message
 - [x] Far-right: the room at the right end of the bar on every screen; the old room shrinks away and the new one grows in with a slight bounce; a fade with reduced motion
   - Tests: the real file uses far-right; both values load; another value throws; with far-right the room sits at the right end on every screen; with follow-fill it still follows the fill
-- [ ] Jaida compares the two versions and picks one (still comparing, 2026-11-21)
+- [x] Middle: a third "placement" value; the room in the middle of the bar on every screen, changing like far-right
+  - Tests: the real file uses middle; all three values load; with middle the room sits in the middle on every screen; middle and far-right change rooms the same way, follow-fill fades
+- [ ] Jaida compares the three versions and picks one (still comparing, 2026-11-21)
 
 ### Phase 5: Checks
 - [x] Every existing quiz test still passes

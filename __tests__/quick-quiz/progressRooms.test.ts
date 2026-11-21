@@ -44,19 +44,21 @@ describe('progress-rooms.json (the real file)', () => {
 })
 
 describe('placement: where the room sits (2026-11-21)', () => {
-  test('the real file uses the far-right version', () => {
-    expect(loadProgressRooms().placement).toBe('far-right')
+  test('the real file uses the middle version (2026-11-21)', () => {
+    expect(loadProgressRooms().placement).toBe('middle')
   })
 
-  test('accepts "follow-fill" and "far-right", and defaults to "follow-fill"', () => {
-    expect(parseProgressRooms({ ...raw, placement: 'follow-fill' }, screenIds).placement).toBe('follow-fill')
+  test('accepts "follow-fill", "far-right" and "middle", and defaults to "follow-fill"', () => {
+    for (const placement of ['follow-fill', 'far-right', 'middle']) {
+      expect(parseProgressRooms({ ...raw, placement }, screenIds).placement).toBe(placement)
+    }
     const { placement: _unused, ...noPlacement } = raw
     void _unused
     expect(parseProgressRooms(noPlacement, screenIds).placement).toBe('follow-fill')
   })
 
   test('throws on any other placement', () => {
-    expect(() => parseProgressRooms({ ...raw, placement: 'middle' }, screenIds)).toThrow(/placement.*middle/)
+    expect(() => parseProgressRooms({ ...raw, placement: 'top-left' }, screenIds)).toThrow(/placement.*top-left/)
   })
 })
 

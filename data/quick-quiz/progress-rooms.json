@@ -3,9 +3,9 @@
     "purpose": "Which room graphic sits on the Quick Quiz progress bar on each screen (docs/ROOM_PROGRESS_PLAN.md, 2026-11-21). 'screens' pairs each quiz question id, then 'contact', with a room. 'finishedHome' is the rooms on the result's 100% bar (Claude's proposal, to judge on screen).",
     "rooms": "Each room's file in public/rooms/, what it shows, and its shape (width and height from the SVG's viewBox), so every room can show at one height with the right width. Graphics from Jaida (originally Asset 11 to Asset 44).",
     "order": "Paired with questions where there is a natural link; the order was left to Claude (Jaida: 'whatever fits best'). Swap rooms here without touching code.",
-    "placement": "Where the room sits: 'follow-fill' (version 1: its right edge follows the end of the yellow fill, sliding along) or 'far-right' (version 2, 2026-11-21: always at the right end of the bar, shrinking away and growing in between screens). Switch here to compare."
+    "placement": "Where the room sits: 'follow-fill' (version 1: its right edge follows the end of the yellow fill, sliding along, fading between screens), 'far-right' (version 2: always at the right end of the bar, shrinking away and growing in between screens) or 'middle' (version 3: always in the middle of the bar, shrinking and growing like version 2). Switch here to compare."
   },
-  "placement": "far-right",
+  "placement": "middle",
   "rooms": {
     "study-desk": {
       "file": "/rooms/study-desk.svg",
