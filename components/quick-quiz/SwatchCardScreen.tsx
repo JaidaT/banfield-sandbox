@@ -68,7 +68,12 @@ export default function SwatchCardScreen(props: StepScreenProps) {
   const exit = !leaving ? '' : fade ? 'card-fade-out' : leaving.direction === 'forward' ? 'card-out-forward' : 'card-out-back'
   const timing = { '--move': `${leaving?.length ?? 0}ms` } as CSSProperties
 
-  const onlyQuestion = step.questions.length === 1 ? step.questions[0] : undefined
+  // On a one-question card the question is the heading, and its help line
+  // sits in the yellow strip under it (Jaida, 2026-11-20).
+  const stripQuestion =
+    step.questions.length === 1 && step.questions[0].prompt === step.step.title ? step.questions[0] : undefined
+  const stripHelp = stripQuestion?.help
+  const helpId = `${headingId}-help`
 
   return (
     <>
@@ -76,12 +81,13 @@ export default function SwatchCardScreen(props: StepScreenProps) {
 
       <div className="relative pt-10">
         {!isLast && (
-          // The next card, peeking about 40px above: tapping it is Next.
+          // The next card, peeking about 40px above: tapping it is Next. It sits
+          // above where a leaving card ends up, so that card goes behind it.
           <button
             type="button"
             aria-label="Next question"
             onClick={goNext}
-            className="absolute inset-x-4 top-0 z-0 h-24 rounded-2xl border-2 border-[var(--line)] bg-white transition-transform hover:-translate-y-1 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy"
+            className="absolute inset-x-4 top-0 z-[5] h-24 rounded-2xl border-2 border-[var(--line)] bg-white transition-transform hover:-translate-y-1 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-navy"
           />
         )}
 
@@ -94,7 +100,7 @@ export default function SwatchCardScreen(props: StepScreenProps) {
             style={timing}
             className={`pointer-events-none absolute inset-x-0 top-10 bottom-0 z-30 ${CARD} ${exit}`}
           >
-            <div className="bg-accent px-5 py-4">
+            <div className="bg-accent px-5 py-4 sm:px-8 sm:py-6">
               <p className="text-xl font-bold leading-snug text-charcoal">{leaving.title}</p>
             </div>
           </div>
@@ -104,17 +110,25 @@ export default function SwatchCardScreen(props: StepScreenProps) {
           key={stepId}
           data-testid="active-card"
           aria-labelledby={headingId}
+          aria-describedby={stripHelp ? helpId : undefined}
           style={timing}
           className={`relative z-10 ${CARD} ${enter}`}
         >
-          <div className="bg-accent px-5 py-4">
+          <div data-testid="card-strip" className="flex flex-col gap-1 bg-accent px-5 py-4 sm:px-8 sm:py-6">
             <h2 ref={headingRef} id={headingId} tabIndex={-1} className="text-xl font-bold leading-snug text-charcoal outline-none">
               {step.step.title}
             </h2>
+            {stripHelp ? (
+              <p id={helpId} className="text-sm italic text-navy">
+                {stripHelp}
+              </p>
+            ) : null}
           </div>
-          <div className="swatch-area flex flex-col gap-5 p-5">
+          <div className="swatch-area flex flex-col gap-5 p-5 sm:p-8">
             {step.step.intro ? <p className="leading-7">{step.step.intro}</p> : null}
-            {step.questions.map((question) => {
+            {step.questions.map((shownQuestion) => {
+              // The strip already shows this question's help line.
+              const question = shownQuestion === stripQuestion ? { ...shownQuestion, help: undefined } : shownQuestion
               const error = problems.find((p) => p.questionId === question.id)?.message
               const onChange = (value: Parameters<typeof onAnswer>[1]) => onAnswer(question.id, value)
               return question.kind === 'single' || question.kind === 'multi' ? (
@@ -127,7 +141,7 @@ export default function SwatchCardScreen(props: StepScreenProps) {
                   onChange={onChange}
                   error={error}
                   // The question is already the card's heading.
-                  labelHidden={question === onlyQuestion && question.prompt === step.step.title}
+                  labelHidden={shownQuestion === stripQuestion}
                 />
               )
             })}

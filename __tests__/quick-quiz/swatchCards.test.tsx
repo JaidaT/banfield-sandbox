@@ -67,6 +67,18 @@ describe('swatch cards: the card and the stack', () => {
     expect(heading()).toBe(questions[1].prompt)
   })
 
+  // Jaida, 2026-11-20: the help line sits in the yellow strip, under the question.
+  test('the help line is in the yellow strip, once, and the answers are described by it', () => {
+    for (const id of ['confidence', 'home_meaning', 'investment']) {
+      renderQuiz({ startAt: id })
+      const help = questions.find((q) => q.id === id)!.help!
+      expect(screen.getAllByText(help), id).toHaveLength(1)
+      expect(screen.getByTestId('card-strip').textContent, id).toContain(help)
+      expect(activeCard().getAttribute('aria-describedby'), id).toBe(screen.getByText(help).id)
+      cleanup()
+    }
+  })
+
   test('the contact card is last, with no card peeking behind it, and says "See my results"', () => {
     renderQuiz({ startAt: 'contact' })
     expect(within(activeCard()).getByRole('heading', { level: 2 }).textContent).toBe(form.contact.title)

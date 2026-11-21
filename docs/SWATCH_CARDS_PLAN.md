@@ -31,6 +31,8 @@ Every quiz question, and the contact screen at the end, is one card.
 ```
 
 - **Yellow strip at the top** (the brand yellow, `#FFCB49`) holds the question, written across (not sideways). It is the card's main heading. Dark text on the yellow, for contrast.
+- **The question's help line** (e.g. "Pick up to two.") sits in the yellow strip, under the question, and is not repeated in the swatch area (Jaida, 2026-11-20).
+- **On a computer** the card has more padding and more space between options than on a phone (Jaida, 2026-11-20).
 - **Swatch area** below it holds the answers, whatever the question type: choices, the slider and "Not sure yet", the long-text box, or the contact fields.
 - **No fabric texture or colour for now.** The swatch area is plain. Texture is a later idea.
 - Rounded corners and a thin light-grey border, like the mockup.
@@ -45,6 +47,7 @@ For one-choice and pick-several questions (Jaida, 2026-11-20). The look should b
 - **The circle's look (from Jaida's mockup):** a wide oval around the whole option line, in dark grey pencil (about `#5a5a5a`). The stroke overshoots a little where it starts and ends (at the top left), like a hand-drawn loop. **Cleaner than the mockup's sketch** (Jaida): a smooth, even line that still reads as pencil, not a rough scribble.
 - **The chosen option's text turns bold.**
 - **Options are plain text** in a list with generous space between them (enough room for the oval, and an easy tap target of at least 44px).
+- **The whole oval always shows**, at any card width. (Found in testing: when the oval's dash pattern was measured as a fraction of the path, wide computer screens showed only part of it. Measure the dash in screen pixels instead, longer than any oval.)
 - **The circle draws itself** in a quick stroke (about 300 ms) when chosen; with reduced motion it simply appears. A few slightly different oval shapes, so the options don't all look stamped. (Claude's proposal; Jaida: "let's try it out", 2026-11-20.)
 - **Underneath, the options are still real radio buttons and tick boxes**, hidden from view but used by keyboards and screen readers, so the quiz works exactly as before.
 - **Keyboard focus** shows the faint circle plus a clear focus outline, so keyboard users can always see where they are.
@@ -71,7 +74,7 @@ Claude's proposals, matching the hand-drawn pencil look (Jaida asked to match th
 - **Back and Next** stay in a row below the stack.
 
 ### Moving forward (Next, or tapping the peeking card)
-1. The active card swings **up and around to the back** of the stack (the curved arrow in the mockup).
+1. The active card swings **up and around to the back** of the stack (the curved arrow in the mockup). It ends up **behind the peeking card**, not between the peeking card and the new active card (Jaida, 2026-11-20).
 2. The peeking card **slides down and forward** into the active place.
 3. A new card appears peeking behind it (if there is one).
 

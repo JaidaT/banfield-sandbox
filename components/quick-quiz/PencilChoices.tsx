@@ -49,7 +49,8 @@ export default function PencilChoices({ question, value, onChange, error }: Prop
           {question.help}
         </p>
       ) : null}
-      <div className="flex flex-col gap-1">
+      {/* More room between options on a computer (Jaida, 2026-11-20). */}
+      <div className="flex flex-col gap-1 sm:gap-3">
         {question.options.map((option, index) => (
           <label
             key={option.id}
@@ -70,7 +71,7 @@ export default function PencilChoices({ question, value, onChange, error }: Prop
               preserveAspectRatio="none"
               className="pencil-oval pointer-events-none absolute -inset-x-1 -inset-y-0.5 h-[calc(100%+4px)] w-[calc(100%+8px)] overflow-visible opacity-0 transition-opacity group-hover:opacity-30 group-has-focus-visible:opacity-30 group-has-checked:opacity-100 group-has-disabled:opacity-0"
             >
-              <path d={OVALS[index % OVALS.length]} pathLength={1} vectorEffect="non-scaling-stroke" />
+              <path d={OVALS[index % OVALS.length]} vectorEffect="non-scaling-stroke" />
             </svg>
             {option.image ? (
               <Image src={option.image} alt="" width={120} height={90} unoptimized className="relative h-16 w-20 shrink-0 rounded-md object-cover" />
