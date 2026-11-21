@@ -6,6 +6,7 @@ import IntroScreen from './IntroScreen'
 import ReviewScreen from './ReviewScreen'
 import StepScreen from './StepScreen'
 import type { ProgressStyle } from './StepScreen'
+import type { ProgressBarProps } from './ProgressBar'
 import { BUTTON } from './styles'
 import { nextStepId, previousStepId, progress } from '@/lib/form/navigation'
 import { buildOutput } from '@/lib/form/output'
@@ -39,6 +40,9 @@ interface Props {
   progressAs?: ProgressStyle
   // "quick-quiz" gives the Quick Quiz its own touches (italic navy hints).
   look?: 'quick-quiz'
+  // The progress bar above each step. Left out: the shared bar. The Quick
+  // Quiz brings its room progress bar (docs/ROOM_PROGRESS_PLAN.md).
+  progressBar?: ComponentType<ProgressBarProps>
   // Called after the form moves to a new screen (Next, Back, Edit, Submit),
   // not when the page opens or Next is blocked. The Quick Quiz uses it to tell
   // the website around its iframe to scroll to the top of the quiz.
@@ -57,7 +61,7 @@ export interface DoneScreenProps {
 // screen passed in as doneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange, progressBar }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -173,6 +177,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
         problems={problems}
         place={progress(questionnaire, answers, current)}
         progressAs={progressAs}
+        progressBar={progressBar}
         isLast={nextStepId(questionnaire, answers, current) === null}
         lastLabel={skipReview ? 'See my results' : 'Review my answers'}
         onAnswer={setAnswer}

@@ -2,6 +2,7 @@ import type { Ref } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
+import type { ProgressBarProps } from '@/components/form/ProgressBar'
 import { parseQuestionnaire } from '@/lib/form/parse'
 import type { Answers } from '@/lib/form/types'
 // The long questionnaire's file is a handy, realistic example to test the form with.
@@ -100,6 +101,20 @@ describe('QuestionnaireForm: no review screen (skipReview)', () => {
     render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} startAt="household" initialAnswers={family} skipReview />)
     click('Next')
     expect(stepHeading()).not.toBe('Final screen')
+  })
+})
+
+// Room progress bar (2026-11-21): a product can bring its own progress bar,
+// which gets the place and the step's id.
+describe('QuestionnaireForm: a custom progress bar (progressBar)', () => {
+  function CustomBar({ place, stepId }: ProgressBarProps) {
+    return <p>{`Custom bar: ${stepId} ${place.number}/${place.total}`}</p>
+  }
+
+  test('question steps show the custom bar instead of the shared one', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} startAt="contact" progressBar={CustomBar} />)
+    expect(screen.getByText(/^Custom bar: contact 1\//)).toBeDefined()
+    expect(screen.queryByText(/^Step \d+ of/)).toBeNull()
   })
 })
 
