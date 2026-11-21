@@ -2,7 +2,7 @@
 
 **For:** the development team building the Quick Quiz in any codebase. This file stands on its own: it describes what to build and how it should behave, not where the code lives. Planned on the `foyer-v1-room-progress` branch of the Banfield sandbox (separate from the swatch cards idea) and written to be copied into another repo.
 
-**Status:** plan only. Nothing is built yet.
+**Status:** being built in the Banfield sandbox (ticked steps). In another repo, start from unticked.
 
 ## Why
 
@@ -85,9 +85,9 @@ The graphics are flat illustrations (SVG), provided by Jaida as "Asset 11" to "A
 Work test-first: for each step that changes what shows, write the failing test, then the code. Motion and looks are checked by eye.
 
 ### Phase 1: The rooms and their order
-- [ ] Add the 13 room graphics, named by what they show
-- [ ] A data file pairing each quiz question id (and the contact screen) with its room, plus the result's "finished home" rooms
-- [ ] Load it with checks: every screen has a room, no unknown question ids, every room file exists, no room listed twice for the screens
+- [x] Add the 13 room graphics, named by what they show
+- [x] A data file pairing each quiz question id (and the contact screen) with its room, plus the result's "finished home" rooms
+- [x] Load it with checks: every screen has a room, no unknown question ids, every room file exists (checked by a test, since the app cannot read files in the browser), no room listed twice for the screens
   - Tests: the real file loads; the 13 pairs match the table above; a missing question, an unknown id, a missing file or a repeated room each stop the app with a message naming the problem
 
 ### Phase 2: The bar

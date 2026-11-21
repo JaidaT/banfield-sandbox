@@ -1,0 +1,107 @@
+{
+  "_meta": {
+    "purpose": "Which room graphic sits on the Quick Quiz progress bar on each screen (docs/ROOM_PROGRESS_PLAN.md, 2026-11-21). 'screens' pairs each quiz question id, then 'contact', with a room. 'finishedHome' is the rooms on the result's 100% bar (Claude's proposal, to judge on screen).",
+    "rooms": "Each room's file in public/rooms/, what it shows, and its shape (width and height from the SVG's viewBox), so every room can show at one height with the right width. Graphics from Jaida (originally Asset 11 to Asset 44).",
+    "order": "Paired with questions where there is a natural link; the order was left to Claude (Jaida: 'whatever fits best'). Swap rooms here without touching code."
+  },
+  "rooms": {
+    "study-desk": {
+      "file": "/rooms/study-desk.svg",
+      "shows": "Desk, chair, lamp and shelf",
+      "width": 251,
+      "height": 157
+    },
+    "writing-desk": {
+      "file": "/rooms/writing-desk.svg",
+      "shows": "Desk with laptop, lamp and plant",
+      "width": 1452,
+      "height": 1002
+    },
+    "sitting-room": {
+      "file": "/rooms/sitting-room.svg",
+      "shows": "Two chairs, a table and art on the wall",
+      "width": 2353,
+      "height": 1340
+    },
+    "reading-chair": {
+      "file": "/rooms/reading-chair.svg",
+      "shows": "Chair, floor lamp and bookshelf",
+      "width": 226,
+      "height": 153
+    },
+    "kitchen": {
+      "file": "/rooms/kitchen.svg",
+      "shows": "Kitchen shelves, coffee machine and fridge",
+      "width": 230,
+      "height": 154
+    },
+    "living-sofa": {
+      "file": "/rooms/living-sofa.svg",
+      "shows": "Sofa under a pendant light",
+      "width": 202,
+      "height": 176
+    },
+    "dining-table": {
+      "file": "/rooms/dining-table.svg",
+      "shows": "Dining table and chairs",
+      "width": 202,
+      "height": 161
+    },
+    "window-sofa": {
+      "file": "/rooms/window-sofa.svg",
+      "shows": "Sofa, window and wall clock",
+      "width": 2021,
+      "height": 1366
+    },
+    "home-office": {
+      "file": "/rooms/home-office.svg",
+      "shows": "Computer desk and chair",
+      "width": 293,
+      "height": 229
+    },
+    "armchair": {
+      "file": "/rooms/armchair.svg",
+      "shows": "Armchair, hanging plant and side table",
+      "width": 241,
+      "height": 162
+    },
+    "vanity": {
+      "file": "/rooms/vanity.svg",
+      "shows": "Vanity mirror and chair",
+      "width": 213,
+      "height": 161
+    },
+    "reading-nook": {
+      "file": "/rooms/reading-nook.svg",
+      "shows": "Bean bag, shelf and side table",
+      "width": 143,
+      "height": 142
+    },
+    "bedroom": {
+      "file": "/rooms/bedroom.svg",
+      "shows": "Bed with a framed picture",
+      "width": 233,
+      "height": 160
+    }
+  },
+  "screens": {
+    "decision_style": "study-desk",
+    "involvement": "writing-desk",
+    "different_concept": "sitting-room",
+    "confidence": "reading-chair",
+    "coffee": "kitchen",
+    "home_meaning": "living-sofa",
+    "project_scope": "dining-table",
+    "timeframe": "window-sofa",
+    "investment": "home-office",
+    "readiness": "armchair",
+    "service": "vanity",
+    "anything_else": "reading-nook",
+    "contact": "bedroom"
+  },
+  "finishedHome": [
+    "living-sofa",
+    "dining-table",
+    "bedroom"
+  ]
+}
