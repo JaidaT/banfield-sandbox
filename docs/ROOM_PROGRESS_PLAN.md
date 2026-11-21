@@ -2,7 +2,7 @@
 
 **For:** the development team building the Quick Quiz in any codebase. This file stands on its own: it describes what to build and how it should behave, not where the code lives. Planned on the `foyer-v1-room-progress` branch of the Banfield sandbox (separate from the swatch cards idea) and written to be copied into another repo.
 
-**Status:** built in the Banfield sandbox on 2026-11-21 (ticked steps); trying it on a phone is still open. In another repo, start from unticked.
+**Status:** built and tried in the Banfield sandbox on 2026-11-21 (Jaida checked a phone and a computer, reduced motion and the stand-in website: no issues). Still open: choosing between version 1 and version 2. In another repo, start from unticked.
 
 ## Why
 
@@ -119,14 +119,14 @@ Work test-first: for each step that changes what shows, write the failing test, 
 - [x] A "placement" setting in the data file ("follow-fill" or "far-right", default "follow-fill"); any other value stops the app with a message
 - [x] Far-right: the room at the right end of the bar on every screen; the old room shrinks away and the new one grows in with a slight bounce; a fade with reduced motion
   - Tests: the real file uses far-right; both values load; another value throws; with far-right the room sits at the right end on every screen; with follow-fill it still follows the fill
-- [ ] Jaida compares the two versions and picks one
+- [ ] Jaida compares the two versions and picks one (still comparing, 2026-11-21)
 
 ### Phase 5: Checks
 - [x] Every existing quiz test still passes
 - [x] Run the project's type check, lint, tests and build: all pass
-- [ ] Try it on a phone and a computer: every screen's room, forward and back, the result
-- [ ] Try it with reduced motion turned on
-- [ ] Try it inside the website iframe, if the quiz is embedded
+- [x] Try it on a phone and a computer: every screen's room, forward and back, the result
+- [x] Try it with reduced motion turned on
+- [x] Try it inside the website iframe, if the quiz is embedded
 
 ## Decisions (2026-11-21)
 
