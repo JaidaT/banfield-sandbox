@@ -55,7 +55,7 @@ export function EmbedTestView({ fixesOn }: { fixesOn: boolean }) {
 
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8">
         <Switch fixesOn={fixesOn} />
-        <h1 className="font-heading text-3xl font-bold text-navy">Find your design style</h1>
+        <h1 className="font-heading text-3xl font-bold text-navy">Find your Design DNA</h1>
         <p className="leading-7">
           Take our five-minute quiz to discover your design approach. This text stands in for the website content
           above the quiz.
