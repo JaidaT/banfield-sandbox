@@ -1,8 +1,10 @@
 'use client'
 
-import { createContext, use, useRef, useState } from 'react'
+import { createContext, use, useEffect, useRef, useState } from 'react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
+import SwatchCardScreen from '@/components/quick-quiz/SwatchCardScreen'
+import { CALCULATING_MS } from '@/components/quick-quiz/motion'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
@@ -61,6 +63,7 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
           look="quick-quiz"
           onStart={start}
           onScreenChange={notifyNewScreen}
+          stepScreen={SwatchCardScreen}
           doneScreen={QuizResults}
         />
       </div>
@@ -68,9 +71,12 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
   )
 }
 
-// The final screen: the client result. Demo styling (2026-11-17): the team
+// The final screen. Swatch cards (docs/SWATCH_CARDS_PLAN.md): the cards fall
+// away, "Calculating your Design DNA" shows for 2 seconds, then the client
+// result appears and the cursor moves to its heading. The result is already
+// worked out; the pause is for effect. Demo styling (2026-11-17): the team
 // brief is not shown under it; the brief opens from the sample list instead.
-function QuizResults({ answers, headingRef }: DoneScreenProps) {
+function QuizResults({ answers }: DoneScreenProps) {
   const setup = use(QuizContext)
   if (!setup) throw new Error('QuizResults must be inside QuizForm')
   const { quizData, clientCopy, startedAt } = setup
@@ -84,5 +90,43 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
   const submission = answersToSubmission(answers, seconds, 'quiz-demo')
   const result = buildClientResult(submission, clientCopy, designDnaFor(submission, quizData))
 
-  return <ClientResultView result={result} embedded complete headingRef={headingRef} />
+  const [calculating, setCalculating] = useState(true)
+  const resultHeading = useRef<HTMLHeadingElement>(null)
+  useEffect(() => {
+    const timer = setTimeout(() => setCalculating(false), CALCULATING_MS)
+    return () => clearTimeout(timer)
+  }, [])
+  useEffect(() => {
+    if (!calculating) resultHeading.current?.focus()
+  }, [calculating])
+
+  if (calculating) return <Calculating />
+  return (
+    <div className="result-reveal">
+      <ClientResultView result={result} embedded complete headingRef={resultHeading} />
+    </div>
+  )
+}
+
+// "Calculating your Design DNA" with dots appearing one by one (still with
+// reduced motion), while the cards fall out of the quiz's area behind it.
+function Calculating() {
+  return (
+    <div className="relative flex min-h-96 flex-1 flex-col items-center justify-center overflow-hidden">
+      <div data-testid="falling-cards" aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-80">
+        <div className="card-fall absolute inset-x-4 top-0 h-72 rounded-2xl border-2 border-[var(--line)] bg-white [animation-delay:60ms]" />
+        <div className="card-fall absolute inset-x-0 top-10 h-72 overflow-hidden rounded-2xl border-2 border-[var(--line)] bg-white">
+          <div className="h-16 bg-accent" />
+        </div>
+      </div>
+      <p role="status" className="calculating text-center text-xl font-bold text-charcoal">
+        Calculating your Design DNA
+        <span aria-hidden="true" className="calc-dots">
+          <span> .</span>
+          <span> .</span>
+          <span> .</span>
+        </span>
+      </p>
+    </div>
+  )
 }

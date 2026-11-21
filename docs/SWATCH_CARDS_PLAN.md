@@ -2,7 +2,7 @@
 
 **For:** the development team building the Quick Quiz in any codebase. This file stands on its own: it describes what to build and how it should behave, not where the code lives. Planned on the `foyer-v1-swatch-cards` branch of the Banfield sandbox and written to be copied into another repo.
 
-**Status:** plan only. Nothing is built yet.
+**Status:** built in the Banfield sandbox on 2026-11-20 (ticked steps below); the steps that need a person to try it on a phone are still open. In another repo, start from unticked.
 
 ## Why
 
@@ -42,7 +42,7 @@ For one-choice and pick-several questions (Jaida, 2026-11-20). The look should b
 - **Chosen**: the same circle at **full opacity**.
 - **Pick several:** each chosen option gets its own circle. When the "pick up to" limit is reached, the other options fade and can't be chosen until one is un-circled, the same rule as today.
 - **Pick one:** choosing another option moves the circle to it.
-- **The circle's look (from Jaida's mockup):** a loose, wide oval around the whole option line, in dark grey pencil (about `#5a5a5a`), slightly uneven. The stroke overshoots where it starts and ends (at the top left), like a real hand-drawn loop.
+- **The circle's look (from Jaida's mockup):** a wide oval around the whole option line, in dark grey pencil (about `#5a5a5a`). The stroke overshoots a little where it starts and ends (at the top left), like a hand-drawn loop. **Cleaner than the mockup's sketch** (Jaida): a smooth, even line that still reads as pencil, not a rough scribble.
 - **The chosen option's text turns bold.**
 - **Options are plain text** in a list with generous space between them (enough room for the oval, and an easy tap target of at least 44px).
 - **The circle draws itself** in a quick stroke (about 300 ms) when chosen; with reduced motion it simply appears. A few slightly different oval shapes, so the options don't all look stamped. (Claude's proposal; Jaida: "let's try it out", 2026-11-20.)
@@ -121,41 +121,41 @@ When the quiz sits in an iframe on a website, the cards fall out of the quiz's o
 Work test-first: for each step that changes what shows or what happens, write the failing test, then the code. Motion itself is checked by eye.
 
 ### Phase 1: Card state
-- [ ] Keep track of which card is active, which one comes next, and which way the last move went (forward or back), using the quiz's existing step order and answers
-- [ ] A "moving" flag that is on while a card swap or the fall is playing, and ignores Next, Back and peeking-card taps while on
+- [x] Keep track of which card is active, which one comes next, and which way the last move went (forward or back), using the quiz's existing step order and answers
+- [x] A "moving" flag that is on while a card swap or the fall is playing, and ignores Next, Back and peeking-card taps while on
   - Tests: Next moves to the next card; Back moves to the previous one; Back on the first card returns to the welcome screen; a tap while moving does nothing
 
 ### Phase 2: The card and the stack (no motion yet)
-- [ ] The card: yellow strip with the question as the heading, plain swatch area with the answers, rounded corners and a thin border
-- [ ] Every question type fits in the swatch area: one choice, several choices (with "pick up to"), the slider with "Not sure yet", long text, and the contact fields
-- [ ] Choices as plain text with the pencil oval: faint on hover and keyboard focus, full and with bold text when chosen, one oval per chosen option on pick-several, the others faded at the "pick up to" limit; real radio buttons and tick boxes underneath
+- [x] The card: yellow strip with the question as the heading, plain swatch area with the answers, rounded corners and a thin border
+- [x] Every question type fits in the swatch area: one choice, several choices (with "pick up to"), the slider with "Not sure yet", long text, and the contact fields
+- [x] Choices as plain text with the pencil oval: faint on hover and keyboard focus, full and with bold text when chosen, one oval per chosen option on pick-several, the others faded at the "pick up to" limit; real radio buttons and tick boxes underneath
   - Tests: choosing an option still records the same answer as today; on pick-several, the limit still stops a third choice; each option can be chosen with the keyboard alone
-- [ ] The pencil feel for the other inputs: circled "Not sure yet", the hand-drawn slider, and underlined text boxes (to try, then judge on screen)
-- [ ] The stack: the active card in front, the next card peeking about 40px above and slightly narrower; no peeking card on the last card
-- [ ] Progress above the stack; Back and Next below it
-- [ ] The welcome screen stays a normal screen
-- [ ] The peeking card is a button named "Next question" that does what Next does; the back card's contents are hidden from screen readers and Tab
+- [x] The pencil feel for the other inputs: circled "Not sure yet", the hand-drawn slider, and underlined text boxes (to try, then judge on screen)
+- [x] The stack: the active card in front, the next card peeking about 40px above and slightly narrower; no peeking card on the last card
+- [x] Progress above the stack; Back and Next below it
+- [x] The welcome screen stays a normal screen
+- [x] The peeking card is a button named "Next question" that does what Next does; the back card's contents are hidden from screen readers and Tab
   - Tests: each question shows as a card with its question as the heading; the next card's button is there except on the last card; pressing it moves forward; nothing on the back card can be reached with Tab
 
 ### Phase 3: Card motion
-- [ ] Next and the peeking card: the active card swings up and around to the back while the next card slides down and forward
-- [ ] Back: the reverse
-- [ ] Reduced motion: a short fade instead
-- [ ] The pencil oval draws itself when an option is chosen; with reduced motion it simply appears
-- [ ] The cursor moves to the new card's question once the move ends
-- [ ] In an iframe that sizes to the quiz, the height stays steady during a move
+- [x] Next and the peeking card: the active card swings up and around to the back while the next card slides down and forward
+- [x] Back: the reverse
+- [x] Reduced motion: a short fade instead
+- [x] The pencil oval draws itself when an option is chosen; with reduced motion it simply appears
+- [x] The cursor moves to the new card's question once the move ends
+- [x] In an iframe that sizes to the quiz, the height stays steady during a move
   - Tests: after a move, the new question has the cursor; with reduced motion turned on, moves still work (and finish straight away in tests)
 
 ### Phase 4: The ending
-- [ ] The contact screen is the last card; its button says "See my results"; a blocked "See my results" shows the problems on the card without any motion
-- [ ] "See my results": the cards fall out of the quiz's area (a fade with reduced motion)
-- [ ] The "Calculating your Design DNA" screen with dots appearing one by one, announced to screen readers; still dots with reduced motion
-- [ ] After 2 seconds, the Design DNA result appears and the cursor moves to its main heading
+- [x] The contact screen is the last card; its button says "See my results"; a blocked "See my results" shows the problems on the card without any motion
+- [x] "See my results": the cards fall out of the quiz's area (a fade with reduced motion)
+- [x] The "Calculating your Design DNA" screen with dots appearing one by one, announced to screen readers; still dots with reduced motion
+- [x] After 2 seconds, the Design DNA result appears and the cursor moves to its main heading
   - Tests (using a pretend clock): "See my results" shows "Calculating your Design DNA"; the result is not there before 2 seconds and is there after; the result is the same one the quiz gives today; a blocked "See my results" shows the problems and no calculating screen
 
 ### Phase 5: Checks
-- [ ] Every existing quiz test still passes (answers, scoring, result, contact rules)
-- [ ] Run the project's type check, lint, tests and build: all pass
+- [x] Every existing quiz test still passes (answers, scoring, result, contact rules)
+- [x] Run the project's type check, lint, tests and build: all pass
 - [ ] Try it on a phone and a computer: forward, back, tapping the peeking card, a fast double-tap, the fall, the calculating screen, the result
 - [ ] Try it with reduced motion turned on (phone accessibility settings, or the browser's developer tools)
 - [ ] Try it inside the website iframe, if the quiz is embedded
@@ -174,7 +174,6 @@ Work test-first: for each step that changes what shows or what happens, write th
 
 ## Open questions (not blocking)
 
-- The active card in Jaida's mockup has a blue outline. The plan reads it as the design tool's selection highlight and keeps the thin light-grey border; confirm.
 - Whether Claude's pencil-style slider, underlined text boxes and self-drawing oval work once tried on screen.
 
 - What the swatch area looks like without texture (plain white, the background colour, or a soft tint).

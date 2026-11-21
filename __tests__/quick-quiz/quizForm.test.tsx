@@ -1,12 +1,20 @@
-import { afterEach, describe, expect, test } from 'vitest'
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import QuizPage, { metadata } from '@/app/quiz/page'
 import QuizForm from '@/components/quick-quiz/QuizForm'
 import { loadClientCopy, loadQuizData, loadQuizForm } from '@/lib/quick-quiz/load'
 import { CONTACT_FIELDS, quizQuestionnaire } from '@/lib/quick-quiz/toQuestionnaire'
 import type { Answers } from '@/lib/form/types'
 
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  vi.useRealTimers()
+})
+// Swatch cards (2026-11-20): the result shows after a 2-second "Calculating
+// your Design DNA" pause, so these tests use a pretend clock.
+beforeEach(() => {
+  vi.useFakeTimers()
+})
 
 const quizData = loadQuizData()
 const clientCopy = loadClientCopy()
@@ -28,6 +36,11 @@ function renderQuiz({ contactRequired = false, startAt, initialAnswers, allConta
 
 const heading = () => screen.getByRole('heading', { level: 2 }).textContent
 const click = (name: string | RegExp) => fireEvent.click(screen.getByRole('button', { name }))
+// Presses "See my results" and waits out the calculating pause.
+const seeResults = () => {
+  click('See my results')
+  act(() => vi.advanceTimersByTime(2000))
+}
 const clientPart = () => within(screen.getByRole('region', { name: 'Your results' }))
 
 describe('QuizForm', () => {
@@ -67,7 +80,7 @@ describe('QuizForm', () => {
 
   test('contactRequired off: the result shows with the contact screen left blank', () => {
     renderQuiz({ startAt: 'contact' })
-    click('See my results')
+    seeResults()
     expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("You're all done!")
     // Nothing answered, so no Design DNA card.
     expect(clientPart().queryByText('DESIGN DNA')).toBeNull()
@@ -77,7 +90,7 @@ describe('QuizForm', () => {
   // Demo styling (2026-11-17): the team view is hidden; the brief opens from the sample list.
   test('no team view under the result', () => {
     renderQuiz({ startAt: 'contact' })
-    click('See my results')
+    seeResults()
     expect(screen.queryByRole('region', { name: 'Team view (demo only)' })).toBeNull()
     expect(screen.queryByText(/(Hot|Warm|Cold) lead/)).toBeNull()
   })
@@ -85,7 +98,7 @@ describe('QuizForm', () => {
   test('contactRequired on: "See my results" is blocked until all six contact fields are filled in', () => {
     renderQuiz({ contactRequired: true, startAt: 'contact', allContactFields: true })
     expect(screen.getByText(form.contact.introWhenRequired)).toBeDefined()
-    click('See my results')
+    seeResults()
     expect(heading()).toBe(form.contact.title)
     expect(screen.getAllByRole('alert')).toHaveLength(6)
 
@@ -96,7 +109,7 @@ describe('QuizForm', () => {
     fill(form.contact.street, '1 Sample Lane')
     fill(form.contact.city, 'Burnaby')
     fill(form.contact.postalCode, 'V5A 0A1')
-    click('See my results')
+    seeResults()
     expect(clientPart().getByRole('heading', { level: 1 }).textContent).toBe("You're all done!")
   })
 
@@ -110,7 +123,7 @@ describe('QuizForm', () => {
       [CONTACT_FIELDS.email]: 'pat@example.com',
     }
     renderQuiz({ startAt: 'contact', initialAnswers: answers })
-    click('See my results')
+    seeResults()
 
     expect(clientPart().getByText('Questionnaire complete')).toBeDefined()
     expect(clientPart().getByRole('heading', { level: 2, name: 'The Visionary' })).toBeDefined()
@@ -125,13 +138,13 @@ describe('QuizForm', () => {
 
   test('the cursor moves to the result greeting', () => {
     renderQuiz({ startAt: 'contact' })
-    click('See my results')
+    seeResults()
     expect(document.activeElement).toBe(clientPart().getByRole('heading', { level: 1 }))
   })
 
   test('there is only one main area on the results screen', () => {
     renderQuiz({ startAt: 'contact' })
-    click('See my results')
+    seeResults()
     expect(screen.getAllByRole('main')).toHaveLength(1)
   })
 })

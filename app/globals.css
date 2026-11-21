@@ -98,3 +98,129 @@ body {
   outline: 3px solid var(--navy);
   outline-offset: 4px;
 }
+
+/* Swatch cards (docs/SWATCH_CARDS_PLAN.md, 2026-11-20). --move is the move's
+   length, set on each card by the Quick Quiz. */
+:root {
+  --pencil: #5a5a5a;
+  --pencil-light: #b9b6ae;
+}
+
+/* Next: the active card swings up and round to the back... */
+@keyframes card-out-forward {
+  0% { transform: none; z-index: 30; opacity: 1; }
+  45% { transform: translateY(-60%) rotate(-4deg); z-index: 30; opacity: 1; }
+  55% { z-index: 5; }
+  100% { transform: translateY(-40px) scale(0.94); z-index: 5; opacity: 0; }
+}
+/* ...while the peeking card slides down and forward. */
+@keyframes card-in-forward {
+  from { transform: translateY(-40px) scale(0.94); }
+  to { transform: none; }
+}
+/* Back: the active card slides back to the peeking place... */
+@keyframes card-out-back {
+  from { transform: none; z-index: 30; opacity: 1; }
+  to { transform: translateY(-40px) scale(0.94); z-index: 5; opacity: 0; }
+}
+/* ...while the card at the back comes up, round and forward. */
+@keyframes card-in-back {
+  0% { transform: translateY(-60%) rotate(-4deg); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+@keyframes card-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.card-out-forward { animation: card-out-forward var(--move) ease-in-out forwards; }
+.card-in-forward { animation: card-in-forward var(--move) ease-out; }
+.card-out-back { animation: card-out-back var(--move) ease-in forwards; }
+.card-in-back { animation: card-in-back var(--move) ease-out; }
+.card-fade-in { animation: card-fade var(--move) ease-out; }
+.card-fade-out { animation: card-fade var(--move) ease-in reverse forwards; }
+
+/* "See my results": the cards fall out of the quiz's area. */
+@keyframes card-fall {
+  from { transform: none; opacity: 1; }
+  to { transform: translateY(140%) rotate(9deg); opacity: 0; }
+}
+.card-fall { animation: card-fall 600ms cubic-bezier(0.5, 0, 0.9, 0.5) forwards; }
+
+/* The calculating text appears as the cards fall, its dots one by one. */
+@keyframes dot { 0%, 20% { opacity: 0; } 30%, 100% { opacity: 1; } }
+.calculating { animation: card-fade 400ms ease-out 200ms both; }
+.calc-dots > span { animation: dot 1.6s infinite; }
+.calc-dots > span:nth-child(2) { animation-delay: 0.4s; }
+.calc-dots > span:nth-child(3) { animation-delay: 0.8s; }
+.result-reveal { animation: card-fade 400ms ease-out; }
+
+/* The pencil oval around a chosen option, drawn in a quick stroke. */
+.pencil-oval path {
+  fill: none;
+  stroke: var(--pencil);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+@keyframes pencil-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+label:has(:checked) > .pencil-oval path { animation: pencil-draw 300ms ease-out; }
+
+/* The other inputs on a card, in the same pencil feel. */
+.swatch-area input[type="text"],
+.swatch-area input[type="number"] {
+  border: 0;
+  border-bottom: 2px solid var(--pencil-light);
+  border-radius: 0;
+  background: transparent;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+/* The long-text box: lines to write on, like paper. */
+.swatch-area textarea {
+  border: 0;
+  border-radius: 0;
+  background: repeating-linear-gradient(transparent 0, transparent 31px, var(--pencil-light) 31px, var(--pencil-light) 33px);
+  line-height: 33px;
+  padding: 0 0.25rem;
+}
+.swatch-area input[type="text"]:focus,
+.swatch-area input[type="number"]:focus { border-bottom-color: var(--pencil); }
+.swatch-area textarea:focus { background-image: repeating-linear-gradient(transparent 0, transparent 31px, var(--pencil) 31px, var(--pencil) 33px); }
+.swatch-area [aria-invalid="true"] { border-bottom-color: #c53030; }
+
+/* The slider: a pencil line with a hand-drawn dot. */
+.swatch-area .form-range {
+  height: 3px;
+  background: linear-gradient(to right, var(--pencil) var(--fill, 0%), var(--pencil-light) var(--fill, 0%));
+}
+.swatch-area .form-range::-webkit-slider-thumb {
+  width: 1.5rem;
+  height: 1.4rem;
+  border: 2px solid var(--pencil);
+  border-radius: 50% 44% 54% 47%;
+  background: var(--accent);
+}
+.swatch-area .form-range::-moz-range-thumb {
+  width: 1.5rem;
+  height: 1.4rem;
+  border: 2px solid var(--pencil);
+  border-radius: 50% 44% 54% 47%;
+  background: var(--accent);
+}
+
+/* "Not sure yet": circled in pencil when chosen, faint on hover. */
+.swatch-area button[aria-pressed] {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 50% / 50%;
+  padding: 0.5rem 1.25rem;
+}
+.swatch-area button[aria-pressed] > span { display: none; }
+.swatch-area button[aria-pressed]:hover { border-color: color-mix(in srgb, var(--pencil) 30%, transparent); }
+.swatch-area button[aria-pressed="true"] { border-color: var(--pencil); font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card-fall { animation: card-fade 150ms ease-in reverse forwards; }
+  .calc-dots > span { animation: none; }
+  label:has(:checked) > .pencil-oval path { animation: none; }
+}
