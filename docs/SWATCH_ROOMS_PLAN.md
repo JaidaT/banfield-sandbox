@@ -2,7 +2,7 @@
 
 **For:** Claude and Jaida. Behaviour first, so it also works in another repo; sandbox files and branches are in "In the sandbox" at the end.
 
-**Status:** plan only. Nothing is built yet.
+**Status:** being built in the sandbox (ticked steps).
 
 **Builds on:** `SWATCH_CARDS_PLAN.md` (the card stack, pencil choices, the fall and "Calculating") and `ROOM_BUILD_PLAN.md` (the room that builds, "build-up-middle" layout). Everything in those plans still applies unless this file says otherwise.
 
@@ -45,7 +45,7 @@ With reduced motion: the plants fade in, and the bar does not animate.
 Work test-first; motion and looks are checked by eye.
 
 ### Phase 1: Bring the room in
-- [ ] Copy the room that builds into this branch: the assets, the piece list with centres and its checks, the room component, and the pop-in animation (not the placement setting or the other room versions)
+- [x] Copy the room that builds into this branch: the assets, the piece list with centres and its checks, the room component, and the pop-in animation (not the placement setting or the other room versions)
   - Tests: the piece list's existing tests pass here
 
 ### Phase 2: The room and bar on the cards

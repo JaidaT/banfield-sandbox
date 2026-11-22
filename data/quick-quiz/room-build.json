@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "purpose": "The room that builds (docs/ROOM_BUILD_PLAN.md, 2026-11-21): an empty room plus one piece per finished Quick Quiz screen. Question 1 shows only the base; each finished screen adds the next piece; the contact screen shows 12; the result shows all 13.",
+    "files": "From Jaida: every file is a 600 x 450 artboard with the piece in its final spot, stacked in this order (later pieces on top). full-picture.svg is the finished room, for checking only.",
+    "centres": "centreX and centreY: the middle of each drawing, as a percentage of the room, measured from the files on 2026-11-21. A new piece grows from here. Re-measure if a drawing moves."
+  },
+  "width": 600,
+  "height": 450,
+  "base": "/room-assets/00-base.svg",
+  "fullPicture": "/room-assets/full-picture.svg",
+  "pieces": [
+    {
+      "name": "Rug",
+      "file": "/room-assets/01-rug.svg",
+      "centreX": 51.9,
+      "centreY": 90.7
+    },
+    {
+      "name": "Big shelf",
+      "file": "/room-assets/02-bigshelf.svg",
+      "centreX": 86.1,
+      "centreY": 56.6
+    },
+    {
+      "name": "Floor lamp",
+      "file": "/room-assets/03-floorlamp.svg",
+      "centreX": 6.2,
+      "centreY": 62.7
+    },
+    {
+      "name": "TV stand",
+      "file": "/room-assets/04-tvstand.svg",
+      "centreX": 45.8,
+      "centreY": 79.2
+    },
+    {
+      "name": "Wall shelves",
+      "file": "/room-assets/05-wallshelves.svg",
+      "centreX": 21.8,
+      "centreY": 39.8
+    },
+    {
+      "name": "Chair",
+      "file": "/room-assets/06-chair.svg",
+      "centreX": 17.2,
+      "centreY": 80.8
+    },
+    {
+      "name": "Pictures",
+      "file": "/room-assets/07-pictures.svg",
+      "centreX": 66.3,
+      "centreY": 44.3
+    },
+    {
+      "name": "Coffee table",
+      "file": "/room-assets/08-coffeetable.svg",
+      "centreX": 47.1,
+      "centreY": 85.9
+    },
+    {
+      "name": "TV",
+      "file": "/room-assets/09-tv.svg",
+      "centreX": 45.8,
+      "centreY": 61.3
+    },
+    {
+      "name": "Clock",
+      "file": "/room-assets/10-clock.svg",
+      "centreX": 45.8,
+      "centreY": 30.4
+    },
+    {
+      "name": "Loveseat",
+      "file": "/room-assets/11-loveseat.svg",
+      "centreX": 82.4,
+      "centreY": 79
+    },
+    {
+      "name": "Things on the shelves",
+      "file": "/room-assets/12-shelfstuff.svg",
+      "centreX": 53.5,
+      "centreY": 41.4
+    },
+    {
+      "name": "Plants",
+      "file": "/room-assets/13-plants.svg",
+      "centreX": 49.1,
+      "centreY": 44.2
+    }
+  ]
+}
