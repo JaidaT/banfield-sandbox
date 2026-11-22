@@ -23,6 +23,7 @@ Top to bottom on every question card:
 
 - **The room** sits centred above the bar, building up as in `"build-up-middle"`: one piece per finished screen, each piece growing from its own centre; Back shrinks the last piece away; a fade with reduced motion.
 - **No empty room behind the pieces** (Jaida, 2026-11-22): `00-base.svg` is left out on the cards, during "Calculating" and on the result, so only the furniture shows. Nothing shows above the bar on question 1; the rug arrives on question 2.
+- **The strip colour is switchable** (Jaida, 2026-11-22): `"strip"` in `data/quick-quiz/swatch-cards.json` is `"yellow"` (the brand yellow, dark text) or `"navy"` (the brand navy with off-white question and help text; on now). The leaving card and the cards falling away at the end match it.
 - **The progress bar** is the room version's bar: full width, white track, yellow outline, yellow fill, no percentage text; screen readers hear "Question N of M". It replaces the swatch cards' grey bar with "N%".
 - **Size:** about **25% of the width on a phone** (smaller than `"build-up-middle"`, so the room, bar, card and buttons still fit on one screen) and **40% on a computer**. Tune by eye.
 - **The cards** work exactly as in `SWATCH_CARDS_PLAN.md`. The room and bar stay still while the cards swing and slide.
@@ -69,6 +70,8 @@ Work test-first; motion and looks are checked by eye.
 - [x] Type check, lint, tests and build: all pass
 - [x] Leave out the empty room everywhere: only the pieces show (Jaida, 2026-11-22)
   - Tests: no empty room on the cards, during "Calculating" or on the result
+- [x] A strip colour setting: yellow, or navy with off-white text (on now)
+  - Tests: the real file uses navy; yellow and navy load, yellow by default, anything else is refused; the card strip is navy with off-white question and help; the falling card matches
 - [ ] Jaida tries it on a phone (does everything fit?) and a computer, with reduced motion, and on the stand-in website
 
 ## Decisions (2026-11-22)

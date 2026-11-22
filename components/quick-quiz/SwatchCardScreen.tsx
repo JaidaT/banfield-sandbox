@@ -7,6 +7,7 @@ import type { StepScreenProps } from '@/components/form/StepScreen'
 import { BUTTON, BUTTON_MAIN } from '@/components/form/styles'
 import PencilChoices from '@/components/quick-quiz/PencilChoices'
 import RoomAndBar from '@/components/quick-quiz/RoomAndBar'
+import { STRIP, STRIP_COLOUR } from '@/components/quick-quiz/stripStyles'
 import { percentDone } from '@/lib/form/navigation'
 import { REDUCED_FADE_MS, moveLength } from '@/components/quick-quiz/motion'
 
@@ -112,8 +113,8 @@ export default function SwatchCardScreen(props: StepScreenProps) {
             style={timing}
             className={`pointer-events-none absolute inset-x-0 top-[var(--peek)] bottom-0 z-30 ${CARD} ${exit}`}
           >
-            <div className="bg-accent px-4 py-3 sm:px-8 sm:py-6">
-              <p className="text-lg sm:text-xl font-bold leading-snug text-charcoal">{leaving.title}</p>
+            <div className={`${STRIP.strip} px-4 py-3 sm:px-8 sm:py-6`}>
+              <p className={`text-lg font-bold leading-snug sm:text-xl ${STRIP.question}`}>{leaving.title}</p>
             </div>
           </div>
         )}
@@ -126,12 +127,12 @@ export default function SwatchCardScreen(props: StepScreenProps) {
           style={timing}
           className={`relative z-10 ${CARD} ${enter}`}
         >
-          <div data-testid="card-strip" className="flex flex-col gap-1 bg-accent px-4 py-3 sm:px-8 sm:py-6">
-            <h2 ref={headingRef} id={headingId} tabIndex={-1} className="text-lg font-bold leading-snug text-charcoal outline-none sm:text-xl">
+          <div data-testid="card-strip" data-strip={STRIP_COLOUR} className={`flex flex-col gap-1 px-4 py-3 sm:px-8 sm:py-6 ${STRIP.strip}`}>
+            <h2 ref={headingRef} id={headingId} tabIndex={-1} className={`text-lg font-bold leading-snug outline-none sm:text-xl ${STRIP.question}`}>
               {step.step.title}
             </h2>
             {stripHelp ? (
-              <p id={helpId} className="text-sm italic text-navy">
+              <p id={helpId} className={`text-sm italic ${STRIP.help}`}>
                 {stripHelp}
               </p>
             ) : null}

@@ -1,0 +1,7 @@
+{
+  "_meta": {
+    "purpose": "Look settings for the Quick Quiz swatch cards (docs/SWATCH_ROOMS_PLAN.md).",
+    "strip": "The colour of the strip holding the question: 'yellow' (the brand yellow with dark text) or 'navy' (the brand navy with off-white text, Jaida 2026-11-22). Switch here to compare; save and refresh the page."
+  },
+  "strip": "navy"
+}

@@ -6,6 +6,7 @@ import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
 import SwatchCardScreen from '@/components/quick-quiz/SwatchCardScreen'
 import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
 import RoomAndBar from '@/components/quick-quiz/RoomAndBar'
+import { STRIP } from '@/components/quick-quiz/stripStyles'
 import { loadRoomBuild } from '@/lib/quick-quiz/roomBuild'
 import { CALCULATING_MS } from '@/components/quick-quiz/motion'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
@@ -126,7 +127,7 @@ function Calculating() {
         <div data-testid="falling-cards" aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-80">
           <div className="card-fall absolute inset-x-4 top-0 h-72 rounded-2xl border-2 border-[var(--line)] bg-white [animation-delay:60ms]" />
           <div className="card-fall absolute inset-x-0 top-10 h-72 overflow-hidden rounded-2xl border-2 border-[var(--line)] bg-white">
-            <div className="h-16 bg-accent" />
+            <div className={`h-16 ${STRIP.strip}`} />
           </div>
         </div>
         <p role="status" className="calculating text-center text-xl font-bold text-charcoal">
