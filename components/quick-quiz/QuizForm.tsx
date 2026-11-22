@@ -100,7 +100,7 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
 
   return <ClientResultView result={result} embedded complete
       finishedHome={BUILD_UP ? undefined : FINISHED_HOME}
-      buildUpRoom={BUILD_UP ? <BuildUpRoom shownCount={BUILD_PIECES} popLast /> : undefined}
+      buildUpRoom={BUILD_UP ? <BuildUpRoom shownCount={BUILD_PIECES} popLast showBase={PLACEMENT !== 'build-up-follow'} /> : undefined}
       buildUpLayout={BUILD_UP_LAYOUT}
       headingRef={headingRef}
     />

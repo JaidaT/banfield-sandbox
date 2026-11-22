@@ -15,11 +15,13 @@ const HIDDEN = 'scale-0 opacity-0 transition-[scale,opacity] duration-200 ease-i
 // start, loaded straight away and hidden until earned, so nothing has to load
 // mid-change. All files share one artboard, so they stack exactly.
 // popLast: the last shown piece pops in when this first appears (the result).
+// showBase: false leaves out the empty room, so only the pieces show
+// (build-up-follow, Jaida 2026-11-22).
 // Decoration only: whatever holds it hides it from screen readers.
-export default function BuildUpRoom({ shownCount, popLast = false }: { shownCount: number; popLast?: boolean }) {
+export default function BuildUpRoom({ shownCount, popLast = false, showBase = true }: { shownCount: number; popLast?: boolean; showBase?: boolean }) {
   return (
     <div data-testid="build-up-room" className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
-      <Image data-base src={BUILD.base} alt="" width={BUILD.width} height={BUILD.height} unoptimized loading="eager" className="absolute inset-0 h-full w-full" />
+      {showBase && <Image data-base src={BUILD.base} alt="" width={BUILD.width} height={BUILD.height} unoptimized loading="eager" className="absolute inset-0 h-full w-full" />}
       {BUILD.pieces.map((piece, index) => {
         const shown = index < shownCount
         const popping = popLast && index === shownCount - 1

@@ -120,7 +120,8 @@ export default function RoomProgressBar({ place, stepId, placement = ROOMS.place
 //   bar, its right edge following the end of the fill (never past the left
 //   end), sliding as the fill grows.
 function BuildUpBar({ place, percent, placement }: { place: ProgressBarProps['place']; percent: number; placement: BuildUpPlacement }) {
-  const roomNow = <BuildUpRoom shownCount={place.number - 1} />
+  // build-up-follow shows only the pieces, without the empty room behind them.
+  const roomNow = <BuildUpRoom shownCount={place.number - 1} showBase={placement !== 'build-up-follow'} />
   const track = (
     <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-accent bg-white">
       <div

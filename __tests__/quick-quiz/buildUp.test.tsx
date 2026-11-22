@@ -31,7 +31,7 @@ const shownPieces = () => pieceImages().filter((img) => img.dataset.shown === 't
 const bar = (number: number) => render(<RoomProgressBar place={{ number, total }} stepId="any" placement="build-up" />)
 
 describe('the room that builds, on the question screens', () => {
-  test('question 1 shows only the empty room', () => {
+  test('question 1 shows only the empty room (the other layouts keep it)', () => {
     bar(1)
     expect(room().querySelector('img[data-base]')!.getAttribute('src')).toBe(build.base)
     expect(shownPieces()).toEqual([])
@@ -137,6 +137,12 @@ describe('the room that builds, following the fill (build-up-follow)', () => {
     expect(followBox().style.width).toBe('92%')
   })
 
+  // Jaida, 2026-11-22: only the pieces, without the empty room behind them.
+  test('there is no empty room behind the pieces', () => {
+    follow(5)
+    expect(room().querySelector('img[data-base]')).toBeNull()
+  })
+
   test('it builds up the same way, hidden from screen readers', () => {
     follow(5)
     expect(shownPieces()).toEqual(build.pieces.slice(0, 4).map((p) => p.file))
@@ -147,8 +153,9 @@ describe('the room that builds, following the fill (build-up-follow)', () => {
   test('the result shows the complete room at the right end of the full bar', () => {
     const sample = loadSampleSubmissions()[0]
     const result = buildClientResult(sample, clientCopy, designDnaFor(sample, quizData))
-    render(<ClientResultView result={result} complete buildUpRoom={<BuildUpRoom shownCount={build.pieces.length} popLast />} buildUpLayout="follow" />)
+    render(<ClientResultView result={result} complete buildUpRoom={<BuildUpRoom shownCount={build.pieces.length} popLast showBase={false} />} buildUpLayout="follow" />)
     expect(screen.getByTestId('complete-build-up').dataset.layout).toBe('follow')
+    expect(room().querySelector('img[data-base]')).toBeNull()
     expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
   })
 })

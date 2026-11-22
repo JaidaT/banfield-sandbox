@@ -30,7 +30,7 @@ Part of making the Quick Quiz less boring (team feedback). Earlier versions put 
 Jaida asked to try the room above a full-width bar, centred and then following the fill. All layouts are kept, chosen by the same setting:
 - **"build-up"** (first layout): the shorter bar (about 60%) beside the room (about 40%).
 - **"build-up-middle"** (second layout): the bar back to **full width**, with the room **centred above it** at the same size (about 40% of the width). On the result, the complete room sits centred above the full bar.
-- **"build-up-follow"** (third layout, on now): the full-width bar, with the room above it and its **right edge following the end of the fill**, as in the single-room "follow-fill" version. It rests at the far left on question 1 and slides right as the fill grows, keeping its size. On the result the fill is full, so the complete room sits at the right end.
+- **"build-up-follow"** (third layout, on now): the full-width bar, with the room above it and its **right edge following the end of the fill**, as in the single-room "follow-fill" version. It rests at the far left on question 1 and slides right as the fill grows, keeping its size. On the result the fill is full, so the complete room sits at the right end. **This layout leaves out the empty room** (`00-base.svg`, Jaida 2026-11-22): only the pieces show, with no wall or floor behind them, so nothing shows above the bar on question 1.
 Everything else is the same: the pieces, the order, the motion and screen readers.
 
 ### The room builds up
@@ -122,6 +122,8 @@ Work test-first: for each step that changes what shows, write the failing test, 
   - Tests: the room comes before the bar, centred, with the bar full width; none on question 1 and four on question 5; hidden from screen readers; the result uses the centred layout
 - [x] "build-up-follow": the room above a full-width bar, its right edge following the fill (never past the left end), the same size throughout; on the result, at the right end of the full bar
   - Tests: the room's box is as wide as the fill (0% on question 1, 92% on the contact screen), above a full-width bar; it builds up the same way; hidden from screen readers; the result uses the right-end layout
+- [x] "build-up-follow" leaves out the empty room: only the pieces show (Jaida, 2026-11-22)
+  - Tests: no empty room in this layout, on the question screens or the result; the other layouts keep it
 - [ ] Jaida compares the three layouts (beside, centred above, following the fill) and picks one
 
 ### Phase 5: Checks
