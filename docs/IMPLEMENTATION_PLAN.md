@@ -678,3 +678,9 @@ Jaida asked to show the demo-styled Quick Quiz on the iframe test's stand-in web
 The full plan is in its own file, `docs/SWATCH_CARDS_PLAN.md`, written to stand on its own so it can be copied into a different development repo (Jaida's requirement, 2026-11-20). Track progress there, not here.
 
 Built on `foyer-v1-swatch-cards`, made from `foyer-v1-demo-styling` on 2026-11-20 (the cards build on the demo look and the stand-in website). `foyer-v1-demo-styling` stays as it is for recordings.
+
+## Swatch Cards + the Room That Builds (2026-11-22)
+
+The plan is in its own file, `docs/SWATCH_ROOMS_PLAN.md` (for Claude and Jaida). Track progress there.
+
+Built on `foyer-v1-swatch-rooms`, made from `foyer-v1-swatch-cards`, with only the room that builds ("build-up-middle" layout) copied in from `foyer-v1-room-progress`.
