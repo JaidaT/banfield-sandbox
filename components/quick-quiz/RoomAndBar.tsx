@@ -9,13 +9,14 @@ import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
 // popLast: the last piece pops in when this appears. label: what screen
 // readers hear for progress ("Question N of M"); the room and bar are
 // decoration and hidden from them.
+// Only the pieces show, without the empty room behind them (Jaida, 2026-11-22).
 export default function RoomAndBar({ shownCount, percent, popLast = false, label }: { shownCount: number; percent: number; popLast?: boolean; label?: string }) {
   return (
     <div className="flex flex-col">
       {label ? <p className="sr-only">{label}</p> : null}
       <div aria-hidden="true" className="flex flex-col items-center gap-1">
         <div className="w-1/4 sm:w-2/5">
-          <BuildUpRoom shownCount={shownCount} popLast={popLast} />
+          <BuildUpRoom shownCount={shownCount} popLast={popLast} showBase={false} />
         </div>
         <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-accent bg-white">
           <div

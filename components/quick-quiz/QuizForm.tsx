@@ -109,7 +109,7 @@ function QuizResults({ answers }: DoneScreenProps) {
   if (calculating) return <Calculating />
   return (
     <div className="result-reveal">
-      <ClientResultView result={result} embedded complete room={<BuildUpRoom shownCount={ALL_PIECES} />} headingRef={resultHeading} />
+      <ClientResultView result={result} embedded complete room={<BuildUpRoom shownCount={ALL_PIECES} showBase={false} />} headingRef={resultHeading} />
     </div>
   )
 }

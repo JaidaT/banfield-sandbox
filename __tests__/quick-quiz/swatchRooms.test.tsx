@@ -31,9 +31,10 @@ afterEach(() => {
 })
 
 describe('the room and bar on the swatch cards', () => {
-  test('question 1 shows only the empty room; question 5 four pieces; the contact card twelve', () => {
+  // Jaida, 2026-11-22: only the pieces, without the empty room behind them.
+  test('no empty room behind the pieces: question 1 shows nothing yet; question 5 four pieces; the contact card twelve', () => {
     renderQuiz(questions[0].id)
-    expect(room().querySelector('img[data-base]')!.getAttribute('src')).toBe(build.base)
+    expect(room().querySelector('img[data-base]')).toBeNull()
     expect(shownPieces()).toEqual([])
     cleanup()
     renderQuiz(questions[4].id)
@@ -87,6 +88,7 @@ describe('the ending', () => {
     expect(screen.getByRole('status').textContent).toContain('Calculating your Design DNA')
     expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
     expect(pieceImages().at(-1)!.className).toContain('piece-pop')
+    expect(room().querySelector('img[data-base]')).toBeNull()
     expect(screen.getByTestId('progress-fill').style.width).toBe('100%')
     expect(room().compareDocumentPosition(screen.getByRole('status')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
@@ -99,6 +101,7 @@ describe('the ending', () => {
     expect(screen.getByRole('heading', { name: "You're all done!" })).toBeDefined()
     expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
     for (const img of pieceImages()) expect(img.className).not.toContain('piece-pop')
+    expect(room().querySelector('img[data-base]')).toBeNull()
     expect(room().compareDocumentPosition(screen.getByTestId('progress-fill')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     expect(room().closest('[aria-hidden="true"]')).not.toBeNull()
   })
