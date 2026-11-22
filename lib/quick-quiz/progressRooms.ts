@@ -15,10 +15,14 @@ export interface Room {
 // Where the room sits on the bar: its right edge following the end of the
 // fill (version 1), always at the far right end (version 2), always in the
 // middle of the bar (version 3), or a shorter bar beside one room that builds
-// up piece by piece (version 4, docs/ROOM_BUILD_PLAN.md), or that room
-// centred above a full-width bar (version 5).
-export type Placement = 'follow-fill' | 'far-right' | 'middle' | 'build-up' | 'build-up-middle'
-const PLACEMENTS: Placement[] = ['follow-fill', 'far-right', 'middle', 'build-up', 'build-up-middle']
+// up piece by piece (version 4, docs/ROOM_BUILD_PLAN.md), that room centred
+// above a full-width bar (version 5), or that room above a full-width bar
+// with its right edge following the fill (version 6).
+export type Placement = 'follow-fill' | 'far-right' | 'middle' | 'build-up' | 'build-up-middle' | 'build-up-follow'
+const PLACEMENTS: Placement[] = ['follow-fill', 'far-right', 'middle', 'build-up', 'build-up-middle', 'build-up-follow']
+// The versions with the room that builds.
+export type BuildUpPlacement = 'build-up' | 'build-up-middle' | 'build-up-follow'
+export const isBuildUp = (placement: Placement): placement is BuildUpPlacement => placement.startsWith('build-up')
 
 export interface ProgressRooms {
   placement: Placement

@@ -114,6 +114,45 @@ describe('the room that builds, centred above the bar (build-up-middle)', () => 
   })
 })
 
+// Jaida, 2026-11-22: the room above a full bar, its right edge following the fill.
+describe('the room that builds, following the fill (build-up-follow)', () => {
+  const follow = (number: number) => render(<RoomProgressBar place={{ number, total }} stepId="any" placement="build-up-follow" />)
+  const followBox = () => room().closest<HTMLElement>('[data-position="follows-fill"]')!
+
+  test('the room sits above a full-width bar, in a box as wide as the fill', () => {
+    follow(5)
+    expect(screen.getByTestId('build-up-row').dataset.placement).toBe('build-up-follow')
+    const barBox = screen.getByTestId('progress-fill').parentElement!.parentElement!
+    expect(barBox.dataset.position).toBe('full-width')
+    expect(followBox().compareDocumentPosition(barBox) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // 4 of 13 done: about 31%.
+    expect(followBox().style.width).toBe('31%')
+  })
+
+  test('it starts at the far left and ends near the right: 0% on question 1, 92% on the contact screen', () => {
+    follow(1)
+    expect(followBox().style.width).toBe('0%')
+    cleanup()
+    follow(total)
+    expect(followBox().style.width).toBe('92%')
+  })
+
+  test('it builds up the same way, hidden from screen readers', () => {
+    follow(5)
+    expect(shownPieces()).toEqual(build.pieces.slice(0, 4).map((p) => p.file))
+    expect(room().closest('[aria-hidden="true"]')).not.toBeNull()
+    expect(screen.getByText(`Question 5 of ${total}`)).toBeDefined()
+  })
+
+  test('the result shows the complete room at the right end of the full bar', () => {
+    const sample = loadSampleSubmissions()[0]
+    const result = buildClientResult(sample, clientCopy, designDnaFor(sample, quizData))
+    render(<ClientResultView result={result} complete buildUpRoom={<BuildUpRoom shownCount={build.pieces.length} popLast />} buildUpLayout="follow" />)
+    expect(screen.getByTestId('complete-build-up').dataset.layout).toBe('follow')
+    expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
+  })
+})
+
 describe('the room that builds, in the quiz', () => {
   function renderQuiz(startAt: string) {
     render(<QuizForm questionnaire={quizQuestionnaire(questions, form)} quizData={quizData} clientCopy={clientCopy} startAt={startAt} />)

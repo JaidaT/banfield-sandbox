@@ -6,7 +6,7 @@ import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
 import RoomProgressBar from '@/components/quick-quiz/RoomProgressBar'
 import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
 import { loadRoomBuild } from '@/lib/quick-quiz/roomBuild'
-import { loadProgressRooms } from '@/lib/quick-quiz/progressRooms'
+import { isBuildUp, loadProgressRooms } from '@/lib/quick-quiz/progressRooms'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
 import { buildClientResult } from '@/lib/quick-quiz/buildClientResult'
@@ -42,7 +42,8 @@ const FINISHED_HOME = loadProgressRooms().finishedHome
 // With the room that builds on, the result shows that room complete instead,
 // its last piece popping in (docs/ROOM_BUILD_PLAN.md).
 const PLACEMENT = loadProgressRooms().placement
-const BUILD_UP = PLACEMENT === 'build-up' || PLACEMENT === 'build-up-middle'
+const BUILD_UP = isBuildUp(PLACEMENT)
+const BUILD_UP_LAYOUT = PLACEMENT === 'build-up-middle' ? 'above' : PLACEMENT === 'build-up-follow' ? 'follow' : 'side'
 const BUILD_PIECES = loadRoomBuild().pieces.length
 
 // The Quick Quiz: the shared form's screens (one question per screen, contact
@@ -100,7 +101,7 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
   return <ClientResultView result={result} embedded complete
       finishedHome={BUILD_UP ? undefined : FINISHED_HOME}
       buildUpRoom={BUILD_UP ? <BuildUpRoom shownCount={BUILD_PIECES} popLast /> : undefined}
-      buildUpLayout={PLACEMENT === 'build-up-middle' ? 'above' : 'side'}
+      buildUpLayout={BUILD_UP_LAYOUT}
       headingRef={headingRef}
     />
 }

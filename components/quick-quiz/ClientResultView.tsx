@@ -19,8 +19,9 @@ interface Props {
   // shorter complete bar instead of the finished home.
   buildUpRoom?: ReactNode
   // "side": beside a shorter bar (version 4); "above": centred above the full
-  // bar (version 5).
-  buildUpLayout?: 'side' | 'above'
+  // bar (version 5); "follow": at the right end of the full bar, where the
+  // full fill ends (version 6).
+  buildUpLayout?: 'side' | 'above' | 'follow'
   // Put on the main heading, so the quiz can move the cursor there.
   headingRef?: Ref<HTMLHeadingElement>
 }
@@ -48,8 +49,13 @@ export default function ClientResultView({ result, embedded = false, complete = 
             <p>100%</p>
           </div>
           {buildUpRoom ? (
-            buildUpLayout === 'above' ? (
-              <div data-testid="complete-build-up" data-layout="above" aria-hidden="true" className="flex flex-col items-center gap-1">
+            buildUpLayout === 'above' || buildUpLayout === 'follow' ? (
+              <div
+                data-testid="complete-build-up"
+                data-layout={buildUpLayout}
+                aria-hidden="true"
+                className={`flex flex-col gap-1 ${buildUpLayout === 'above' ? 'items-center' : 'items-end'}`}
+              >
                 <div className="w-2/5">{buildUpRoom}</div>
                 <div className="h-3.5 w-full rounded-full border-2 border-accent bg-accent" />
               </div>

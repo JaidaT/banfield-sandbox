@@ -4,7 +4,8 @@ import type { ProgressBarProps } from '@/components/form/ProgressBar'
 import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
 import { percentDone } from '@/lib/form/navigation'
 import { loadProgressRooms } from '@/lib/quick-quiz/progressRooms'
-import type { Placement } from '@/lib/quick-quiz/progressRooms'
+import { isBuildUp } from '@/lib/quick-quiz/progressRooms'
+import type { BuildUpPlacement, Placement } from '@/lib/quick-quiz/progressRooms'
 
 // Which room goes with which screen, and where it sits
 // (data/quick-quiz/progress-rooms.json).
@@ -33,6 +34,7 @@ const CHANGES: Record<Placement, { shown: string; hidden: string }> = {
   middle: SHRINK_AND_GROW,
   'build-up': SHRINK_AND_GROW,
   'build-up-middle': SHRINK_AND_GROW,
+  'build-up-follow': SHRINK_AND_GROW,
 }
 
 // Where the rooms' box sits on the bar. In the middle, each room is also
@@ -43,6 +45,7 @@ const BOX_PLACE: Record<Placement, string> = {
   middle: 'left-1/2 -translate-x-1/2',
   'build-up': 'left-0',
   'build-up-middle': 'left-0',
+  'build-up-follow': 'left-0',
 }
 
 // The Quick Quiz's progress bar (docs/ROOM_PROGRESS_PLAN.md): a white track
@@ -59,7 +62,7 @@ const BOX_PLACE: Record<Placement, string> = {
 // placement: for tests and comparisons; left out, the data file decides.
 export default function RoomProgressBar({ place, stepId, placement = ROOMS.placement }: ProgressBarProps & { placement?: Placement }) {
   const percent = percentDone(place)
-  if (placement === 'build-up' || placement === 'build-up-middle') return <BuildUpBar place={place} percent={percent} placement={placement} />
+  if (isBuildUp(placement)) return <BuildUpBar place={place} percent={percent} placement={placement} />
   const current = ROOMS.screens[stepId]
   const followFill = placement === 'follow-fill'
   const box = {
@@ -108,40 +111,72 @@ export default function RoomProgressBar({ place, stepId, placement = ROOMS.place
 }
 
 // The room that builds (docs/ROOM_BUILD_PLAN.md). The room shows one piece
-// per finished screen: none on question 1.
-// - build-up (version 4): a shorter bar (about 60%) beside the room (about
-//   40%), lined up at the bottom.
+// per finished screen: none on question 1. It is about 40% of the bar's width.
+// - build-up (version 4): a shorter bar (about 60%) beside the room, lined up
+//   at the bottom.
 // - build-up-middle (version 5, Jaida 2026-11-22): the room centred above a
-//   full-width bar, at the same size (about 40% of the width).
-function BuildUpBar({ place, percent, placement }: { place: ProgressBarProps['place']; percent: number; placement: 'build-up' | 'build-up-middle' }) {
-  const above = placement === 'build-up-middle'
-  // Above the bar it comes first; beside the bar it comes after (on the right).
-  const room = (
-    <div data-position={above ? 'centred' : 'right'} className={above ? 'w-2/5' : 'flex-[2]'}>
-      <BuildUpRoom shownCount={place.number - 1} />
+//   full-width bar.
+// - build-up-follow (version 6, Jaida 2026-11-22): the room above a full-width
+//   bar, its right edge following the end of the fill (never past the left
+//   end), sliding as the fill grows.
+function BuildUpBar({ place, percent, placement }: { place: ProgressBarProps['place']; percent: number; placement: BuildUpPlacement }) {
+  const roomNow = <BuildUpRoom shownCount={place.number - 1} />
+  const track = (
+    <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-accent bg-white">
+      <div
+        data-testid="progress-fill"
+        className="h-full rounded-full bg-accent transition-[width] duration-400 ease-out motion-reduce:transition-none"
+        style={{ width: `${percent}%` }}
+      />
     </div>
   )
+
+  let layout
+  if (placement === 'build-up') {
+    layout = (
+      <div data-testid="build-up-row" data-placement={placement} aria-hidden="true" className="flex items-end gap-3">
+        <div data-position="left" className="flex-[3] pb-1">
+          {track}
+        </div>
+        <div data-position="right" className="flex-[2]">
+          {roomNow}
+        </div>
+      </div>
+    )
+  } else if (placement === 'build-up-middle') {
+    layout = (
+      <div data-testid="build-up-row" data-placement={placement} aria-hidden="true" className="flex flex-col items-center gap-1">
+        <div data-position="centred" className="w-2/5">
+          {roomNow}
+        </div>
+        <div data-position="full-width" className="w-full">
+          {track}
+        </div>
+      </div>
+    )
+  } else {
+    // cqw: a share of the bar's width (the row is a size container), so the
+    // room keeps its size while its box grows with the fill.
+    layout = (
+      <div data-testid="build-up-row" data-placement={placement} aria-hidden="true" className="@container flex flex-col gap-1">
+        <div
+          data-position="follows-fill"
+          style={{ width: `${percent}%` }}
+          className="flex min-w-[40cqw] justify-end transition-[width] duration-400 ease-out motion-reduce:transition-none"
+        >
+          <div className="w-[40cqw] shrink-0">{roomNow}</div>
+        </div>
+        <div data-position="full-width" className="w-full">
+          {track}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col">
       <p className="sr-only">{`Question ${place.number} of ${place.total}`}</p>
-      <div
-        data-testid="build-up-row"
-        data-placement={placement}
-        aria-hidden="true"
-        className={above ? 'flex flex-col items-center gap-1' : 'flex items-end gap-3'}
-      >
-        {above && room}
-        <div data-position={above ? 'full-width' : 'left'} className={above ? 'w-full' : 'flex-[3] pb-1'}>
-          <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-accent bg-white">
-            <div
-              data-testid="progress-fill"
-              className="h-full rounded-full bg-accent transition-[width] duration-400 ease-out motion-reduce:transition-none"
-              style={{ width: `${percent}%` }}
-            />
-          </div>
-        </div>
-        {!above && room}
-      </div>
+      {layout}
     </div>
   )
 }

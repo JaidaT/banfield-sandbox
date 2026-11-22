@@ -26,11 +26,12 @@ Part of making the Quick Quiz less boring (team feedback). Earlier versions put 
 - **The same split on phones and computers.** On a phone the room is about 140px wide.
 - **Screen readers** hear "Question N of M" (visually hidden), as in the other versions. The room is decoration: hidden from screen readers.
 
-### Second layout: the room centred above the bar (2026-11-22)
-Jaida asked to try the room **centred above a full-width bar**, like the "middle" single-room version. Both layouts are kept, chosen by the same setting:
+### More layouts: above the bar (2026-11-22)
+Jaida asked to try the room above a full-width bar, centred and then following the fill. All layouts are kept, chosen by the same setting:
 - **"build-up"** (first layout): the shorter bar (about 60%) beside the room (about 40%).
-- **"build-up-middle"** (second layout, on now): the bar back to **full width**, with the room **centred above it** at the same size (about 40% of the width).
-Everything else is the same: the pieces, the order, the motion and screen readers. On the result, the complete room sits centred above the full bar.
+- **"build-up-middle"** (second layout): the bar back to **full width**, with the room **centred above it** at the same size (about 40% of the width). On the result, the complete room sits centred above the full bar.
+- **"build-up-follow"** (third layout, on now): the full-width bar, with the room above it and its **right edge following the end of the fill**, as in the single-room "follow-fill" version. It rests at the far left on question 1 and slides right as the fill grows, keeping its size. On the result the fill is full, so the complete room sits at the right end.
+Everything else is the same: the pieces, the order, the motion and screen readers.
 
 ### The room builds up
 - **Question 1:** the empty room (wall and floor).
@@ -119,7 +120,9 @@ Work test-first: for each step that changes what shows, write the failing test, 
 ### Second layout steps
 - [x] "build-up-middle": the room centred above a full-width bar, building up the same way; on the result, the complete room centred above the full bar
   - Tests: the room comes before the bar, centred, with the bar full width; none on question 1 and four on question 5; hidden from screen readers; the result uses the centred layout
-- [ ] Jaida compares the two layouts (beside, or above) and picks one
+- [x] "build-up-follow": the room above a full-width bar, its right edge following the fill (never past the left end), the same size throughout; on the result, at the right end of the full bar
+  - Tests: the room's box is as wide as the fill (0% on question 1, 92% on the contact screen), above a full-width bar; it builds up the same way; hidden from screen readers; the result uses the right-end layout
+- [ ] Jaida compares the three layouts (beside, centred above, following the fill) and picks one
 
 ### Phase 5: Checks
 - [x] Every existing quiz test still passes
