@@ -41,7 +41,8 @@ const QuizContext = createContext<QuizSetup | null>(null)
 const FINISHED_HOME = loadProgressRooms().finishedHome
 // With the room that builds on, the result shows that room complete instead,
 // its last piece popping in (docs/ROOM_BUILD_PLAN.md).
-const BUILD_UP = loadProgressRooms().placement === 'build-up'
+const PLACEMENT = loadProgressRooms().placement
+const BUILD_UP = PLACEMENT === 'build-up' || PLACEMENT === 'build-up-middle'
 const BUILD_PIECES = loadRoomBuild().pieces.length
 
 // The Quick Quiz: the shared form's screens (one question per screen, contact
@@ -99,6 +100,7 @@ function QuizResults({ answers, headingRef }: DoneScreenProps) {
   return <ClientResultView result={result} embedded complete
       finishedHome={BUILD_UP ? undefined : FINISHED_HOME}
       buildUpRoom={BUILD_UP ? <BuildUpRoom shownCount={BUILD_PIECES} popLast /> : undefined}
+      buildUpLayout={PLACEMENT === 'build-up-middle' ? 'above' : 'side'}
       headingRef={headingRef}
     />
 }

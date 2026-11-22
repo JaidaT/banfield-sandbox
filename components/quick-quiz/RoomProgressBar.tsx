@@ -32,6 +32,7 @@ const CHANGES: Record<Placement, { shown: string; hidden: string }> = {
   'far-right': SHRINK_AND_GROW,
   middle: SHRINK_AND_GROW,
   'build-up': SHRINK_AND_GROW,
+  'build-up-middle': SHRINK_AND_GROW,
 }
 
 // Where the rooms' box sits on the bar. In the middle, each room is also
@@ -41,6 +42,7 @@ const BOX_PLACE: Record<Placement, string> = {
   'far-right': 'right-0',
   middle: 'left-1/2 -translate-x-1/2',
   'build-up': 'left-0',
+  'build-up-middle': 'left-0',
 }
 
 // The Quick Quiz's progress bar (docs/ROOM_PROGRESS_PLAN.md): a white track
@@ -57,7 +59,7 @@ const BOX_PLACE: Record<Placement, string> = {
 // placement: for tests and comparisons; left out, the data file decides.
 export default function RoomProgressBar({ place, stepId, placement = ROOMS.placement }: ProgressBarProps & { placement?: Placement }) {
   const percent = percentDone(place)
-  if (placement === 'build-up') return <BuildUpBar place={place} percent={percent} />
+  if (placement === 'build-up' || placement === 'build-up-middle') return <BuildUpBar place={place} percent={percent} placement={placement} />
   const current = ROOMS.screens[stepId]
   const followFill = placement === 'follow-fill'
   const box = {
@@ -105,15 +107,31 @@ export default function RoomProgressBar({ place, stepId, placement = ROOMS.place
   )
 }
 
-// Version 4, the room that builds (docs/ROOM_BUILD_PLAN.md): a shorter bar
-// (about 60%) beside one room (about 40%), lined up at the bottom. The room
-// shows one piece per finished screen: none on question 1.
-function BuildUpBar({ place, percent }: { place: ProgressBarProps['place']; percent: number }) {
+// The room that builds (docs/ROOM_BUILD_PLAN.md). The room shows one piece
+// per finished screen: none on question 1.
+// - build-up (version 4): a shorter bar (about 60%) beside the room (about
+//   40%), lined up at the bottom.
+// - build-up-middle (version 5, Jaida 2026-11-22): the room centred above a
+//   full-width bar, at the same size (about 40% of the width).
+function BuildUpBar({ place, percent, placement }: { place: ProgressBarProps['place']; percent: number; placement: 'build-up' | 'build-up-middle' }) {
+  const above = placement === 'build-up-middle'
+  // Above the bar it comes first; beside the bar it comes after (on the right).
+  const room = (
+    <div data-position={above ? 'centred' : 'right'} className={above ? 'w-2/5' : 'flex-[2]'}>
+      <BuildUpRoom shownCount={place.number - 1} />
+    </div>
+  )
   return (
     <div className="flex flex-col">
       <p className="sr-only">{`Question ${place.number} of ${place.total}`}</p>
-      <div data-testid="build-up-row" data-placement="build-up" aria-hidden="true" className="flex items-end gap-3">
-        <div className="flex-[3] pb-1">
+      <div
+        data-testid="build-up-row"
+        data-placement={placement}
+        aria-hidden="true"
+        className={above ? 'flex flex-col items-center gap-1' : 'flex items-end gap-3'}
+      >
+        {above && room}
+        <div data-position={above ? 'full-width' : 'left'} className={above ? 'w-full' : 'flex-[3] pb-1'}>
           <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-accent bg-white">
             <div
               data-testid="progress-fill"
@@ -122,9 +140,7 @@ function BuildUpBar({ place, percent }: { place: ProgressBarProps['place']; perc
             />
           </div>
         </div>
-        <div className="flex-[2]">
-          <BuildUpRoom shownCount={place.number - 1} />
-        </div>
+        {!above && room}
       </div>
     </div>
   )

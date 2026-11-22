@@ -3,9 +3,9 @@
     "purpose": "Which room graphic sits on the Quick Quiz progress bar on each screen (docs/ROOM_PROGRESS_PLAN.md, 2026-11-21). 'screens' pairs each quiz question id, then 'contact', with a room. 'finishedHome' is the rooms on the result's 100% bar (Claude's proposal, to judge on screen).",
     "rooms": "Each room's file in public/rooms/, what it shows, and its shape (width and height from the SVG's viewBox), so every room can show at one height with the right width. Graphics from Jaida (originally Asset 11 to Asset 44).",
     "order": "Paired with questions where there is a natural link; the order was left to Claude (Jaida: 'whatever fits best'). Swap rooms here without touching code.",
-    "placement": "Where the room sits: 'follow-fill' (version 1: its right edge follows the end of the yellow fill, sliding along, fading between screens), 'far-right' (version 2: always at the right end of the bar, shrinking away and growing in between screens) or 'middle' (version 3: always in the middle of the bar, shrinking and growing like version 2). Switch here to compare. 'build-up' (version 4: a shorter bar beside one room that gains a piece per finished screen; pieces in room-build.json, plan in docs/ROOM_BUILD_PLAN.md)."
+    "placement": "Where the room sits. One room per screen: 'follow-fill' (version 1: its right edge follows the end of the yellow fill, sliding along, fading between screens), 'far-right' (version 2: always at the right end of the bar, shrinking away and growing in) or 'middle' (version 3: always in the middle of the bar, shrinking and growing like version 2). The room that builds (one piece per finished screen; pieces in room-build.json, plan in docs/ROOM_BUILD_PLAN.md): 'build-up' (version 4: a shorter bar beside the room) or 'build-up-middle' (version 5: the room centred above a full-width bar). Switch here to compare."
   },
-  "placement": "build-up",
+  "placement": "build-up-middle",
   "rooms": {
     "study-desk": {
       "file": "/rooms/study-desk.svg",

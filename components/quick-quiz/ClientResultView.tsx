@@ -18,6 +18,9 @@ interface Props {
   // The room that builds, complete (docs/ROOM_BUILD_PLAN.md): shown beside a
   // shorter complete bar instead of the finished home.
   buildUpRoom?: ReactNode
+  // "side": beside a shorter bar (version 4); "above": centred above the full
+  // bar (version 5).
+  buildUpLayout?: 'side' | 'above'
   // Put on the main heading, so the quiz can move the cursor there.
   headingRef?: Ref<HTMLHeadingElement>
 }
@@ -27,7 +30,7 @@ const LABEL = 'text-xs font-semibold uppercase tracking-widest'
 
 // Client-facing, laid out like the team's mockup (2026-11-13). Receives only
 // ClientResult, which has no client type or fit data.
-export default function ClientResultView({ result, embedded = false, complete = false, finishedHome, buildUpRoom, headingRef }: Props) {
+export default function ClientResultView({ result, embedded = false, complete = false, finishedHome, buildUpRoom, buildUpLayout = 'side', headingRef }: Props) {
   const Outer = embedded ? 'section' : 'main'
   const dnaHeadingId = useId()
   const helpHeadingId = useId()
@@ -45,12 +48,19 @@ export default function ClientResultView({ result, embedded = false, complete = 
             <p>100%</p>
           </div>
           {buildUpRoom ? (
-            <div aria-hidden="true" className="flex items-end gap-3">
-              <div className="flex-[3] pb-1">
+            buildUpLayout === 'above' ? (
+              <div data-testid="complete-build-up" data-layout="above" aria-hidden="true" className="flex flex-col items-center gap-1">
+                <div className="w-2/5">{buildUpRoom}</div>
                 <div className="h-3.5 w-full rounded-full border-2 border-accent bg-accent" />
               </div>
-              <div className="flex-[2]">{buildUpRoom}</div>
-            </div>
+            ) : (
+              <div data-testid="complete-build-up" data-layout="side" aria-hidden="true" className="flex items-end gap-3">
+                <div className="flex-[3] pb-1">
+                  <div className="h-3.5 w-full rounded-full border-2 border-accent bg-accent" />
+                </div>
+                <div className="flex-[2]">{buildUpRoom}</div>
+              </div>
+            )
           ) : (
           <div aria-hidden="true" className="flex flex-col gap-1">
             {finishedHome && finishedHome.length > 0 && (

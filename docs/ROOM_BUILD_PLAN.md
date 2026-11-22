@@ -26,6 +26,12 @@ Part of making the Quick Quiz less boring (team feedback). Earlier versions put 
 - **The same split on phones and computers.** On a phone the room is about 140px wide.
 - **Screen readers** hear "Question N of M" (visually hidden), as in the other versions. The room is decoration: hidden from screen readers.
 
+### Second layout: the room centred above the bar (2026-11-22)
+Jaida asked to try the room **centred above a full-width bar**, like the "middle" single-room version. Both layouts are kept, chosen by the same setting:
+- **"build-up"** (first layout): the shorter bar (about 60%) beside the room (about 40%).
+- **"build-up-middle"** (second layout, on now): the bar back to **full width**, with the room **centred above it** at the same size (about 40% of the width).
+Everything else is the same: the pieces, the order, the motion and screen readers. On the result, the complete room sits centred above the full bar.
+
 ### The room builds up
 - **Question 1:** the empty room (wall and floor).
 - **Each finished screen adds one piece.** Question 2 shows the rug, question 3 adds the big shelf, and so on.
@@ -109,6 +115,11 @@ Work test-first: for each step that changes what shows, write the failing test, 
 ### Phase 4: The result
 - [x] The result's 100% bar keeps the 60/40 layout, with the complete room; the last piece pops in
   - Tests: the result shows all 13 pieces; the room is hidden from screen readers
+
+### Second layout steps
+- [x] "build-up-middle": the room centred above a full-width bar, building up the same way; on the result, the complete room centred above the full bar
+  - Tests: the room comes before the bar, centred, with the bar full width; none on question 1 and four on question 5; hidden from screen readers; the result uses the centred layout
+- [ ] Jaida compares the two layouts (beside, or above) and picks one
 
 ### Phase 5: Checks
 - [x] Every existing quiz test still passes

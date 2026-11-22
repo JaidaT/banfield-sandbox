@@ -75,6 +75,45 @@ describe('the room that builds, on the question screens', () => {
   })
 })
 
+// Jaida, 2026-11-22: the room centred above a full-width bar.
+describe('the room that builds, centred above the bar (build-up-middle)', () => {
+  const above = (number: number) => render(<RoomProgressBar place={{ number, total }} stepId="any" placement="build-up-middle" />)
+
+  test('the room sits above the bar, centred, and the bar is full width', () => {
+    above(3)
+    const layout = screen.getByTestId('build-up-row')
+    expect(layout.dataset.placement).toBe('build-up-middle')
+    const roomBox = room().parentElement!
+    const barBox = screen.getByTestId('progress-fill').parentElement!.parentElement!
+    // The room comes first (above), then the bar.
+    expect(roomBox.compareDocumentPosition(barBox) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(roomBox.dataset.position).toBe('centred')
+    expect(barBox.dataset.position).toBe('full-width')
+  })
+
+  test('it builds up the same way: none on question 1, four on question 5', () => {
+    above(1)
+    expect(shownPieces()).toEqual([])
+    cleanup()
+    above(5)
+    expect(shownPieces()).toEqual(build.pieces.slice(0, 4).map((p) => p.file))
+  })
+
+  test('hidden from screen readers, who hear "Question N of M"', () => {
+    above(2)
+    expect(room().closest('[aria-hidden="true"]')).not.toBeNull()
+    expect(screen.getByText(`Question 2 of ${total}`)).toBeDefined()
+  })
+
+  test('the result shows the complete room centred above the full bar', () => {
+    const sample = loadSampleSubmissions()[0]
+    const result = buildClientResult(sample, clientCopy, designDnaFor(sample, quizData))
+    render(<ClientResultView result={result} complete buildUpRoom={<BuildUpRoom shownCount={build.pieces.length} popLast />} buildUpLayout="above" />)
+    expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
+    expect(screen.getByTestId('complete-build-up').dataset.layout).toBe('above')
+  })
+})
+
 describe('the room that builds, in the quiz', () => {
   function renderQuiz(startAt: string) {
     render(<QuizForm questionnaire={quizQuestionnaire(questions, form)} quizData={quizData} clientCopy={clientCopy} startAt={startAt} />)
@@ -106,6 +145,7 @@ describe('the complete room on the result', () => {
 
   test('all 13 pieces show, the last one popping in, hidden from screen readers', () => {
     render(<ClientResultView result={result} complete buildUpRoom={<BuildUpRoom shownCount={build.pieces.length} popLast />} />)
+    expect(screen.getByTestId('complete-build-up').dataset.layout).toBe('side')
     expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
     expect(pieceImages().at(-1)!.className).toContain('piece-pop')
     expect(room().closest('[aria-hidden="true"]')).not.toBeNull()
