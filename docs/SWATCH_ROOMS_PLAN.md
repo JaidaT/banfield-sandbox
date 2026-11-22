@@ -2,7 +2,7 @@
 
 **For:** Claude and Jaida. Behaviour first, so it also works in another repo; sandbox files and branches are in "In the sandbox" at the end.
 
-**Status:** being built in the sandbox (ticked steps).
+**Status:** built in the sandbox on 2026-11-22; Jaida's phone check is still open.
 
 **Builds on:** `SWATCH_CARDS_PLAN.md` (the card stack, pencil choices, the fall and "Calculating") and `ROOM_BUILD_PLAN.md` (the room that builds, "build-up-middle" layout). Everything in those plans still applies unless this file says otherwise.
 
@@ -29,7 +29,7 @@ Top to bottom on every question card:
 ## The ending
 
 1. "See my results": the cards fall away, as now.
-2. **The room and the bar stay at the top.** The bar fills to 100%, and the **last piece (the plants) pops in**, completing the room, while "Calculating your Design DNA . . ." shows below.
+2. **The room and the bar stay at the top.** The bar shows 100% (built: it appears full, rather than filling up), and the **last piece (the plants) pops in**, completing the room, while "Calculating your Design DNA . . ." shows below.
 3. After 2 seconds the result appears: the complete room centred above the full bar (no second pop), then the result as now.
 
 With reduced motion: the plants fade in, and the bar does not animate.
@@ -49,23 +49,23 @@ Work test-first; motion and looks are checked by eye.
   - Tests: the piece list's existing tests pass here
 
 ### Phase 2: The room and bar on the cards
-- [ ] The card screen shows, in order: the room (centred), the room version's bar (full width, no percentage, "Question N of M" for screen readers), then the card stack
-- [ ] The room has the earned pieces for the current card: none on question 1, 12 on the contact card
-- [ ] About 25% wide on a phone, 40% on a computer
+- [x] The card screen shows, in order: the room (centred), the room version's bar (full width, no percentage, "Question N of M" for screen readers), then the card stack
+- [x] The room has the earned pieces for the current card: none on question 1, 12 on the contact card
+- [x] About 25% wide on a phone, 40% on a computer
   - Tests: question 1 shows only the empty room; question 5 shows four pieces; the contact card shows 12; no percentage text; "Question N of M" is there; the room comes before the bar, and the bar before the card; the room is hidden from screen readers
 
 ### Phase 3: Moving between cards
-- [ ] Next adds one piece and Back removes one, while the cards move; the room's pictures stay the same on the page
+- [x] Next adds one piece and Back removes one, while the cards move; the room's pictures stay the same on the page
   - Tests: Next adds exactly one shown piece, Back removes one, and no room picture is re-added; a second tap during a card move still does nothing
 
 ### Phase 4: The ending
-- [ ] During "Calculating your Design DNA", the room and the full bar stay at the top and the plants pop in
-- [ ] The result shows the complete room centred above the full bar, with no second pop
+- [x] During "Calculating your Design DNA", the room and the full bar stay at the top and the plants pop in
+- [x] The result shows the complete room centred above the full bar, with no second pop
   - Tests: during calculating, all 13 pieces show and the plants have the pop-in; the result shows all 13 pieces with no pop-in; the calculating pause and result tests from the swatch cards still pass
 
 ### Phase 5: Checks
-- [ ] Every existing test still passes
-- [ ] Type check, lint, tests and build: all pass
+- [x] Every existing test still passes
+- [x] Type check, lint, tests and build: all pass
 - [ ] Jaida tries it on a phone (does everything fit?) and a computer, with reduced motion, and on the stand-in website
 
 ## Decisions (2026-11-22)

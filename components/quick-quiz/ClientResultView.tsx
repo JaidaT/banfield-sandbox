@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import type { Ref } from 'react'
+import type { ReactNode, Ref } from 'react'
 import type { ClientResult } from '@/lib/quick-quiz/types'
 
 interface Props {
@@ -10,6 +10,9 @@ interface Props {
   // Shows "Questionnaire complete 100%" on top: on the quiz, not on the team's
   // sample result pages.
   complete?: boolean
+  // The complete room that builds, centred above the complete bar
+  // (docs/SWATCH_ROOMS_PLAN.md).
+  room?: ReactNode
   // Put on the main heading, so the quiz can move the cursor there.
   headingRef?: Ref<HTMLHeadingElement>
 }
@@ -19,7 +22,7 @@ const LABEL = 'text-xs font-semibold uppercase tracking-widest'
 
 // Client-facing, laid out like the team's mockup (2026-11-13). Receives only
 // ClientResult, which has no client type or fit data.
-export default function ClientResultView({ result, embedded = false, complete = false, headingRef }: Props) {
+export default function ClientResultView({ result, embedded = false, complete = false, room, headingRef }: Props) {
   const Outer = embedded ? 'section' : 'main'
   const dnaHeadingId = useId()
   const helpHeadingId = useId()
@@ -36,7 +39,10 @@ export default function ClientResultView({ result, embedded = false, complete = 
             <p>{result.completeLabel}</p>
             <p>100%</p>
           </div>
-          <div className="h-2 w-full rounded-full bg-accent" aria-hidden="true" />
+          <div aria-hidden="true" className="flex flex-col items-center gap-1">
+            {room ? <div className="w-1/4 sm:w-2/5">{room}</div> : null}
+            <div data-testid="progress-fill" style={{ width: '100%' }} className="h-3.5 w-full rounded-full border-2 border-accent bg-accent" />
+          </div>
         </div>
       )}
 

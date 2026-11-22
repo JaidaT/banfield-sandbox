@@ -4,6 +4,9 @@ import { createContext, use, useEffect, useRef, useState } from 'react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
 import SwatchCardScreen from '@/components/quick-quiz/SwatchCardScreen'
+import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
+import RoomAndBar from '@/components/quick-quiz/RoomAndBar'
+import { loadRoomBuild } from '@/lib/quick-quiz/roomBuild'
 import { CALCULATING_MS } from '@/components/quick-quiz/motion'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
 import type { DoneScreenProps } from '@/components/form/QuestionnaireForm'
@@ -34,6 +37,9 @@ interface QuizSetup {
   startedAt: number | null
 }
 const QuizContext = createContext<QuizSetup | null>(null)
+
+// Every piece of the room that builds (docs/SWATCH_ROOMS_PLAN.md).
+const ALL_PIECES = loadRoomBuild().pieces.length
 
 // The Quick Quiz: the shared form's screens (one question per screen, contact
 // last, no review screen), ending on the quiz's own result screen.
@@ -103,30 +109,35 @@ function QuizResults({ answers }: DoneScreenProps) {
   if (calculating) return <Calculating />
   return (
     <div className="result-reveal">
-      <ClientResultView result={result} embedded complete headingRef={resultHeading} />
+      <ClientResultView result={result} embedded complete room={<BuildUpRoom shownCount={ALL_PIECES} />} headingRef={resultHeading} />
     </div>
   )
 }
 
 // "Calculating your Design DNA" with dots appearing one by one (still with
 // reduced motion), while the cards fall out of the quiz's area behind it.
+// The room and the full bar stay at the top, and the last piece (the plants)
+// pops in, completing the room (docs/SWATCH_ROOMS_PLAN.md).
 function Calculating() {
   return (
-    <div className="relative flex min-h-96 flex-1 flex-col items-center justify-center overflow-hidden">
-      <div data-testid="falling-cards" aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-80">
-        <div className="card-fall absolute inset-x-4 top-0 h-72 rounded-2xl border-2 border-[var(--line)] bg-white [animation-delay:60ms]" />
-        <div className="card-fall absolute inset-x-0 top-10 h-72 overflow-hidden rounded-2xl border-2 border-[var(--line)] bg-white">
-          <div className="h-16 bg-accent" />
+    <div className="flex flex-1 flex-col gap-4">
+      <RoomAndBar shownCount={ALL_PIECES} percent={100} popLast />
+      <div className="relative flex min-h-80 flex-1 flex-col items-center justify-center overflow-hidden">
+        <div data-testid="falling-cards" aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-80">
+          <div className="card-fall absolute inset-x-4 top-0 h-72 rounded-2xl border-2 border-[var(--line)] bg-white [animation-delay:60ms]" />
+          <div className="card-fall absolute inset-x-0 top-10 h-72 overflow-hidden rounded-2xl border-2 border-[var(--line)] bg-white">
+            <div className="h-16 bg-accent" />
+          </div>
         </div>
+        <p role="status" className="calculating text-center text-xl font-bold text-charcoal">
+          Calculating your Design DNA
+          <span aria-hidden="true" className="calc-dots">
+            <span> .</span>
+            <span> .</span>
+            <span> .</span>
+          </span>
+        </p>
       </div>
-      <p role="status" className="calculating text-center text-xl font-bold text-charcoal">
-        Calculating your Design DNA
-        <span aria-hidden="true" className="calc-dots">
-          <span> .</span>
-          <span> .</span>
-          <span> .</span>
-        </span>
-      </p>
     </div>
   )
 }

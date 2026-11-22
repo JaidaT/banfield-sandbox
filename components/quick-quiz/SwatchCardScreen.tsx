@@ -2,11 +2,12 @@
 
 import { useEffect, useId, useState } from 'react'
 import type { CSSProperties } from 'react'
-import ProgressBar from '@/components/form/ProgressBar'
 import QuestionInput from '@/components/form/QuestionInput'
 import type { StepScreenProps } from '@/components/form/StepScreen'
 import { BUTTON, BUTTON_MAIN } from '@/components/form/styles'
 import PencilChoices from '@/components/quick-quiz/PencilChoices'
+import RoomAndBar from '@/components/quick-quiz/RoomAndBar'
+import { percentDone } from '@/lib/form/navigation'
 import { REDUCED_FADE_MS, moveLength } from '@/components/quick-quiz/motion'
 
 type Direction = 'forward' | 'back'
@@ -35,7 +36,7 @@ const CARD = 'overflow-hidden rounded-2xl border-2 border-[var(--line)] bg-white
 // the next card peeking about 40px above. Next, Back and the peeking card move
 // the stack; while a move plays, further taps are ignored.
 export default function SwatchCardScreen(props: StepScreenProps) {
-  const { step, answers, problems, place, progressAs, isLast, lastLabel, onAnswer, onNext, onBack, headingRef } = props
+  const { step, answers, problems, place, isLast, lastLabel, onAnswer, onNext, onBack, headingRef } = props
   const headingId = useId()
   const stepId = step.step.id
   const number = place?.number ?? 0
@@ -84,7 +85,11 @@ export default function SwatchCardScreen(props: StepScreenProps) {
 
   return (
     <>
-      {place ? <ProgressBar place={place} progressAs={progressAs} /> : null}
+      {/* The room that builds above the bar: one piece per finished card
+          (docs/SWATCH_ROOMS_PLAN.md). It stays still while the cards move. */}
+      {place ? (
+        <RoomAndBar shownCount={place.number - 1} percent={percentDone(place)} label={`Question ${place.number} of ${place.total}`} />
+      ) : null}
 
       <div className="swatch-stack relative pt-[var(--peek)]">
         {!isLast && (

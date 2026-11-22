@@ -55,9 +55,9 @@ describe('swatch cards: the card and the stack', () => {
     expect(within(activeCard()).getByRole('heading', { level: 2 }).textContent).toBe(questions[0].prompt)
   })
 
-  test('the progress percentage sits above the card', () => {
+  test('the progress sits above the card', () => {
     renderQuiz({ startAt: questions[0].id })
-    const percent = screen.getByText('0%')
+    const percent = screen.getByTestId('progress-fill')
     expect(percent.compareDocumentPosition(activeCard()) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
