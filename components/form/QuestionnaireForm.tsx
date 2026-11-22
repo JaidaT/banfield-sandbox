@@ -46,6 +46,10 @@ interface Props {
   // not when the page opens or Next is blocked. The Quick Quiz uses it to tell
   // the website around its iframe to scroll to the top of the quiz.
   onScreenChange?: () => void
+  // Move the cursor to a new screen's heading without the browser's own
+  // scroll to it; the product scrolls instead (the Quick Quiz keeps its room
+  // in view, docs/SWATCH_ROOMS_PLAN.md). Left out: the browser scrolls.
+  focusWithoutScroll?: boolean
 }
 
 export interface DoneScreenProps {
@@ -60,7 +64,7 @@ export interface DoneScreenProps {
 // screen passed in as doneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange, stepScreen: Step = StepScreen }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange, focusWithoutScroll = false, stepScreen: Step = StepScreen }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -84,9 +88,10 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   // on a phone and tells screen readers the screen changed.
   useEffect(() => {
     if (!hasMoved.current) return
-    headingRef.current?.focus()
+    if (focusWithoutScroll) headingRef.current?.focus({ preventScroll: true })
+    else headingRef.current?.focus()
     screenChanged()
-  }, [current])
+  }, [current, focusWithoutScroll])
 
   // After a blocked Next, put the cursor in the first box with a problem
   // The browsers scrolls to it, and screen readers read out its message

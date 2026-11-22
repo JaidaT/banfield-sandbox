@@ -129,6 +129,27 @@ describe('QuestionnaireForm: a custom question screen (stepScreen)', () => {
   })
 })
 
+// Swatch rooms (2026-11-22): the Quick Quiz moves the cursor without the
+// browser's own scroll, then scrolls itself so the room stays in view.
+describe('QuestionnaireForm: focusWithoutScroll', () => {
+  test('with it, the new heading gets the cursor without the browser scrolling to it', () => {
+    const focus = vi.spyOn(HTMLElement.prototype, 'focus')
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} focusWithoutScroll />)
+    click("Let's start")
+    expect(document.activeElement).toBe(screen.getByRole('heading', { level: 2 }))
+    expect(focus).toHaveBeenLastCalledWith({ preventScroll: true })
+    focus.mockRestore()
+  })
+
+  test('without it, the browser scrolls to the new heading as before', () => {
+    const focus = vi.spyOn(HTMLElement.prototype, 'focus')
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} />)
+    click("Let's start")
+    expect(focus).toHaveBeenLastCalledWith()
+    focus.mockRestore()
+  })
+})
+
 describe('QuestionnaireForm: onStart', () => {
   test('is called once when "Let\'s start" is pressed, not when the page opens or on later steps', () => {
     const onStart = vi.fn()

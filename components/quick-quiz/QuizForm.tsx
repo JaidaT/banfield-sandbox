@@ -57,6 +57,18 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
   // new screen shows (DECISIONS.md 2026-11-15). On its own page it does nothing.
   const wrapper = useRef<HTMLDivElement>(null)
   const notifyNewScreen = useEmbedBridge(wrapper)
+  // After each move: tell the website around the iframe, or, on the quiz's
+  // own page, scroll the quiz's top (the room) into view if it is above the
+  // screen. On a short phone the room otherwise ended up scrolled out of view
+  // above the new question (Jaida, 2026-11-22).
+  const afterMove = () => {
+    notifyNewScreen()
+    if (window.parent !== window) return // the website's script scrolls instead
+    const top = wrapper.current?.getBoundingClientRect().top
+    if (top === undefined || top >= 0) return
+    const reduce = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: window.scrollY + top, behavior: reduce ? 'auto' : 'smooth' })
+  }
   return (
     <QuizContext value={{ quizData, clientCopy, startedAt }}>
       {/* flex-1 keeps the page filling the window, as before. */}
@@ -69,7 +81,8 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
           progressAs="percent"
           look="quick-quiz"
           onStart={start}
-          onScreenChange={notifyNewScreen}
+          onScreenChange={afterMove}
+          focusWithoutScroll
           stepScreen={SwatchCardScreen}
           doneScreen={QuizResults}
         />
