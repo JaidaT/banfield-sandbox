@@ -240,3 +240,15 @@ label:has(:checked) > .pencil-oval path { animation: pencil-draw 300ms ease-out;
   .piece-pop { animation: room-piece-fade 150ms ease-out both; }
 }
 @keyframes room-piece-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Short screens, 700px tall or less (Jaida tested on a 667px phone,
+   2026-11-22; docs/SWATCH_ROOMS_PLAN.md): a compact Quick Quiz so the room,
+   bar, card and buttons fit better. Taller screens are unchanged. These
+   rules sit outside Tailwind's layers, so they win over its classes. */
+@media (max-height: 700px) {
+  .swatch-stack { --peek: 16px; }
+  .quick-quiz main { row-gap: 0.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  .card-strip { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  .card-question { font-size: 1rem; line-height: 1.35; }
+  .card-buttons { padding-top: 0.5rem; }
+}

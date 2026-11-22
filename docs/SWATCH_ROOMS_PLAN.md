@@ -26,6 +26,8 @@ Top to bottom on every question card:
 - **The strip colour is switchable** (Jaida, 2026-11-22): `"strip"` in `data/quick-quiz/swatch-cards.json` is `"yellow"` (the brand yellow, dark text) or `"navy"` (the brand navy with off-white question and help text; on now). The leaving card and the cards falling away at the end match it.
 - **The progress bar** is the room version's bar: full width, white track, yellow outline, yellow fill, no percentage text; screen readers hear "Question N of M". It replaces the swatch cards' grey bar with "N%".
 - **Size:** about **25% of the width on a phone** (smaller than `"build-up-middle"`, so the room, bar, card and buttons still fit on one screen) and **40% on a computer**. Tune by eye.
+- **Short screens (700px tall or less)** get a compact layout (Jaida tested on a 667px phone, 2026-11-22): the next card peeks about 16px instead of 32px, a smaller question with less padding in the strip, and less space between the room, bar, card and buttons (about 50px saved in all). The room's size and the 44px answer rows stay. Taller screens are unchanged.
+- **After each move, the room stays in view.** Found in testing: moving the cursor to the new question made the browser scroll just enough to show it, leaving the room scrolled out of view above. Now the cursor moves without that scroll, and the quiz scrolls its own top (the room) into view if it is above the screen. Inside the website's iframe, the website's script does the scrolling instead.
 - **The cards** work exactly as in `SWATCH_CARDS_PLAN.md`. The room and bar stay still while the cards swing and slide.
 
 ## The ending
@@ -72,6 +74,9 @@ Work test-first; motion and looks are checked by eye.
   - Tests: no empty room on the cards, during "Calculating" or on the result
 - [x] A strip colour setting: yellow, or navy with off-white text (on now)
   - Tests: the real file uses navy; yellow and navy load, yellow by default, anything else is refused; the card strip is navy with off-white question and help; the falling card matches
+- [x] After each move, keep the room in view: move the cursor without the browser's scroll, then scroll the quiz's top into view if needed (not inside the iframe)
+  - Tests: the cursor still moves to the new question; the quiz scrolls when its top is above the screen and not when it is in view; other forms still let the browser scroll
+- [x] A compact layout for screens 700px tall or less: smaller peek, strip and gaps
 - [ ] Jaida tries it on a phone (does everything fit?) and a computer, with reduced motion, and on the stand-in website
 
 ## Decisions (2026-11-22)

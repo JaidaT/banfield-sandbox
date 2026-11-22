@@ -27,7 +27,9 @@ interface Leaving {
 // card shows; the card moves in app/globals.css use it too.
 
 // The Back and Next row, a little closer to the card on a phone.
-const CARD_BUTTON_ROW = 'mt-auto flex gap-3 pt-4 sm:pt-6 [&>button]:flex-1'
+// card-buttons, card-strip and card-question: tightened on short screens
+// (app/globals.css, "short screens").
+const CARD_BUTTON_ROW = 'card-buttons mt-auto flex gap-3 pt-4 sm:pt-6 [&>button]:flex-1'
 
 // The card's shape: rounded, a thin light-grey border, white.
 const CARD = 'overflow-hidden rounded-2xl border-2 border-[var(--line)] bg-white'
@@ -127,8 +129,8 @@ export default function SwatchCardScreen(props: StepScreenProps) {
           style={timing}
           className={`relative z-10 ${CARD} ${enter}`}
         >
-          <div data-testid="card-strip" data-strip={STRIP_COLOUR} className={`flex flex-col gap-1 px-4 py-3 sm:px-8 sm:py-6 ${STRIP.strip}`}>
-            <h2 ref={headingRef} id={headingId} tabIndex={-1} className={`text-lg font-bold leading-snug outline-none sm:text-xl ${STRIP.question}`}>
+          <div data-testid="card-strip" data-strip={STRIP_COLOUR} className={`card-strip flex flex-col gap-1 px-4 py-3 sm:px-8 sm:py-6 ${STRIP.strip}`}>
+            <h2 ref={headingRef} id={headingId} tabIndex={-1} className={`card-question text-lg font-bold leading-snug outline-none sm:text-xl ${STRIP.question}`}>
               {step.step.title}
             </h2>
             {stripHelp ? (
