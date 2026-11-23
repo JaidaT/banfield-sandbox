@@ -91,7 +91,9 @@ export default function SwatchCardScreen(props: StepScreenProps) {
       {/* The room that builds above the bar: one piece per finished card
           (docs/SWATCH_ROOMS_PLAN.md). It stays still while the cards move. */}
       {place ? (
-        <RoomAndBar shownCount={place.number - 1} percent={percentDone(place)} label={`Question ${place.number} of ${place.total}`} />
+        // The room starts with the rug on question 1 and gains a piece per card,
+        // so the contact card shows all 13 (Jaida, 2026-11-22).
+        <RoomAndBar shownCount={place.number} percent={percentDone(place)} label={`Question ${place.number} of ${place.total}`} />
       ) : null}
 
       <div className="swatch-stack relative pt-[var(--peek)]">

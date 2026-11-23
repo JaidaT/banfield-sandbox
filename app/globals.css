@@ -262,3 +262,10 @@ label:has(:checked) > .pencil-oval path { animation: pencil-draw 300ms ease-out;
 @media (min-width: 640px) {
   [data-embedded] [data-embed-min] main:not(:has([data-screen="welcome"])) { min-height: var(--embed-min-computer); }
 }
+
+/* On the result, the walls and floor fade in behind the furniture: the
+   finishing touch (Jaida, 2026-11-22). */
+.base-arrive { animation: room-piece-fade 500ms ease-out 300ms both; }
+@media (prefers-reduced-motion: reduce) {
+  .base-arrive { animation-duration: 150ms; animation-delay: 0ms; }
+}

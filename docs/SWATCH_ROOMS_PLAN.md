@@ -22,7 +22,8 @@ Top to bottom on every question card:
 ```
 
 - **The room** sits centred above the bar, building up as in `"build-up-middle"`: one piece per finished screen, each piece growing from its own centre; Back shrinks the last piece away; a fade with reduced motion.
-- **No empty room behind the pieces** (Jaida, 2026-11-22): `00-base.svg` is left out on the cards, during "Calculating" and on the result, so only the furniture shows. Nothing shows above the bar on question 1; the rug arrives on question 2.
+- **The order is shifted** (Jaida, 2026-11-22): the room **starts with the rug** on question 1 and gains one piece per card, so the contact card shows all 13 pieces (plants included) and nothing new arrives during "Calculating". **The walls and floor (`00-base.svg`) are the finishing touch on the result**: they fade in behind the furniture (about 500 ms; a quick fade with reduced motion). This replaces "the plants pop in during Calculating" below.
+- **No empty room behind the pieces** (Jaida, 2026-11-22): `00-base.svg` is left out on the cards and during "Calculating", so only the furniture shows; it arrives on the result (see above).
 - **The strip colour is switchable** (Jaida, 2026-11-22): `"strip"` in `data/quick-quiz/swatch-cards.json` is `"yellow"` (the brand yellow, dark text) or `"navy"` (the brand navy with off-white question and help text; on now). The leaving card and the cards falling away at the end match it.
 - **The progress bar** is the room version's bar: full width, white track, yellow outline, yellow fill, no percentage text; screen readers hear "Question N of M". It replaces the swatch cards' grey bar with "N%".
 - **Size:** about **25% of the width on a phone** (smaller than `"build-up-middle"`, so the room, bar, card and buttons still fit on one screen) and **40% on a computer**. Tune by eye.
@@ -84,6 +85,8 @@ Work test-first; motion and looks are checked by eye.
   - Tests: with a mouse, neither the quiz nor the website script scrolls; on a touch screen both still do
 - [x] The welcome screen keeps its own height in the iframe (measured in Chrome: 258px on a phone, 230px on a computer; the cards stay at the minimum)
   - Tests: the welcome screen carries the mark; question cards do not
+- [x] Start with the rug; the walls and floor fade in behind the furniture on the result; nothing new during "Calculating"
+  - Tests: question 1 shows the rug, question 5 five pieces, the contact card all 13 with no walls and floor; nothing pops during "Calculating"; the result adds the walls and floor behind the pieces with the fade-in
 - [ ] Jaida tries it on a phone (does everything fit?) and a computer, with reduced motion, and on the stand-in website
 
 ## Decisions (2026-11-22)

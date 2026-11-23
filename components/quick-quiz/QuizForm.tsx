@@ -134,7 +134,7 @@ function QuizResults({ answers }: DoneScreenProps) {
   if (calculating) return <Calculating />
   return (
     <div className="result-reveal">
-      <ClientResultView result={result} embedded complete room={<BuildUpRoom shownCount={ALL_PIECES} showBase={false} />} headingRef={resultHeading} />
+      <ClientResultView result={result} embedded complete room={<BuildUpRoom shownCount={ALL_PIECES} baseArrives />} headingRef={resultHeading} />
     </div>
   )
 }
@@ -146,7 +146,7 @@ function QuizResults({ answers }: DoneScreenProps) {
 function Calculating() {
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <RoomAndBar shownCount={ALL_PIECES} percent={100} popLast />
+      <RoomAndBar shownCount={ALL_PIECES} percent={100} />
       <div className="relative flex min-h-80 flex-1 flex-col items-center justify-center overflow-hidden">
         <div data-testid="falling-cards" aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-80">
           <div className="card-fall absolute inset-x-4 top-0 h-72 rounded-2xl border-2 border-[var(--line)] bg-white [animation-delay:60ms]" />

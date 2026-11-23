@@ -31,17 +31,20 @@ afterEach(() => {
 })
 
 describe('the room and bar on the swatch cards', () => {
-  // Jaida, 2026-11-22: only the pieces, without the empty room behind them.
-  test('no empty room behind the pieces: question 1 shows nothing yet; question 5 four pieces; the contact card twelve', () => {
+  // Jaida, 2026-11-22: the room starts with the rug, and the walls and floor
+  // only arrive on the result.
+  test('question 1 shows the rug; question 5 five pieces; the contact card all thirteen; no walls and floor yet', () => {
     renderQuiz(questions[0].id)
     expect(room().querySelector('img[data-base]')).toBeNull()
-    expect(shownPieces()).toEqual([])
+    expect(shownPieces()).toEqual([build.pieces[0].file])
+    expect(build.pieces[0].name).toBe('Rug')
     cleanup()
     renderQuiz(questions[4].id)
-    expect(shownPieces()).toEqual(build.pieces.slice(0, 4).map((p) => p.file))
+    expect(shownPieces()).toEqual(build.pieces.slice(0, 5).map((p) => p.file))
     cleanup()
     renderQuiz('contact')
-    expect(shownPieces()).toHaveLength(12)
+    expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
+    expect(room().querySelector('img[data-base]')).toBeNull()
   })
 
   test('top to bottom: the room, the bar, then the card', () => {
@@ -64,9 +67,9 @@ describe('the room and bar on the swatch cards', () => {
     renderQuiz(questions[2].id)
     const before = pieceImages()
     click('Next')
-    expect(shownPieces()).toHaveLength(3)
+    expect(shownPieces()).toHaveLength(4)
     click('Back')
-    expect(shownPieces()).toHaveLength(2)
+    expect(shownPieces()).toHaveLength(3)
     pieceImages().forEach((img, i) => expect(img).toBe(before[i]))
   })
 
@@ -76,24 +79,24 @@ describe('the room and bar on the swatch cards', () => {
     renderQuiz(questions[2].id)
     click('Next')
     click('Next')
-    expect(shownPieces()).toHaveLength(3)
+    expect(shownPieces()).toHaveLength(4)
   })
 })
 
 describe('the ending', () => {
-  test('during "Calculating", the room and full bar stay at the top and the plants pop in', () => {
+  test('during "Calculating", the room and full bar stay at the top, with nothing new arriving', () => {
     vi.useFakeTimers()
     renderQuiz('contact')
     click('See my results')
     expect(screen.getByRole('status').textContent).toContain('Calculating your Design DNA')
     expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
-    expect(pieceImages().at(-1)!.className).toContain('piece-pop')
+    for (const img of pieceImages()) expect(img.className).not.toContain('piece-pop')
     expect(room().querySelector('img[data-base]')).toBeNull()
     expect(screen.getByTestId('progress-fill').style.width).toBe('100%')
     expect(room().compareDocumentPosition(screen.getByRole('status')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
-  test('the result shows the complete room above the full bar, with no second pop', () => {
+  test('the result adds the walls and floor behind the furniture, fading in, above the full bar', () => {
     vi.useFakeTimers()
     renderQuiz('contact')
     click('See my results')
@@ -101,7 +104,11 @@ describe('the ending', () => {
     expect(screen.getByRole('heading', { name: "You're all done!" })).toBeDefined()
     expect(shownPieces()).toEqual(build.pieces.map((p) => p.file))
     for (const img of pieceImages()) expect(img.className).not.toContain('piece-pop')
-    expect(room().querySelector('img[data-base]')).toBeNull()
+    const base = room().querySelector<HTMLImageElement>('img[data-base]')!
+    expect(base.getAttribute('src')).toBe(build.base)
+    expect(base.className).toContain('base-arrive')
+    // Behind the furniture: first in the room, so the pieces are drawn on top.
+    expect(room().querySelector('img')).toBe(base)
     expect(room().compareDocumentPosition(screen.getByTestId('progress-fill')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     expect(room().closest('[aria-hidden="true"]')).not.toBeNull()
   })
