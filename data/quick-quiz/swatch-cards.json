@@ -2,11 +2,11 @@
   "_meta": {
     "purpose": "Look settings for the Quick Quiz swatch cards (docs/SWATCH_ROOMS_PLAN.md).",
     "strip": "The colour of the strip holding the question: 'yellow' (the brand yellow with dark text) or 'navy' (the brand navy with off-white text, Jaida 2026-11-22). Switch here to compare; save and refresh the page.",
-    "embedMinHeight": "Inside the website's iframe only (/embed-test), the quiz is at least this tall, in pixels: 'phone' below 640px wide, 'computer' from 640px wide. Shorter cards leave space above the buttons instead of shrinking the iframe (Jaida, 2026-11-22). Set to null to let the iframe fit each card again. Starting values estimated from the tallest card; tune by eye."
+    "embedMinHeight": "Inside the website's iframe only (/embed-test), the quiz is at least this tall, in pixels: 'phone' below 640px wide, 'computer' from 640px wide. Shorter cards leave space above the buttons instead of shrinking the iframe (Jaida, 2026-11-22). Set to null to let the iframe fit each card again. Set just above the tallest card, measured in Chrome on 2026-11-22: 668px on a 375px-wide phone, 951px on a computer (the iframe 736px wide). Narrower phones wrap more text, so their cards are taller."
   },
   "strip": "navy",
   "embedMinHeight": {
-    "phone": 640,
-    "computer": 900
+    "phone": 680,
+    "computer": 960
   }
 }
