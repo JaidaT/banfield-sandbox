@@ -1,5 +1,6 @@
 'use client'
 
+import type { CSSProperties } from 'react'
 import { createContext, use, useEffect, useRef, useState } from 'react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
@@ -7,6 +8,7 @@ import SwatchCardScreen from '@/components/quick-quiz/SwatchCardScreen'
 import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
 import RoomAndBar from '@/components/quick-quiz/RoomAndBar'
 import { STRIP } from '@/components/quick-quiz/stripStyles'
+import { loadSwatchLook } from '@/lib/quick-quiz/swatchLook'
 import { loadRoomBuild } from '@/lib/quick-quiz/roomBuild'
 import { CALCULATING_MS } from '@/components/quick-quiz/motion'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
@@ -38,6 +40,13 @@ interface QuizSetup {
   startedAt: number | null
 }
 const QuizContext = createContext<QuizSetup | null>(null)
+
+// Inside the website's iframe, the quiz is at least this tall (null: it fits
+// each card). Used by the iframe rule in app/globals.css.
+const EMBED_MIN = loadSwatchLook().embedMinHeight
+const EMBED_MIN_STYLE = EMBED_MIN
+  ? ({ '--embed-min-phone': `${EMBED_MIN.phone}px`, '--embed-min-computer': `${EMBED_MIN.computer}px` } as CSSProperties)
+  : undefined
 
 // Every piece of the room that builds (docs/SWATCH_ROOMS_PLAN.md).
 const ALL_PIECES = loadRoomBuild().pieces.length
@@ -72,7 +81,7 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
   return (
     <QuizContext value={{ quizData, clientCopy, startedAt }}>
       {/* flex-1 keeps the page filling the window, as before. */}
-      <div ref={wrapper} className="flex flex-1 flex-col">
+      <div ref={wrapper} data-embed-min={EMBED_MIN ? '' : undefined} style={EMBED_MIN_STYLE} className="flex flex-1 flex-col">
         <QuestionnaireForm
           questionnaire={questionnaire}
           startAt={startAt}

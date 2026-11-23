@@ -34,6 +34,28 @@ describe('swatch-cards.json', () => {
   })
 })
 
+// Jaida, 2026-11-22: a minimum height for the quiz inside the website's
+// iframe, so the iframe does not grow and shrink with every card.
+describe('embedMinHeight', () => {
+  test('the real file sets a phone and a computer minimum', () => {
+    expect(loadSwatchLook().embedMinHeight).toEqual({ phone: 640, computer: 900 })
+  })
+
+  test('null or left out switches it off; anything but two positive numbers is refused', () => {
+    expect(parseSwatchLook({ embedMinHeight: null }).embedMinHeight).toBeNull()
+    expect(parseSwatchLook({}).embedMinHeight).toBeNull()
+    expect(() => parseSwatchLook({ embedMinHeight: { phone: 640 } })).toThrow(/embedMinHeight/)
+    expect(() => parseSwatchLook({ embedMinHeight: { phone: -1, computer: 900 } })).toThrow(/embedMinHeight/)
+  })
+
+  test('the quiz carries the two heights for the iframe rule to use', () => {
+    renderQuiz('confidence')
+    const quiz = document.querySelector<HTMLElement>('[data-embed-min]')!
+    expect(quiz.style.getPropertyValue('--embed-min-phone')).toBe('640px')
+    expect(quiz.style.getPropertyValue('--embed-min-computer')).toBe('900px')
+  })
+})
+
 describe('the navy strip', () => {
   test('the question card strip is navy, with off-white question and help text', () => {
     renderQuiz('confidence')
