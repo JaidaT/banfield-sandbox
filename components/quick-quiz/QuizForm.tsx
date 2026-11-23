@@ -69,10 +69,12 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
   // After each move: tell the website around the iframe, or, on the quiz's
   // own page, scroll the quiz's top (the room) into view if it is above the
   // screen. On a short phone the room otherwise ended up scrolled out of view
-  // above the new question (Jaida, 2026-11-22).
+  // above the new question (Jaida, 2026-11-22). Touch screens only: with a
+  // mouse or trackpad the page stays put (Jaida, 2026-11-22).
   const afterMove = () => {
     notifyNewScreen()
     if (window.parent !== window) return // the website's script scrolls instead
+    if (typeof window.matchMedia === 'function' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
     const top = wrapper.current?.getBoundingClientRect().top
     if (top === undefined || top >= 0) return
     const reduce = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches

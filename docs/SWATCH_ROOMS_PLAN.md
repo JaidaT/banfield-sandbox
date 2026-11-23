@@ -27,7 +27,7 @@ Top to bottom on every question card:
 - **The progress bar** is the room version's bar: full width, white track, yellow outline, yellow fill, no percentage text; screen readers hear "Question N of M". It replaces the swatch cards' grey bar with "N%".
 - **Size:** about **25% of the width on a phone** (smaller than `"build-up-middle"`, so the room, bar, card and buttons still fit on one screen) and **40% on a computer**. Tune by eye.
 - **Short screens (700px tall or less)** get a compact layout (Jaida tested on a 667px phone, 2026-11-22): the next card peeks about 16px instead of 32px, a smaller question with less padding in the strip, and less space between the room, bar, card and buttons (about 50px saved in all). The room's size and the 44px answer rows stay. Taller screens are unchanged.
-- **After each move, the room stays in view.** Found in testing: moving the cursor to the new question made the browser scroll just enough to show it, leaving the room scrolled out of view above. Now the cursor moves without that scroll, and the quiz scrolls its own top (the room) into view if it is above the screen. Inside the website's iframe, the website's script does the scrolling instead.
+- **After each move, the room stays in view.** Found in testing: moving the cursor to the new question made the browser scroll just enough to show it, leaving the room scrolled out of view above. Now the cursor moves without that scroll, and the quiz scrolls its own top (the room) into view if it is above the screen. Inside the website's iframe, the website's script does the scrolling instead. **Touch screens only** (Jaida, 2026-11-22): with a mouse or trackpad (the browser's "hover: hover and pointer: fine"), neither the quiz nor the website's script scrolls, so the page does not jump on a computer.
 - **Inside the website's iframe, a minimum height** (Jaida, 2026-11-22): the iframe fits the quiz's height, so it grew and shrank with every card (each has a different number of answers). With `"embedMinHeight"` in `data/quick-quiz/swatch-cards.json` (680px on a phone, 960px on a computer: just above the tallest card, 668px and 951px, measured in Chrome), the quiz is at least that tall inside the iframe, and shorter cards leave space above the buttons instead. `null` switches it off. The quiz on its own page is unchanged.
 - **The cards** work exactly as in `SWATCH_CARDS_PLAN.md`. The room and bar stay still while the cards swing and slide.
 
@@ -80,6 +80,8 @@ Work test-first; motion and looks are checked by eye.
 - [x] A compact layout for screens 700px tall or less: smaller peek, strip and gaps
 - [x] A minimum height inside the iframe, switchable (embedMinHeight)
   - Tests: the real file sets 680 and 960; null or left out switches it off; bad values are refused; the quiz carries the two heights for the iframe rule
+- [x] No automatic scrolling with a mouse or trackpad, on the quiz's own page and on the website; touch screens keep it
+  - Tests: with a mouse, neither the quiz nor the website script scrolls; on a touch screen both still do
 - [ ] Jaida tries it on a phone (does everything fit?) and a computer, with reduced motion, and on the stand-in website
 
 ## Decisions (2026-11-22)

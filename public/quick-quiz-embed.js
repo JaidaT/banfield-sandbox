@@ -8,7 +8,9 @@
  *   - its height: this script sets the iframe to that height, so there is no
  *     scroll box inside the page;
  *   - "new screen": this script scrolls the page so the top of the quiz sits
- *     just below the sticky header, but only if the top is out of view.
+ *     just below the sticky header, but only if the top is out of view, and
+ *     only on touch screens: with a mouse or trackpad the page stays put
+ *     (Jaida, 2026-11-22).
  *
  * The iframe needs a data-quick-quiz attribute:
  *   <iframe src="https://<quiz address>/quiz" data-quick-quiz title="Quick Quiz"></iframe>
@@ -50,7 +52,14 @@
     return header ? header.getBoundingClientRect().height : 0;
   }
 
+  // True when the device is used with a mouse or trackpad (a precise pointer
+  // that can hover), not a finger.
+  function usesMouse() {
+    return !!(window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+  }
+
   function scrollToQuiz(frame) {
+    if (usesMouse()) return;
     var gap = headerGap(frame);
     var top = frame.getBoundingClientRect().top;
     // Already in view, below the header: leave the page where it is.

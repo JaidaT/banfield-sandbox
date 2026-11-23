@@ -37,6 +37,17 @@ describe('scrolling after a move', () => {
     expect(scrollTo.mock.calls[0][0]).toMatchObject({ top: window.scrollY - 150 })
   })
 
+  // Jaida, 2026-11-22: no scrolling with a mouse or trackpad; touch screens keep it.
+  test('with a mouse or trackpad, nothing scrolls even when the room is above the screen', () => {
+    const scrollTo = vi.fn()
+    vi.stubGlobal('scrollTo', scrollTo)
+    vi.stubGlobal('matchMedia', (query: string) => ({ matches: query.includes('pointer: fine'), media: query, addEventListener() {}, removeEventListener() {} }))
+    renderQuiz(questions[2].id)
+    quizTopAt(-150)
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(scrollTo).not.toHaveBeenCalled()
+  })
+
   test('when the room is already in view, nothing scrolls', () => {
     const scrollTo = vi.fn()
     vi.stubGlobal('scrollTo', scrollTo)

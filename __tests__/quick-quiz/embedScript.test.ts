@@ -18,7 +18,13 @@ beforeAll(() => {
 afterEach(() => {
   document.body.innerHTML = ''
   vi.restoreAllMocks()
+  vi.unstubAllGlobals()
 })
+
+// Pretends the device is used with a mouse or trackpad (true) or a finger (false).
+function pointer(mouse: boolean) {
+  vi.stubGlobal('matchMedia', (query: string) => ({ matches: mouse && query.includes('pointer: fine'), media: query }))
+}
 
 // A page with an optional sticky header and the quiz's iframe.
 function page({ headerHeight, headerOffset }: { headerHeight?: number; headerOffset?: number } = {}) {
@@ -122,6 +128,25 @@ describe('quick-quiz-embed.js: new screen', () => {
     quizTopAt(iframe, 30)
     receive(newScreenMessage(), fromQuiz(iframe))
     expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ top: 1000 + 30 - 70 }))
+  })
+
+  // Jaida, 2026-11-22: no scrolling with a mouse or trackpad; touch screens keep it.
+  test('with a mouse or trackpad, a new screen does not scroll the page', () => {
+    pointer(true)
+    const iframe = page({ headerHeight: 70 })
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    quizTopAt(iframe, -400)
+    receive(newScreenMessage(), fromQuiz(iframe))
+    expect(scrollTo).not.toHaveBeenCalled()
+  })
+
+  test('on a touch screen, a new screen still scrolls', () => {
+    pointer(false)
+    const iframe = page({ headerHeight: 70 })
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    quizTopAt(iframe, -400)
+    receive(newScreenMessage(), fromQuiz(iframe))
+    expect(scrollTo).toHaveBeenCalled()
   })
 
   test('ignores a new-screen message from another window', () => {
