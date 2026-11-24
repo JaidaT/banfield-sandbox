@@ -279,7 +279,9 @@ export interface QuizForm {
   // when left out), and whether it shows its intro (yes when left out).
   contactShown?: ContactField[]
   contactIntroShown?: boolean
-  welcome: { title: string; intro: string }
+  // The welcome screen (docs/WELCOME_MASCOTS_PLAN.md): its paragraphs, where
+  // **text** is bold, and its button (left out: the form's "Let's start").
+  welcome: { title: string; intro: string[]; button?: string }
   // Prompts for the contact screen, which comes last.
   contact: {
     title: string

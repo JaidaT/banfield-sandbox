@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Placeholder for mascot 3 (docs/WELCOME_MASCOTS_PLAN.md). Replace with the real picture. -->
+  <rect x="1" y="1" width="98" height="98" fill="#f6f4ee" stroke="#d6d0c2" stroke-width="2"/>
+  <path d="M1 1 L99 99 M99 1 L1 99" stroke="#d6d0c2" stroke-width="2"/>
+</svg>

@@ -1,4 +1,5 @@
 import { parseQuestionnaire } from '@/lib/form/parse'
+import { withoutBoldMarks } from './boldText'
 import { isBlank } from '@/lib/form/validate'
 import type { Answers, AnswerValue, Questionnaire } from '@/lib/form/types'
 import type { Question, QuizForm, Submission } from './types'
@@ -63,7 +64,9 @@ export function quizQuestionnaire(questions: Question[], form: QuizForm): Questi
 
   const raw = {
     steps: [
-      { id: 'welcome', title: form.welcome.title, intro: form.welcome.intro, questions: [] },
+      // The Quick Quiz shows its own welcome card (WelcomeScreen); the plain
+      // intro here is for anything showing the shared welcome screen.
+      { id: 'welcome', title: form.welcome.title, intro: form.welcome.intro.map(withoutBoldMarks).join(' '), questions: [] },
       // Demo styling (2026-11-17): the question itself heads its screen.
       ...questions.map((q) => ({ id: q.id, title: q.prompt, questions: [formQuestion(q)] })),
       {

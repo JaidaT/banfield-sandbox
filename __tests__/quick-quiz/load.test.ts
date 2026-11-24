@@ -142,7 +142,7 @@ describe('parseQuizForm', () => {
 
   test('throws when any wording is missing, naming it', () => {
     const noWelcome = { ...quizForm(), welcome: { title: 'Welcome' } }
-    expect(() => parseQuizForm(noWelcome)).toThrow(/quiz form is missing "welcome.intro"/)
+    expect(() => parseQuizForm(noWelcome)).toThrow(/"welcome.intro"/)
     const contact = quizForm().contact as Record<string, unknown>
     const noPhone = { ...quizForm(), contact: { ...contact, phone: '' } }
     expect(() => parseQuizForm(noPhone)).toThrow(/quiz form is missing "contact.phone"/)

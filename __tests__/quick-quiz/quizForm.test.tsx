@@ -47,7 +47,7 @@ describe('QuizForm', () => {
   test('starts on the welcome screen, then the first question shows its progress', () => {
     renderQuiz()
     expect(heading()).toBe(form.welcome.title)
-    expect(screen.getByText(form.welcome.intro)).toBeDefined()
+    expect(screen.getByText(form.welcome.intro[0], { exact: false })).toBeDefined()
     click("Let's start")
     // Swatch rooms (2026-11-22): no percentage text; screen readers hear "Question N of M".
     expect(screen.getByText('Question 1 of 13')).toBeDefined()

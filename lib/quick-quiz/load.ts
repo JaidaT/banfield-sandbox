@@ -1,3 +1,4 @@
+import { boldMarksPaired } from './boldText'
 import archetypesJson from '@/data/quick-quiz/archetypes.json'
 import clientResultJson from '@/data/quick-quiz/client-result.json'
 import designDnaJson from '@/data/quick-quiz/design-dna.json'
@@ -559,7 +560,6 @@ export function loadSampleSubmissions(): SampleSubmission[] {
   return parseSampleSubmissions(samplesJson as unknown, loadQuestions())
 }
 
-const WELCOME_FIELDS = ['title', 'intro'] as const
 const CONTACT_FIELDS = [
   'title',
   'introWhenRequired',
@@ -572,13 +572,31 @@ const CONTACT_FIELDS = [
   'postalCode',
 ] as const
 
+// The welcome wording: a title, one paragraph or a list of them (with **bold**
+// parts), and an optional button label (docs/WELCOME_MASCOTS_PLAN.md).
+function parseWelcome(raw: Record<string, unknown>): QuizForm['welcome'] {
+  const intro = typeof raw.intro === 'string' ? [raw.intro] : raw.intro
+  if (!Array.isArray(intro) || intro.length === 0 || !intro.every((p) => typeof p === 'string' && p.trim() !== '')) {
+    throw new Error('quiz form "welcome.intro" must be a paragraph, or a list of paragraphs, none blank')
+  }
+  for (const paragraph of intro as string[]) {
+    if (!boldMarksPaired(paragraph)) throw new Error(`quiz form "welcome.intro" has a ** with no closing **: ${paragraph}`)
+  }
+  const welcome: QuizForm['welcome'] = { title: raw.title as string, intro: intro as string[] }
+  if (raw.button !== undefined) {
+    if (typeof raw.button !== 'string' || raw.button.trim() === '') throw new Error('quiz form "welcome.button" must not be blank')
+    welcome.button = raw.button
+  }
+  return welcome
+}
+
 // Checks the quiz screen wording and the contactRequired setting.
 export function parseQuizForm(raw: unknown): QuizForm {
   if (!isRecord(raw)) throw new Error('quiz form must be an object')
   if (typeof raw.contactRequired !== 'boolean') {
     throw new Error('quiz form "contactRequired" must be true or false')
   }
-  const sections = { welcome: WELCOME_FIELDS, contact: CONTACT_FIELDS }
+  const sections = { welcome: ['title'] as const, contact: CONTACT_FIELDS }
   for (const [section, fields] of Object.entries(sections)) {
     const part = raw[section]
     if (!isRecord(part)) throw new Error(`quiz form is missing "${section}"`)
@@ -590,7 +608,7 @@ export function parseQuizForm(raw: unknown): QuizForm {
   }
   const form: QuizForm = {
     contactRequired: raw.contactRequired,
-    welcome: raw.welcome as QuizForm['welcome'],
+    welcome: parseWelcome(raw.welcome as Record<string, unknown>),
     contact: raw.contact as QuizForm['contact'],
   }
   if (raw.contactShown !== undefined) {

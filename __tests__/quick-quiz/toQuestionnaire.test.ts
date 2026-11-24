@@ -22,7 +22,7 @@ describe('quizQuestionnaire', () => {
   })
 
   test('a welcome screen, one screen per quiz question in order, then the contact screen', () => {
-    expect(built.steps[0]).toMatchObject({ id: 'welcome', title: form.welcome.title, intro: form.welcome.intro, questions: [] })
+    expect(built.steps[0]).toMatchObject({ id: 'welcome', title: form.welcome.title, intro: 'Discover how you approach projects, and how Banfield Design Co. can help bring your dream home to life. It takes about 5 minutes, and there are no wrong answers.', questions: [] })
     const middle = built.steps.slice(1, -1)
     expect(middle.map((s) => s.questions.map((q) => q.id))).toEqual(questions.map((q) => [q.id]))
     expect(built.steps.at(-1)?.id).toBe('contact')
