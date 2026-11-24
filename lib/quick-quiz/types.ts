@@ -263,7 +263,8 @@ export interface ClientCopy {
   intro: string
   next: { title: string; text: string }
   cta: { label: string; bookingUrl: string }
-  thanks: { title: string; text: string }
+  // text: an optional line under "Thank you!" (none for now, 2026-11-23).
+  thanks: { title: string; text?: string }
 }
 
 // The contact details the quiz can ask for.
@@ -303,7 +304,8 @@ export interface ClientResult {
   designDna: ClientDesignDna | null
   next: { title: string; text: string }
   cta: { label: string; href: string }
-  thanks: { title: string; text: string }
+  // text: an optional line under "Thank you!" (none for now, 2026-11-23).
+  thanks: { title: string; text?: string }
 }
 
 // Team-facing only. Never render any part of this to the client.

@@ -4,7 +4,8 @@
     "draft": true,
     "purpose": "Wording for the client-facing result screen, from the team's mockup (2026-11-13). The Design DNA card's words come from design-dna.json. Never mention client types, scores or fit here; tests enforce this.",
     "caps": "completeLabel and next.title show in capitals on screen (the styling does this), so they are written in normal case here.",
-    "cta": "bookingUrl is a placeholder until the real booking page address is confirmed. Name and email are added to it so the booking form can be pre-filled; the parameter names may change once the booking tool is confirmed (see DISCOVERY open questions). The mockup has no booking button; it is kept because booking a call is the quiz's main goal (DECISIONS.md 2026-11-13)."
+    "cta": "bookingUrl is a placeholder until the real booking page address is confirmed. Name and email are added to it so the booking form can be pre-filled; the parameter names may change once the booking tool is confirmed (see DISCOVERY open questions). The mockup has no booking button; it is kept because booking a call is the quiz's main goal (DECISIONS.md 2026-11-13).",
+    "thanks": "The line under 'Thank you!' (thanks.text) is left out on purpose (Jaida, 2026-11-23): 'Powered by Foyer.' is the footer below it. Add a \"text\" to show a line there again."
   },
   "completeLabel": "Questionnaire complete",
   "heading": "You're all done!",
@@ -18,7 +19,6 @@
     "bookingUrl": "/book"
   },
   "thanks": {
-    "title": "Thank you!",
-    "text": "You may now exit this screen."
+    "title": "Thank you!"
   }
 }

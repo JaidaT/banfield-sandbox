@@ -32,6 +32,6 @@ export function buildClientResult(
       label: copy.cta.label,
       href: bookingHref(copy.cta.bookingUrl, submission.contact.name, submission.contact.email),
     },
-    thanks: { title: copy.thanks.title, text: copy.thanks.text },
+    thanks: copy.thanks.text ? { title: copy.thanks.title, text: copy.thanks.text } : { title: copy.thanks.title },
   }
 }

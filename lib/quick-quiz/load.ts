@@ -436,12 +436,13 @@ export function parseSampleSubmissions(raw: unknown, questions: Question[]): Sam
 }
 
 // Each piece of wording the result screen needs: top-level fields, and the
-// fields inside each group (next, cta, thanks).
+// fields inside each group (next, cta, thanks). The line under "Thank you!"
+// (thanks.text) is optional (Jaida, 2026-11-23), but not blank when given.
 const COPY_FIELDS = ['completeLabel', 'heading', 'intro'] as const
 const COPY_GROUPS = {
   next: ['title', 'text'],
   cta: ['label', 'bookingUrl'],
-  thanks: ['title', 'text'],
+  thanks: ['title'],
 } as const
 
 export function parseClientCopy(raw: unknown): ClientCopy {
@@ -459,6 +460,10 @@ export function parseClientCopy(raw: unknown): ClientCopy {
         throw new Error(`client result copy is missing "${group}.${field}"`)
       }
     }
+  }
+  const thanksText = (raw.thanks as Record<string, unknown>).text
+  if (thanksText !== undefined && (typeof thanksText !== 'string' || thanksText === '')) {
+    throw new Error('client result copy "thanks.text" must be left out or not blank')
   }
   return raw as unknown as ClientCopy
 }

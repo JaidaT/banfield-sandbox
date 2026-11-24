@@ -23,6 +23,7 @@ Top to bottom on every question card:
 
 - **The room** sits centred above the bar, building up as in `"build-up-middle"`: one piece per finished screen, each piece growing from its own centre; Back shrinks the last piece away; a fade with reduced motion.
 - **"Powered by Foyer." footer** (Jaida, 2026-11-23): small, centred, muted grey, "Foyer." in bold, the last thing on every Quick Quiz screen (welcome, cards, Calculating, result). It sits inside the quiz's main area, so on `/quiz` it is at the bottom edge on short screens and inside the website's iframe it is at the bottom of the frame (counted in the iframe's height).
+- **"Thank you!" stands alone** (Jaida, 2026-11-23): the line under it ("You may now exit this screen.") is left out, since "Powered by Foyer." is the footer right below. The line is optional in `data/quick-quiz/client-result.json` (`thanks.text`): add it back to show one.
 - **No progress bar on the result** (Jaida, 2026-11-23): the result shows the finished room on its own, centred, with no bar and no "Questionnaire complete 100%" line. "Calculating" still shows the room above the full bar.
 - **The order is shifted** (Jaida, 2026-11-22): the room **starts with the rug** on question 1 and gains one piece per card, so the contact card shows all 13 pieces (plants included) and nothing new arrives during "Calculating". **The walls and floor (`00-base.svg`) are the finishing touch on the result**: they fade in behind the furniture (about 500 ms; a quick fade with reduced motion). This replaces "the plants pop in during Calculating" below.
 - **No empty room behind the pieces** (Jaida, 2026-11-22): `00-base.svg` is left out on the cards and during "Calculating", so only the furniture shows; it arrives on the result (see above).
@@ -93,6 +94,8 @@ Work test-first; motion and looks are checked by eye.
   - Tests: no bar or "Questionnaire complete" on the result, with or without the room
 - [x] "Powered by Foyer." at the bottom of every screen (a footer option on the shared form, last inside the main area)
   - Tests: the shared form shows a given footer last in its main area, and none when not given; the quiz footer reads "Powered by Foyer." with "Foyer." bold and is last on the welcome screen, a card, Calculating and the result
+- [x] No line under "Thank you!": the line is optional in the wording file, and left out
+  - Tests: the result has no line under "Thank you!"; the wording file accepts no line, refuses a blank one, and still requires the title
 - [ ] Jaida tries it on a phone (does everything fit?) and a computer, with reduced motion, and on the stand-in website
 
 ## Decisions (2026-11-22)

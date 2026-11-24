@@ -250,7 +250,9 @@ describe('ClientResultView', () => {
     render(<ClientResultView result={resultOf('analytical-validator')} />)
     expect(headings()).toEqual(["You're all done!", 'The Strategist', 'How we can help', 'What happens next', 'Thank you!'])
     expect(screen.getByText("Here's what your answers reveal about your design approach.")).toBeDefined()
-    expect(screen.getByText('You may now exit this screen.')).toBeDefined()
+    // Jaida, 2026-11-23: "Thank you!" stands alone, with no line under it.
+    expect(screen.queryByText('You may now exit this screen.')).toBeNull()
+    expect(screen.getByRole('heading', { name: 'Thank you!' }).nextElementSibling).toBeNull()
   })
 
   test('the Design DNA card shows the label, name, headline and paragraph', () => {

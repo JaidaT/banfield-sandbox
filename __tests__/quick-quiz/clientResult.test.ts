@@ -26,7 +26,8 @@ describe('buildClientResult', () => {
       title: 'What happens next',
       text: 'Jamie can use your results to prepare for a first conversation about your project.',
     })
-    expect(result.thanks).toEqual({ title: 'Thank you!', text: 'You may now exit this screen.' })
+    // Jaida, 2026-11-23: no line under "Thank you!" ("Powered by Foyer." is the footer).
+    expect(result.thanks).toEqual({ title: 'Thank you!' })
   })
 
   test('carries the Design DNA it is given, and none when given none', () => {
@@ -104,5 +105,12 @@ describe('buildClientResult', () => {
 describe('parseClientCopy', () => {
   test('throws when a required piece of copy is missing', () => {
     expect(() => parseClientCopy({ ...copy, heading: "" })).toThrow(/heading/)
+    expect(() => parseClientCopy({ ...copy, thanks: { text: 'Bye.' } })).toThrow(/thanks.title/)
+  })
+
+  test('the line under "Thank you!" is optional, but not blank when given', () => {
+    expect(parseClientCopy({ ...copy, thanks: { title: 'Thank you!' } }).thanks).toEqual({ title: 'Thank you!' })
+    expect(parseClientCopy({ ...copy, thanks: { title: 'Thank you!', text: 'Bye.' } }).thanks.text).toBe('Bye.')
+    expect(() => parseClientCopy({ ...copy, thanks: { title: 'Thank you!', text: '' } })).toThrow(/thanks.text/)
   })
 })

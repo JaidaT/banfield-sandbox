@@ -91,7 +91,7 @@ export default function ClientResultView({ result, embedded = false, complete = 
 
       <section className="flex flex-col items-center gap-1 text-center">
         <h2 className="text-xl font-bold">{result.thanks.title}</h2>
-        <p className="text-sm">{result.thanks.text}</p>
+        {result.thanks.text ? <p className="text-sm">{result.thanks.text}</p> : null}
       </section>
     </Outer>
   )
