@@ -94,11 +94,23 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
           onStart={start}
           onScreenChange={afterMove}
           focusWithoutScroll
+          footer={<PoweredBy />}
           stepScreen={SwatchCardScreen}
           doneScreen={QuizResults}
         />
       </div>
     </QuizContext>
+  )
+}
+
+// "Powered by Foyer." at the bottom of every Quick Quiz screen (Jaida,
+// 2026-11-23): small, centred, muted, the last thing on the page. On /quiz the
+// page fills the screen, so on short screens it sits at the bottom edge.
+function PoweredBy() {
+  return (
+    <footer data-testid="quiz-footer" className="pt-2 text-center text-xs text-charcoal/60">
+      Powered by <strong className="font-bold">Foyer.</strong>
+    </footer>
   )
 }
 

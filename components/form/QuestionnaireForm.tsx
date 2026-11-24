@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useEffectEvent, useRef, useState } from 'react'
-import type { ComponentType, Ref } from 'react'
+import type { ComponentType, ReactNode, Ref } from 'react'
 import IntroScreen from './IntroScreen'
 import ReviewScreen from './ReviewScreen'
 import StepScreen from './StepScreen'
@@ -50,6 +50,10 @@ interface Props {
   // scroll to it; the product scrolls instead (the Quick Quiz keeps its room
   // in view, docs/SWATCH_ROOMS_PLAN.md). Left out: the browser scrolls.
   focusWithoutScroll?: boolean
+  // Shown last inside the main area on every screen, e.g. "Powered by Foyer."
+  // (the Quick Quiz, 2026-11-23). Inside main, so the website's iframe counts
+  // it when it sizes itself.
+  footer?: ReactNode
 }
 
 export interface DoneScreenProps {
@@ -64,7 +68,7 @@ export interface DoneScreenProps {
 // screen passed in as doneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange, focusWithoutScroll = false, stepScreen: Step = StepScreen }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange, focusWithoutScroll = false, footer, stepScreen: Step = StepScreen }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -205,7 +209,10 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
     <div className={`flex flex-1 flex-col bg-frost font-sans text-charcoal ${look ?? ''}`}>
       {/* Inside an iframe (data-embedded, set by the Quick Quiz), the column is
           only as tall as its content, so the iframe can shrink as well as grow. */}
-      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 in-[[data-embedded]]:flex-none max-sm:in-[.quick-quiz]:gap-4 max-sm:in-[.quick-quiz]:py-4">{screen}</main>
+      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 in-[[data-embedded]]:flex-none max-sm:in-[.quick-quiz]:gap-4 max-sm:in-[.quick-quiz]:py-4">
+        {screen}
+        {footer}
+      </main>
     </div>
   )
 }

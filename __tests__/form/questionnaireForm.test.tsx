@@ -150,6 +150,23 @@ describe('QuestionnaireForm: focusWithoutScroll', () => {
   })
 })
 
+// Swatch rooms (2026-11-23): a product can add a footer, last inside the
+// form's main area (so the website's iframe counts it in the height).
+describe('QuestionnaireForm: footer', () => {
+  test('shows the footer last inside the main area, on the welcome and question screens', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} footer={<p>Footer text</p>} />)
+    const main = screen.getByRole('main')
+    expect(main.lastElementChild!.textContent).toBe('Footer text')
+    click("Let's start")
+    expect(screen.getByRole('main').lastElementChild!.textContent).toBe('Footer text')
+  })
+
+  test('no footer when none is given', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} />)
+    expect(screen.queryByText('Footer text')).toBeNull()
+  })
+})
+
 describe('QuestionnaireForm: onStart', () => {
   test('is called once when "Let\'s start" is pressed, not when the page opens or on later steps', () => {
     const onStart = vi.fn()
