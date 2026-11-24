@@ -22,6 +22,7 @@ Top to bottom on every question card:
 ```
 
 - **The room** sits centred above the bar, building up as in `"build-up-middle"`: one piece per finished screen, each piece growing from its own centre; Back shrinks the last piece away; a fade with reduced motion.
+- **No progress bar on the result** (Jaida, 2026-11-23): the result shows the finished room on its own, centred, with no bar and no "Questionnaire complete 100%" line. "Calculating" still shows the room above the full bar.
 - **The order is shifted** (Jaida, 2026-11-22): the room **starts with the rug** on question 1 and gains one piece per card, so the contact card shows all 13 pieces (plants included) and nothing new arrives during "Calculating". **The walls and floor (`00-base.svg`) are the finishing touch on the result**: they fade in behind the furniture (about 500 ms; a quick fade with reduced motion). This replaces "the plants pop in during Calculating" below.
 - **No empty room behind the pieces** (Jaida, 2026-11-22): `00-base.svg` is left out on the cards and during "Calculating", so only the furniture shows; it arrives on the result (see above).
 - **The strip colour is switchable** (Jaida, 2026-11-22): `"strip"` in `data/quick-quiz/swatch-cards.json` is `"yellow"` (the brand yellow, dark text) or `"navy"` (the brand navy with off-white question and help text; on now). The leaving card and the cards falling away at the end match it.
@@ -87,6 +88,8 @@ Work test-first; motion and looks are checked by eye.
   - Tests: the welcome screen carries the mark; question cards do not
 - [x] Start with the rug; the walls and floor fade in behind the furniture on the result; nothing new during "Calculating"
   - Tests: question 1 shows the rug, question 5 five pieces, the contact card all 13 with no walls and floor; nothing pops during "Calculating"; the result adds the walls and floor behind the pieces with the fade-in
+- [x] Remove the progress bar and its "Questionnaire complete 100%" line from the result; keep the finished room
+  - Tests: no bar or "Questionnaire complete" on the result, with or without the room
 - [ ] Jaida tries it on a phone (does everything fit?) and a computer, with reduced motion, and on the stand-in website
 
 ## Decisions (2026-11-22)

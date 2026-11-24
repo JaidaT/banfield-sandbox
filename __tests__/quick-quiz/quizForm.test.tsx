@@ -127,7 +127,8 @@ describe('QuizForm', () => {
     renderQuiz({ startAt: 'contact', initialAnswers: answers })
     seeResults()
 
-    expect(clientPart().getByText('Questionnaire complete')).toBeDefined()
+    // Swatch rooms (2026-11-23): no progress bar on the result.
+    expect(clientPart().queryByText('Questionnaire complete')).toBeNull()
     expect(clientPart().getByRole('heading', { level: 2, name: 'The Visionary' })).toBeDefined()
     expect(clientPart().getByRole('heading', { level: 2, name: 'How we can help' })).toBeDefined()
     expect(clientPart().getByText('We take the lead.')).toBeDefined()

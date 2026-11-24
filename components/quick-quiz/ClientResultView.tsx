@@ -7,11 +7,11 @@ interface Props {
   // Inside another page (the quiz screen): a section instead of the page's main
   // area, since a page has only one.
   embedded?: boolean
-  // Shows "Questionnaire complete 100%" on top: on the quiz, not on the team's
-  // sample result pages.
+  // The quiz's own result (not the team's sample result pages): shows the
+  // finished room on top, when given.
   complete?: boolean
-  // The complete room that builds, centred above the complete bar
-  // (docs/SWATCH_ROOMS_PLAN.md).
+  // The complete room that builds, centred on top (docs/SWATCH_ROOMS_PLAN.md).
+  // No progress bar on the result (Jaida, 2026-11-23).
   room?: ReactNode
   // Put on the main heading, so the quiz can move the cursor there.
   headingRef?: Ref<HTMLHeadingElement>
@@ -33,18 +33,13 @@ export default function ClientResultView({ result, embedded = false, complete = 
       // Inside the quiz, the quiz page already gives the side margins.
       className={`mx-auto flex w-full max-w-xl flex-col gap-8 text-charcoal ${embedded ? 'py-2' : 'px-4 py-10 sm:px-6'}`}
     >
-      {complete && (
-        <div className="flex flex-col gap-2">
-          <div className={`flex justify-between ${LABEL}`}>
-            <p>{result.completeLabel}</p>
-            <p>100%</p>
-          </div>
-          <div aria-hidden="true" className="flex flex-col items-center gap-1">
-            {room ? <div className="w-1/4 sm:w-2/5">{room}</div> : null}
-            <div data-testid="progress-fill" style={{ width: '100%' }} className="h-3.5 w-full rounded-full border-2 border-accent bg-accent" />
-          </div>
+      {/* No progress bar or "Questionnaire complete 100%" line on the result
+          (Jaida, 2026-11-23): just the finished room, centred. */}
+      {complete && room ? (
+        <div aria-hidden="true" className="flex justify-center">
+          <div className="w-1/4 sm:w-2/5">{room}</div>
         </div>
-      )}
+      ) : null}
 
       <header className="flex flex-col gap-2">
         <h1 ref={headingRef} tabIndex={-1} className="text-3xl font-bold leading-tight outline-none">

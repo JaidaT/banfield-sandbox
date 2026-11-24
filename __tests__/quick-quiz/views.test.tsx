@@ -318,13 +318,16 @@ describe('ClientResultView', () => {
     expect(screen.queryByText(/share/i)).toBeNull()
   })
 
-  test('the "Questionnaire complete 100%" bar shows only when asked for', () => {
+  // Swatch rooms (Jaida, 2026-11-23): no progress bar on the result, with or
+  // without the finished room.
+  test('no "Questionnaire complete 100%" bar on the result', () => {
     const { unmount } = render(<ClientResultView result={resultOf('decisive-delegator')} />)
     expect(screen.queryByText('Questionnaire complete')).toBeNull()
     unmount()
     render(<ClientResultView result={resultOf('decisive-delegator')} complete />)
-    expect(screen.getByText('Questionnaire complete')).toBeDefined()
-    expect(screen.getByText('100%')).toBeDefined()
+    expect(screen.queryByText('Questionnaire complete')).toBeNull()
+    expect(screen.queryByText('100%')).toBeNull()
+    expect(screen.queryByTestId('progress-fill')).toBeNull()
   })
 
   // DISCOVERY P3 and P6: nothing team-facing on the client screen.

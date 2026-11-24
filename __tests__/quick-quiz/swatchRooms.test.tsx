@@ -96,7 +96,7 @@ describe('the ending', () => {
     expect(room().compareDocumentPosition(screen.getByRole('status')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
-  test('the result adds the walls and floor behind the furniture, fading in, above the full bar', () => {
+  test('the result adds the walls and floor behind the furniture, fading in, with no progress bar', () => {
     vi.useFakeTimers()
     renderQuiz('contact')
     click('See my results')
@@ -109,7 +109,9 @@ describe('the ending', () => {
     expect(base.className).toContain('base-arrive')
     // Behind the furniture: first in the room, so the pieces are drawn on top.
     expect(room().querySelector('img')).toBe(base)
-    expect(room().compareDocumentPosition(screen.getByTestId('progress-fill')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // Jaida, 2026-11-23: the progress bar and its "Questionnaire complete" line are gone from the result.
+    expect(screen.queryByTestId('progress-fill')).toBeNull()
+    expect(screen.queryByText('Questionnaire complete')).toBeNull()
     expect(room().closest('[aria-hidden="true"]')).not.toBeNull()
   })
 })
