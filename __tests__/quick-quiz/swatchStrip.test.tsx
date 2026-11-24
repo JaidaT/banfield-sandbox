@@ -38,7 +38,7 @@ describe('swatch-cards.json', () => {
 // iframe, so the iframe does not grow and shrink with every card.
 describe('embedMinHeight', () => {
   test('the real file sets a phone and a computer minimum', () => {
-    expect(loadSwatchLook().embedMinHeight).toEqual({ phone: 715, computer: 960 })
+    expect(loadSwatchLook().embedMinHeight).toEqual({ phone: 650, computer: 850 })
   })
 
   test('null or left out switches it off; anything but two positive numbers is refused', () => {
@@ -54,8 +54,8 @@ describe('embedMinHeight', () => {
   test('the quiz carries the two heights for the iframe rule to use', () => {
     renderQuiz('confidence')
     const quiz = document.querySelector<HTMLElement>('[data-embed-min]')!
-    expect(quiz.style.getPropertyValue('--embed-min-phone')).toBe('715px')
-    expect(quiz.style.getPropertyValue('--embed-min-computer')).toBe('960px')
+    expect(quiz.style.getPropertyValue('--embed-min-phone')).toBe('650px')
+    expect(quiz.style.getPropertyValue('--embed-min-computer')).toBe('850px')
   })
 })
 

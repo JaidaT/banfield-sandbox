@@ -8,8 +8,8 @@
   },
   "strip": "navy",
   "embedMinHeight": {
-    "phone": 715,
-    "computer": 960
+    "phone": 650,
+    "computer": 850
   },
   "roomWidth": {
     "phone": 60,

@@ -6,7 +6,7 @@
 export const COLUMN_COUNT = 15
 
 // Each loop is at least this tall, so a column always covers the screen
-// (the iframe is 960px tall on a computer).
+// (the iframe's minimum height is set in swatch-cards.json, under 1600px).
 export const LOOP_MIN_HEIGHT = 1600
 
 export type Direction = 'up' | 'down'
