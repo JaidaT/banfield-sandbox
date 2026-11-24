@@ -288,7 +288,7 @@ label:has(:checked) > .pencil-oval path { animation: pencil-draw 300ms ease-out;
 @keyframes mascot-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
 .mascot-up { animation: mascot-up var(--loop) linear infinite; }
 .mascot-down { animation: mascot-down var(--loop) linear infinite; }
-/* With "reduce motion" on, the columns stand still. */
+/* With "reduce motion" on (a phone or computer setting), the columns stand still. */
 @media (prefers-reduced-motion: reduce) {
   .mascot-up, .mascot-down { animation: none; }
 }
