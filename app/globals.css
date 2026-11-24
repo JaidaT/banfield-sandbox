@@ -252,6 +252,17 @@ label:has(:checked) > .pencil-oval path { animation: pencil-draw 300ms ease-out;
   .card-question { font-size: 1rem; line-height: 1.35; }
   .card-buttons { padding-top: 0.5rem; }
 }
+/* Inside the website's iframe on a phone, always compact: the iframe's own
+   height says nothing about the phone's screen, and switching on the iframe's
+   height made a card grow past 700px, lose the compact layout and grow more
+   (found measuring in Chrome, 2026-11-23). */
+@media (max-width: 639px) {
+  [data-embedded] .swatch-stack { --peek: 16px; }
+  [data-embedded] .quick-quiz main { row-gap: 0.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  [data-embedded] .card-strip { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  [data-embedded] .card-question { font-size: 1rem; line-height: 1.35; }
+  [data-embedded] .card-buttons { padding-top: 0.5rem; }
+}
 
 /* Inside the website's iframe (data-embedded on the page): the quiz is at
    least as tall as the swatch-cards.json minimum, so the iframe does not grow

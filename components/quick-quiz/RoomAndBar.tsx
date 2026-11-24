@@ -1,9 +1,10 @@
 import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
+import { ROOM_BOX } from '@/components/quick-quiz/stripStyles'
 
 // Swatch cards + the room that builds (docs/SWATCH_ROOMS_PLAN.md): the room
 // centred above a full-width bar (white track, yellow outline and fill, no
-// percentage text). The room is about a quarter of the width on a phone, so
-// the card still fits, and 40% on a computer. Used on the question cards,
+// percentage text). The room's width is the roomWidth setting in
+// data/quick-quiz/swatch-cards.json. Used on the question cards,
 // during "Calculating" and on the result.
 // shownCount: how many pieces are earned. percent: how full the bar is.
 // popLast: the last piece pops in when this appears. label: what screen
@@ -15,7 +16,7 @@ export default function RoomAndBar({ shownCount, percent, popLast = false, label
     <div className="flex flex-col">
       {label ? <p className="sr-only">{label}</p> : null}
       <div aria-hidden="true" className="flex flex-col items-center gap-1">
-        <div className="w-1/4 sm:w-2/5">
+        <div className={ROOM_BOX.className} style={ROOM_BOX.style}>
           <BuildUpRoom shownCount={shownCount} popLast={popLast} showBase={false} />
         </div>
         <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-accent bg-white">

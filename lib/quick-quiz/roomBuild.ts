@@ -19,7 +19,8 @@ export interface RoomBuild {
   height: number
   base: string
   pieces: RoomPiece[]
-  fullPicture: string
+  // The finished room in one file, for checking (optional; the quiz uses the pieces).
+  fullPicture?: string
 }
 
 const text = (value: unknown, where: string): string => {
@@ -53,7 +54,9 @@ export function parseRoomBuild(raw: unknown, screenCount: number): RoomBuild {
     }
     return { name, file, centreX: piece.centreX as number, centreY: piece.centreY as number }
   })
-  return { width: size('width'), height: size('height'), base: text(raw.base, '"base"'), pieces, fullPicture: text(raw.fullPicture, '"fullPicture"') }
+  const build: RoomBuild = { width: size('width'), height: size('height'), base: text(raw.base, '"base"'), pieces }
+  if (raw.fullPicture !== undefined) build.fullPicture = text(raw.fullPicture, '"fullPicture"')
+  return build
 }
 
 export function loadRoomBuild(): RoomBuild {

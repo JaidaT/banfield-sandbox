@@ -33,7 +33,8 @@ export default function BuildUpRoom({
   baseArrives?: boolean
 }) {
   return (
-    <div data-testid="build-up-room" className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
+    // The room takes its shape from its files (3:1 for the wide room).
+    <div data-testid="build-up-room" style={{ aspectRatio: `${BUILD.width} / ${BUILD.height}` }} className="relative w-full overflow-hidden rounded-lg">
       {(showBase || baseArrives) && (
         <Image
           data-base

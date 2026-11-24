@@ -47,6 +47,11 @@ describe('the room and bar on the swatch cards', () => {
     expect(room().querySelector('img[data-base]')).toBeNull()
   })
 
+  test('the room takes its shape from its files (3:1)', () => {
+    renderQuiz(questions[0].id)
+    expect(room().style.aspectRatio).toBe('900 / 300')
+  })
+
   test('top to bottom: the room, the bar, then the card', () => {
     renderQuiz(questions[2].id)
     const bar = screen.getByTestId('progress-fill')

@@ -38,7 +38,7 @@ describe('swatch-cards.json', () => {
 // iframe, so the iframe does not grow and shrink with every card.
 describe('embedMinHeight', () => {
   test('the real file sets a phone and a computer minimum', () => {
-    expect(loadSwatchLook().embedMinHeight).toEqual({ phone: 680, computer: 960 })
+    expect(loadSwatchLook().embedMinHeight).toEqual({ phone: 715, computer: 960 })
   })
 
   test('null or left out switches it off; anything but two positive numbers is refused', () => {
@@ -60,8 +60,29 @@ describe('embedMinHeight', () => {
   test('the quiz carries the two heights for the iframe rule to use', () => {
     renderQuiz('confidence')
     const quiz = document.querySelector<HTMLElement>('[data-embed-min]')!
-    expect(quiz.style.getPropertyValue('--embed-min-phone')).toBe('680px')
+    expect(quiz.style.getPropertyValue('--embed-min-phone')).toBe('715px')
     expect(quiz.style.getPropertyValue('--embed-min-computer')).toBe('960px')
+  })
+})
+
+// Jaida, 2026-11-23: how wide the room is, as a share of the bar's width.
+describe('roomWidth', () => {
+  test('the real file sets 60% on a phone and on a computer', () => {
+    expect(loadSwatchLook().roomWidth).toEqual({ phone: 60, computer: 60 })
+  })
+
+  test('left out, it is 25% and 40% (as before); anything but two numbers from 1 to 100 is refused', () => {
+    expect(parseSwatchLook({}).roomWidth).toEqual({ phone: 25, computer: 40 })
+    expect(() => parseSwatchLook({ roomWidth: { phone: 60 } })).toThrow(/roomWidth/)
+    expect(() => parseSwatchLook({ roomWidth: { phone: 0, computer: 60 } })).toThrow(/roomWidth/)
+    expect(() => parseSwatchLook({ roomWidth: { phone: 60, computer: 120 } })).toThrow(/roomWidth/)
+  })
+
+  test('the room above the bar carries the two widths', () => {
+    renderQuiz('confidence')
+    const box = screen.getByTestId('build-up-room').parentElement!
+    expect(box.style.getPropertyValue('--room-w-phone')).toBe('60%')
+    expect(box.style.getPropertyValue('--room-w-computer')).toBe('60%')
   })
 })
 

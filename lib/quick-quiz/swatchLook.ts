@@ -8,6 +8,9 @@ import { isRecord } from './load'
 // embedMinHeight: inside the website's iframe, the quiz is at least this tall
 // (in pixels, on a phone and on a computer), so the iframe does not grow and
 // shrink with every card. null: the iframe fits each card (Jaida, 2026-11-22).
+// roomWidth: how wide the room above the bar is, as a percentage of the bar's
+// width, on a phone and on a computer (Jaida, 2026-11-23). Left out: 25% and
+// 40%, the first sizes.
 export type StripColour = 'yellow' | 'navy'
 const STRIPS: StripColour[] = ['yellow', 'navy']
 
@@ -16,9 +19,25 @@ export interface EmbedMinHeight {
   computer: number
 }
 
+export interface RoomWidth {
+  phone: number
+  computer: number
+}
+
 export interface SwatchLook {
   strip: StripColour
   embedMinHeight: EmbedMinHeight | null
+  roomWidth: RoomWidth
+}
+
+function parseRoomWidth(raw: unknown): RoomWidth {
+  if (raw === undefined) return { phone: 25, computer: 40 }
+  const value = isRecord(raw) ? raw : {}
+  const ok = (n: unknown): n is number => typeof n === 'number' && n > 0 && n <= 100
+  if (!ok(value.phone) || !ok(value.computer)) {
+    throw new Error('swatch cards "roomWidth" must be { "phone": <percent>, "computer": <percent> }, each from 1 to 100')
+  }
+  return { phone: value.phone, computer: value.computer }
 }
 
 function parseEmbedMinHeight(raw: unknown): EmbedMinHeight | null {
@@ -37,7 +56,11 @@ export function parseSwatchLook(raw: unknown): SwatchLook {
   if (!STRIPS.includes(strip as StripColour)) {
     throw new Error(`swatch cards "strip" must be one of ${STRIPS.join(', ')}, not ${String(strip)}`)
   }
-  return { strip: strip as StripColour, embedMinHeight: parseEmbedMinHeight(settings.embedMinHeight) }
+  return {
+    strip: strip as StripColour,
+    embedMinHeight: parseEmbedMinHeight(settings.embedMinHeight),
+    roomWidth: parseRoomWidth(settings.roomWidth),
+  }
 }
 
 export function loadSwatchLook(): SwatchLook {

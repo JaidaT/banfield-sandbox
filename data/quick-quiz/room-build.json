@@ -1,91 +1,90 @@
 {
   "_meta": {
     "purpose": "The room that builds (docs/ROOM_BUILD_PLAN.md, 2026-11-21): an empty room plus one piece per finished Quick Quiz screen. Question 1 shows only the base; each finished screen adds the next piece; the contact screen shows 12; the result shows all 13.",
-    "files": "From Jaida: every file is a 600 x 450 artboard with the piece in its final spot, stacked in this order (later pieces on top). full-picture.svg is the finished room, for checking only.",
-    "centres": "centreX and centreY: the middle of each drawing, as a percentage of the room, measured from the files on 2026-11-21. A new piece grows from here. Re-measure if a drawing moves."
+    "files": "From Jaida: the wide room (2026-11-23), every file a 900 x 300 artboard (3:1) with the piece in its final spot, stacked in this order (later pieces on top). The room shows at this shape. The first 4:3 version (600 x 450) is in public/room-assets/.",
+    "centres": "centreX and centreY: the middle of each drawing, as a percentage of the room, measured from the files on 2026-11-23. A new piece grows from here. Re-measure if a drawing moves."
   },
-  "width": 600,
-  "height": 450,
-  "base": "/room-assets/00-base.svg",
-  "fullPicture": "/room-assets/full-picture.svg",
+  "width": 900,
+  "height": 300,
+  "base": "/3-1-room-assets/00-base.svg",
   "pieces": [
     {
       "name": "Rug",
-      "file": "/room-assets/01-rug.svg",
-      "centreX": 51.9,
-      "centreY": 90.7
+      "file": "/3-1-room-assets/01-rug.svg",
+      "centreX": 52.4,
+      "centreY": 91.2
     },
     {
       "name": "Big shelf",
-      "file": "/room-assets/02-bigshelf.svg",
-      "centreX": 86.1,
-      "centreY": 56.6
+      "file": "/3-1-room-assets/02-big-shelf.svg",
+      "centreX": 90.6,
+      "centreY": 47
     },
     {
       "name": "Floor lamp",
-      "file": "/room-assets/03-floorlamp.svg",
-      "centreX": 6.2,
-      "centreY": 62.7
+      "file": "/3-1-room-assets/03-floor-lamp.svg",
+      "centreX": 8.9,
+      "centreY": 54.8
     },
     {
       "name": "TV stand",
-      "file": "/room-assets/04-tvstand.svg",
-      "centreX": 45.8,
-      "centreY": 79.2
+      "file": "/3-1-room-assets/04-tv-stand.svg",
+      "centreX": 43.9,
+      "centreY": 72.8
     },
     {
       "name": "Wall shelves",
-      "file": "/room-assets/05-wallshelves.svg",
-      "centreX": 21.8,
-      "centreY": 39.8
+      "file": "/3-1-room-assets/05-wall-shelves.svg",
+      "centreX": 20.7,
+      "centreY": 37
     },
     {
       "name": "Chair",
-      "file": "/room-assets/06-chair.svg",
-      "centreX": 17.2,
-      "centreY": 80.8
+      "file": "/3-1-room-assets/06-chair.svg",
+      "centreX": 27,
+      "centreY": 75
     },
     {
       "name": "Pictures",
-      "file": "/room-assets/07-pictures.svg",
-      "centreX": 66.3,
-      "centreY": 44.3
+      "file": "/3-1-room-assets/07-pictures.svg",
+      "centreX": 62.9,
+      "centreY": 34.2
     },
     {
       "name": "Coffee table",
-      "file": "/room-assets/08-coffeetable.svg",
-      "centreX": 47.1,
-      "centreY": 85.9
+      "file": "/3-1-room-assets/08-coffee-table.svg",
+      "centreX": 47.7,
+      "centreY": 82.7
     },
     {
       "name": "TV",
-      "file": "/room-assets/09-tv.svg",
-      "centreX": 45.8,
-      "centreY": 61.3
+      "file": "/3-1-room-assets/09-tv.svg",
+      "centreX": 43.9,
+      "centreY": 45.5
     },
     {
       "name": "Clock",
-      "file": "/room-assets/10-clock.svg",
-      "centreX": 45.8,
-      "centreY": 30.4
+      "file": "/3-1-room-assets/10-clock.svg",
+      "centreX": 44,
+      "centreY": 16.5
     },
     {
       "name": "Loveseat",
-      "file": "/room-assets/11-loveseat.svg",
-      "centreX": 82.4,
-      "centreY": 79
+      "file": "/3-1-room-assets/11-love-seat.svg",
+      "centreX": 72.3,
+      "centreY": 73.3
     },
     {
       "name": "Things on the shelves",
-      "file": "/room-assets/12-shelfstuff.svg",
-      "centreX": 53.5,
-      "centreY": 41.4
+      "file": "/3-1-room-assets/12-shelf-stuff.svg",
+      "centreX": 55,
+      "centreY": 30.8
     },
     {
       "name": "Plants",
-      "file": "/room-assets/13-plants.svg",
-      "centreX": 49.1,
-      "centreY": 44.2
+      "file": "/3-1-room-assets/13-plants.svg",
+      "centreX": 45.7,
+      "centreY": 44
     }
   ]
 }

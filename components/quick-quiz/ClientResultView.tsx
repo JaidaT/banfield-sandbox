@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import type { ReactNode, Ref } from 'react'
+import { ROOM_BOX } from '@/components/quick-quiz/stripStyles'
 import type { ClientResult } from '@/lib/quick-quiz/types'
 
 interface Props {
@@ -37,7 +38,9 @@ export default function ClientResultView({ result, embedded = false, complete = 
           (Jaida, 2026-11-23): just the finished room, centred. */}
       {complete && room ? (
         <div aria-hidden="true" className="flex justify-center">
-          <div className="w-1/4 sm:w-2/5">{room}</div>
+          <div className={ROOM_BOX.className} style={ROOM_BOX.style}>
+            {room}
+          </div>
         </div>
       ) : null}
 

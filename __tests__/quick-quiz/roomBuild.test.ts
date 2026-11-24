@@ -31,11 +31,17 @@ describe('room-build.json (the real file)', () => {
     expect(build.pieces).toHaveLength(screenCount)
   })
 
-  test('every file exists and has the same artboard as the base', () => {
+  // Jaida, 2026-11-23: the wide room, drawn at 3:1 (900 x 300).
+  test('uses the wide room: every file exists and has the same 900 x 300 artboard', () => {
     const build = loadRoomBuild()
+    expect([build.width, build.height]).toEqual([900, 300])
+    expect(build.base).toBe('/3-1-room-assets/00-base.svg')
     const base = viewBox(build.base)
-    expect(base).toBe('0 0 600 450')
-    for (const file of [...build.pieces.map((p) => p.file), build.fullPicture]) expect(viewBox(file), file).toBe(base)
+    expect(base).toBe(`0 0 ${build.width} ${build.height}`)
+    for (const file of build.pieces.map((p) => p.file)) {
+      expect(file.startsWith('/3-1-room-assets/'), file).toBe(true)
+      expect(viewBox(file), file).toBe(base)
+    }
   })
 
   test('every centre point is inside the room', () => {

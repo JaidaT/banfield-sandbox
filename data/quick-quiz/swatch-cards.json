@@ -2,11 +2,16 @@
   "_meta": {
     "purpose": "Look settings for the Quick Quiz swatch cards (docs/SWATCH_ROOMS_PLAN.md).",
     "strip": "The colour of the strip holding the question: 'yellow' (the brand yellow with dark text) or 'navy' (the brand navy with off-white text, Jaida 2026-11-22). Switch here to compare; save and refresh the page.",
-    "embedMinHeight": "Inside the website's iframe only (/embed-test), the quiz is at least this tall, in pixels: 'phone' below 640px wide, 'computer' from 640px wide. Shorter cards leave space above the buttons instead of shrinking the iframe (Jaida, 2026-11-22). Set to null to let the iframe fit each card again. Set just above the tallest card, measured in Chrome on 2026-11-22: 668px on a 375px-wide phone, 951px on a computer (the iframe 736px wide). Narrower phones wrap more text, so their cards are taller."
+    "embedMinHeight": "Inside the website's iframe only (/embed-test), the quiz is at least this tall, in pixels: 'phone' below 640px wide, 'computer' from 640px wide. Shorter cards leave space above the buttons instead of shrinking the iframe (Jaida, 2026-11-22). Set to null to let the iframe fit each card again. Set just above the tallest card, measured in Chrome on 2026-11-23 with the wide room and the footer: 703px on a 375px-wide phone (the same on short and tall phones), 947px on a computer (the iframe 736px wide). Narrower phones wrap more text, so their cards are taller.",
+    "roomWidth": "How wide the room above the bar is, as a percentage of the bar's width: 'phone' below 640px wide, 'computer' from 640px wide (Jaida, 2026-11-23). The wide (3:1) room stays low, so it can be wide. Change the numbers to try other widths; then check the iframe minimum heights still hold."
   },
   "strip": "navy",
   "embedMinHeight": {
-    "phone": 680,
+    "phone": 715,
     "computer": 960
+  },
+  "roomWidth": {
+    "phone": 60,
+    "computer": 60
   }
 }
