@@ -2,7 +2,7 @@
 
 **For:** Claude and Jaida. Behaviour first, so it also works in another repo; sandbox files and branches are in "In the sandbox" at the end.
 
-**Status:** planned, not built.
+**Status:** built in the sandbox on 2026-11-23 and checked in Chrome. Jaida's check on a phone and a computer is still open.
 
 **Builds on:** `SWATCH_ROOMS_PLAN.md` (it ships with the swatch cards and the room that builds). Only the Quick Quiz's welcome screen changes; the long questionnaire's welcome screen stays as it is.
 
@@ -55,30 +55,32 @@ From Jaida's mockup (2026-11-23):
 Test first for each step (TDD); run lint, tests and build, then commit and push after each.
 
 ### Phase 1: Wording and settings
-- [ ] **Wording:** the welcome wording becomes the heading, the two paragraphs and the button label. In the data, `**...**` marks bold text. Tests check the wording and that the bold part shows in bold.
-- [ ] **Settings:** a `"welcome"` setting holds the list of pictures, the speed (20 seconds per square) and the square size. The parser rejects a missing picture or a speed or size of zero or less. Tests check the real file and each refusal.
-- [ ] **Placeholders:** 5 placeholder SVG files (a grey square with a cross). A test checks that every listed file exists.
+- [x] **Wording:** the welcome wording becomes the heading, the two paragraphs and the button label. In the data, `**...**` marks bold text. Tests check the wording and that the bold part shows in bold.
+- [x] **Settings:** a `"welcome"` setting holds the list of pictures, the speed (20 seconds per square) and the square size. The parser rejects a missing picture or a speed or size of zero or less. Tests check the real file and each refusal.
+- [x] **Placeholders:** 5 placeholder SVG files (a grey square with a cross). A test checks that every listed file exists.
 
 ### Phase 2: The welcome screen
-- [ ] **Own welcome screen:** the shared form can take its own welcome screen, as it already does for step screens. If none is given, it uses the current one, so the long questionnaire is unchanged. Tests check both.
-- [ ] **The card:** heading, text and "Get Started". Pressing the button starts the quiz, and the timer still starts on the first press. Tests check both.
-- [ ] **Footer:** not shown on the welcome screen, but still shown on the cards. Tests check both.
-- [ ] **Iframe height:** the welcome screen is no longer left out of the iframe minimum height. Remeasure the iframe in Chrome.
+- [x] **Own welcome screen:** the shared form can take its own welcome screen, as it already does for step screens. If none is given, it uses the current one, so the long questionnaire is unchanged. Tests check both.
+- [x] **The card:** heading, text and "Get Started". Pressing the button starts the quiz, and the timer still starts on the first press. Tests check both.
+- [x] **Footer:** not shown on the welcome screen, but still shown on the cards. Tests check both.
+- [x] **Iframe height:** the welcome screen is no longer left out of the iframe minimum height. Remeasure the iframe in Chrome.
 
 ### Phase 3: The moving background
-- [ ] **Columns:** the columns of squares, with every other column shifted by half a square. Tests check that they're hidden from screen readers and can't be clicked or reached with Tab.
-- [ ] **Directions:** the middle column moves down, and the others alternate outwards. Tests check each column's direction.
-- [ ] **Animation:** each column's loop time comes from the speed setting. With reduced motion, the columns don't move. Tests check the loop time; the reduced-motion rule is CSS.
-- [ ] **Filling the space:** enough columns to fill a computer screen, with the edges cut off neatly.
+- [x] **Columns:** the columns of squares, with every other column shifted by half a square. Tests check that they're hidden from screen readers and can't be clicked or reached with Tab.
+- [x] **Directions:** the middle column moves down, and the others alternate outwards. Tests check each column's direction.
+- [x] **Animation:** each column's loop time comes from the speed setting. With reduced motion, the columns don't move. Tests check the loop time; the reduced-motion rule is CSS.
+- [x] **Filling the space:** enough columns to fill a computer screen, with the edges cut off neatly.
 
 ### Phase 4: Check
-- [ ] **Measure in Chrome:** check the welcome screen's height in the iframe on a phone and on a computer, at 715 and 960.
+- [x] **Measure in Chrome:** check the welcome screen's height in the iframe on a phone and on a computer, at 715 and 960. Measured 2026-11-23: 715 and 960; the columns move about 6px a second (124px in 20 seconds) and stand still with reduced motion.
 - [ ] **Jaida's check:** Jaida tries it on a phone and a computer, then tunes the square size and speed if needed.
 
 ## In the sandbox
 - **Branch:** `foyer-v1-swatch-rooms`.
 - **Wording:** `data/quick-quiz/quiz-form.json` (`welcome`).
 - **Settings:** `data/quick-quiz/swatch-cards.json` (`welcome`), parsed in `lib/quick-quiz/swatchLook.ts`.
-- **Placeholders:** `public/welcome-mascots/`.
-- **Welcome screen extension point:** a new `introScreen` prop on `components/form/QuestionnaireForm.tsx`. The new screen is `components/quick-quiz/WelcomeScreen.tsx`.
+- **Placeholders:** `public/welcome-mascots/01-placeholder.svg` to `05-placeholder.svg`. To use the real pictures, put the files in `public/` and list them in `"welcome"` > `"pictures"` in `data/quick-quiz/swatch-cards.json`.
+- **Welcome screen extension point:** new `introScreen` and `hideFooterOnWelcome` props on `components/form/QuestionnaireForm.tsx`. The new screen is `components/quick-quiz/WelcomeScreen.tsx`; the columns are `components/quick-quiz/MascotBackground.tsx`, with their rules in `lib/quick-quiz/mascotColumns.ts` (15 columns, enough for a wide screen) and the animation at the end of `app/globals.css`.
+- **Bold text:** `lib/quick-quiz/boldText.ts`.
+- **Tests:** `__tests__/quick-quiz/welcomeSettings.test.ts`, `welcomeScreen.test.tsx`, `mascotBackground.test.tsx`, and the `introScreen` tests in `__tests__/form/questionnaireForm.test.tsx`.
 - **The iframe rule:** in `app/globals.css`, the iframe minimum height rule drops its `:not(:has([data-screen="welcome"]))` part.

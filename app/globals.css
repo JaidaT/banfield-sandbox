@@ -280,3 +280,15 @@ label:has(:checked) > .pencil-oval path { animation: pencil-draw 300ms ease-out;
 @media (prefers-reduced-motion: reduce) {
   .base-arrive { animation-duration: 150ms; animation-delay: 0ms; }
 }
+
+/* Welcome mascots (docs/WELCOME_MASCOTS_PLAN.md, Jaida, 2026-11-23): each
+   column's track holds one loop of squares twice and moves by one loop, so
+   it joins up seamlessly. --loop is the loop's length in seconds. */
+@keyframes mascot-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes mascot-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+.mascot-up { animation: mascot-up var(--loop) linear infinite; }
+.mascot-down { animation: mascot-down var(--loop) linear infinite; }
+/* With "reduce motion" on, the columns stand still. */
+@media (prefers-reduced-motion: reduce) {
+  .mascot-up, .mascot-down { animation: none; }
+}
