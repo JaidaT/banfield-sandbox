@@ -48,7 +48,7 @@ From Jaida's mockup (2026-11-23):
 
 ### The rest of the screen
 - **No "Powered by Foyer." footer** on the welcome screen. Every other screen keeps it.
-- **Inside the website's iframe, the same height as the other screens** (715px on a phone, 960px on a computer, from `embedMinHeight`). This replaces "the welcome screen is left out" in `SWATCH_ROOMS_PLAN.md`. On the quiz's own page, the welcome screen fills the window.
+- **Inside the website's iframe, the same height as the other screens** (from `embedMinHeight`: 650px on a phone and 850px on a computer since Jaida lowered them on 2026-11-23; 715px and 960px when built). This replaces "the welcome screen is left out" in `SWATCH_ROOMS_PLAN.md`. On the quiz's own page, the welcome screen fills the window.
 
 ## Steps
 
