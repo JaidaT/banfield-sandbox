@@ -15,7 +15,7 @@ interface Props {
 // Each column's track holds one loop of squares twice, and moves by one loop
 // (half the track), so the loop joins up seamlessly. The animations
 // (mascot-up, mascot-down) live in app/globals.css, which also stops them
-// with reduced motion.
+// with reduced motion. With "animate": false the squares show but stay still.
 export default function MascotBackground({ look }: Props) {
   const step = look.squareSize + look.gap
   const loop = squaresPerLoop(look.pictures.length, step)
@@ -40,7 +40,7 @@ export default function MascotBackground({ look }: Props) {
             className="shrink-0"
             style={{ width: look.squareSize, marginTop: shifted ? -step / 2 : undefined }}
           >
-            <div className={direction === 'up' ? 'mascot-up' : 'mascot-down'} style={timing}>
+            <div className={!look.animate ? '' : direction === 'up' ? 'mascot-up' : 'mascot-down'} style={timing}>
               {[...pictures, ...pictures].map((file, i) => (
                 <Image
                   key={i}

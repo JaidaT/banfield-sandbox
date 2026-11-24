@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { afterEach, describe, expect, test } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import MascotBackground from '@/components/quick-quiz/MascotBackground'
 import QuizForm from '@/components/quick-quiz/QuizForm'
 import { COLUMN_COUNT, columnDirection, columnPictures, squaresPerLoop } from '@/lib/quick-quiz/mascotColumns'
 import { loadClientCopy, loadQuizData, loadQuizForm } from '@/lib/quick-quiz/load'
@@ -80,6 +81,19 @@ describe('the background on the welcome screen', () => {
     const track = columns()[0].firstElementChild as HTMLElement
     expect(track.style.getPropertyValue('--loop')).toBe(`${loop * look.secondsPerSquare}s`)
     expect(track.querySelectorAll('img')).toHaveLength(loop * 2)
+  })
+
+  test('with "animate": true, every column moves', () => {
+    renderQuiz()
+    for (const column of columns()) expect((column.firstElementChild as HTMLElement).className).toMatch(/^mascot-(up|down)$/)
+  })
+
+  // Jaida, 2026-11-23: "animate": false keeps the squares but stops the movement.
+  test('with "animate": false, the squares show but no column moves', () => {
+    render(<MascotBackground look={{ ...look, animate: false }} />)
+    expect(columns()).toHaveLength(COLUMN_COUNT)
+    for (const column of columns()) expect((column.firstElementChild as HTMLElement).className).not.toMatch(/mascot-(up|down)/)
+    expect(background().querySelectorAll('img').length).toBeGreaterThan(0)
   })
 
   test('goes away after "Get Started"', () => {

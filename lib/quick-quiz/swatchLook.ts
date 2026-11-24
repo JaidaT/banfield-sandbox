@@ -14,7 +14,8 @@ import { isRecord } from './load'
 // welcome: the moving columns of mascot squares behind the welcome card
 // (docs/WELCOME_MASCOTS_PLAN.md, Jaida, 2026-11-23): the pictures (files in
 // public/), how many seconds a square takes to move its own height, and the
-// square size and gap in pixels. Left out: no moving background.
+// square size and gap in pixels, and whether the columns move ("animate",
+// left out: true; false keeps the squares still). Left out: no background.
 export type StripColour = 'yellow' | 'navy'
 const STRIPS: StripColour[] = ['yellow', 'navy']
 
@@ -33,6 +34,7 @@ export interface WelcomeLook {
   secondsPerSquare: number
   squareSize: number
   gap: number
+  animate: boolean
 }
 
 export interface SwatchLook {
@@ -53,7 +55,9 @@ function parseWelcome(raw: unknown): WelcomeLook | null {
       'swatch cards "welcome" must be { "pictures": ["/file.svg", ...], "secondsPerSquare": <seconds>, "squareSize": <pixels>, "gap": <pixels> }, with at least one picture and every number above 0',
     )
   }
-  return { pictures: pictures as string[], secondsPerSquare: value.secondsPerSquare, squareSize: value.squareSize, gap: value.gap }
+  const animate = value.animate ?? true
+  if (typeof animate !== 'boolean') throw new Error('swatch cards "welcome.animate" must be true or false')
+  return { pictures: pictures as string[], secondsPerSquare: value.secondsPerSquare, squareSize: value.squareSize, gap: value.gap, animate }
 }
 
 function parseRoomWidth(raw: unknown): RoomWidth {

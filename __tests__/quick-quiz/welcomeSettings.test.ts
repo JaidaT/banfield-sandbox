@@ -72,6 +72,15 @@ describe('the welcome background settings (swatch-cards.json)', () => {
     expect(welcome.secondsPerSquare).toBe(20)
     expect(welcome.squareSize).toBe(112)
     expect(welcome.gap).toBe(12)
+    expect(welcome.animate).toBe(true)
+  })
+
+  // Jaida, 2026-11-23: a switch to turn the movement on and off.
+  test('"animate": true or false; left out, the columns move; anything else is refused', () => {
+    const base = { pictures: ['/a.svg'], secondsPerSquare: 20, squareSize: 112, gap: 12 }
+    expect(parseSwatchLook({ welcome: base }).welcome!.animate).toBe(true)
+    expect(parseSwatchLook({ welcome: { ...base, animate: false } }).welcome!.animate).toBe(false)
+    expect(() => parseSwatchLook({ welcome: { ...base, animate: 'no' } })).toThrow(/animate/)
   })
 
   test('every picture file exists in public/', () => {
@@ -86,7 +95,7 @@ describe('the welcome background settings (swatch-cards.json)', () => {
 
   test('refuses no pictures, and a speed, size or gap that is not a positive number', () => {
     const good = { pictures: ['/a.svg'], secondsPerSquare: 20, squareSize: 112, gap: 12 }
-    expect(parseSwatchLook({ welcome: good }).welcome).toEqual(good)
+    expect(parseSwatchLook({ welcome: good }).welcome).toEqual({ ...good, animate: true })
     expect(() => parseSwatchLook({ welcome: { ...good, pictures: [] } })).toThrow(/welcome/)
     expect(() => parseSwatchLook({ welcome: { ...good, pictures: [''] } })).toThrow(/welcome/)
     expect(() => parseSwatchLook({ welcome: { ...good, secondsPerSquare: 0 } })).toThrow(/welcome/)
