@@ -22,15 +22,16 @@ afterEach(() => {
 
 describe('Powered by Foyer.', () => {
   test('reads "Powered by Foyer." with Foyer. in bold', () => {
-    renderQuiz()
+    renderQuiz('confidence')
     expect(footer().textContent).toBe('Powered by Foyer.')
     expect(footer().querySelector('strong')!.textContent).toBe('Foyer.')
   })
 
-  test('is the last thing on the welcome screen and on a question card', () => {
+  // Not on the welcome card (Jaida, 2026-11-23, docs/WELCOME_MASCOTS_PLAN.md).
+  test('is the last thing on a question card, and not shown on the welcome card', () => {
     renderQuiz()
-    isLast()
-    fireEvent.click(screen.getByRole('button', { name: "Let's start" }))
+    expect(screen.queryByTestId('quiz-footer')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Get Started' }))
     isLast()
   })
 

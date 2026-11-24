@@ -48,7 +48,7 @@ describe('QuizForm', () => {
     renderQuiz()
     expect(heading()).toBe(form.welcome.title)
     expect(screen.getByText(form.welcome.intro[0], { exact: false })).toBeDefined()
-    click("Let's start")
+    click('Get Started')
     // Swatch rooms (2026-11-22): no percentage text; screen readers hear "Question N of M".
     expect(screen.getByText('Question 1 of 13')).toBeDefined()
     expect(screen.queryByText('0%')).toBeNull()
@@ -156,7 +156,7 @@ describe('the /quiz page', () => {
   test('shows the welcome screen, and is kept out of search engines', () => {
     render(<QuizPage />)
     expect(heading()).toBe(form.welcome.title)
-    expect(screen.getByRole('button', { name: "Let's start" })).toBeDefined()
+    expect(screen.getByRole('button', { name: 'Get Started' })).toBeDefined()
     expect(metadata.robots).toEqual({ index: false, follow: false })
   })
 })

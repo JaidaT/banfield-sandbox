@@ -268,10 +268,10 @@ label:has(:checked) > .pencil-oval path { animation: pencil-draw 300ms ease-out;
    least as tall as the swatch-cards.json minimum, so the iframe does not grow
    and shrink with every card (Jaida, 2026-11-22). Shorter cards leave space
    above the buttons, which stay at the bottom. */
-/* The welcome screen keeps its own height (Jaida, 2026-11-22). */
-[data-embedded] [data-embed-min] main:not(:has([data-screen="welcome"])) { min-height: var(--embed-min-phone); }
+/* The welcome screen too, like every other screen (Jaida, 2026-11-23). */
+[data-embedded] [data-embed-min] main { min-height: var(--embed-min-phone); }
 @media (min-width: 640px) {
-  [data-embedded] [data-embed-min] main:not(:has([data-screen="welcome"])) { min-height: var(--embed-min-computer); }
+  [data-embedded] [data-embed-min] main { min-height: var(--embed-min-computer); }
 }
 
 /* On the result, the walls and floor fade in behind the furniture: the

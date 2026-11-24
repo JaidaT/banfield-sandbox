@@ -5,6 +5,7 @@ import { createContext, use, useEffect, useRef, useState } from 'react'
 import ClientResultView from '@/components/quick-quiz/ClientResultView'
 import { useEmbedBridge } from '@/components/quick-quiz/useEmbedBridge'
 import SwatchCardScreen from '@/components/quick-quiz/SwatchCardScreen'
+import WelcomeScreen from '@/components/quick-quiz/WelcomeScreen'
 import BuildUpRoom from '@/components/quick-quiz/BuildUpRoom'
 import RoomAndBar from '@/components/quick-quiz/RoomAndBar'
 import { STRIP } from '@/components/quick-quiz/stripStyles'
@@ -36,7 +37,7 @@ interface Props {
 interface QuizSetup {
   quizData: QuizData
   clientCopy: ClientCopy
-  // null until "Let's start" is pressed.
+  // null until "Get Started" is pressed.
   startedAt: number | null
 }
 const QuizContext = createContext<QuizSetup | null>(null)
@@ -54,7 +55,7 @@ const ALL_PIECES = loadRoomBuild().pieces.length
 // The Quick Quiz: the shared form's screens (one question per screen, contact
 // last, no review screen), ending on the quiz's own result screen.
 export default function QuizForm({ questionnaire, quizData, clientCopy, startAt, initialAnswers }: Props) {
-  // When "Let's start" was pressed, for the "time taken" note in the brief (a
+  // When "Get Started" was pressed, for the "time taken" note in the brief (a
   // note only, with no effect on scoring; DECISIONS.md 2026-10-26). Reading the
   // welcome screen does not count. performance.now() is the timer: Next.js does
   // not allow Date.now() while it prepares the page ahead of time, and says
@@ -95,6 +96,8 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
           onScreenChange={afterMove}
           focusWithoutScroll
           footer={<PoweredBy />}
+          hideFooterOnWelcome
+          introScreen={WelcomeScreen}
           stepScreen={SwatchCardScreen}
           doneScreen={QuizResults}
         />
@@ -104,7 +107,8 @@ export default function QuizForm({ questionnaire, quizData, clientCopy, startAt,
 }
 
 // "Powered by Foyer." at the bottom of every Quick Quiz screen (Jaida,
-// 2026-11-23): small, centred, muted, the last thing on the page. On /quiz the
+// 2026-11-23): small, centred, muted, the last thing on the page (not on the
+// welcome card, docs/WELCOME_MASCOTS_PLAN.md). On /quiz the
 // page fills the screen, so on short screens it sits at the bottom edge.
 function PoweredBy() {
   return (
@@ -124,7 +128,7 @@ function QuizResults({ answers }: DoneScreenProps) {
   if (!setup) throw new Error('QuizResults must be inside QuizForm')
   const { quizData, clientCopy, startedAt } = setup
   // Worked out once, when the results first show. 0 when the quiz was opened
-  // past the welcome screen (tests and demo links), so "Let's start" was never pressed.
+  // past the welcome screen (tests and demo links), so "Get Started" was never pressed.
   const [seconds] = useState(() =>
     startedAt === null ? 0 : Math.max(0, Math.round((performance.now() - startedAt) / 1000)),
   )

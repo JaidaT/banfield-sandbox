@@ -34,7 +34,7 @@ describe('QuizForm in an iframe', () => {
   test('sends a new-screen message on "Let\'s start", Next and Back', () => {
     pretendIframe()
     renderQuiz()
-    click("Let's start")
+    click('Get Started')
     expect(newScreens()).toEqual([newScreenMessage()])
     click('Next')
     expect(newScreens()).toHaveLength(2)
@@ -46,7 +46,7 @@ describe('QuizForm in an iframe', () => {
 describe('QuizForm on its own page', () => {
   test('sends nothing', () => {
     renderQuiz()
-    click("Let's start")
+    click('Get Started')
     click('Next')
     expect(parentPost).not.toHaveBeenCalled()
   })

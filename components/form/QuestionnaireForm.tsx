@@ -3,6 +3,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import type { ComponentType, ReactNode, Ref } from 'react'
 import IntroScreen from './IntroScreen'
+import type { IntroScreenProps } from './IntroScreen'
 import ReviewScreen from './ReviewScreen'
 import StepScreen from './StepScreen'
 import type { ProgressStyle, StepScreenProps } from './StepScreen'
@@ -42,6 +43,10 @@ interface Props {
   // The screen for steps with questions. Left out: the shared StepScreen. The
   // Quick Quiz brings its swatch cards (docs/SWATCH_CARDS_PLAN.md).
   stepScreen?: ComponentType<StepScreenProps>
+  // The screen for steps with no questions, such as the welcome. Left out: the
+  // shared IntroScreen. The Quick Quiz brings its welcome card
+  // (docs/WELCOME_MASCOTS_PLAN.md).
+  introScreen?: ComponentType<IntroScreenProps>
   // Called after the form moves to a new screen (Next, Back, Edit, Submit),
   // not when the page opens or Next is blocked. The Quick Quiz uses it to tell
   // the website around its iframe to scroll to the top of the quiz.
@@ -54,6 +59,8 @@ interface Props {
   // (the Quick Quiz, 2026-11-23). Inside main, so the website's iframe counts
   // it when it sizes itself.
   footer?: ReactNode
+  // Leave the footer off the welcome screen (the Quick Quiz, 2026-11-23).
+  hideFooterOnWelcome?: boolean
 }
 
 export interface DoneScreenProps {
@@ -68,7 +75,7 @@ export interface DoneScreenProps {
 // screen passed in as doneScreen.
 // Answers live only here, so they are lost if the page closes (no saving yet,
 // see DECISIONS.md).
-export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange, focusWithoutScroll = false, footer, stepScreen: Step = StepScreen }: Props) {
+export default function QuestionnaireForm({ questionnaire, startAt, initialAnswers, doneScreen: Done, skipReview = false, onStart, progressAs = 'steps', look, onScreenChange, focusWithoutScroll = false, footer, hideFooterOnWelcome = false, stepScreen: Step = StepScreen, introScreen }: Props) {
   const firstStepId = questionnaire.steps[0].id
   // The screen showing now: a step id, REVIEW or DONE.
   const [current, setCurrent] = useState(startAt ?? firstStepId)
@@ -165,8 +172,9 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
   } else if (current === DONE) {
     screen = <Done questionnaire={questionnaire} answers={visibleAnswers(questionnaire, answers)} headingRef={headingRef} />
   } else if (step && step.step.questions.length === 0) {
+    const Intro = introScreen ?? IntroScreen
     screen = (
-      <IntroScreen
+      <Intro
         step={step.step}
         buttonLabel={current === firstStepId ? "Let's start" : 'Next'}
         onNext={() => {
@@ -211,7 +219,7 @@ export default function QuestionnaireForm({ questionnaire, startAt, initialAnswe
           only as tall as its content, so the iframe can shrink as well as grow. */}
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 in-[[data-embedded]]:flex-none max-sm:in-[.quick-quiz]:gap-4 max-sm:in-[.quick-quiz]:py-4">
         {screen}
-        {footer}
+        {hideFooterOnWelcome && current === firstStepId ? null : footer}
       </main>
     </div>
   )

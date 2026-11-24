@@ -51,7 +51,7 @@ describe('swatch cards: the card and the stack', () => {
   test('the welcome screen is not a card; the first question is', () => {
     renderQuiz()
     expect(screen.queryByTestId('active-card')).toBeNull()
-    click("Let's start")
+    click('Get Started')
     expect(within(activeCard()).getByRole('heading', { level: 2 }).textContent).toBe(questions[0].prompt)
   })
 

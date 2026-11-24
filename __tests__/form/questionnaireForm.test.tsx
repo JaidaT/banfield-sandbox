@@ -2,6 +2,7 @@ import type { Ref } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import QuestionnaireForm from '@/components/form/QuestionnaireForm'
+import type { IntroScreenProps } from '@/components/form/IntroScreen'
 import type { StepScreenProps } from '@/components/form/StepScreen'
 import { parseQuestionnaire } from '@/lib/form/parse'
 import type { Answers } from '@/lib/form/types'
@@ -126,6 +127,44 @@ describe('QuestionnaireForm: a custom question screen (stepScreen)', () => {
     click("Let's start")
     expect(stepHeading()).toBe(`Custom: ${questionnaire.steps[1].title}`)
     expect(document.activeElement).toBe(screen.getByRole('heading', { level: 2 }))
+  })
+})
+
+// Welcome mascots (2026-11-23): a product can bring its own welcome screen,
+// and leave its footer off the welcome screen.
+describe('QuestionnaireForm: a custom welcome screen (introScreen)', () => {
+  function CustomWelcome({ step, buttonLabel, onNext, headingRef }: IntroScreenProps) {
+    return (
+      <>
+        <h2 ref={headingRef} tabIndex={-1}>
+          Custom welcome: {step.title}
+        </h2>
+        <button type="button" onClick={onNext}>
+          {buttonLabel}
+        </button>
+      </>
+    )
+  }
+
+  test('the welcome screen uses the custom screen, with the start button label and onStart', () => {
+    const onStart = vi.fn()
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} introScreen={CustomWelcome} onStart={onStart} />)
+    expect(stepHeading()).toBe(`Custom welcome: ${questionnaire.steps[0].title}`)
+    click("Let's start")
+    expect(onStart).toHaveBeenCalledTimes(1)
+    expect(stepHeading()).toBe(questionnaire.steps[1].title)
+  })
+
+  test('without it, the shared welcome screen shows as before', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} />)
+    expect(stepHeading()).toBe(questionnaire.steps[0].title)
+  })
+
+  test('hideFooterOnWelcome leaves the footer off the welcome screen only', () => {
+    render(<QuestionnaireForm questionnaire={questionnaire} doneScreen={StandIn} footer={<p>Footer text</p>} hideFooterOnWelcome />)
+    expect(screen.queryByText('Footer text')).toBeNull()
+    click("Let's start")
+    expect(screen.getByText('Footer text')).toBeDefined()
   })
 })
 

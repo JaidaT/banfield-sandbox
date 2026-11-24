@@ -48,14 +48,8 @@ describe('embedMinHeight', () => {
     expect(() => parseSwatchLook({ embedMinHeight: { phone: -1, computer: 900 } })).toThrow(/embedMinHeight/)
   })
 
-  // Jaida, 2026-11-22: the welcome screen keeps its own height in the iframe.
-  // The iframe rule (app/globals.css) skips a page showing this marker.
-  test('the welcome screen is marked, so the minimum height skips it; question cards are not', () => {
-    render(<QuizForm questionnaire={quizQuestionnaire(quizData.questions, form)} quizData={quizData} clientCopy={clientCopy} />)
-    expect(document.querySelector('main [data-screen="welcome"]')).not.toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: "Let's start" }))
-    expect(document.querySelector('main [data-screen="welcome"]')).toBeNull()
-  })
+  // The welcome screen now matches the other screens' height (Jaida,
+  // 2026-11-23): tested in welcomeScreen.test.tsx.
 
   test('the quiz carries the two heights for the iframe rule to use', () => {
     renderQuiz('confidence')
