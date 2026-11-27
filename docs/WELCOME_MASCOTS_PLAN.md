@@ -58,9 +58,9 @@ From Jaida's mockup (2026-11-23):
 - **Where:** centred at the top of the yellow Design DNA card, above "DESIGN DNA" and the profile name (Claude's recommendation). It is 144px on a phone and 176px on a computer, with no box, fitted without stretching.
 - **Screen readers** read the mascot's name (for example "Strategist Seal").
 - **Everywhere the client result shows:** the quiz's result screen and the team's sample result pages. The team brief is unchanged.
-- **Optional per profile:** leave  out of a profile for none.
-- Tests: , plus the mascot in . Checked in Chrome on a phone and a computer.
-- In the sandbox:  on each profile in ; parsed in , copied by  (), shown in .
+- **Optional per profile:** leave `"mascot"` out of a profile for none.
+- Tests: `__tests__/quick-quiz/resultMascot.test.tsx`, plus the mascot in `pickDesignDna.test.ts`. Checked in Chrome on a phone and a computer.
+- In the sandbox: `"mascot"` on each profile in `data/quick-quiz/design-dna.json`; parsed in `lib/quick-quiz/load.ts`, copied by `pickDesignDna` (`lib/quick-quiz/designDna.ts`), shown in `components/quick-quiz/ClientResultView.tsx`.
 
 ## Steps
 
