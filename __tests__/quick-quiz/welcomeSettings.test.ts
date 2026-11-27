@@ -94,6 +94,15 @@ describe('the welcome background settings (swatch-cards.json)', () => {
     expect(welcome.squareSize).toBe(150)
     expect(welcome.gap).toBe(12)
     expect(welcome.animate).toBe(true)
+    expect(welcome.opacity).toBe(30)
+  })
+
+  // Jaida, 2026-11-27: how strongly the columns show, in percent.
+  test('"opacity": a percentage from 1 to 100; left out, 100; anything else is refused', () => {
+    const base = { pictures: ['/a.svg'], secondsPerSquare: 20, squareSize: 112, gap: 12 }
+    expect(parseSwatchLook({ welcome: base }).welcome!.opacity).toBe(100)
+    expect(parseSwatchLook({ welcome: { ...base, opacity: 30 } }).welcome!.opacity).toBe(30)
+    for (const bad of [0, 101, '30']) expect(() => parseSwatchLook({ welcome: { ...base, opacity: bad } })).toThrow(/opacity/)
   })
 
   // Jaida, 2026-11-23: a switch to turn the movement on and off.
@@ -116,7 +125,7 @@ describe('the welcome background settings (swatch-cards.json)', () => {
 
   test('refuses no pictures, and a speed, size or gap that is not a positive number', () => {
     const good = { pictures: ['/a.svg'], secondsPerSquare: 20, squareSize: 112, gap: 12 }
-    expect(parseSwatchLook({ welcome: good }).welcome).toEqual({ ...good, animate: true })
+    expect(parseSwatchLook({ welcome: good }).welcome).toEqual({ ...good, animate: true, opacity: 100 })
     expect(() => parseSwatchLook({ welcome: { ...good, pictures: [] } })).toThrow(/welcome/)
     expect(() => parseSwatchLook({ welcome: { ...good, pictures: [''] } })).toThrow(/welcome/)
     expect(() => parseSwatchLook({ welcome: { ...good, secondsPerSquare: 0 } })).toThrow(/welcome/)

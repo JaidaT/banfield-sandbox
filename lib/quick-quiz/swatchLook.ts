@@ -15,7 +15,8 @@ import { isRecord } from './load'
 // (docs/WELCOME_MASCOTS_PLAN.md, Jaida, 2026-11-23): the pictures (files in
 // public/), how many seconds a square takes to move its own height, and the
 // square size and gap in pixels, and whether the columns move ("animate",
-// left out: true; false keeps the squares still). Left out: no background.
+// left out: true; false keeps the squares still), and "opacity", how strongly
+// they show, in percent (left out: 100). Left out: no background.
 export type StripColour = 'yellow' | 'navy'
 const STRIPS: StripColour[] = ['yellow', 'navy']
 
@@ -35,6 +36,7 @@ export interface WelcomeLook {
   squareSize: number
   gap: number
   animate: boolean
+  opacity: number
 }
 
 export interface SwatchLook {
@@ -57,7 +59,11 @@ function parseWelcome(raw: unknown): WelcomeLook | null {
   }
   const animate = value.animate ?? true
   if (typeof animate !== 'boolean') throw new Error('swatch cards "welcome.animate" must be true or false')
-  return { pictures: pictures as string[], secondsPerSquare: value.secondsPerSquare, squareSize: value.squareSize, gap: value.gap, animate }
+  const opacity = value.opacity ?? 100
+  if (typeof opacity !== 'number' || opacity <= 0 || opacity > 100) {
+    throw new Error('swatch cards "welcome.opacity" must be a percentage from 1 to 100')
+  }
+  return { pictures: pictures as string[], secondsPerSquare: value.secondsPerSquare, squareSize: value.squareSize, gap: value.gap, animate, opacity }
 }
 
 function parseRoomWidth(raw: unknown): RoomWidth {

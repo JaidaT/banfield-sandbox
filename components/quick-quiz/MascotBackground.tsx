@@ -26,7 +26,8 @@ export default function MascotBackground({ look }: Props) {
       data-testid="mascot-background"
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-0 flex justify-center overflow-hidden"
-      style={{ gap: look.gap }}
+      // Faded by the opacity setting (Jaida, 2026-11-27: 30%).
+      style={{ gap: look.gap, opacity: look.opacity / 100 }}
     >
       {Array.from({ length: COLUMN_COUNT }, (_, index) => {
         const direction = columnDirection(index)

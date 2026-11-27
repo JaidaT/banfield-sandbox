@@ -41,6 +41,7 @@ From Jaida's mockup (2026-11-23):
 - **Squares:** columns of mascot squares, **150px** with a 12px gap (Jaida, 2026-11-27; first 112px). Every other column is shifted down by half a square, as in the mockup.
 - **Movement:** the middle column moves down, and the columns on either side alternate: up, down, up and so on, outwards from the middle. Each loop is seamless. **One square takes 20 seconds to travel its own height.**
 - **Speed is a setting,** so Jaida can change it without code.
+- **Faded to 30%** (Jaida, 2026-11-27): `"opacity"` in the welcome settings, in percent (left out: 100). Only the columns fade; the logo on the card stays at full strength.
 - **On/off switch** (Jaida, 2026-11-23): `"animate"` in the welcome settings. `true` (or left out) moves the columns; `false` keeps the squares but stops the movement.
 - **Reduced motion:** with "reduce motion" turned on in the phone or computer settings, the columns stay still.
 - **Filling the space:** on a phone about 3 columns show. On wider screens more columns fill the sides, so the card stays the swatch cards' width.
