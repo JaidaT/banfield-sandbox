@@ -30,6 +30,15 @@ describe('the welcome card', () => {
     expect(card().getByRole('button', { name: 'Get Started' })).toBeDefined()
   })
 
+  // Jaida, 2026-11-27: the Banfield logo, centred above the heading.
+  test('shows the Banfield logo above the heading', () => {
+    renderQuiz()
+    const logo = card().getByRole('img', { name: 'Banfield Design Co.' })
+    expect(logo.getAttribute('src')).toBe('/mascots/banfield-logo.svg')
+    const heading = card().getByRole('heading', { level: 2 })
+    expect(logo.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   test('the cursor starts on the heading, and "Get Started" goes to the first question', () => {
     renderQuiz()
     fireEvent.click(screen.getByRole('button', { name: 'Get Started' }))

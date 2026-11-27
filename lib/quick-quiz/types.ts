@@ -280,8 +280,9 @@ export interface QuizForm {
   contactShown?: ContactField[]
   contactIntroShown?: boolean
   // The welcome screen (docs/WELCOME_MASCOTS_PLAN.md): its paragraphs, where
-  // **text** is bold, and its button (left out: the form's "Let's start").
-  welcome: { title: string; intro: string[]; button?: string }
+  // **text** is bold, its button (left out: the form's "Let's start"), and an
+  // optional logo above the heading (a file in public/ and its description).
+  welcome: { title: string; intro: string[]; button?: string; logo?: { file: string; alt: string } }
   // Prompts for the contact screen, which comes last.
   contact: {
     title: string

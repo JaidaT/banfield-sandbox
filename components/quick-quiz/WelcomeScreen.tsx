@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useId } from 'react'
 import type { IntroScreenProps } from '@/components/form/IntroScreen'
 import { BUTTON_MAIN } from '@/components/form/styles'
@@ -28,6 +29,19 @@ export default function WelcomeScreen({ step, buttonLabel, onNext, headingRef }:
         aria-labelledby={headingId}
         className="relative z-10 flex flex-col gap-5 rounded-2xl border-2 border-[var(--line)] bg-white p-4 sm:p-8"
       >
+        {/* The Banfield logo, centred above the heading (Jaida, 2026-11-27):
+            160px wide on a phone, 192px on a computer. */}
+        {WELCOME.logo ? (
+          <Image
+            src={WELCOME.logo.file}
+            alt={WELCOME.logo.alt}
+            width={192}
+            height={39}
+            unoptimized
+            priority
+            className="mx-auto h-auto w-40 sm:w-48"
+          />
+        ) : null}
         <h2
           ref={headingRef}
           id={headingId}

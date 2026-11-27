@@ -6,7 +6,7 @@
     "contactRequired": "false: the contact fields can be left blank and the result still shows (the current choice, 2026-11-10). true: name, email, phone and the full site address must be filled in before the result. Switching needs no code change; the contact screen picks introWhenRequired or introWhenOptional to match.",
     "contact": "The site address is the project's address, which Jamie uses for pre-call research. It may differ from where the person lives now.",
     "demo": "Demo styling (2026-11-17, foyer-v1-demo-styling only): the contact screen follows the team's screenshot: its heading, only name and email ('contactShown'), labels 'Your Name' and 'Email Address', and no intro ('contactIntroShown': false). Leave both settings out to show all six fields and the intro again.",
-    "welcome": "Welcome card (Jaida, 2026-11-23, docs/WELCOME_MASCOTS_PLAN.md): intro is one paragraph or a list of them; **text** shows in bold. button is the start button (left out: \"Let's start\")."
+    "welcome": "Welcome card (Jaida, 2026-11-23, docs/WELCOME_MASCOTS_PLAN.md): intro is one paragraph or a list of them; **text** shows in bold. button is the start button (left out: \"Let's start\"). logo: the picture above the heading (a file in public/) and alt, what it says for screen readers; leave it out for no logo."
   },
   "contactRequired": false,
   "contactShown": [
@@ -20,7 +20,11 @@
       "Discover how you approach projects, and how Banfield Design Co. can help bring your dream home to life.",
       "It takes about **5 minutes**, and there are no wrong answers."
     ],
-    "button": "Get Started"
+    "button": "Get Started",
+    "logo": {
+      "file": "/mascots/banfield-logo.svg",
+      "alt": "Banfield Design Co."
+    }
   },
   "contact": {
     "title": "Please leave your contact information, so we can discuss things further with you.",

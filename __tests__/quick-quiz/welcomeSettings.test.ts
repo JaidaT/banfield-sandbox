@@ -36,6 +36,7 @@ describe('the welcome wording (quiz-form.json)', () => {
         'It takes about **5 minutes**, and there are no wrong answers.',
       ],
       button: 'Get Started',
+      logo: { file: '/mascots/banfield-logo.svg', alt: 'Banfield Design Co.' },
     })
   })
 
@@ -48,6 +49,18 @@ describe('the welcome wording (quiz-form.json)', () => {
     expect(() => parseQuizForm(formWith({ title: 'Hi', intro: ['Fine', ''] }))).toThrow(/welcome.intro/)
     expect(() => parseQuizForm(formWith({ title: 'Hi', intro: ['About **5 minutes'] }))).toThrow(/\*\*/)
     expect(() => parseQuizForm(formWith({ title: 'Hi', intro: ['Fine'], button: '' }))).toThrow(/welcome.button/)
+  })
+
+  // Jaida, 2026-11-27: the Banfield logo on the welcome card.
+  test('the logo is optional; given, it needs a file in public/ and a description', () => {
+    const logo = { file: '/logo.svg', alt: 'Banfield Design Co.' }
+    expect(parseQuizForm(formWith({ title: 'Hi', intro: ['Fine'], logo })).welcome.logo).toEqual(logo)
+    expect(() => parseQuizForm(formWith({ title: 'Hi', intro: ['Fine'], logo: { file: 'logo.svg', alt: 'B' } }))).toThrow(/welcome.logo/)
+    expect(() => parseQuizForm(formWith({ title: 'Hi', intro: ['Fine'], logo: { file: '/logo.svg', alt: '' } }))).toThrow(/welcome.logo/)
+  })
+
+  test('the real logo file exists in public/', () => {
+    expect(existsSync(join(process.cwd(), 'public', loadQuizForm().welcome.logo!.file))).toBe(true)
   })
 })
 
@@ -66,11 +79,19 @@ describe('boldParts: ** marks bold text', () => {
 })
 
 describe('the welcome background settings (swatch-cards.json)', () => {
-  test('the real file: 5 placeholder pictures, 20 seconds per square, 112px squares with a 12px gap', () => {
+  // Jaida, 2026-11-27: the 5 mascots and the logo replace the placeholders, at 150px.
+  test('the real file: the 5 mascots then the logo, 20 seconds per square, 150px squares with a 12px gap', () => {
     const welcome = loadSwatchLook().welcome!
-    expect(welcome.pictures).toHaveLength(5)
+    expect(welcome.pictures).toEqual([
+      '/mascots/curator-capybara.svg',
+      '/mascots/explorer-echidna.svg',
+      '/mascots/nest-builder-nene.svg',
+      '/mascots/strategist-seal.svg',
+      '/mascots/visionary-vole.svg',
+      '/mascots/banfield-logo.svg',
+    ])
     expect(welcome.secondsPerSquare).toBe(20)
-    expect(welcome.squareSize).toBe(112)
+    expect(welcome.squareSize).toBe(150)
     expect(welcome.gap).toBe(12)
     expect(welcome.animate).toBe(true)
   })

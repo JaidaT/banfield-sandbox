@@ -50,8 +50,10 @@ export default function MascotBackground({ look }: Props) {
                   height={look.squareSize}
                   unoptimized
                   draggable={false}
-                  className="block"
-                  style={{ marginBottom: look.gap }}
+                  // Fitted inside the square without stretching, no box
+                  // (Jaida, 2026-11-27): the mascots and logo are not square.
+                  className="block object-contain"
+                  style={{ width: look.squareSize, height: look.squareSize, marginBottom: look.gap }}
                 />
               ))}
             </div>

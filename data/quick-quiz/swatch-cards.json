@@ -4,7 +4,7 @@
     "strip": "The colour of the strip holding the question: 'yellow' (the brand yellow with dark text) or 'navy' (the brand navy with off-white text, Jaida 2026-11-22). Switch here to compare; save and refresh the page.",
     "embedMinHeight": "Inside the website's iframe only (/embed-test), the quiz is at least this tall, in pixels: 'phone' below 640px wide, 'computer' from 640px wide. Shorter cards leave space above the buttons instead of shrinking the iframe (Jaida, 2026-11-22). Set to null to let the iframe fit each card again. Set just above the tallest card, measured in Chrome on 2026-11-23 with the wide room and the footer: 703px on a 375px-wide phone (the same on short and tall phones), 947px on a computer (the iframe 736px wide). Narrower phones wrap more text, so their cards are taller.",
     "roomWidth": "How wide the room above the bar is, as a percentage of the bar's width: 'phone' below 640px wide, 'computer' from 640px wide (Jaida, 2026-11-23). The wide (3:1) room stays low, so it can be wide. Change the numbers to try other widths; then check the iframe minimum heights still hold.",
-    "welcome": "The moving columns of squares behind the welcome card (docs/WELCOME_MASCOTS_PLAN.md, Jaida, 2026-11-23). pictures: the files (in public/), used in turn down each column; placeholders until the 5 Design DNA mascots (and maybe portfolio photos or the logo) are ready. secondsPerSquare: how long one square takes to move its own height (bigger is slower). squareSize and gap: in pixels. animate: true moves the columns, false keeps them still (left out: true). Leave \"welcome\" out for a plain background."
+    "welcome": "The moving columns of squares behind the welcome card (docs/WELCOME_MASCOTS_PLAN.md, Jaida, 2026-11-23). pictures: the files (in public/), used in turn down each column; the 5 Design DNA mascots, then the Banfield logo (Jaida, 2026-11-27); each fits inside its square without stretching, with no box. secondsPerSquare: how long one square takes to move its own height (bigger is slower). squareSize and gap: in pixels. animate: true moves the columns, false keeps them still (left out: true). Leave \"welcome\" out for a plain background."
   },
   "strip": "navy",
   "embedMinHeight": {
@@ -18,14 +18,15 @@
   "welcome": {
     "animate": true,
     "pictures": [
-      "/welcome-mascots/01-placeholder.svg",
-      "/welcome-mascots/02-placeholder.svg",
-      "/welcome-mascots/03-placeholder.svg",
-      "/welcome-mascots/04-placeholder.svg",
-      "/welcome-mascots/05-placeholder.svg"
+      "/mascots/curator-capybara.svg",
+      "/mascots/explorer-echidna.svg",
+      "/mascots/nest-builder-nene.svg",
+      "/mascots/strategist-seal.svg",
+      "/mascots/visionary-vole.svg",
+      "/mascots/banfield-logo.svg"
     ],
     "secondsPerSquare": 20,
-    "squareSize": 112,
+    "squareSize": 150,
     "gap": 12
   }
 }

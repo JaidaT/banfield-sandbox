@@ -587,6 +587,13 @@ function parseWelcome(raw: Record<string, unknown>): QuizForm['welcome'] {
     if (typeof raw.button !== 'string' || raw.button.trim() === '') throw new Error('quiz form "welcome.button" must not be blank')
     welcome.button = raw.button
   }
+  if (raw.logo !== undefined) {
+    const logo = isRecord(raw.logo) ? raw.logo : {}
+    const fileOk = typeof logo.file === 'string' && logo.file.startsWith('/')
+    const altOk = typeof logo.alt === 'string' && logo.alt.trim() !== ''
+    if (!fileOk || !altOk) throw new Error('quiz form "welcome.logo" must be { "file": "/file.svg", "alt": "<what the logo says>" }')
+    welcome.logo = { file: logo.file as string, alt: logo.alt as string }
+  }
   return welcome
 }
 

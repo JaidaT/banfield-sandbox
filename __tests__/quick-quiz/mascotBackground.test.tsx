@@ -61,6 +61,15 @@ describe('the background on the welcome screen', () => {
     for (const img of background().querySelectorAll('img')) expect(img.getAttribute('alt')).toBe('')
   })
 
+  // Jaida, 2026-11-27: plain, no box; each picture fits its square without stretching.
+  test('each picture fits inside its square without stretching, with no box around it', () => {
+    renderQuiz()
+    for (const img of background().querySelectorAll('img')) {
+      expect(img.className).toContain('object-contain')
+      expect(img.className).not.toMatch(/border|bg-/)
+    }
+  })
+
   test('has the columns, the middle one moving down and the rest alternating', () => {
     renderQuiz()
     expect(columns()).toHaveLength(COLUMN_COUNT)

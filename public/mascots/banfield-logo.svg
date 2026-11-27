@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400.67 81.18">
+  <g id="Logo">
+    <g id="Logo-2" data-name="Logo">
+      <g id="Banfield.">
+        <path d="M37.99,26.99c-1.38-.58-1.27-.95.15-1.49C48.69,21.52,50.13,0,28.43,0H.24v53.98h30.25c17.35,0,22.48-21.46,7.5-26.99ZM17.2,12.84h8.86c4.1,0,4.32,8.71.43,8.71h-9.29v-8.71ZM27.06,40.85h-9.86v-8.71h9.4c4.36,0,4.59,8.71.46,8.71Z"/>
+        <path d="M88.36,0h-18.96l-19.95,53.98h17.43l2.6-8.46h18.8l2.6,8.46h17.43L88.36,0ZM73.69,33.52l5.2-15.82,5.2,15.82h-10.39Z"/>
+        <path d="M173.32,0v53.98s16.85.52,16.85,0v-20.81h15.36v-12.04h-15.36v-8.14h21.21V0h-38.06Z"/>
+        <rect x="217.75" y="0" width="16.85" height="53.98"/>
+        <polygon points="279.14 12.99 279.14 0 242.74 0 242.74 53.98 279.14 53.98 279.14 40.99 259.59 40.99 259.59 32.83 276.62 32.83 276.62 19.83 259.59 19.83 259.59 12.99 279.14 12.99"/>
+        <polygon points="302.59 40.99 302.59 0 285.73 0 285.73 53.98 319.27 53.98 319.27 40.99 302.59 40.99"/>
+        <polygon points="148.38 0 148.38 27.9 130.04 0 113.18 0 113.18 53.98 130.04 53.98 130.04 26.08 148.38 53.98 165.24 53.98 165.24 0 148.38 0"/>
+        <path d="M349.76,0h-24.71v53.98h24.71c34.28,0,35.41-53.98,0-53.98ZM347.24,39.13s-4.24-.11-5.33,0V14.14h5.33c15.59,0,16.05,24.99,0,24.99Z"/>
+        <ellipse cx="391.04" cy="46.24" rx="9.63" ry="8.25"/>
+      </g>
+      <g id="DESIGN_CO" data-name="DESIGN CO">
+        <path d="M1,80.14v-17.73h6.27c9.4,0,11.62,17.73,0,17.73H1Z" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <polyline points="30.81 62.41 20.8 62.41 20.8 71.27 20.8 80.14 30.81 80.14" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <line x1="20.8" y1="71.27" x2="30.02" y2="71.27" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <path d="M46.46,64.41c-3.67-2.46-7.29-3.17-10.26.4-.57.69-1.43,5.48,4.41,6.13,7.22.8,8.78,7.79.54,9.19-1.91.32-4.95-1.22-6.04-2.77" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <line x1="52.65" y1="62.41" x2="52.65" y2="80.14" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <path d="M71.97,63.55c-2.75-1.72-7.39-1.32-9.23,0s-4.13,3.79-4.13,7.71,2.98,8.87,8.03,8.87,6.25-2.03,6.19-3.8v-4.18h-5.16" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <polyline points="78.89 80.14 78.89 62.41 92.2 80.14 92.2 62.41" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <path d="M118.75,63.61c-2.48-1.2-3.37-1.2-4.99-1.2s-8.03,1.68-8.03,8.87,5.68,8.87,7.45,8.87,4.36-.13,5.56-1.62" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <ellipse cx="131.53" cy="71.27" rx="8.31" ry="8.87" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+    </g>
+  </g>
+</svg>

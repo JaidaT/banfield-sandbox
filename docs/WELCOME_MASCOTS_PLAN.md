@@ -38,14 +38,15 @@ From Jaida's mockup (2026-11-23):
 
 ### The background
 - **Colour:** the same off-white as the rest of the quiz.
-- **Squares:** columns of mascot squares, about 112px with a 12px gap (an estimate, to tune by eye). Every other column is shifted down by half a square, as in the mockup.
+- **Squares:** columns of mascot squares, **150px** with a 12px gap (Jaida, 2026-11-27; first 112px). Every other column is shifted down by half a square, as in the mockup.
 - **Movement:** the middle column moves down, and the columns on either side alternate: up, down, up and so on, outwards from the middle. Each loop is seamless. **One square takes 20 seconds to travel its own height.**
 - **Speed is a setting,** so Jaida can change it without code.
 - **On/off switch** (Jaida, 2026-11-23): `"animate"` in the welcome settings. `true` (or left out) moves the columns; `false` keeps the squares but stops the movement.
 - **Reduced motion:** with "reduce motion" turned on in the phone or computer settings, the columns stay still.
 - **Filling the space:** on a phone about 3 columns show. On wider screens more columns fill the sides, so the card stays the swatch cards' width.
 - **Hidden from screen readers:** the background is decoration only. Screen readers and the Tab key skip it, and it can't be clicked.
-- **Placeholders for now:** 5 grey placeholder squares with a cross, like the mockup, one per mascot. The real mascots (5 Design DNA types), and possibly Banfield portfolio photos or the logo, will replace these files later. The list of pictures is a setting, so pictures can be added or removed without code.
+- **The pictures** (Jaida, 2026-11-27): the 5 Design DNA mascots (Curator Capybara, Explorer Echidna, Nest-builder Nene, Strategist Seal, Visionary Vole), then the Banfield logo, in turn down each column, so the logo is 1 square in 6. **Plain, no box:** each fits inside its square without stretching (the drawings are not square; the logo is wide, so it shows small). They replaced the first grey placeholders. The list of pictures is a setting, so pictures can be added or removed without code.
+- **The logo on the card** (Jaida, 2026-11-27): centred above the heading, 160px wide on a phone and 192px on a computer (Claude's first size, to tune). Screen readers read it as "Banfield Design Co.". It is `"logo"` in the welcome wording; leave it out for no logo.
 
 ### The rest of the screen
 - **No "Powered by Foyer." footer** on the welcome screen. Every other screen keeps it.
@@ -58,7 +59,7 @@ Test first for each step (TDD); run lint, tests and build, then commit and push 
 ### Phase 1: Wording and settings
 - [x] **Wording:** the welcome wording becomes the heading, the two paragraphs and the button label. In the data, `**...**` marks bold text. Tests check the wording and that the bold part shows in bold.
 - [x] **Settings:** a `"welcome"` setting holds the list of pictures, the speed (20 seconds per square) and the square size. The parser rejects a missing picture or a speed or size of zero or less. Tests check the real file and each refusal.
-- [x] **Placeholders:** 5 placeholder SVG files (a grey square with a cross). A test checks that every listed file exists.
+- [x] **Placeholders:** 5 placeholder SVG files (a grey square with a cross), replaced by the real mascots and logo on 2026-11-27. A test checks that every listed file exists.
 
 ### Phase 2: The welcome screen
 - [x] **Own welcome screen:** the shared form can take its own welcome screen, as it already does for step screens. If none is given, it uses the current one, so the long questionnaire is unchanged. Tests check both.
@@ -80,7 +81,7 @@ Test first for each step (TDD); run lint, tests and build, then commit and push 
 - **Branch:** `foyer-v1-swatch-rooms`.
 - **Wording:** `data/quick-quiz/quiz-form.json` (`welcome`).
 - **Settings:** `data/quick-quiz/swatch-cards.json` (`welcome`), parsed in `lib/quick-quiz/swatchLook.ts`.
-- **Placeholders:** `public/welcome-mascots/01-placeholder.svg` to `05-placeholder.svg`. To use the real pictures, put the files in `public/` and list them in `"welcome"` > `"pictures"` in `data/quick-quiz/swatch-cards.json`.
+- **Pictures:** `public/mascots/`: `curator-capybara.svg`, `explorer-echidna.svg`, `nest-builder-nene.svg`, `strategist-seal.svg`, `visionary-vole.svg`, `banfield-logo.svg` (Jaida's files). Listed in `"welcome"` > `"pictures"` in `data/quick-quiz/swatch-cards.json`; the card logo is `"welcome"` > `"logo"` in `data/quick-quiz/quiz-form.json`.
 - **Welcome screen extension point:** new `introScreen` and `hideFooterOnWelcome` props on `components/form/QuestionnaireForm.tsx`. The new screen is `components/quick-quiz/WelcomeScreen.tsx`; the columns are `components/quick-quiz/MascotBackground.tsx`, with their rules in `lib/quick-quiz/mascotColumns.ts` (15 columns, enough for a wide screen) and the animation at the end of `app/globals.css`.
 - **Bold text:** `lib/quick-quiz/boldText.ts`.
 - **Tests:** `__tests__/quick-quiz/welcomeSettings.test.ts`, `welcomeScreen.test.tsx`, `mascotBackground.test.tsx`, and the `introScreen` tests in `__tests__/form/questionnaireForm.test.tsx`.
