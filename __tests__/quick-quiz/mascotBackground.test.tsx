@@ -106,9 +106,9 @@ describe('the background on the welcome screen', () => {
   })
 
   // Jaida, 2026-11-27: only the columns fade; the logo on the card stays full strength.
-  test('the columns show at the opacity setting (30%); the card logo does not fade', () => {
+  test('the columns show at the opacity setting (10%); the card logo does not fade', () => {
     renderQuiz()
-    expect(background().style.opacity).toBe('0.3')
+    expect(background().style.opacity).toBe('0.1')
     const cardLogo = screen.getByTestId('welcome-card').querySelector('img')!
     expect(cardLogo.style.opacity).toBe('')
     expect(cardLogo.closest('[data-testid="mascot-background"]')).toBeNull()

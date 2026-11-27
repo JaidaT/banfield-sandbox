@@ -80,7 +80,7 @@ describe('boldParts: ** marks bold text', () => {
 
 describe('the welcome background settings (swatch-cards.json)', () => {
   // Jaida, 2026-11-27: the 5 mascots and the logo replace the placeholders, at 150px.
-  test('the real file: the 5 mascots then the logo, 20 seconds per square, 150px squares with a 12px gap', () => {
+  test('the real file: the 5 mascots then the logo, 20 seconds per square, 150px squares with a 20px gap (Jaida, 2026-11-27)', () => {
     const welcome = loadSwatchLook().welcome!
     expect(welcome.pictures).toEqual([
       '/mascots/curator-capybara.svg',
@@ -92,9 +92,9 @@ describe('the welcome background settings (swatch-cards.json)', () => {
     ])
     expect(welcome.secondsPerSquare).toBe(20)
     expect(welcome.squareSize).toBe(150)
-    expect(welcome.gap).toBe(12)
+    expect(welcome.gap).toBe(20)
     expect(welcome.animate).toBe(true)
-    expect(welcome.opacity).toBe(30)
+    expect(welcome.opacity).toBe(10)
   })
 
   // Jaida, 2026-11-27: how strongly the columns show, in percent.

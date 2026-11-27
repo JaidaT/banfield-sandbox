@@ -17,7 +17,7 @@
   },
   "welcome": {
     "animate": true,
-    "opacity": 30,
+    "opacity": 10,
     "pictures": [
       "/mascots/curator-capybara.svg",
       "/mascots/explorer-echidna.svg",
@@ -28,6 +28,6 @@
     ],
     "secondsPerSquare": 20,
     "squareSize": 150,
-    "gap": 12
+    "gap": 20
   }
 }
