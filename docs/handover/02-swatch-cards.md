@@ -107,7 +107,7 @@ M 40 9 C 110 2, 240 0, 288 18 C 304 32, 282 54, 160 58 C 70 60, 8 52, 5 34 C 3 1
 @media (prefers-reduced-motion: reduce) { .chosen .oval path { animation: none; } }
 ```
 
-Found in testing: measuring the dash as a fraction of the path showed only part of the oval on wide screens. Keep it in screen pixels as above.
+Found when trying it: measuring the dash as a fraction of the path showed only part of the oval on wide screens. Keep it in screen pixels as above.
 
 ### The other inputs (same pencil feel; restyled from inside the swatch area)
 These are plain CSS rules on the swatch area's descendants, using `:global()` for the tags inside `QuestionInput`.
@@ -186,7 +186,6 @@ These are plain CSS rules on the swatch area's descendants, using `:global()` fo
 .fadeOut    { animation: cardFade var(--move) ease-in reverse forwards; }
 ```
 
-In tests (no `matchMedia`), the move length is 0, so moves finish straight away.
 
 ### Compact layout
 This applies on screens 700px tall or less, and always inside the iframe below 640px wide. In the iframe, the iframe's own height says nothing about the phone: keying the compact layout to it made a tall card lose it and grow even taller (found measuring in Chrome).
@@ -210,24 +209,27 @@ The 44px answer rows stay. Taller screens are unchanged.
 3. **Then the result appears**, fading in over 400ms, and focus moves to its main heading. **When:** once the server's result has arrived **and** at least 2 seconds have passed since "See my results", whichever is later. A fast server still shows "Calculating" for 2 seconds, and a slow one keeps showing it until the result is there.
    - **If the server action fails:** keep production's current error handling, shown once the 2 seconds have passed. Flag it if there is none.
 
-## Steps (test first: write the failing test, then the code)
+## Steps
+
+Production has no test runner. Each step ends with a **check by hand**: short steps to click through in `npm run dev` (or with the browser's developer tools where noted). The data checks in `parse.js` act as the automatic safety net: a bad settings or data file stops the app with a message naming the problem.
 
 - [ ] The `strip` setting in `swatch-cards.json`, through `config.look.strip`.
-  - Tests: the real file gives `"navy"`; left out gives `"yellow"`; anything else is refused naming `strip`.
+  - Check by hand: the strips are navy with off-white text. Set `"yellow"`: yellow with dark text. Set `"pink"`: the app refuses to start, naming `strip`. Set it back to `"navy"`.
 - [ ] The card: strip with the question as an `h2`, the help line in the strip (not repeated below), the swatch area, labelled `<section>`.
-  - Tests: each question shows as a card headed by its prompt; the help line is in the strip and linked with `aria-describedby`; the strip carries the setting's colour.
+  - Check by hand: every question is a card headed by its question; "Pick up to two." (or similar) is in the strip and not again below; the contact screen is the last card.
 - [ ] `PencilChoices` for `single` and `multi`.
-  - Tests: choosing records the same answer value as today; on `multi`, the limit stops a further choice and turns the others off; each option can be chosen with the keyboard alone; the chosen option's text is bold; the real inputs are there but visually hidden.
-- [ ] The other inputs restyled inside the swatch area (checked by eye; the answers they record do not change).
-- [ ] The stack: the peeking "Next question" button (absent on the contact card), Back and Next below, "Next" always (never "Skip"), "See my results" on the contact card.
-  - Tests: no "Skip" button with an empty answer; Next with no answer moves on and the answer is recorded as skipped, exactly as before; the peeking button moves forward; Back on question 1 shows the welcome screen; nothing on the leaving card can be reached with Tab.
+  - Check by hand: hovering an option shows a faint oval; choosing draws a full oval and turns the text bold; on a pick-several question, after the limit the other options fade and can't be chosen; using only Tab, the arrow keys and Space, every option can be chosen; the result is the same as before for the same answers.
+- [ ] The other inputs restyled inside the swatch area.
+  - Check by hand: the text boxes have a pencil underline, the long-text box has lines, the slider has a pencil track and a hand-drawn yellow handle, and "Not sure yet" gets a pencil circle when chosen.
+- [ ] The stack: the peeking "Next question" button (none on the contact card), Back and Next below, "Next" always (never "Skip"), "See my results" on the contact card.
+  - Check by hand: with nothing chosen, the button still says "Next" and moves on (the question counts as skipped, as before); tapping the peeking card moves forward; Back on question 1 shows the welcome screen; the contact card has no card peeking behind it.
 - [ ] Moves: the out and in animations, the 150ms fade with reduced motion, one move at a time, focus on the new heading.
-  - Tests: a second tap during a move does nothing; after a move the new heading has focus; with reduced motion moves still work.
-- [ ] The compact layout (checked by eye on a 667px-tall phone and inside the iframe on a phone).
+  - Check by hand: Next swings the card to the back and slides the next one forward; Back does the reverse; a fast double-tap on Next moves only one card; with reduced motion turned on (developer tools, Rendering, "prefers-reduced-motion: reduce"), cards fade instead; after each move, a screen reader (or Tab) starts at the new question.
+- [ ] The compact layout.
+  - Check by hand: on a 667px-tall phone (or the developer tools' iPhone SE size) and inside the iframe on a phone, the card peeks less and the strip is tighter; on a tall screen it is unchanged.
 - [ ] "Calculating" with the falling cards and dots; the result once it has arrived and 2 seconds have passed.
-  - Tests (pretend clock, with the server action stubbed): "See my results" shows "Calculating your Design DNA" in a status region; with the result back at once, the result is not shown before 2 seconds and is shown after; with the result arriving at 3 seconds, it shows at 3 seconds; the result is the same one production gives today; focus moves to the result heading.
-- [ ] Every existing short quiz test still passes, apart from the ones about "Skip" and `scrollTo(0, 0)`, which change on purpose.
-- [ ] Lint, tests and build pass. Try it on a phone and a computer: forward, back, tapping the peeking card, a fast double-tap, the fall, "Calculating", the result; and with reduced motion turned on; and inside the iframe.
+  - Check by hand: "See my results" makes the cards fall and shows "Calculating your Design DNA" with dots appearing one by one; the result appears after about 2 seconds; with the developer tools' network set to "Slow 3G", "Calculating" stays until the result arrives; focus moves to the result's heading.
+- [ ] Lint and build pass. Try it on a phone and a computer: forward, back, tapping the peeking card, a fast double-tap, the fall, "Calculating", the result; and with reduced motion turned on; and inside the iframe.
 
 ## Decisions (from Jaida, in the sandbox)
 

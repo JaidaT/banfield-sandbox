@@ -169,21 +169,25 @@ Each Design DNA profile gets a mascot in `design-dna.json`:
   - With no mascot, the card is unchanged.
 - **Where it shows:** everywhere `ClientResultView` shows a short quiz result. The team brief is unchanged.
 
-## Steps (test first: write the failing test, then the code)
+## Steps
+
+Production has no test runner. Each step ends with a **check by hand**: short steps to click through in `npm run dev` (or with the browser's developer tools where noted). The data checks in `parse.js` act as the automatic safety net: a bad settings or data file stops the app with a message naming the problem.
 
 - [ ] Copy the 6 files into `public/mascots/`.
 - [ ] Wording: `intro` as a string or a list with `**bold**`, the optional `button` and `logo`, the real file updated, through `config.welcome`.
-  - Tests: the real file gives the heading, the two paragraphs, "Get Started" and the logo; a single string becomes one paragraph; an empty list, a blank paragraph, an unpaired `**`, a blank button, a logo path without `/` and a blank logo `alt` are each refused; the bold helper splits "It takes about **5 minutes**, and ..." into plain, bold and plain parts.
+  - Check by hand: the welcome card shows the logo, "Find your Design DNA", both paragraphs with **5 minutes** in bold, and "Get Started". Temporarily remove one `**`: the app refuses to start, naming `welcome.intro`. Put it back.
 - [ ] The `welcome` settings, through `config.look.welcome`.
-  - Tests: the real file gives the 6 pictures, 20 seconds, 150px, a 20px gap, `animate: true` and `opacity: 10`; left out gives `null`; `animate` defaults to true and `opacity` to 100; each bad value above is refused naming `welcome`; every listed picture exists in `public/`.
+  - Check by hand: the columns show the 5 mascots and the logo, faint. Set `"animate": false`: they stand still. Set `"opacity": 0`: the app refuses to start, naming `welcome`. Set both back.
 - [ ] `WelcomeCard` for the `"welcome"` screen.
-  - Tests: the card shows the logo (alt "Banfield Design Co.") before the heading, the heading "Find your Design DNA", both paragraphs with "5 minutes" in `<strong>`, and a "Get Started" button; pressing it opens question 1 and starts the clock exactly as "Let's start" did; focus starts on the heading; Back from question 1 returns to the card; no footer on this screen.
+  - Check by hand: the card is centred, with the logo above the heading; "Get Started" opens question 1; the saved submission's time is measured from that press, as before; Back from question 1 returns to the card; there is no "Powered by Foyer." on this screen.
 - [ ] `MascotBackground` behind the card, on the welcome screen only.
-  - Tests: 15 columns; the middle one is "down" and the others alternate outwards; odd-distance columns are shifted by half a step; each track holds the loop twice with a `--loop` of `loop * secondsPerSquare` seconds; with `animate: false` no column has an animation class; the layer is `aria-hidden`, not clickable, has nothing to Tab to, and every image has `alt=""`; the layer's opacity is 0.1; the card's logo is not inside the faded layer; it is gone after "Get Started".
+  - Check by hand: the middle column moves down slowly and its neighbours up; every other column starts half a square higher; the pictures are not stretched and have no boxes; Tab never lands on the background; with reduced motion the columns stand still; the background is gone after "Get Started"; the logo on the card is not faded.
 - [ ] The mascot on the result.
-  - Tests: each of the 5 profiles has the mascot in the table above, and each file exists; a profile without `mascot` loads; a bad path or blank `alt` is refused; `pickDesignDna()` includes the mascot; the result shows the mascot as the first thing in the Design DNA card, named by its `alt`; with no mascot there is no image in the card; the result still contains no client type id.
+  - Check by hand: for each profile (use answers that lead to each one, or production's sample results), the matching mascot is the first thing in the yellow card, above "DESIGN DNA"; a screen reader reads its name, for example "Strategist Seal".
+- [ ] **Privacy check:** the result never shows the client type.
+  - Check by hand: on the result screen, search the page source and the server action's response (developer tools, Network) for each client type id (`hands_on_controller`, `creative_collaborator`, `cautious_reassurance_seeker`, `analytical_validator`, `decisive_delegator`) and for the word "score": none appear. Production's data files say tests enforce this, but there is no test runner, so check it by hand after any change to the result.
 - [ ] Check the welcome screen inside the iframe: it should be exactly the `embedMinHeight` tall (650 on a phone, 850 on a computer), with the card centred.
-- [ ] Lint, tests and build pass. Try it on a phone and a computer, with reduced motion, and inside the iframe.
+- [ ] Lint and build pass. Try it on a phone and a computer, with reduced motion, and inside the iframe.
 
 ## Decisions (from Jaida, in the sandbox)
 

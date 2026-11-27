@@ -75,7 +75,7 @@ Measured in Chrome with all four handovers: the tallest card needs about 703px o
 
 ### 2d. The script on the website page
 
-Banfield pastes this into Squarespace code injection, once, on the page with the quiz. It is plain JavaScript with no build step. It is the sandbox's tested script, unchanged; serve it from `public/quick-quiz-embed.js`.
+Banfield pastes this into Squarespace code injection, once, on the page with the quiz. It is plain JavaScript with no build step. It is the script tried in the sandbox, unchanged; serve it from `public/quick-quiz-embed.js`.
 
 - **Height message:** sets the iframe to that height, so there is no scroll box inside the page.
 - **New-screen message:** scrolls the page so the top of the quiz sits just below any sticky header, **only if the top is out of view, and only on touch screens**. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) the page stays put. With reduced motion it jumps instead of scrolling smoothly.
@@ -118,25 +118,28 @@ The result ends with the "Thank you!" heading and then the footer.
 - `ClientResultView` shows the line only when `thanks.text` is present.
 - `thanks.title` stays required.
 
-## Steps (test first: write the failing test, then the code)
+## Steps
 
-- [ ] The settings file, with its check and `config.look.embedMinHeight`.
-  - Tests: the real file gives 650/850; `null` or left out gives `null`; a missing number or a number at or below 0 is refused with a message naming `embedMinHeight`.
+Production has no test runner. Each step ends with a **check by hand**: short steps to click through in `npm run dev` (or with the browser's developer tools where noted). The data checks in `parse.js` act as the automatic safety net: a bad settings or data file stops the app with a message naming the problem.
+
+- [ ] The settings file, with its check in `parse.js` and `config.look.embedMinHeight`.
+  - Check by hand: the app starts with the real file. Temporarily set `"phone": 0`: the app refuses to start with a message naming `embedMinHeight`. Set it back.
 - [ ] The frame-ancestors header on the short quiz's page.
-  - Test: the header is present, naming `'self'` and `https://www.banfielddesign.co`.
+  - Check by hand: in the browser's developer tools (Network tab), the short quiz page's response has `Content-Security-Policy: frame-ancestors 'self' https://www.banfielddesign.co`. Other pages do not have it.
 - [ ] The iframe connection: `data-embedded`, the height message and the new-screen message, only inside an iframe.
-  - Tests (with a pretend parent window): nothing is sent and no `data-embedded` on the quiz's own page; inside an iframe, `data-embedded` is set, a height message is sent, and a new-screen message is sent after Next and Back; messages hold only `source`, `type` and, for height, `height`.
+  - Check by hand: on the quiz's own page, `<html>` has no `data-embedded` (Elements tab). On the stand-in page (last step), `<html>` inside the iframe has `data-embedded`, and the iframe changes height when the screen changes.
 - [ ] The minimum height inside the iframe, on every screen.
+  - Check by hand: on the stand-in page, the iframe is 650px tall on a phone-width window and 850px on a computer-width window, on the welcome screen and on a short card.
 - [ ] Focus without the browser scroll, and the touch-only scroll into view (replacing `scrollTo(0, 0)`).
-  - Tests: after Next, the new heading has focus and `focus` was called with `{ preventScroll: true }`; on a touch device with the quiz's top above the screen, it scrolls; with the top in view, or with a mouse, it does not; inside an iframe, it does not.
+  - Check by hand: on a computer, scroll down a little and press Next: the page does not jump, and Tab starts from the new question. On a phone (or the developer tools' phone mode with touch), scroll so the top of the quiz is off screen and press Next: the quiz's top scrolls into view.
 - [ ] The website script in `public/quick-quiz-embed.js`.
-  - Tests (jsdom): it sizes only a `data-quick-quiz` iframe whose own window and address sent the message; it ignores other sources, bad heights and other iframes; on a touch device it scrolls to the quiz on "new screen" only when the quiz is out of view; with a mouse it never scrolls.
+  - Check by hand: on the stand-in page, there is no scroll box inside the iframe on any screen; on a phone, Next scrolls the page to the top of the quiz when it is out of view, and not when it is in view; on a computer, the page never scrolls by itself.
 - [ ] The footer on every screen except the welcome screen.
-  - Tests: the footer reads "Powered by Foyer." with "Foyer." bold and is the last thing in the main content box on a question, the contact screen, "Calculating" and the result; it is absent on the welcome screen.
-- [ ] `thanks.text` optional, removed from the real file.
-  - Tests: no line under "Thank you!"; the file accepts no line, refuses a blank one, and still requires the title.
-- [ ] Optional: a stand-in website page that shows the quiz in an iframe with the script, for trying it on a phone.
-- [ ] Lint, tests and build pass. Try the quiz inside the stand-in page on a phone and a computer.
+  - Check by hand: "Powered by **Foyer.**" is the last thing on a question, the contact screen, "Calculating" and the result; it is not on the welcome screen.
+- [ ] `thanks.text` optional, and removed from the real file.
+  - Check by hand: the result ends with "Thank you!" and then the footer, with no line between. Temporarily set `"text": ""`: the app refuses to start. Remove the line again.
+- [ ] A stand-in website page that shows the quiz in an iframe with the script, for trying it on a phone (a plain page with some text above and below the iframe is enough).
+- [ ] Lint and build pass. Try the quiz inside the stand-in page on a phone and a computer.
 
 ## Appendix: the website script (`public/quick-quiz-embed.js`)
 

@@ -122,7 +122,7 @@ Top to bottom:
   - **The walls and floor (`00-base.svg`) do not show on the cards**, only the furniture.
 
 ### How a piece arrives and leaves
-- **All 13 pieces are on the page from the first card**, loaded straight away (`loading="eager"`), hidden until earned. Found in testing: adding pictures mid-move made them pop in without their animation, because each had to load first.
+- **All 13 pieces are on the page from the first card**, loaded straight away (`loading="eager"`), hidden until earned. Found when trying it: adding pictures mid-move made them pop in without their animation, because each had to load first.
 - **A new piece** (Next) grows in from **its own centre** (`transform-origin: <centreX>% <centreY>%`):
   - from `scale: 0; opacity: 0` to `scale: 1; opacity: 1`,
   - over 300ms after a 100ms delay, with a slight bounce: `cubic-bezier(0.34, 1.56, 0.64, 1)`.
@@ -150,20 +150,22 @@ Top to bottom:
 ## Re-check the iframe heights
 The room makes each card taller. After this handover, measure the tallest card in Chrome inside the iframe, on a 375px phone and on a computer. In the sandbox it was 703px and 947px, against minimums of 650/850 (handover 1). Tell Jaida the numbers if they differ.
 
-## Steps (test first: write the failing test, then the code)
+## Steps
 
-- [ ] Copy the 14 files. Add `room-build.json` with its checks, through `config.room`.
-  - Tests: the real file has 13 pieces in the order above, one per card screen; every file exists and has a `0 0 900 300` viewBox; a wrong count, a repeat, a centre outside the room or a bad path is refused with a message naming the problem.
+Production has no test runner. Each step ends with a **check by hand**: short steps to click through in `npm run dev` (or with the browser's developer tools where noted). The data checks in `parse.js` act as the automatic safety net: a bad settings or data file stops the app with a message naming the problem.
+
+- [ ] Copy the 14 files. Add `room-build.json` with its checks in `parse.js`, through `config.room`.
+  - Check by hand: the app starts. Temporarily delete one piece from the list: the app refuses to start, saying the count does not match. Put it back.
 - [ ] The `roomWidth` setting, through `config.look.roomWidth`.
-  - Tests: the real file gives 60/60; left out gives 25/40; a missing value or one outside 1 to 100 is refused naming `roomWidth`.
+  - Check by hand: the room is a bit over half the bar's width. Set `"phone": 120`: the app refuses to start, naming `roomWidth`. Set it back to 60.
 - [ ] `BuildUpRoom` and `RoomProgressBar` on every card, above the stack.
-  - Tests: the room comes before the bar and the bar before the card; question 1 shows 1 piece, question 5 shows 5, the contact card all 13; no walls and floor on the cards; no percentage text; "Question n of 13" is there; the room and bar are hidden from screen readers; the room's shape is `900 / 300`.
-- [ ] Moves: Next adds one shown piece, Back removes one, and no picture is re-added.
-  - Tests: every piece is on the page from question 1; after Next exactly one more piece is shown, after Back one fewer; the same image elements stay; a second tap during a card move still does nothing.
-- [ ] "Calculating" shows all 13 pieces and a full bar; the result shows the complete room with the walls and floor fading in behind, and no bar.
-  - Tests: during "Calculating" all 13 pieces show and the bar is 100%; the result has no progress bar or "Questionnaire complete"; the result's room has all 13 pieces plus the walls and floor, first in order, with the fade-in.
+  - Check by hand: the room sits centred above a full-width outlined bar, above the card; question 1 shows only the rug, question 5 five pieces, the contact card all 13; there is no wall or floor behind the furniture; there is no percentage text; a screen reader hears "Question n of 13".
+- [ ] Moves: Next adds one piece, Back removes one.
+  - Check by hand: each Next grows one new piece from its own spot with a slight bounce; Back shrinks the latest one away; the other pieces never flicker or reload (developer tools, Network: no new image requests after the first card); a fast double-tap still moves only one card.
+- [ ] "Calculating" and the result.
+  - Check by hand: during "Calculating" all 13 pieces show and the bar is full; the result has no progress bar or "Questionnaire complete"; the result shows the complete room, and the walls and floor fade in behind the furniture.
 - [ ] Re-measure the iframe heights (above).
-- [ ] Lint, tests and build pass. Try it on a phone and a computer, with reduced motion, and inside the iframe.
+- [ ] Lint and build pass. Try it on a phone and a computer, with reduced motion, and inside the iframe.
 
 ## Decisions (from Jaida, in the sandbox)
 
