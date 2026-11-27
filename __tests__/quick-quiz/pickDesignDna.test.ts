@@ -43,6 +43,8 @@ describe('pickDesignDna', () => {
           expect.objectContaining({ title: 'A plan with clear decision points.' }),
         ],
       },
+      // Jaida, 2026-11-27: the profile's mascot, shown on the result.
+      mascot: { file: '/mascots/strategist-seal.svg', alt: 'Strategist Seal' },
     })
     expect(dna).not.toHaveProperty('archetype')
     expect(JSON.stringify(dna)).not.toMatch(/analytical_validator|percent/)

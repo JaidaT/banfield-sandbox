@@ -5,7 +5,8 @@
     "purpose": "Design DNA profiles: the result people see after the Quick Quiz, instead of their client type. Each profile belongs to one client type (archetype). The quiz shows the profile of the person's top client type. There is no secondary trait: the team decided it was too much (2026-11-13).",
     "teamOnly": "The 'archetype' pairs are team-only. Only name, headline and description are ever shown to the client.",
     "wording": "The team's wording from 2026-11-13, exactly as written, with straight apostrophes (the project uses plain characters only; the loader rejects curly quotes).",
-    "help": "'How we can help' (helpLabel and each profile's help points): drafted by Claude from each client type's team notes and BRAND_NOTES.md, approved by Jaida on 2026-11-15. Still a draft for the team to review. Never name a client type or use the word 'fit' here; tests check this."
+    "help": "'How we can help' (helpLabel and each profile's help points): drafted by Claude from each client type's team notes and BRAND_NOTES.md, approved by Jaida on 2026-11-15. Still a draft for the team to review. Never name a client type or use the word 'fit' here; tests check this.",
+    "mascot": "Each profile's mascot (Jaida, 2026-11-27): a file in public/mascots/ and alt, what it shows for screen readers. Shown centred at the top of the yellow Design DNA card on the client result. Leave \"mascot\" out of a profile for none."
   },
   "label": "DESIGN DNA",
   "helpLabel": "How we can help",
@@ -28,7 +29,11 @@
           "title": "The reasons behind each choice.",
           "text": "We explain why we recommend a material, layout or trade, so your ideas and ours work together."
         }
-      ]
+      ],
+      "mascot": {
+        "file": "/mascots/curator-capybara.svg",
+        "alt": "Curator Capybara"
+      }
     },
     {
       "archetype": "creative_collaborator",
@@ -48,7 +53,11 @@
           "title": "Room to explore, with a clear frame.",
           "text": "We set the scope and budget early, so new ideas can be explored without losing track of the plan."
         }
-      ]
+      ],
+      "mascot": {
+        "file": "/mascots/explorer-echidna.svg",
+        "alt": "Explorer Echidna"
+      }
     },
     {
       "archetype": "cautious_reassurance_seeker",
@@ -68,7 +77,11 @@
           "title": "Decisions at a comfortable pace.",
           "text": "We bring a few well-chosen options at a time, and make room for the people whose opinions matter to you."
         }
-      ]
+      ],
+      "mascot": {
+        "file": "/mascots/nest-builder-nene.svg",
+        "alt": "Nest-builder Nene"
+      }
     },
     {
       "archetype": "analytical_validator",
@@ -88,7 +101,11 @@
           "title": "A plan with clear decision points.",
           "text": "Each step is documented, so you can see how today's choices support long-term value, comfort and energy performance."
         }
-      ]
+      ],
+      "mascot": {
+        "file": "/mascots/strategist-seal.svg",
+        "alt": "Strategist Seal"
+      }
     },
     {
       "archetype": "decisive_delegator",
@@ -108,7 +125,11 @@
           "title": "Your time, respected.",
           "text": "Fewer, well-planned meetings and short updates, each with a clear next step."
         }
-      ]
+      ],
+      "mascot": {
+        "file": "/mascots/visionary-vole.svg",
+        "alt": "Visionary Vole"
+      }
     }
   ]
 }

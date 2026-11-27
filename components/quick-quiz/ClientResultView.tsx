@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useId } from 'react'
 import type { ReactNode, Ref } from 'react'
 import { ROOM_BOX } from '@/components/quick-quiz/stripStyles'
@@ -54,6 +55,18 @@ export default function ClientResultView({ result, embedded = false, complete = 
       {dna && (
         <>
           <section aria-labelledby={dnaHeadingId} className="flex flex-col gap-4 rounded-2xl bg-accent p-6">
+            {/* The profile's mascot, centred at the top of the card (Jaida,
+                2026-11-27, docs/WELCOME_MASCOTS_PLAN.md). */}
+            {dna.mascot ? (
+              <Image
+                src={dna.mascot.file}
+                alt={dna.mascot.alt}
+                width={176}
+                height={176}
+                unoptimized
+                className="mx-auto h-36 w-36 object-contain sm:h-44 sm:w-44"
+              />
+            ) : null}
             <p className={LABEL}>{dna.label}</p>
             <h2 id={dnaHeadingId} className="text-4xl font-bold leading-tight">
               {dna.name}

@@ -53,6 +53,15 @@ From Jaida's mockup (2026-11-23):
 - **No "Powered by Foyer." footer** on the welcome screen. Every other screen keeps it.
 - **Inside the website's iframe, the same height as the other screens** (from `embedMinHeight`: 650px on a phone and 850px on a computer since Jaida lowered them on 2026-11-23; 715px and 960px when built). This replaces "the welcome screen is left out" in `SWATCH_ROOMS_PLAN.md`. On the quiz's own page, the welcome screen fills the window.
 
+### The mascot on the result (Jaida, 2026-11-27)
+- **Each Design DNA profile has its mascot:** The Curator is Curator Capybara, The Explorer is Explorer Echidna, The Nest Builder is Nest-builder Nene, The Strategist is Strategist Seal, and The Visionary is Visionary Vole.
+- **Where:** centred at the top of the yellow Design DNA card, above "DESIGN DNA" and the profile name (Claude's recommendation). It is 144px on a phone and 176px on a computer, with no box, fitted without stretching.
+- **Screen readers** read the mascot's name (for example "Strategist Seal").
+- **Everywhere the client result shows:** the quiz's result screen and the team's sample result pages. The team brief is unchanged.
+- **Optional per profile:** leave  out of a profile for none.
+- Tests: , plus the mascot in . Checked in Chrome on a phone and a computer.
+- In the sandbox:  on each profile in ; parsed in , copied by  (), shown in .
+
 ## Steps
 
 Test first for each step (TDD); run lint, tests and build, then commit and push after each.

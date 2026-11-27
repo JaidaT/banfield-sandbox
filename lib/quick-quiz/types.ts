@@ -210,6 +210,14 @@ export interface DesignDnaProfile {
   description: string
   // "How we can help": 2 to 3 short points written for this profile.
   help: HelpPoint[]
+  // The profile's mascot (a file in public/ and what it shows), shown on the
+  // client result (Jaida, 2026-11-27). Optional.
+  mascot?: Mascot
+}
+
+export interface Mascot {
+  file: string
+  alt: string
 }
 
 // One "How we can help" point: a bold line and one sentence.
@@ -227,6 +235,8 @@ export interface ClientDesignDna {
   description: string
   // "How we can help": the heading and this profile's points.
   help: { label: string; points: HelpPoint[] }
+  // The profile's mascot, at the top of the Design DNA card.
+  mascot?: Mascot
 }
 
 export interface DesignDnaData {

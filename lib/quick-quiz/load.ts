@@ -33,6 +33,7 @@ import type {
   Signal,
   SignalRule,
   Weights,
+  Mascot,
 } from './types'
 
 const STRING_FIELDS = ['id', 'label', 'communication', 'pacing', 'pitch'] as const
@@ -508,13 +509,24 @@ export function parseDesignDna(raw: unknown, archetypes: Archetype[]): DesignDna
     )
     if (seenNames.has(name)) throw new Error(`design DNA name "${name}" is used more than once`)
     seenNames.add(name)
-    return { archetype, name, headline, description, help: parseHelp(entry.help, index) }
+    const profile: DesignDnaProfile = { archetype, name, headline, description, help: parseHelp(entry.help, index) }
+    if (entry.mascot !== undefined) profile.mascot = parseMascot(entry.mascot, index)
+    return profile
   })
 
   for (const id of known) {
     if (!seenTypes.has(id)) throw new Error(`client type ${id} has no design DNA profile`)
   }
   return { label, helpLabel, profiles }
+}
+
+// The profile's mascot: a file in public/ and a plain description of it.
+function parseMascot(raw: unknown, profileIndex: number): Mascot {
+  const mascot = isRecord(raw) ? raw : {}
+  if (typeof mascot.file !== 'string' || !mascot.file.startsWith('/')) {
+    throw new Error(`design DNA profile ${profileIndex} "mascot" needs a "file" in public/, starting with /`)
+  }
+  return { file: mascot.file, alt: plainText(mascot.alt, `profile ${profileIndex} "mascot.alt"`) }
 }
 
 // "How we can help": 2 to 3 points, each with a title and a sentence.

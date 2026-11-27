@@ -24,5 +24,6 @@ export function pickDesignDna(blend: ArchetypeBlend, data: DesignDnaData): Clien
     headline: main.headline,
     description: main.description,
     help: { label: data.helpLabel, points: main.help },
+    ...(main.mascot ? { mascot: main.mascot } : {}),
   }
 }
